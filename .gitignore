@@ -1,0 +1,20 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore node modules (if any)
+node_modules/
+package-lock.json
+
+# Ignore composer vendor (if any)
+vendor/
+composer.lock
+
+# Ignore logs
+*.log

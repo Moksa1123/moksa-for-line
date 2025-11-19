@@ -1,0 +1,211 @@
+/* Popup Container */
+.moksa-line-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 99999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.moksa-line-popup-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.moksa-line-popup-content {
+    background: #ffffff;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 16px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+}
+
+.moksa-line-popup-overlay.active .moksa-line-popup-content {
+    transform: translateY(0);
+}
+
+/* Close Button */
+.moksa-line-popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    transition: color 0.2s;
+    padding: 0;
+}
+
+.moksa-line-popup-close:hover {
+    color: #333;
+}
+
+.moksa-line-popup-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Header */
+.moksa-line-popup-header {
+    margin-bottom: 25px;
+}
+
+.moksa-line-popup-logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.moksa-line-popup-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 8px;
+}
+
+.moksa-line-popup-desc {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Body */
+.moksa-line-popup-body {
+    margin-bottom: 25px;
+}
+
+.moksa-line-login-btn-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #06C755;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s, transform 0.1s;
+    gap: 10px;
+}
+
+.moksa-line-login-btn-large:hover {
+    background-color: #05b34c;
+    color: #ffffff;
+}
+
+.moksa-line-login-btn-large:active {
+    transform: scale(0.98);
+}
+
+.moksa-line-login-btn-large svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Footer */
+.moksa-line-popup-footer {
+    font-size: 12px;
+    color: #999;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.moksa-line-popup-footer a {
+    color: #666;
+    text-decoration: none;
+}
+
+.moksa-line-popup-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .moksa-line-popup-content {
+        background: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .moksa-line-popup-title {
+        color: #ffffff;
+    }
+
+    .moksa-line-popup-desc {
+        color: #aaa;
+    }
+
+    .moksa-line-popup-footer {
+        border-top-color: #333;
+        color: #666;
+    }
+
+    .moksa-line-popup-footer a {
+        color: #888;
+    }
+}
+
+/* Loading Spinner */
+.moksa-line-loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #06c755;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+    display: none;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Error Message */
+.moksa-line-error {
+    color: #ff334b;
+    background: #ffe6e6;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+    font-size: 14px;
+    display: none;
+    text-align: center;
+}
+
+/* Dark Mode Adjustments for new elements */
+@media (prefers-color-scheme: dark) {
+    .moksa-line-error {
+        background: #4a1a1a;
+        color: #ff8080;
+    }
+}

@@ -60,6 +60,13 @@ class Moksa_Line_Login {
         require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-auth.php';
         require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-profile.php';
         require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-shortcodes.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-popup.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-woocommerce.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-messaging.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-webhook.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-richmenu.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-flexmessage.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-tools.php';
     }
     
     /**
@@ -85,6 +92,13 @@ class Moksa_Line_Login {
         Moksa_Line_Auth::get_instance();
         Moksa_Line_Profile::get_instance();
         Moksa_Line_Shortcodes::get_instance();
+        Moksa_Line_Popup::get_instance();
+        Moksa_Line_WooCommerce::get_instance();
+        Moksa_Line_Messaging::get_instance();
+        Moksa_Line_Webhook::get_instance();
+        Moksa_Line_RichMenu::get_instance();
+        Moksa_Line_FlexMessage::get_instance();
+        Moksa_Line_Tools::get_instance();
     }
     
     /**
