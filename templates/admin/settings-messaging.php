@@ -11,7 +11,7 @@
             <table class="form-table">
                 <tr>
                     <th scope="row">
-                        <label for="moksa_line_messaging_token">Channel Access Token</label>
+                        <label for="moksa_line_messaging_token">頻道存取權杖</label>
                     </th>
                     <td>
                         <textarea id="moksa_line_messaging_token" name="moksa_line_messaging_token" rows="5" class="large-text code"><?php echo esc_textarea(get_option('moksa_line_messaging_token')); ?></textarea>

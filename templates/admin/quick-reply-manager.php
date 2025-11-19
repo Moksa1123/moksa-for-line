@@ -72,7 +72,7 @@
 </div>
 
 <script type="text/template" id="qr_item_template">
-    <div class="qr-item" style="background: #f9f9f9; padding: 10px; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 4px;">
+    <div class="qr-item" style="background: #f8fafc; padding: 12px; border: 1px solid #e2e8f0; margin-bottom: 10px; border-radius: 8px;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
             <strong><?php _e('Item', 'moksa-line-login'); ?></strong>
             <button type="button" class="button-link-delete remove-qr-item">x</button>
@@ -119,7 +119,7 @@ jQuery(document).ready(function($) {
         });
         
         if (items.length === 0) {
-            alert('Please add at least one item.');
+            alert('請至少新增一個項目。');
             return;
         }
         
@@ -133,7 +133,7 @@ jQuery(document).ready(function($) {
             if (response.success) {
                 location.reload();
             } else {
-                alert('Error: ' + response.data);
+                alert('錯誤：' + response.data);
             }
         });
     });
@@ -175,7 +175,7 @@ jQuery(document).ready(function($) {
     
     // Delete
     $('.delete-quick-reply').on('click', function() {
-        if (!confirm('<?php _e('Are you sure?', 'moksa-line-login'); ?>')) return;
+        if (!confirm('確定要刪除嗎？')) return;
         
         var id = $(this).data('id');
         $.post(moksaLineAdmin.ajaxUrl, {

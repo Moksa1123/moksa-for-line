@@ -11,7 +11,7 @@
             <table class="form-table">
                 <tr>
                     <th scope="row">
-                        <label for="moksa_line_channel_id">Channel ID</label>
+                        <label for="moksa_line_channel_id">頻道 ID</label>
                     </th>
                     <td>
                         <input type="text" id="moksa_line_channel_id" name="moksa_line_channel_id" 
@@ -87,7 +87,7 @@
 
                 <tr>
                     <th scope="row">
-                        <label for="moksa_line_n8n_webhook_url">n8n Webhook URL</label>
+                        <label for="moksa_line_n8n_webhook_url">n8n Webhook 網址</label>
                     </th>
                     <td>
                         <input type="url" id="moksa_line_n8n_webhook_url" name="moksa_line_n8n_webhook_url" 

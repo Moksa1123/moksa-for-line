@@ -24,7 +24,7 @@
                 <div id="setting-limit" class="form-group" style="margin-top: 15px;">
                     <label for="carousel_limit"><?php _e('Number of Products', 'moksa-line-login'); ?></label>
                     <input type="number" id="carousel_limit" class="widefat" value="5" min="1" max="12">
-                    <p class="description"><?php _e('Max 12 bubbles in a carousel.', 'moksa-line-login'); ?></p>
+                    <p class="description">輪播中最多 12 個氣泡。</p>
                 </div>
                 
                 <div id="setting-category" class="form-group" style="margin-top: 15px; display: none;">
@@ -51,7 +51,7 @@
                 <div id="setting-specific" class="form-group" style="margin-top: 15px; display: none;">
                     <label for="carousel_ids"><?php _e('Product IDs', 'moksa-line-login'); ?></label>
                     <input type="text" id="carousel_ids" class="widefat" placeholder="e.g., 101, 102, 105">
-                    <p class="description"><?php _e('Comma separated list of Product IDs.', 'moksa-line-login'); ?></p>
+                    <p class="description">以逗號分隔的商品 ID 列表。</p>
                 </div>
                 
                 <div style="margin-top: 20px;">

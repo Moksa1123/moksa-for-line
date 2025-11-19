@@ -3,7 +3,7 @@
     <p>自訂當訂單狀態變更時發送給使用者的 Flex Message 訊息範本。</p>
 
     <div class="moksa-card">
-        <div style="margin-bottom: 20px; padding: 15px; background: #f0f0f1; border-radius: 4px; display: flex; align-items: center; gap: 15px;">
+        <div style="margin-bottom: 20px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; align-items: center; gap: 15px;">
             <label for="moksa-order-status" style="font-weight: bold;">選擇訂單狀態：</label>
             <select id="moksa-order-status" style="min-width: 200px;">
                 <option value="default">預設範本 (Default)</option>
@@ -21,7 +21,7 @@
         <div style="display: flex; gap: 20px;">
             <div style="flex: 1;">
                 <h3>JSON 範本編輯器</h3>
-                <div id="moksa-json-editor" style="height: 600px; border: 1px solid #ddd; border-radius: 4px;"></div>
+                <div id="moksa-json-editor" style="height: 600px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;"></div>
                 <textarea id="moksa_line_order_template" name="moksa_line_order_template" style="display: none;"></textarea>
                 
                 <div style="margin-top: 20px;">
@@ -66,7 +66,7 @@
                     );
                     
                     foreach ($variables as $category => $vars) {
-                        echo '<h4 style="margin: 15px 0 5px; color: #444;">' . esc_html($category) . '</h4>';
+                        echo '<h4 style="margin: 15px 0 8px; color: #1e293b; font-weight: 600; font-size: 14px;">' . esc_html($category) . '</h4>';
                         foreach ($vars as $var => $desc) {
                             echo '<div class="moksa-variable-item" draggable="true" data-variable="' . esc_attr($var) . '" onclick="navigator.clipboard.writeText(\'' . $var . '\')">';
                             echo '<code>' . $var . '</code>';
@@ -99,34 +99,36 @@
     padding-right: 5px;
 }
 .moksa-variable-item {
-    padding: 8px 12px;
+    padding: 10px 14px;
     background: #fff;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: grab;
-    transition: all 0.2s;
-    border: 1px solid #e0e0e0;
+    transition: all 0.2s ease;
+    border: 1px solid #e2e8f0;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 .moksa-variable-item:hover {
-    background: #f0f7ff;
-    border-color: #007cba;
+    background: #f1f5f9;
+    border-color: #cbd5e1;
     transform: translateX(2px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 .moksa-variable-item:active {
     cursor: grabbing;
 }
 .moksa-variable-item code {
-    font-weight: bold;
-    color: #d63384;
-    background: rgba(214, 51, 132, 0.1);
-    padding: 2px 4px;
-    border-radius: 3px;
+    font-weight: 600;
+    color: #2563eb;
+    background: #eff6ff;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 12px;
 }
 .moksa-variable-item span {
-    font-size: 0.85em;
-    color: #666;
+    font-size: 13px;
+    color: #64748b;
 }
 /* Phone Preview Styles */
 .moksa-phone-preview {
@@ -142,16 +144,17 @@
     flex-direction: column;
 }
 .moksa-phone-header {
-    background: #2c3e50;
+    background: #1e293b;
     color: #fff;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 14px;
 }
 .moksa-phone-content {
     flex: 1;
-    background: #849ebf; /* LINE default bg color */
-    padding: 10px;
+    background: #e2e8f0;
+    padding: 12px;
     overflow-y: auto;
 }
 /* Simple Flex Message Renderer Styles */
@@ -178,15 +181,20 @@
     display: block;
     text-align: center;
     padding: 10px;
-    background: #f0f0f0;
+    background: #f1f5f9;
     text-decoration: none;
-    color: #444;
-    border-radius: 4px;
+    color: #475569;
+    border-radius: 6px;
     margin-top: 5px;
+    font-weight: 500;
+    transition: all 0.2s;
 }
 .flex-button.primary {
-    background: #06c755;
+    background: #2563eb;
     color: #fff;
+}
+.flex-button:hover {
+    opacity: 0.9;
 }
 </style>
 
@@ -216,7 +224,11 @@ jQuery(document).ready(function($) {
         editor.onDidChangeModelContent(function() {
             var value = editor.getValue();
             $('#moksa_line_order_template').val(value);
-            updatePreview(value);
+            // Debounce preview update to avoid too frequent updates
+            clearTimeout(window.previewTimeout);
+            window.previewTimeout = setTimeout(function() {
+                updatePreview(value);
+            }, 500);
         });
 
         // Drag and Drop Support
@@ -355,14 +367,16 @@ jQuery(document).ready(function($) {
             renderSimpleFlex(flexObj, container);
             
         } catch (e) {
-            // Invalid JSON, ignore
+            // Invalid JSON, show error
+            var container = $('#moksa-preview-container');
+            container.html('<div style="background: #fff; padding: 12px 16px; border-radius: 8px; color: #dc2626; border: 1px solid #fecaca; font-size: 13px;">JSON 格式錯誤：' + e.message + '</div>');
         }
     }
 
     function renderSimpleFlex(obj, container) {
         // Handle Bubble
         if (obj.type === 'bubble') {
-            var bubble = $('<div class="flex-bubble"></div>');
+            var bubble = $('<div class="flex-bubble" style="background: #fff; border-radius: 12px; overflow: hidden; max-width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"></div>');
             
             if (obj.header) renderBox(obj.header, bubble, 'flex-header');
             if (obj.hero) renderImage(obj.hero, bubble, 'flex-hero');
@@ -371,22 +385,30 @@ jQuery(document).ready(function($) {
             
             container.append(bubble);
         } else if (obj.type === 'flex') {
-            renderSimpleFlex(obj.contents, container);
+            if (obj.contents) {
+                renderSimpleFlex(obj.contents, container);
+            }
+        } else if (obj.type === 'carousel') {
+            // Handle carousel (simplified - just show first bubble)
+            if (obj.contents && obj.contents.length > 0) {
+                renderSimpleFlex(obj.contents[0], container);
+            }
         }
     }
 
     function renderBox(box, parent, className) {
-        var div = $('<div class="' + (className || '') + '"></div>');
+        var div = $('<div class="' + (className || '') + '" style="padding: 16px;"></div>');
         
         // Apply styles
         if (box.backgroundColor) div.css('background-color', box.backgroundColor);
-        if (box.layout === 'horizontal') div.css({display: 'flex', flexDirection: 'row', gap: '5px'});
+        if (box.layout === 'horizontal') div.css({display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center'});
         if (box.layout === 'vertical') div.css({display: 'flex', flexDirection: 'column', gap: '5px'});
         
         if (box.contents && Array.isArray(box.contents)) {
             box.contents.forEach(function(item) {
                 if (item.type === 'text') {
-                    var p = $('<p class="flex-text">' + item.text + '</p>');
+                    var p = $('<p class="flex-text" style="margin: 0; line-height: 1.5;"></p>');
+                    p.text(item.text);
                     if (item.color) p.css('color', item.color);
                     if (item.size === 'xs') p.css('font-size', '10px');
                     if (item.size === 'sm') p.css('font-size', '12px');
@@ -399,14 +421,17 @@ jQuery(document).ready(function($) {
                     if (item.flex) p.css('flex', item.flex);
                     div.append(p);
                 } else if (item.type === 'button') {
-                    var a = $('<a href="#" class="flex-button">' + (item.action ? item.action.label : 'Button') + '</a>');
-                    if (item.style === 'primary') a.addClass('primary');
+                    var a = $('<a href="#" class="flex-button" style="display: block; text-align: center; padding: 10px; background: #f1f5f9; text-decoration: none; color: #475569; border-radius: 6px; margin-top: 5px; font-weight: 500; transition: all 0.2s;"></a>');
+                    a.text(item.action ? (item.action.label || '按鈕') : '按鈕');
+                    if (item.style === 'primary') a.css({'background-color': '#2563eb', 'color': '#fff'});
                     if (item.color) a.css('background-color', item.color);
                     div.append(a);
                 } else if (item.type === 'box') {
                     renderBox(item, div);
                 } else if (item.type === 'separator') {
-                    div.append('<hr style="border:0; border-top:1px solid #eee; margin: 5px 0;">');
+                    div.append('<hr style="border:0; border-top:1px solid #e2e8f0; margin: 8px 0;">');
+                } else if (item.type === 'image') {
+                    renderImage(item, div);
                 }
             });
         }
@@ -416,7 +441,12 @@ jQuery(document).ready(function($) {
     
     function renderImage(img, parent, className) {
         var div = $('<div class="' + (className || '') + '"></div>');
-        div.append('<img src="' + img.url + '">');
+        var imgEl = $('<img style="width: 100%; height: auto; display: block;">');
+        imgEl.attr('src', img.url || '');
+        if (img.aspectRatio) {
+            imgEl.css('aspect-ratio', img.aspectRatio);
+        }
+        div.append(imgEl);
         parent.append(div);
     }
 });

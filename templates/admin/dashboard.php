@@ -12,7 +12,7 @@
         
         <div class="card" style="flex: 1; text-align: center; padding: 20px;">
             <h2 style="margin-top: 0;"><?php _e('Total Friends', 'moksa-line-login'); ?></h2>
-            <div style="font-size: 48px; font-weight: bold; color: #06C755;">
+            <div style="font-size: 48px; font-weight: bold; color: #2563eb;">
                 <?php echo number_format($total_friends); ?>
             </div>
             <p><?php _e('Linked Users', 'moksa-line-login'); ?></p>
@@ -20,7 +20,7 @@
         
         <div class="card" style="flex: 1; text-align: center; padding: 20px;">
             <h2 style="margin-top: 0;"><?php _e('Messages Sent', 'moksa-line-login'); ?></h2>
-            <div style="font-size: 48px; font-weight: bold; color: #00B900;">
+            <div style="font-size: 48px; font-weight: bold; color: #3b82f6;">
                 <?php echo number_format($message_stats['total_sent']); ?>
             </div>
             <p><?php _e('Total Broadcasts/Push', 'moksa-line-login'); ?></p>

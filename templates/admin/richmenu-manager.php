@@ -138,7 +138,7 @@ jQuery(document).ready(function($) {
     
     // Delete
     $('.delete-rm').on('click', function() {
-        if (!confirm('確定要刪除嗎？')) return;
+        if (!confirm('確定要刪除此圖文選單嗎？')) return;
         var id = $(this).data('id');
         
         $.post(moksaLineAdmin.ajaxUrl, {
@@ -173,76 +173,3 @@ jQuery(document).ready(function($) {
 });
 </script>
 
-<script>
-jQuery(document).ready(function($) {
-    // Image Upload
-    var frame;
-    $('#rm_upload_image').on('click', function(e) {
-        e.preventDefault();
-        if (frame) { frame.open(); return; }
-        
-        frame = wp.media({
-            title: 'Select Rich Menu Image',
-            button: { text: 'Use this image' },
-            multiple: false
-        });
-        
-        frame.on('select', function() {
-            var attachment = frame.state().get('selection').first().toJSON();
-            $('#rm_image_id').val(attachment.id);
-            $('#rm_image_preview').html('<img src="' + attachment.url + '" style="max-width:100%;">');
-        });
-        
-        frame.open();
-    });
-    
-    // Create Form Submit
-    $('#moksa-line-richmenu-form').on('submit', function(e) {
-        e.preventDefault();
-        var data = $(this).serialize() + '&action=moksa_line_create_richmenu&nonce=' + moksaLineAdmin.nonce;
-        
-        $.post(moksaLineAdmin.ajaxUrl, data, function(response) {
-            if (response.success) {
-                location.reload();
-            } else {
-                alert(response.data);
-            }
-        });
-    });
-    
-    // Delete
-    $('.delete-rm').on('click', function() {
-        if (!confirm('Are you sure?')) return;
-        var id = $(this).data('id');
-        
-        $.post(moksaLineAdmin.ajaxUrl, {
-            action: 'moksa_line_delete_richmenu',
-            nonce: moksaLineAdmin.nonce,
-            id: id
-        }, function(response) {
-            if (response.success) {
-                location.reload();
-            } else {
-                alert(response.data);
-            }
-        });
-    });
-    
-    // Set Default
-    $('.set-default-rm').on('click', function() {
-        var id = $(this).data('id');
-        
-        $.post(moksaLineAdmin.ajaxUrl, {
-            action: 'moksa_line_set_default_richmenu',
-            nonce: moksaLineAdmin.nonce,
-            id: id
-        }, function(response) {
-            if (response.success) {
-                location.reload();
-            } else {
-                alert(response.data);
-            }
-        });
-    });
-});
-</script>

@@ -14,7 +14,7 @@
                 
                 <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
                     <label style="display: block; margin-bottom: 5px; font-weight: bold;">JSON 內容</label>
-                    <div id="monaco-editor" style="flex: 1; border: 1px solid #ccc;"></div>
+                    <div id="monaco-editor" style="flex: 1; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;"></div>
                     <textarea id="flex_json" style="display: none;"></textarea>
                 </div>
                 
@@ -39,7 +39,7 @@
                 
                 <div id="user_selector" style="display: none; margin-top: 10px;">
                     <p class="description">請從下方列表中選擇使用者：</p>
-                    <div style="max-height: 150px; overflow-y: auto; border: 1px solid #ddd; padding: 5px;">
+                    <div style="max-height: 150px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; background: #f8fafc;">
                         <?php
                         $db = Moksa_Line_Database::get_instance();
                         $users = $db->get_all_line_users(100);
@@ -62,13 +62,13 @@
             </div>
             
             <!-- Phone Preview -->
-            <div class="phone-preview" style="background: #fff; border: 1px solid #ddd; border-radius: 20px; padding: 15px; flex: 1; overflow: hidden; display: flex; flex-direction: column;">
-                <div style="text-align: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px; font-weight: bold;">
+            <div class="phone-preview" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; flex: 1; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);">
+                <div style="text-align: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 12px; font-weight: 600; color: #1e293b; font-size: 14px;">
                     LINE
                 </div>
-                <div id="preview_container" style="flex: 1; overflow-y: auto; background: #849ebf; padding: 10px; border-radius: 4px;">
+                <div id="preview_container" style="flex: 1; overflow-y: auto; background: #e2e8f0; padding: 12px; border-radius: 8px;">
                     <!-- Preview content will be rendered here -->
-                    <div class="flex-bubble-preview" style="background: #fff; padding: 10px; border-radius: 10px; text-align: center; color: #999;">
+                    <div class="flex-bubble-preview" style="background: #fff; padding: 16px; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 13px;">
                         預覽將顯示於此
                     </div>
                 </div>
@@ -94,7 +94,14 @@
             document.getElementById('flex_json').value = window.editor.getValue();
         });
         
-        // Initial sync
+        // Initial sync and preview
         document.getElementById('flex_json').value = window.editor.getValue();
+        
+        // Initial preview
+        if (typeof updatePreview === 'function') {
+            setTimeout(function() {
+                updatePreview(window.editor.getValue());
+            }, 500);
+        }
     });
 </script>

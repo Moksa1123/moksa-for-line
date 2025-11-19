@@ -64,13 +64,13 @@
                     <div id="image-preview" style="margin-bottom: 10px; max-width: 100%;"></div>
                     <input type="hidden" id="image_id" name="image_id" required>
                     <button type="button" class="button" id="upload_image"><?php _e('Upload Image', 'moksa-line-login'); ?></button>
-                    <p class="description"><?php _e('Recommended width: 1040px. JPEG format.', 'moksa-line-login'); ?></p>
+                    <p class="description">建議寬度：1040px。JPEG 格式。</p>
                 </div>
                 
                 <div class="form-group" style="margin-top: 15px;">
                     <label for="actions"><?php _e('Actions (JSON)', 'moksa-line-login'); ?></label>
                     <textarea id="actions" class="widefat" rows="10" placeholder='[{"type":"uri","linkUri":"https://...","area":{"x":0,"y":0,"width":520,"height":1040}}]'></textarea>
-                    <p class="description"><?php _e('Define clickable areas. Use x, y, width, height.', 'moksa-line-login'); ?></p>
+                    <p class="description">定義可點擊區域。使用 x, y, width, height 座標。</p>
                 </div>
                 
                 <div style="margin-top: 20px;">
