@@ -3,13 +3,15 @@
  * Plugin Name: Moksa LINE Login
  * Plugin URI: https://moksaweb.com
  * Description: Complete LINE Login integration for WordPress with user registration, profile management, and database storage.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Moksa Team
  * Author URI: https://moksaweb.com
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: moksa-line-login
  * Domain Path: /languages
+ * Requires at least: 6.7
+ * Requires PHP: 8.0
  */
 
 // Exit if accessed directly
@@ -18,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('MOKSA_LINE_VERSION', '1.0.0');
+define('MOKSA_LINE_VERSION', '1.1.0');
 define('MOKSA_LINE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('MOKSA_LINE_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('MOKSA_LINE_PLUGIN_BASENAME', plugin_basename(__FILE__));
