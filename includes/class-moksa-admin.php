@@ -34,8 +34,8 @@ class Moksa_Line_Admin {
      */
     public function add_admin_menu() {
         add_menu_page(
-            __('Moksa LINE Login', 'moksa-line-login'),
-            __('LINE Login', 'moksa-line-login'),
+            'Moksa LINE Login',
+            'LINE Login',
             'manage_options',
             'moksa-line-login',
             array($this, 'render_settings_page'),
@@ -45,8 +45,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('General Settings', 'moksa-line-login'),
-            __('General Settings', 'moksa-line-login'),
+            '一般設定',
+            '一般設定',
             'manage_options',
             'moksa-line-login',
             array($this, 'render_settings_page')
@@ -54,8 +54,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Button Settings', 'moksa-line-login'),
-            __('Button Settings', 'moksa-line-login'),
+            '按鈕樣式設定',
+            '按鈕樣式',
             'manage_options',
             'moksa-line-button-settings',
             array($this, 'render_button_settings')
@@ -63,8 +63,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Messaging API', 'moksa-line-login'),
-            __('Messaging API', 'moksa-line-login'),
+            'Messaging API 設定',
+            'Messaging API',
             'manage_options',
             'moksa-line-messaging-settings',
             array($this, 'render_messaging_settings')
@@ -72,8 +72,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Rich Menu Manager', 'moksa-line-login'),
-            __('Rich Menu', 'moksa-line-login'),
+            '圖文選單 (Rich Menu) 管理',
+            '圖文選單',
             'manage_options',
             'moksa-line-rich-menu',
             array($this, 'render_richmenu_page')
@@ -81,8 +81,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Flex Message Editor', 'moksa-line-login'),
-            __('Flex Editor', 'moksa-line-login'),
+            'Flex Message 編輯器',
+            'Flex 編輯器',
             'manage_options',
             'moksa-line-flex-message',
             array($this, 'render_flex_editor_page')
@@ -90,8 +90,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Quick Reply Manager', 'moksa-line-login'),
-            __('Quick Reply', 'moksa-line-login'),
+            '快速回覆 (Quick Reply) 管理',
+            '快速回覆',
             'manage_options',
             'moksa-line-quick-reply',
             array($this, 'render_quickreply_page')
@@ -99,8 +99,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Auto Reply Rules', 'moksa-line-login'),
-            __('Auto Reply', 'moksa-line-login'),
+            '自動回覆規則',
+            '自動回覆',
             'manage_options',
             'moksa-line-auto-reply',
             array($this, 'render_autoreply_page')
@@ -108,8 +108,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('WooCommerce Carousel', 'moksa-line-login'),
-            __('WooCarousel', 'moksa-line-login'),
+            'WooCommerce 商品輪播',
+            '商品輪播',
             'manage_options',
             'moksa-line-woocarousel',
             array($this, 'render_woocarousel_page')
@@ -117,8 +117,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Order Notification', 'moksa-line-login'),
-            __('Order Notification', 'moksa-line-login'),
+            '訂單通知範本',
+            '訂單通知',
             'manage_options',
             'moksa-line-order-notification',
             array($this, 'render_order_notification_page')
@@ -126,8 +126,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Imagemap Manager', 'moksa-line-login'),
-            __('Imagemap', 'moksa-line-login'),
+            '圖文訊息 (Imagemap) 管理',
+            '圖文訊息',
             'manage_options',
             'moksa-line-imagemap',
             array($this, 'render_imagemap_page')
@@ -135,8 +135,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Dashboard', 'moksa-line-login'),
-            __('Dashboard', 'moksa-line-login'),
+            '儀表板',
+            '儀表板',
             'manage_options',
             'moksa-line-dashboard',
             array($this, 'render_dashboard_page')
@@ -144,8 +144,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Instruction Manual', 'moksa-line-login'),
-            __('Instruction Manual', 'moksa-line-login'),
+            '使用說明',
+            '使用說明',
             'manage_options',
             'moksa-line-docs',
             array($this, 'render_docs_page')
@@ -153,8 +153,8 @@ class Moksa_Line_Admin {
         
         add_submenu_page(
             'moksa-line-login',
-            __('Tools', 'moksa-line-login'),
-            __('Tools', 'moksa-line-login'),
+            '工具',
+            '工具',
             'manage_options',
             'moksa-line-tools',
             array($this, 'render_tools_page')
@@ -328,7 +328,7 @@ class Moksa_Line_Admin {
      * Add LINE User ID column to users table
      */
     public function add_line_user_column($columns) {
-        $columns['line_user_id'] = __('LINE User ID', 'moksa-line-login');
+        $columns['line_user_id'] = 'LINE 使用者 ID';
         return $columns;
     }
     

@@ -51,6 +51,8 @@ class Moksa_Line_WooCommerce {
         
         // AJAX Save Template
         add_action('wp_ajax_moksa_line_save_order_template', array($this, 'ajax_save_order_template'));
+        // AJAX Get Template
+        add_action('wp_ajax_moksa_line_get_order_template', array($this, 'ajax_get_order_template'));
     }
     
     /**
@@ -60,27 +62,74 @@ class Moksa_Line_WooCommerce {
         check_ajax_referer('moksa_line_save_template', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error('Permission denied');
+            wp_send_json_error('權限不足');
         }
         
         $template = isset($_POST['template']) ? wp_unslash($_POST['template']) : '';
+        $status = isset($_POST['status']) ? sanitize_text_field($_POST['status']) : 'default';
         
         // Validate JSON
         if (json_decode($template) === null) {
-            wp_send_json_error('Invalid JSON');
+            wp_send_json_error('無效的 JSON 格式');
         }
         
-        update_option('moksa_line_order_template', $template);
+        if ($status === 'default') {
+            update_option('moksa_line_order_template', $template);
+        } else {
+            update_option('moksa_line_order_template_' . $status, $template);
+        }
+        
         wp_send_json_success();
+    }
+
+    /**
+     * AJAX Get Order Template
+     */
+    public function ajax_get_order_template() {
+        check_ajax_referer('moksa_line_save_template', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('權限不足');
+        }
+        
+        $status = isset($_POST['status']) ? sanitize_text_field($_POST['status']) : 'default';
+        
+        if ($status === 'default') {
+            $template = get_option('moksa_line_order_template');
+        } else {
+            $template = get_option('moksa_line_order_template_' . $status);
+        }
+
+        if (empty($template)) {
+            $template = json_encode($this->get_default_order_template($status));
+        }
+        
+        wp_send_json_success(array('template' => $template));
     }
     
     /**
      * Get Default Order Template
      */
-    public function get_default_order_template() {
+    public function get_default_order_template($status = 'default') {
+        $color = '#17c950'; // Default Green
+        $title = '訂單狀態更新';
+        
+        if (in_array($status, array('pending', 'on-hold'))) {
+            $color = '#ff9800';
+            $title = '訂單待付款/處理中';
+        }
+        if (in_array($status, array('cancelled', 'failed', 'refunded'))) {
+            $color = '#ff334b';
+            $title = '訂單已取消/退款';
+        }
+        if ($status === 'completed') {
+            $color = '#06c755';
+            $title = '訂單已完成';
+        }
+
         return array(
             'type' => 'flex',
-            'altText' => 'Order #{{order_number}} Status Update: {{status_label}}',
+            'altText' => '訂單 #{{order_number}} 狀態更新: {{status_label}}',
             'contents' => array(
                 'type' => 'bubble',
                 'header' => array(
@@ -89,9 +138,9 @@ class Moksa_Line_WooCommerce {
                     'contents' => array(
                         array(
                             'type' => 'text',
-                            'text' => 'Order Update',
+                            'text' => $title,
                             'weight' => 'bold',
-                            'color' => '#1DB446',
+                            'color' => $color,
                             'size' => 'sm'
                         ),
                         array(
@@ -127,7 +176,7 @@ class Moksa_Line_WooCommerce {
                                     'contents' => array(
                                         array(
                                             'type' => 'text',
-                                            'text' => 'Total',
+                                            'text' => '總金額',
                                             'size' => 'sm',
                                             'color' => '#555555',
                                             'flex' => 0
@@ -147,7 +196,7 @@ class Moksa_Line_WooCommerce {
                                     'contents' => array(
                                         array(
                                             'type' => 'text',
-                                            'text' => 'Items',
+                                            'text' => '商品數量',
                                             'size' => 'sm',
                                             'color' => '#555555',
                                             'flex' => 0
@@ -180,7 +229,7 @@ class Moksa_Line_WooCommerce {
                             'height' => 'sm',
                             'action' => array(
                                 'type' => 'uri',
-                                'label' => 'View Order',
+                                'label' => '查看訂單',
                                 'uri' => '{{view_order_url}}'
                             ),
                             'color' => '{{status_color}}'
@@ -309,10 +358,13 @@ class Moksa_Line_WooCommerce {
         if (in_array($status, array('cancelled', 'failed', 'refunded'))) $color = '#ff334b';
         if ($status === 'completed') $color = '#06c755';
         
-        // Get Template
-        $template_json = get_option('moksa_line_order_template');
+        // Get Template - Try specific status first, then default
+        $template_json = get_option('moksa_line_order_template_' . $status);
         if (empty($template_json)) {
-            $template_arr = $this->get_default_order_template();
+            $template_json = get_option('moksa_line_order_template'); // Fallback to global default
+        }
+        if (empty($template_json)) {
+            $template_arr = $this->get_default_order_template($status);
             $template_json = json_encode($template_arr);
         }
         
@@ -331,7 +383,7 @@ class Moksa_Line_WooCommerce {
             '{{payment_method}}' => $payment_method,
             '{{shipping_method}}' => $shipping_method,
             '{{customer_note}}' => $customer_note,
-            '{{tracking_number}}' => $tracking_number ? $tracking_number : __('N/A', 'moksa-line-login'),
+            '{{tracking_number}}' => $tracking_number ? $tracking_number : '無',
             '{{store_name}}' => $store_name ? $store_name : '',
             '{{store_address}}' => $store_address ? $store_address : '',
             '{{view_order_url}}' => $view_order_url
@@ -352,7 +404,7 @@ class Moksa_Line_WooCommerce {
         $logout = $items['customer-logout'];
         unset($items['customer-logout']);
         
-        $items['line-account'] = __('LINE Account', 'moksa-line-login');
+        $items['line-account'] = 'LINE 帳號綁定';
         $items['customer-logout'] = $logout;
         
         return $items;
@@ -374,7 +426,7 @@ class Moksa_Line_WooCommerce {
         $line_user = $db->get_line_user_by_wp_id($user_id);
         
         ?>
-        <h3><?php _e('LINE Account Connection', 'moksa-line-login'); ?></h3>
+        <h3>LINE 帳號綁定</h3>
         
         <?php if ($line_user): ?>
             <div class="moksa-line-account-info" style="background: #f9f9f9; padding: 20px; border-radius: 8px; display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
@@ -390,19 +442,19 @@ class Moksa_Line_WooCommerce {
                         <p style="margin: 0 0 10px; color: #666;"><?php echo esc_html($line_user->status_message); ?></p>
                     <?php endif; ?>
                     <p style="margin: 0; font-size: 0.9em; color: #999;">
-                        <?php printf(__('Connected since: %s', 'moksa-line-login'), date_i18n(get_option('date_format'), strtotime($line_user->created_at))); ?>
+                        <?php printf('已連結於: %s', date_i18n(get_option('date_format'), strtotime($line_user->created_at))); ?>
                     </p>
                 </div>
             </div>
             
             <button type="button" class="button" id="moksa-unbind-line" data-user-id="<?php echo esc_attr($user_id); ?>">
-                <?php _e('Disconnect LINE Account', 'moksa-line-login'); ?>
+                解除 LINE 綁定
             </button>
             
         <?php else: ?>
-            <p><?php _e('Connect your LINE account to sign in easily and receive order updates.', 'moksa-line-login'); ?></p>
+            <p>連結您的 LINE 帳號，以便快速登入並接收訂單更新通知。</p>
             
-            <?php echo do_shortcode('[line_login_button text="' . __('Connect LINE Account', 'moksa-line-login') . '"]'); ?>
+            <?php echo do_shortcode('[line_login_button text="連結 LINE 帳號"]'); ?>
         <?php endif; ?>
         <?php
     }
@@ -417,7 +469,7 @@ class Moksa_Line_WooCommerce {
         
         // Add separator
         echo '<div style="text-align: center; margin-bottom: 20px; position: relative;">
-                <span style="background: #fff; padding: 0 10px; position: relative; z-index: 1; color: #777;">' . __('OR', 'moksa-line-login') . '</span>
+                <span style="background: #fff; padding: 0 10px; position: relative; z-index: 1; color: #777;">或</span>
                 <div style="position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #eee;"></div>
               </div>';
     }
@@ -431,8 +483,8 @@ class Moksa_Line_WooCommerce {
         }
         
         echo '<div class="woocommerce-info">';
-        echo __('Have a LINE account?', 'moksa-line-login') . ' ';
-        echo '<a href="#" class="showlogin moksa-line-login-trigger">' . __('Click here to login with LINE', 'moksa-line-login') . '</a>';
+        echo '擁有 LINE 帳號嗎？ ';
+        echo '<a href="#" class="showlogin moksa-line-login-trigger">點此使用 LINE 快速登入</a>';
         echo '</div>';
     }
 }
