@@ -47,6 +47,18 @@
                     <p class="description"><?php _e('URL for users to add your Official Account as a friend (e.g., https://line.me/R/ti/p/@yourid).', 'moksa-line-login'); ?></p>
                 </td>
             </tr>
+            
+            <tr>
+                <th scope="row">
+                    <label for="moksa_line_order_delay"><?php _e('Order Notification Delay', 'moksa-line-login'); ?></label>
+                </th>
+                <td>
+                    <input type="number" id="moksa_line_order_delay" name="moksa_line_order_delay" min="0" step="1"
+                           value="<?php echo esc_attr(get_option('moksa_line_order_delay', 0)); ?>" class="regular-text"> <?php _e('seconds', 'moksa-line-login'); ?>
+                    <p class="description"><?php _e('Delay sending order status notifications to ensure tracking numbers are updated by third-party plugins.', 'moksa-line-login'); ?></p>
+                    <p class="description"><?php _e('Example: <strong>600</strong> for 10 minutes. Set to 0 to disable.', 'moksa-line-login'); ?></p>
+                </td>
+            </tr>
         </table>
         
         <?php submit_button(); ?>

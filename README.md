@@ -8,20 +8,29 @@ Complete LINE Login integration for WordPress with user registration, profile ma
 - **LINE Login**: 安全的 OAuth 2.1 登入流程。
 - **自動註冊 (Auto Registration)**: 自動將 LINE 帳號轉換為 WordPress 使用者。
 - **資料同步 (Profile Sync)**: 同步 LINE 顯示名稱與大頭貼。
+- **現代化 UI (Modern UI)**: 全新設計的紫色/粉色系後台介面，美觀且易於操作。
 - **彈窗登入 (Pop-up Login)**: 現代化、響應式的彈窗登入介面。
 - **短代碼 (Shortcodes)**: 輕鬆在任何地方放置登入按鈕。
 
+### 進階訊息互動 (Advanced Messaging)
+- **快速回覆 (Quick Reply)**: 建立並管理訊息下方的快速回覆按鈕。
+- **關鍵字自動回覆 (Auto-reply)**: 設定關鍵字觸發自動回覆 (文字、Flex Message、Quick Reply)。
+- **Flex Message 模擬器 (Flex Simulator)**: 內建即時預覽的 Flex Message 編輯器。
+- **圖片地圖 (Imagemap)**: 支援上傳並設定多區域點擊的 Imagemap 訊息。
+- **歡迎訊息 (Greeting Message)**: 自訂好友加入時的歡迎訊息。
+
 ### WooCommerce 整合
+- **商品推薦輪播 (Product Carousel)**: 自動將 WooCommerce 商品轉換為美觀的 Flex Carousel。
 - **我的帳戶 (My Account)**: 新增「LINE 帳號」分頁，讓使用者管理綁定狀態。
 - **結帳頁面 (Checkout)**: 在結帳頁面提供 LINE 登入按鈕。
-- **解除綁定 (Unbind)**: 使用者可自行解除 LINE 帳號綁定。
 - **訂單通知 (Order Notifications)**: 訂單狀態變更時自動發送 LINE Flex Message 通知。
 
-### Messaging API (官方帳號)
-- **圖文選單管理 (Rich Menu Manager)**: 在後台建立並指派互動式圖文選單。
-- **Flex Message 編輯器**: 直接在 WordPress 設計並發送複雜的 JSON 訊息。
-- **訊息推播 (Broadcast)**: 發送訊息給所有使用者或特定使用者。
-- **Webhook**: 處理加好友/封鎖事件並記錄互動。
+### 數據與工具 (Analytics & Tools)
+- **儀表板 (Dashboard)**: 視覺化統計好友數、訊息發送量與近期互動。
+- **LIFF 整合**: 內建 LIFF 支援，提供會員資料補全頁面。
+- **圖文選單 (Rich Menu)**: 視覺化管理介面，輕鬆設定官方帳號選單。
+- **教學手冊 (Instruction Manual)**: 內建完整的後台操作說明文件。
+
 
 ## 安裝說明 (Installation)
 

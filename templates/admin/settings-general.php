@@ -36,23 +36,4 @@
                 </th>
                 <td>
                     <input type="checkbox" id="moksa_line_sync_profile" name="moksa_line_sync_profile" value="1" 
-                           <?php checked('1', get_option('moksa_line_sync_profile')); ?>>
-                    <span class="description"><?php _e('Update WordPress user display name and avatar from LINE profile on every login.', 'moksa-line-login'); ?></span>
-                </td>
-            </tr>
-            
-            <tr>
-                <th scope="row">
-                    <label for="moksa_line_redirect_after_login"><?php _e('Redirect After Login', 'moksa-line-login'); ?></label>
-                </th>
-                <td>
-                    <input type="text" id="moksa_line_redirect_after_login" name="moksa_line_redirect_after_login" 
-                           value="<?php echo esc_attr(get_option('moksa_line_redirect_after_login', home_url())); ?>" class="regular-text">
-                    <p class="description"><?php _e('URL to redirect to after successful login (default: home page).', 'moksa-line-login'); ?></p>
-                </td>
-            </tr>
-        </table>
-        
-        <?php submit_button(); ?>
-    </form>
 </div>

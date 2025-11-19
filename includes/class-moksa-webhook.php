@@ -54,6 +54,19 @@ class Moksa_Line_Webhook {
         
         $events = json_decode($body, true);
         
+        // Forward to n8n if configured
+        $n8n_url = get_option('moksa_line_n8n_webhook_url');
+        if (!empty($n8n_url)) {
+            wp_remote_post($n8n_url, array(
+                'headers' => array(
+                    'Content-Type' => 'application/json',
+                    'x-line-signature' => $signature
+                ),
+                'body' => $body,
+                'blocking' => false // Non-blocking to avoid delaying LINE response
+            ));
+        }
+        
         if (!isset($events['events'])) {
             return new WP_REST_Response(array('status' => 'ok'), 200);
         }
