@@ -114,11 +114,18 @@ class Moksa_Line_Webhook {
             // We can update or create user here if needed
             // For now, we just ensure the user exists in our LINE users table if they linked before
             // Or we can just log it.
-            // If we want to support "Add Friend" -> "Create Account", we need more logic.
         }
         
         // Send welcome message if configured
-        // $messaging->reply_message($event['replyToken'], ...);
+        $greeting = get_option('moksa_line_greeting_message');
+        if (!empty($greeting)) {
+            $messaging->reply_message($event['replyToken'], array(
+                array(
+                    'type' => 'text',
+                    'text' => $greeting
+                )
+            ));
+        }
     }
     
     /**
@@ -133,7 +140,60 @@ class Moksa_Line_Webhook {
      * Handle Message Event
      */
     private function handle_message($event) {
-        // Handle auto-replies or keywords here
+        $message = $event['message'];
+        
+        if ($message['type'] === 'text') {
+            $text = $message['text'];
+            $reply_token = $event['replyToken'];
+            
+            // Check Auto Reply Rules
+            $autoreply = Moksa_Line_AutoReply::get_instance();
+            $rule = $autoreply->find_match($text);
+            
+            if ($rule) {
+                $messaging = Moksa_Line_Messaging::get_instance();
+                $messages = array();
+                
+                if ($rule->reply_type === 'text') {
+                    $messages[] = array(
+                        'type' => 'text',
+                        'text' => $rule->reply_data
+                    );
+                } elseif ($rule->reply_type === 'flex') {
+                    $flex_content = json_decode($rule->reply_data, true);
+                    if ($flex_content) {
+                        $messages[] = $flex_content;
+                    }
+                } elseif ($rule->reply_type === 'quick_reply') {
+                    // For Quick Reply Set, we need to attach it to a text message
+                    // Since Quick Reply is a property of a message, not a message type itself
+                    // We'll send a default text with the Quick Reply items
+                    
+                    $qr_manager = Moksa_Line_QuickReply::get_instance();
+                    // Get the Quick Reply Set by ID (stored in reply_data)
+                    global $wpdb;
+                    $qr_table = $wpdb->prefix . 'moksa_line_quick_replies';
+                    $qr_set = $wpdb->get_row($wpdb->prepare("SELECT * FROM $qr_table WHERE id = %d", intval($rule->reply_data)));
+                    
+                    if ($qr_set) {
+                        $items = json_decode($qr_set->items, true);
+                        if ($items) {
+                            $messages[] = array(
+                                'type' => 'text',
+                                'text' => __('Please select an option:', 'moksa-line-login'),
+                                'quickReply' => array(
+                                    'items' => $items
+                                )
+                            );
+                        }
+                    }
+                }
+                
+                if (!empty($messages)) {
+                    $messaging->reply_message($reply_token, $messages);
+                }
+            }
+        }
     }
     
     /**

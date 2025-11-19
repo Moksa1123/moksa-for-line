@@ -14,25 +14,6 @@
                 </th>
                 <td>
                     <input type="text" id="moksa_line_channel_id" name="moksa_line_channel_id" 
-                           value="<?php echo esc_attr(get_option('moksa_line_channel_id')); ?>" class="regular-text">
-                    <p class="description"><?php _e('Enter your LINE Login Channel ID.', 'moksa-line-login'); ?></p>
-                </td>
-            </tr>
-            
-            <tr>
-                <th scope="row">
-                    <label for="moksa_line_channel_secret"><?php _e('Channel Secret', 'moksa-line-login'); ?></label>
-                </th>
-                <td>
-                    <input type="password" id="moksa_line_channel_secret" name="moksa_line_channel_secret" 
-                           value="<?php echo esc_attr(get_option('moksa_line_channel_secret')); ?>" class="regular-text">
-                    <p class="description"><?php _e('Enter your LINE Login Channel Secret.', 'moksa-line-login'); ?></p>
-                </td>
-            </tr>
-            
-            <tr>
-                <th scope="row"><?php _e('Callback URL', 'moksa-line-login'); ?></th>
-                <td>
                     <code><?php echo esc_url(admin_url('admin-ajax.php?action=moksa_line_callback')); ?></code>
                     <p class="description"><?php _e('Copy this URL and paste it into the "Callback URL" field in your LINE Developers console.', 'moksa-line-login'); ?></p>
                 </td>

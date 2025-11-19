@@ -1,0 +1,207 @@
+/* Flex Message Simulator CSS */
+.flex-preview-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #849ebf;
+    /* LINE Chat Background */
+    padding: 10px;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.flex-bubble {
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 300px;
+    margin: 0 auto 10px auto;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.flex-carousel {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    gap: 10px;
+}
+
+.flex-carousel .flex-bubble {
+    flex: 0 0 260px;
+    /* Fixed width for carousel items */
+}
+
+/* Components */
+.flex-box {
+    display: flex;
+    box-sizing: border-box;
+}
+
+.flex-box.vertical {
+    flex-direction: column;
+}
+
+.flex-box.horizontal {
+    flex-direction: row;
+}
+
+.flex-text {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    line-height: 1.5;
+}
+
+.flex-image {
+    display: block;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.flex-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.flex-button:hover {
+    opacity: 0.8;
+}
+
+.flex-separator {
+    display: block;
+    background-color: #F0F0F0;
+}
+
+.flex-filler {
+    flex-grow: 1;
+}
+
+.flex-spacer {
+    display: block;
+}
+
+.flex-icon {
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Styles */
+.flex-style-link {
+    color: #42659a;
+}
+
+.flex-style-primary {
+    color: #000000;
+}
+
+.flex-style-secondary {
+    color: #888888;
+}
+
+/* Button Styles */
+.flex-btn-style-link {
+    background-color: transparent;
+}
+
+.flex-btn-style-primary {
+    background-color: #17c950;
+    color: #ffffff;
+}
+
+.flex-btn-style-secondary {
+    background-color: #dcdcdc;
+    color: #555555;
+}
+
+/* Sizes */
+.flex-size-xxs {
+    font-size: 11px;
+}
+
+.flex-size-xs {
+    font-size: 13px;
+}
+
+.flex-size-sm {
+    font-size: 14px;
+}
+
+.flex-size-md {
+    font-size: 16px;
+}
+
+.flex-size-lg {
+    font-size: 19px;
+}
+
+.flex-size-xl {
+    font-size: 22px;
+}
+
+.flex-size-xxl {
+    font-size: 29px;
+}
+
+.flex-size-3xl {
+    font-size: 35px;
+}
+
+.flex-size-4xl {
+    font-size: 48px;
+}
+
+.flex-size-5xl {
+    font-size: 60px;
+}
+
+/* Weights */
+.flex-weight-regular {
+    font-weight: 400;
+}
+
+.flex-weight-bold {
+    font-weight: 700;
+}
+
+/* Alignments */
+.flex-align-start {
+    align-items: flex-start;
+}
+
+.flex-align-center {
+    align-items: center;
+}
+
+.flex-align-end {
+    align-items: flex-end;
+}
+
+/* Justify */
+.flex-justify-start {
+    justify-content: flex-start;
+}
+
+.flex-justify-center {
+    justify-content: center;
+}
+
+.flex-justify-end {
+    justify-content: flex-end;
+}
+
+.flex-justify-between {
+    justify-content: space-between;
+}
+
+/* Hero Image */
+.flex-hero-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
