@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moksa Flex Renderer - Complex Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/moksa-flex-renderer.js"></script>
+    <style>
+        body {
+            background: #f0f2f5;
+            padding: 20px;
+            font-family: sans-serif;
+        }
+
+        #preview_container {
+            width: 375px;
+            height: 700px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid #ccc;
+            overflow: hidden;
+            /* Phone frame simulation */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="preview_container"></div>
+
+    <script>
+        var complexJson = {
+            "type": "bubble",
+            "header": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "📦 您的包裹已到達指定門市！",
+                        "weight": "bold",
+                        "color": "#ffffff",
+                        "size": "sm"
+                    }
+                ],
+                "backgroundColor": "#c54431",
+                "paddingTop": "19px",
+                "paddingAll": "12px",
+                "paddingBottom": "16px"
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "{{customer_last_name}}{{customer_first_name}} 您好！",
+                        "weight": "bold",
+                        "size": "xl",
+                        "margin": "md",
+                        "color": "#1f2d3d"
+                    },
+                    {
+                        "type": "text",
+                        "text": "您的訂單已送達指定的超商門市，請記得在期限內前往取貨喔！",
+                        "size": "sm",
+                        "color": "#5f6c7b",
+                        "wrap": true
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "margin": "xxl",
+                        "spacing": "sm",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "▍訂單資訊",
+                                "color": "#555555",
+                                "size": "sm",
+                                "weight": "bold"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "訂單編號：",
+                                        "size": "sm",
+                                        "color": "#555555",
+                                        "flex": 0
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "#{{order_number}}",
+                                        "size": "sm",
+                                        "color": "#111111",
+                                        "align": "end"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "separator",
+                                "margin": "lg"
+                            },
+                            {
+                                "type": "text",
+                                "text": "▍物流資訊",
+                                "color": "#555555",
+                                "size": "sm",
+                                "weight": "bold",
+                                "margin": "lg"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "物流類型：",
+                                        "size": "sm",
+                                        "color": "#555555",
+                                        "flex": 0
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "{{_ecpay_shipping_LogisticsType}} - {{_ecpay_shipping_LogisticsSubType}}",
+                                        "size": "sm",
+                                        "color": "#111111",
+                                        "align": "end",
+                                        "wrap": true
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "margin": "md",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "取貨門市：",
+                                        "size": "sm",
+                                        "color": "#555555",
+                                        "flex": 0
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "{{_shipping_cvs_store_name}}",
+                                        "size": "sm",
+                                        "color": "#111111",
+                                        "align": "end",
+                                        "wrap": true
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "margin": "md",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "門市地址：",
+                                        "size": "sm",
+                                        "color": "#555555",
+                                        "flex": 0
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "{{_shipping_cvs_store_address}}",
+                                        "size": "sm",
+                                        "color": "#111111",
+                                        "align": "end",
+                                        "wrap": true
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "margin": "md",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "取貨電話：",
+                                        "size": "sm",
+                                        "color": "#555555",
+                                        "flex": 0
+                                    },
+                                    {
+                                        "type": "text",
+                                        "text": "{{_shipping_phone}}",
+                                        "size": "sm",
+                                        "color": "#111111",
+                                        "align": "end",
+                                        "wrap": true
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "separator",
+                                "margin": "lg"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "margin": "lg",
+                                "paddingAll": "12px",
+                                "cornerRadius": "md",
+                                "borderWidth": "1px",
+                                "borderColor": "#cccccc",
+                                "contents": [
+                                    {
+                                        "type": "box",
+                                        "layout": "horizontal",
+                                        "spacing": "sm",
+                                        "contents": [
+                                            {
+                                                "type": "text",
+                                                "text": "⚠️",
+                                                "flex": 0
+                                            },
+                                            {
+                                                "type": "text",
+                                                "text": "取貨提醒",
+                                                "weight": "bold",
+                                                "color": "#5f6c7b"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "separator",
+                                        "margin": "md"
+                                    },
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "spacing": "sm",
+                                        "margin": "md",
+                                        "contents": [
+                                            {
+                                                "type": "text",
+                                                "text": "• 請告知店員您的「姓名」與「手機末三碼」。",
+                                                "wrap": true,
+                                                "size": "sm",
+                                                "color": "#5f6c7b"
+                                            },
+                                            {
+                                                "type": "text",
+                                                "text": "• 領取包裹時，請務必攜帶與收件人姓名相符之「身分證件」正本。",
+                                                "wrap": true,
+                                                "size": "sm",
+                                                "color": "#5f6c7b"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "paddingAll": "20px",
+                "backgroundColor": "#fdf6ec"
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                    {
+                        "type": "button",
+                        "style": "primary",
+                        "height": "sm",
+                        "action": {
+                            "type": "uri",
+                            "label": "在網站上查看訂單",
+                            "uri": "https://moksaweb.com/order-notify-setting6/"
+                        },
+                        "color": "#000000"
+                    },
+                    {
+                        "type": "text",
+                        "text": "您也可以點擊上方按鈕追蹤訂單最新狀態",
+                        "color": "#FFFFFF",
+                        "size": "xxs",
+                        "align": "center"
+                    }
+                ],
+                "flex": 0,
+                "backgroundColor": "#c54431"
+            },
+            "styles": {
+                "body": {
+                    "backgroundColor": "#fdf6ec"
+                }
+            }
+        };
+
+        $(document).ready(function () {
+            MoksaFlexRenderer.render(complexJson, $('#preview_container'));
+        });
+    </script>
+</body>
+
+</html>

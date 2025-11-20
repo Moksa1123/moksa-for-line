@@ -1,394 +1,433 @@
 /**
- * Moksa Flex Message Renderer
- * Shared logic for rendering LINE Flex Messages in the admin preview.
+ * Moksa Advanced Flex Message Renderer
+ * A robust, standalone renderer for LINE Flex Messages.
+ * Mimics LINE's official rendering logic using CSS Flexbox.
  */
 
-(function (window) {
+(function ($) {
     'use strict';
 
-    console.log('MoksaFlexRenderer loaded');
+    console.log('MoksaFlexRenderer: Initializing Advanced Renderer...');
 
     var MoksaFlexRenderer = {
-        /**
-         * Render a Flex Message JSON object into a container
-         * @param {Object} flexObj - The parsed JSON object
-         * @param {jQuery} container - The jQuery container element
-         */
+
         render: function (flexObj, container) {
             container.empty();
 
-            // Container Style for Preview Area (Reset & Base Styles)
+            // Base Container Styles (Reset)
             container.css({
-                'background-color': '#849ebf', // LINE Chat Background Color
+                'background-color': '#849ebf', // Default LINE Chat BG
                 'padding': '20px',
-                'min-height': '300px',
+                'min-height': '100%',
                 'display': 'flex',
                 'flex-direction': 'column',
-                'align-items': 'flex-start', // Align bubbles to left
+                'align-items': 'flex-start',
                 'gap': '10px',
-                'overflow-x': 'hidden', // Prevent container scroll, handle carousel inside
-                'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
+                'overflow-y': 'auto',
+                'overflow-x': 'hidden',
+                'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                'box-sizing': 'border-box'
             });
 
             try {
                 if (!flexObj) return;
 
+                // Handle String (Dynamic Parameter)
                 if (typeof flexObj === 'string') {
                     this.renderPlaceholder(flexObj, container);
                     return;
                 }
 
-                if (flexObj.type === 'flex') {
-                    this.renderContainer(flexObj, container);
-                } else if (flexObj.type === 'bubble' || flexObj.type === 'carousel') {
-                    this.renderContainer(flexObj, container);
-                } else {
-                    // Handle raw bubble object without type: flex wrapper
-                    this.renderContainer(Object.assign({ type: 'bubble' }, flexObj), container);
+                // Normalize Input
+                var root = flexObj;
+                if (root.type === 'flex') {
+                    root = root.contents;
                 }
+
+                if (root.type === 'bubble') {
+                    container.append(this.createBubble(root));
+                } else if (root.type === 'carousel') {
+                    container.append(this.createCarousel(root));
+                } else {
+                    // Fallback: Try to render as bubble if it looks like one
+                    container.append(this.createBubble(Object.assign({ type: 'bubble' }, root)));
+                }
+
             } catch (e) {
                 console.error('Flex Render Error:', e);
-                container.html('<div class="moksa-error-message" style="background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 12px; border-radius: 8px; font-size: 13px; line-height: 1.5;"><strong>Render Error:</strong> ' + this.escapeHtml(e.message) + '</div>');
+                container.html(this.createError(e.message));
             }
         },
 
-        renderContainer: function (obj, container) {
-            if (!obj) return;
+        // --- Components ---
 
-            if (typeof obj === 'string') {
-                container.append(this.createPlaceholder(obj));
-                return;
-            }
+        createBubble: function (bubble) {
+            var el = $('<div>').addClass('flex-bubble');
+            el.css({
+                'display': 'flex',
+                'flex-direction': 'column',
+                'overflow': 'hidden',
+                'background-color': '#ffffff',
+                'border-radius': '10px',
+                'box-shadow': '0 2px 6px rgba(0,0,0,0.1)',
+                'position': 'relative'
+            });
 
-            if (obj.type === 'bubble') {
-                container.append(this.renderBubble(obj));
-            } else if (obj.type === 'carousel') {
-                var carousel = $('<div class="flex-carousel" style="display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; width: 100%; scroll-snap-type: x mandatory;"></div>');
-
-                // Scrollbar styling for webkit
-                var style = $('<style>.flex-carousel::-webkit-scrollbar { height: 6px; } .flex-carousel::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }</style>');
-                container.append(style);
-
-                if (obj.contents && Array.isArray(obj.contents)) {
-                    var self = this;
-                    obj.contents.forEach(function (bubbleObj) {
-                        var bubbleWrapper = $('<div style="flex: 0 0 auto; width: 300px; scroll-snap-align: start;"></div>');
-                        if (typeof bubbleObj === 'string') {
-                            bubbleWrapper.append(self.createPlaceholder(bubbleObj));
-                        } else {
-                            bubbleWrapper.append(self.renderBubble(bubbleObj));
-                        }
-                        carousel.append(bubbleWrapper);
-                    });
-                }
-                container.append(carousel);
-            } else if (obj.contents) {
-                this.renderContainer(obj.contents, container);
-            }
-        },
-
-        renderBubble: function (bubbleObj) {
-            if (typeof bubbleObj === 'string') {
-                return this.createPlaceholder(bubbleObj);
-            }
-
-            var bubble = $('<div class="flex-bubble" style="background: #fff; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"></div>');
-
-            // Bubble Styles
-            if (bubbleObj.size === 'giga') bubble.css('width', '100%');
-            else if (bubbleObj.size === 'mega') bubble.css('width', '300px');
-            else if (bubbleObj.size === 'kilo') bubble.css('width', '260px');
-            else if (bubbleObj.size === 'micro') bubble.css('width', '160px');
-            else if (bubbleObj.size === 'nano') bubble.css('width', '120px');
-            else bubble.css('width', '300px'); // Default to mega-like
+            // Size
+            var width = '300px'; // Default (Mega)
+            if (bubble.size === 'giga') width = '100%';
+            else if (bubble.size === 'kilo') width = '260px';
+            else if (bubble.size === 'micro') width = '160px';
+            else if (bubble.size === 'nano') width = '120px';
+            el.css('width', width);
+            el.css('max-width', '100%');
 
             // Direction
-            var dir = bubbleObj.direction || 'ltr';
-            bubble.css('direction', dir);
+            el.css('direction', bubble.direction || 'ltr');
 
             // Header
-            if (bubbleObj.header) {
-                bubble.append(this.renderBox(bubbleObj.header, 'header'));
-            }
-
+            if (bubble.header) el.append(this.createBox(bubble.header, 'header', bubble.styles));
             // Hero
-            if (bubbleObj.hero) {
-                bubble.append(this.renderImage(bubbleObj.hero, 'hero'));
-            }
-
+            if (bubble.hero) el.append(this.createImage(bubble.hero, 'hero', bubble.styles));
             // Body
-            if (bubbleObj.body) {
-                bubble.append(this.renderBox(bubbleObj.body, 'body'));
-            }
-
+            if (bubble.body) el.append(this.createBox(bubble.body, 'body', bubble.styles));
             // Footer
-            if (bubbleObj.footer) {
-                bubble.append(this.renderBox(bubbleObj.footer, 'footer'));
+            if (bubble.footer) el.append(this.createBox(bubble.footer, 'footer', bubble.styles));
+
+            // Block Styles (Backgrounds)
+            if (bubble.styles && bubble.styles.body && bubble.styles.body.backgroundColor) {
+                // Applied in createBox, but if body is missing?
             }
 
-            // Styles (Block Styles)
-            if (bubbleObj.styles) {
-                if (bubbleObj.styles.header && bubbleObj.styles.header.backgroundColor) {
-                    bubble.find('.flex-box-header').css('background-color', bubbleObj.styles.header.backgroundColor);
-                }
-                if (bubbleObj.styles.hero && bubbleObj.styles.hero.backgroundColor) {
-                    bubble.find('.flex-image-hero').css('background-color', bubbleObj.styles.hero.backgroundColor);
-                }
-                if (bubbleObj.styles.body && bubbleObj.styles.body.backgroundColor) {
-                    bubble.find('.flex-box-body').css('background-color', bubbleObj.styles.body.backgroundColor);
-                }
-                if (bubbleObj.styles.footer && bubbleObj.styles.footer.backgroundColor) {
-                    bubble.find('.flex-box-footer').css('background-color', bubbleObj.styles.footer.backgroundColor);
-                }
-            }
-
-            return bubble;
+            return el;
         },
 
-        renderBox: function (boxObj, blockType) {
-            if (typeof boxObj === 'string') {
-                return this.createPlaceholder(boxObj);
-            }
+        createCarousel: function (carousel) {
+            var el = $('<div>').addClass('flex-carousel');
+            el.css({
+                'display': 'flex',
+                'overflow-x': 'auto',
+                'gap': '10px',
+                'padding-bottom': '10px',
+                'width': '100%',
+                'scroll-snap-type': 'x mandatory'
+            });
 
-            var box = $('<div class="flex-box flex-box-' + blockType + '"></div>');
+            var self = this;
+            if (carousel.contents && Array.isArray(carousel.contents)) {
+                carousel.contents.forEach(function (bubble) {
+                    var wrapper = $('<div>').css({
+                        'flex': '0 0 auto',
+                        'scroll-snap-align': 'start'
+                    });
+                    wrapper.append(self.createBubble(bubble));
+                    el.append(wrapper);
+                });
+            }
+            return el;
+        },
+
+        createBox: function (box, blockType, globalStyles) {
+            var el = $('<div>').addClass('flex-box');
 
             // Layout
-            var layout = boxObj.layout || 'vertical';
-            box.css('display', 'flex');
-            box.css('flex-direction', layout === 'horizontal' ? 'row' : 'column');
+            var isHorizontal = box.layout === 'horizontal' || box.layout === 'baseline';
+            el.css({
+                'display': 'flex',
+                'flex-direction': isHorizontal ? 'row' : 'column'
+            });
 
-            // Background Color
-            if (boxObj.backgroundColor) box.css('background-color', boxObj.backgroundColor);
+            if (box.layout === 'baseline') {
+                el.css('align-items', 'baseline');
+            }
+
+            // Background
+            if (box.backgroundColor) el.css('background-color', box.backgroundColor);
+            else if (globalStyles && globalStyles[blockType] && globalStyles[blockType].backgroundColor) {
+                el.css('background-color', globalStyles[blockType].backgroundColor);
+            }
 
             // Padding
-            if (boxObj.paddingAll) box.css('padding', boxObj.paddingAll);
-            else if (!boxObj.paddingAll && !boxObj.paddingTop && !boxObj.paddingBottom && !boxObj.paddingStart && !boxObj.paddingEnd) {
-                // Default padding if none specified
-                if (blockType === 'body') box.css('padding', '20px');
-                else if (blockType === 'header') box.css('padding', '20px');
-                else if (blockType === 'footer') box.css('padding', '20px');
-            } else {
-                if (boxObj.paddingTop) box.css('padding-top', boxObj.paddingTop);
-                if (boxObj.paddingBottom) box.css('padding-bottom', boxObj.paddingBottom);
-                if (boxObj.paddingStart) box.css('padding-left', boxObj.paddingStart);
-                if (boxObj.paddingEnd) box.css('padding-right', boxObj.paddingEnd);
-            }
+            this.applyPadding(el, box, blockType);
 
             // Spacing (Gap)
-            var spacing = boxObj.spacing || 'none';
-            var gapMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
-            box.css('gap', gapMap[spacing] || spacing);
+            var gap = this.getSize(box.spacing || 'none');
+            el.css('gap', gap);
 
             // Margin
-            if (boxObj.margin) {
-                var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
-                box.css('margin-top', marginMap[boxObj.margin] || boxObj.margin);
-            }
+            if (box.margin) el.css('margin-top', this.getSize(box.margin));
 
             // Flex
-            if (boxObj.flex !== undefined) box.css('flex', boxObj.flex);
+            if (box.flex !== undefined) el.css('flex-grow', box.flex);
 
             // Width/Height
-            if (boxObj.width) box.css('width', boxObj.width);
-            if (boxObj.height) box.css('height', boxObj.height);
+            if (box.width) el.css('width', box.width);
+            if (box.height) el.css('height', box.height);
+            if (box.maxWidth) el.css('max-width', box.maxWidth);
+            if (box.maxHeight) el.css('max-height', box.maxHeight);
 
-            // Justify Content
-            if (boxObj.justifyContent) {
-                var justifyMap = {
-                    'center': 'center', 'flex-start': 'flex-start', 'flex-end': 'flex-end',
-                    'space-between': 'space-between', 'space-around': 'space-around', 'space-evenly': 'space-evenly'
-                };
-                box.css('justify-content', justifyMap[boxObj.justifyContent] || 'flex-start');
-            }
-
-            // Align Items
-            if (boxObj.alignItems) {
-                var alignMap = { 'center': 'center', 'flex-start': 'flex-start', 'flex-end': 'flex-end' };
-                box.css('align-items', alignMap[boxObj.alignItems] || 'flex-start');
-            }
+            // Justify & Align
+            if (box.justifyContent) el.css('justify-content', box.justifyContent);
+            if (box.alignItems) el.css('align-items', box.alignItems);
 
             // Border
-            if (boxObj.borderWidth) {
-                box.css('border-width', boxObj.borderWidth);
-                box.css('border-style', 'solid');
+            if (box.borderWidth) {
+                el.css('border-width', box.borderWidth);
+                el.css('border-style', 'solid');
+                el.css('border-color', box.borderColor || '#000000');
             }
-            if (boxObj.borderColor) box.css('border-color', boxObj.borderColor);
-            if (boxObj.cornerRadius) box.css('border-radius', boxObj.cornerRadius);
+            if (box.cornerRadius) el.css('border-radius', box.cornerRadius);
 
             // Contents
-            if (boxObj.contents && Array.isArray(boxObj.contents)) {
+            if (box.contents && Array.isArray(box.contents)) {
                 var self = this;
-                boxObj.contents.forEach(function (item) {
-                    if (typeof item === 'string') {
-                        box.append(self.createPlaceholder(item));
-                    } else if (item.type === 'box') {
-                        box.append(self.renderBox(item, 'child'));
-                    } else if (item.type === 'text') {
-                        box.append(self.renderText(item));
-                    } else if (item.type === 'image') {
-                        box.append(self.renderImage(item, 'child'));
-                    } else if (item.type === 'button') {
-                        box.append(self.renderButton(item));
-                    } else if (item.type === 'separator') {
-                        box.append(self.renderSeparator(item));
-                    } else if (item.type === 'filler') {
-                        box.append($('<div style="flex-grow: 1;"></div>'));
-                    } else if (item.type === 'spacer') {
-                        var sizeMap = { 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
-                        box.append($('<div style="height: ' + (sizeMap[item.size] || '8px') + ';"></div>'));
-                    }
+                box.contents.forEach(function (item) {
+                    var child = self.createComponent(item);
+                    if (child) el.append(child);
                 });
             }
 
-            return box;
-        },
-
-        renderText: function (textObj) {
-            var p = $('<div class="flex-text"></div>');
-            p.text(textObj.text || '');
-
-            // Styles
-            p.css('color', textObj.color || '#000000');
-
-            var sizeMap = { 'xxs': '11px', 'xs': '13px', 'sm': '14px', 'md': '16px', 'lg': '19px', 'xl': '22px', 'xxl': '29px', '3xl': '35px', '4xl': '48px', '5xl': '74px' };
-            p.css('font-size', sizeMap[textObj.size] || '16px');
-
-            if (textObj.weight === 'bold') p.css('font-weight', 'bold');
-            if (textObj.style === 'italic') p.css('font-style', 'italic');
-            if (textObj.decoration === 'underline') p.css('text-decoration', 'underline');
-            if (textObj.decoration === 'line-through') p.css('text-decoration', 'line-through');
-
-            if (textObj.align) p.css('text-align', textObj.align);
-            if (textObj.wrap) p.css('white-space', 'pre-wrap');
-            else p.css('white-space', 'nowrap');
-
-            if (textObj.flex !== undefined) p.css('flex', textObj.flex);
-            if (textObj.margin) {
-                var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
-                p.css('margin-top', marginMap[textObj.margin] || textObj.margin);
+            // Action
+            if (box.action) {
+                el.css('cursor', 'pointer');
+                // In a real app, bind click. Here, maybe just hover effect.
+                el.hover(function () { $(this).css('opacity', 0.8); }, function () { $(this).css('opacity', 1); });
             }
 
-            p.css('line-height', '1.5');
-            return p;
+            return el;
         },
 
-        renderImage: function (imgObj, blockType) {
-            var wrapper = $('<div class="flex-image-wrapper flex-image-' + blockType + '" style="position: relative; overflow: hidden;"></div>');
-            var img = $('<img style="display: block; width: 100%; height: 100%;">');
-            img.attr('src', imgObj.url);
+        createComponent: function (component) {
+            if (typeof component === 'string') return this.createPlaceholder(component);
+            if (!component.type) return null;
 
-            var ratio = imgObj.aspectRatio || '1:1';
+            switch (component.type) {
+                case 'box': return this.createBox(component);
+                case 'text': return this.createText(component);
+                case 'image': return this.createImage(component);
+                case 'button': return this.createButton(component);
+                case 'separator': return this.createSeparator(component);
+                case 'spacer': return this.createSpacer(component);
+                case 'filler': return $('<div>').css('flex-grow', 1);
+                case 'icon': return this.createIcon(component);
+                default: return null;
+            }
+        },
+
+        createText: function (text) {
+            var el = $('<div>').addClass('flex-text').text(text.text || '');
+
+            // Style
+            el.css('color', text.color || '#000000');
+            el.css('font-size', this.getFontSize(text.size));
+            if (text.weight === 'bold') el.css('font-weight', '700');
+            if (text.style === 'italic') el.css('font-style', 'italic');
+            if (text.decoration === 'underline') el.css('text-decoration', 'underline');
+            if (text.decoration === 'line-through') el.css('text-decoration', 'line-through');
+
+            // Layout
+            el.css('text-align', text.align || 'left');
+            if (text.wrap) {
+                el.css('white-space', 'pre-wrap');
+                el.css('word-break', 'break-word');
+            } else {
+                el.css('white-space', 'nowrap');
+                el.css('overflow', 'hidden');
+                el.css('text-overflow', 'ellipsis');
+            }
+
+            // Flex
+            if (text.flex !== undefined) el.css('flex-grow', text.flex);
+            else el.css('flex-grow', 0); // Text defaults to 0 unlike box? Actually depends.
+
+            // Margin
+            if (text.margin) el.css('margin-top', this.getSize(text.margin));
+
+            return el;
+        },
+
+        createImage: function (img, blockType, globalStyles) {
+            var wrapper = $('<div>').addClass('flex-image-wrapper');
+            var el = $('<img>').attr('src', img.url);
+
+            wrapper.css({
+                'position': 'relative',
+                'overflow': 'hidden',
+                'display': 'flex' // To align img
+            });
+
+            // Size
+            var size = img.size || 'md';
+            if (size.endsWith('%') || size.endsWith('px')) {
+                wrapper.css('width', size);
+            } else {
+                var sizeMap = { 'xxs': '15%', 'xs': '20%', 'sm': '24%', 'md': '30%', 'lg': '46%', 'xl': '50%', 'xxl': '70%', '3xl': '80%', '4xl': '90%', '5xl': '100%', 'full': '100%' };
+                wrapper.css('width', sizeMap[size] || '100%');
+            }
+
+            // Aspect Ratio
+            var ratio = img.aspectRatio || '1:1';
             wrapper.css('aspect-ratio', ratio.replace(':', '/'));
 
-            if (imgObj.aspectMode === 'cover') {
-                img.css('object-fit', 'cover');
+            // Mode
+            if (img.aspectMode === 'cover') {
+                el.css({ 'width': '100%', 'height': '100%', 'object-fit': 'cover' });
             } else {
-                img.css('object-fit', 'contain');
+                el.css({ 'width': '100%', 'height': '100%', 'object-fit': 'contain' });
             }
 
-            if (imgObj.size) {
-                var sizeMap = { 'xxs': '15%', 'xs': '20%', 'sm': '24%', 'md': '30%', 'lg': '46%', 'xl': '50%', 'xxl': '70%', '3xl': '80%', '4xl': '90%', '5xl': '100%', 'full': '100%' };
-                if (sizeMap[imgObj.size]) {
-                    wrapper.css('width', sizeMap[imgObj.size]);
-                    if (imgObj.align === 'center') wrapper.css('margin', '0 auto');
-                    if (imgObj.align === 'end') wrapper.css('margin-left', 'auto');
-                } else {
-                    wrapper.css('width', imgObj.size);
-                }
-            } else {
-                wrapper.css('width', '100%');
+            // Background
+            if (img.backgroundColor) wrapper.css('background-color', img.backgroundColor);
+            else if (blockType === 'hero' && globalStyles && globalStyles.hero && globalStyles.hero.backgroundColor) {
+                wrapper.css('background-color', globalStyles.hero.backgroundColor);
             }
 
-            if (imgObj.backgroundColor) wrapper.css('background-color', imgObj.backgroundColor);
+            // Align
+            if (img.align === 'center') wrapper.css('margin', '0 auto');
+            else if (img.align === 'end') wrapper.css('margin-left', 'auto');
 
-            if (imgObj.margin) {
-                var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
-                wrapper.css('margin-top', marginMap[imgObj.margin] || imgObj.margin);
-            }
+            // Margin
+            if (img.margin) wrapper.css('margin-top', this.getSize(img.margin));
 
-            if (imgObj.flex !== undefined) wrapper.css('flex', imgObj.flex);
-
-            wrapper.append(img);
+            wrapper.append(el);
             return wrapper;
         },
 
-        renderButton: function (btnObj) {
-            var btn = $('<button class="flex-button"></button>');
-            btn.text(btnObj.action ? (btnObj.action.label || 'Button') : 'Button');
+        createButton: function (btn) {
+            var el = $('<button>').addClass('flex-button').text(btn.action ? (btn.action.label || 'Button') : 'Button');
 
-            btn.css({
+            // Base Style
+            el.css({
                 'display': 'block',
                 'width': '100%',
-                'padding': '0 16px',
-                'height': btnObj.height === 'sm' ? '30px' : '40px',
-                'border-radius': '4px',
                 'border': 'none',
                 'cursor': 'pointer',
-                'font-weight': 'bold',
-                'font-size': '14px',
-                'line-height': btnObj.height === 'sm' ? '28px' : '38px',
+                'font-family': 'inherit',
                 'text-align': 'center',
-                'box-sizing': 'border-box'
+                'box-sizing': 'border-box',
+                'outline': 'none'
             });
 
-            if (btnObj.style === 'primary') {
-                btn.css({ 'background-color': btnObj.color || '#17c950', 'color': '#ffffff' });
-            } else if (btnObj.style === 'secondary') {
-                btn.css({ 'background-color': btnObj.color || '#dcdfe5', 'color': '#111111' });
-            } else if (btnObj.style === 'link') {
-                btn.css({ 'background-color': 'transparent', 'color': btnObj.color || '#17c950' });
-            } else {
-                btn.css({ 'background-color': 'transparent', 'color': btnObj.color || '#17c950' });
+            // Height
+            var height = btn.height === 'sm' ? '30px' : '40px';
+            el.css('height', height);
+            el.css('line-height', height); // Center text vertically
+
+            // Style & Color
+            var style = btn.style || 'link';
+            var color = btn.color || '#17c950'; // Default LINE Green
+
+            if (style === 'primary') {
+                el.css({ 'background-color': color, 'color': '#ffffff' });
+            } else if (style === 'secondary') {
+                el.css({ 'background-color': color || '#dcdfe5', 'color': '#111111' });
+            } else { // link
+                el.css({ 'background-color': 'transparent', 'color': color });
             }
 
-            if (btnObj.margin) {
-                var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
-                btn.css('margin-top', marginMap[btnObj.margin] || btnObj.margin);
-            }
+            // Margin
+            if (btn.margin) el.css('margin-top', this.getSize(btn.margin));
 
-            if (btnObj.flex !== undefined) btn.css('flex', btnObj.flex);
+            // Flex
+            if (btn.flex !== undefined) el.css('flex-grow', btn.flex);
 
-            return btn;
+            return el;
         },
 
-        renderSeparator: function (sepObj) {
-            var hr = $('<hr>');
-            hr.css({
-                'border': 'none',
-                'border-top': '1px solid ' + (sepObj.color || '#e2e5e8'),
-                'margin': 0,
-                'width': '100%'
+        createSeparator: function (sep) {
+            var el = $('<div>').addClass('flex-separator');
+            el.css({
+                'width': '100%',
+                'height': '1px',
+                'background-color': sep.color || '#E2E5E8'
             });
-
-            if (sepObj.margin) {
-                var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
-                hr.css('margin-top', marginMap[sepObj.margin] || sepObj.margin);
-                hr.css('margin-bottom', marginMap[sepObj.margin] || sepObj.margin);
+            if (sep.margin) {
+                var m = this.getSize(sep.margin);
+                el.css({ 'margin-top': m, 'margin-bottom': m });
             }
-
-            return hr;
+            return el;
         },
 
-        createPlaceholder: function (text) {
-            return $('<div class="moksa-dynamic-placeholder" style="border: 1px dashed #94a3b8; padding: 8px; background: #f1f5f9; color: #64748b; text-align: center; font-size: 12px; margin: 5px 0; border-radius: 4px;">' + this.escapeHtml(text) + '</div>');
+        createSpacer: function (spacer) {
+            var el = $('<div>').addClass('flex-spacer');
+            var size = this.getSize(spacer.size || 'md');
+            el.css('height', size);
+            return el;
+        },
+
+        createIcon: function (icon) {
+            var el = $('<img>').attr('src', icon.url);
+            var size = this.getFontSize(icon.size || 'md'); // Icons use font size scale usually
+            el.css({
+                'width': size,
+                'height': size,
+                'object-fit': 'contain'
+            });
+            if (icon.margin) el.css('margin-left', this.getSize(icon.margin)); // Icons usually inline
+            return el;
+        },
+
+        // --- Helpers ---
+
+        applyPadding: function (el, box, blockType) {
+            if (box.paddingAll) el.css('padding', box.paddingAll);
+            else {
+                // Default padding for blocks
+                if (blockType && !box.paddingTop && !box.paddingBottom && !box.paddingStart && !box.paddingEnd) {
+                    el.css('padding', '20px');
+                } else {
+                    if (box.paddingTop) el.css('padding-top', box.paddingTop);
+                    if (box.paddingBottom) el.css('padding-bottom', box.paddingBottom);
+                    if (box.paddingStart) el.css('padding-left', box.paddingStart);
+                    if (box.paddingEnd) el.css('padding-right', box.paddingEnd);
+                }
+            }
+        },
+
+        getSize: function (size) {
+            var map = { 'none': '0px', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
+            return map[size] || size || '0px';
+        },
+
+        getFontSize: function (size) {
+            var map = { 'xxs': '11px', 'xs': '13px', 'sm': '14px', 'md': '16px', 'lg': '19px', 'xl': '22px', 'xxl': '29px', '3xl': '35px', '4xl': '48px', '5xl': '74px' };
+            return map[size] || '16px';
         },
 
         renderPlaceholder: function (text, container) {
-            container.append(this.createPlaceholder(text));
+            var el = $('<div>').addClass('moksa-dynamic-placeholder').text(text);
+            el.css({
+                'border': '1px dashed #94a3b8',
+                'padding': '8px',
+                'background': '#f1f5f9',
+                'color': '#64748b',
+                'text-align': 'center',
+                'font-size': '12px',
+                'margin': '5px 0',
+                'border-radius': '4px',
+                'width': '100%'
+            });
+            if (container) container.append(el);
+            return el;
+        },
+
+        createPlaceholder: function (text) {
+            return this.renderPlaceholder(text);
+        },
+
+        createError: function (msg) {
+            return '<div style="background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 12px; border-radius: 8px; font-size: 13px; line-height: 1.5;"><strong>Render Error:</strong> ' + this.escapeHtml(msg) + '</div>';
         },
 
         escapeHtml: function (text) {
             if (!text) return '';
-            return text
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
     };
 
-    // Expose to global scope
+    // Expose
     window.MoksaFlexRenderer = MoksaFlexRenderer;
+    // Also expose as simpler name just in case
+    window.MoksaFlex = MoksaFlexRenderer;
 
-})(window);
+})(jQuery);
