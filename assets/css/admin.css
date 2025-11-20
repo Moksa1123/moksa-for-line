@@ -1,25 +1,31 @@
 /* Admin General Styles */
 .moksa-line-wrap {
     max-width: 1400px;
-    /* Increased width for 3-column layout */
-    margin: 20px auto;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin: 40px auto;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
 }
 
 .moksa-line-wrap h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 10px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
 }
 
 .moksa-card {
     background: #fff;
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s ease;
+}
+
+.moksa-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
 }
 
 /* --- New 3-Column Editor Layout --- */
@@ -29,52 +35,53 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 32px;
     background: #fff;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    padding: 24px 32px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     border: 1px solid #e2e8f0;
 }
 
 .moksa-editor-header h1 {
-    margin: 0 0 5px 0;
-    font-size: 20px;
+    margin: 0 0 6px 0;
+    font-size: 24px;
 }
 
 .moksa-editor-header .description {
     margin: 0;
     color: #64748b;
+    font-size: 14px;
 }
 
 .header-actions {
     display: flex;
-    gap: 10px;
+    gap: 12px;
 }
 
 /* Layout Grid */
 .moksa-editor-layout {
     display: grid;
-    grid-template-columns: 280px 1fr 340px;
-    /* Fixed Left, Fluid Center, Fixed Right */
-    gap: 20px;
-    height: calc(100vh - 140px);
-    /* Full height minus header/padding */
-    min-height: 600px;
+    grid-template-columns: 300px 1fr 380px;
+    /* Wider columns */
+    gap: 24px;
+    height: calc(100vh - 180px);
+    min-height: 700px;
 }
 
 /* Sidebar (Variables) */
 .moksa-editor-sidebar {
     background: #fff;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-section {
-    padding: 15px;
+    padding: 20px;
     border-bottom: 1px solid #f1f5f9;
 }
 
@@ -83,12 +90,12 @@
 }
 
 .sidebar-section h3 {
-    margin: 0 0 10px 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: #334155;
+    margin: 0 0 16px 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: #94a3b8;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
 }
 
 .sidebar-section.flex-grow {
@@ -96,27 +103,31 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* For internal scrolling */
 }
 
 .moksa-select-wrapper select {
     width: 100%;
     max-width: 100%;
+    border-radius: 8px;
+    border-color: #cbd5e1;
+    padding: 8px 12px;
 }
 
 /* Variable List */
 .moksa-variable-list {
     flex: 1;
     overflow-y: auto;
-    padding-right: 5px;
+    padding-right: 8px;
 }
 
 .variable-category {
     font-size: 12px;
     font-weight: 700;
-    color: #94a3b8;
-    margin: 15px 0 8px;
-    padding-left: 5px;
+    color: #64748b;
+    margin: 20px 0 10px;
+    padding-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .variable-category:first-child {
@@ -124,53 +135,56 @@
 }
 
 .moksa-variable-item {
-    padding: 8px 12px;
+    padding: 10px 14px;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    margin-bottom: 6px;
+    border-radius: 8px;
+    margin-bottom: 8px;
     cursor: grab;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
 }
 
 .moksa-variable-item:hover {
     background: #fff;
     border-color: #3b82f6;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
     transform: translateY(-1px);
 }
 
 .moksa-variable-item code {
-    font-family: 'Monaco', 'Consolas', monospace;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
     font-size: 12px;
     color: #2563eb;
-    background: rgba(37, 99, 235, 0.1);
-    padding: 2px 6px;
-    border-radius: 4px;
+    background: rgba(37, 99, 235, 0.08);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
 }
 
 .moksa-variable-item span {
-    font-size: 12px;
-    color: #64748b;
+    font-size: 13px;
+    color: #475569;
+    font-weight: 500;
 }
 
 /* Main Editor Area */
 .moksa-editor-main {
     background: #fff;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
+    border-radius: 16px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .editor-toolbar {
-    padding: 10px 15px;
-    background: #f8fafc;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 16px 24px;
+    background: #fff;
+    border-bottom: 1px solid #f1f5f9;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -178,18 +192,20 @@
 
 .editor-label {
     font-weight: 600;
-    color: #475569;
-    font-size: 13px;
+    color: #334155;
+    font-size: 14px;
 }
 
 .editor-status {
     font-size: 12px;
     color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 20px;
 }
 
 #moksa-json-editor {
     flex: 1;
-    /* Take remaining height */
     width: 100%;
 }
 
@@ -197,53 +213,146 @@
 .moksa-editor-preview-col {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    padding-top: 20px;
 }
 
-.preview-header h3 {
-    margin: 0;
-    font-size: 16px;
-    color: #1e293b;
-}
-
+/* Realistic Phone Preview (iPhone 14/15 Style) */
 .moksa-phone-preview {
-    width: 100%;
-    height: 100%;
-    /* Fill column */
-    max-height: 700px;
+    width: 320px;
+    /* Standard width */
+    height: 650px;
     background: #fff;
     border: 12px solid #1e293b;
-    /* Phone bezel */
-    border-radius: 30px;
+    /* Dark bezel */
+    border-radius: 48px;
+    /* More rounded corners */
     overflow: hidden;
     display: flex;
     flex-direction: column;
     position: relative;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    box-shadow:
+        0 0 0 2px #334155,
+        /* Outer rim */
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        /* Drop shadow */
+        inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+    /* Inner reflection */
+}
+
+/* Notch / Dynamic Island */
+.moksa-phone-preview::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 24px;
+    background: #000;
+    border-radius: 12px;
+    z-index: 100;
 }
 
 .moksa-phone-header {
-    background: #2b3445;
-    /* Darker header */
+    background: #06c755;
+    /* Official LINE Green */
     color: #fff;
-    padding: 15px;
+    padding: 44px 16px 12px;
+    /* Top padding for notch */
     text-align: center;
     font-weight: 600;
-    font-size: 14px;
-    border-bottom: 1px solid #334155;
+    font-size: 15px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+/* Status Bar Simulation */
+.moksa-phone-header::after {
+    content: '9:41';
+    position: absolute;
+    top: 14px;
+    left: 24px;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.moksa-phone-header::before {
+    content: '🔋';
+    /* Simple battery icon */
+    position: absolute;
+    top: 14px;
+    right: 24px;
+    font-size: 12px;
+    opacity: 0.9;
 }
 
 .moksa-phone-content {
     flex: 1;
-    background: #849ebf;
-    /* Default LINE bg color */
-    padding: 15px;
+    background: #9bbcd9;
+    /* More accurate LINE chat bg */
+    padding: 16px;
     overflow-y: auto;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
+.moksa-phone-content::-webkit-scrollbar {
+    display: none;
 }
 
-/* Spin Animation for Save Icon */
+/* Form Elements Polish */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    outline: none;
+}
+
+/* Buttons */
+.button.button-primary {
+    background: #06c755;
+    /* LINE Green */
+    border-color: #06c755;
+    color: #fff;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s;
+    text-shadow: none;
+    box-shadow: 0 2px 4px rgba(6, 199, 85, 0.2);
+}
+
+.button.button-primary:hover {
+    background: #05b34c;
+    border-color: #05b34c;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(6, 199, 85, 0.25);
+}
+
+.button.button-small {
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+/* Spin Animation */
 @keyframes spin {
     100% {
         transform: rotate(360deg);
@@ -255,16 +364,17 @@
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
+@media (max-width: 1280px) {
     .moksa-editor-layout {
-        grid-template-columns: 250px 1fr;
+        grid-template-columns: 260px 1fr;
         grid-template-rows: auto auto;
     }
 
     .moksa-editor-preview-col {
         grid-column: 2;
         grid-row: 2;
-        height: 500px;
+        height: auto;
+        padding-bottom: 40px;
     }
 
     .moksa-editor-sidebar {
@@ -272,7 +382,7 @@
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .moksa-editor-layout {
         display: flex;
         flex-direction: column;
@@ -284,5 +394,9 @@
     .moksa-editor-preview-col {
         height: auto;
         min-height: 400px;
+    }
+
+    .moksa-phone-preview {
+        margin: 0 auto;
     }
 }
