@@ -91,37 +91,44 @@
 
 <script>
 jQuery(document).ready(function($) {
-    // Wait for Monaco to be loaded by WordPress
-    if (typeof require !== 'undefined') {
-        require(['vs/editor/editor.main'], function() {
-            window.editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-                value: '{\n  "type": "bubble",\n  "body": {\n    "type": "box",\n    "layout": "vertical",\n    "contents": [\n      {\n        "type": "text",\n        "text": "Hello World",\n        "weight": "bold",\n        "size": "xl"\n      }\n    ]\n  }\n}',
-                language: 'json',
-                theme: 'vs-light',
-                minimap: { enabled: false },
-                automaticLayout: true,
-                formatOnPaste: true,
-                formatOnType: true,
-                scrollBeyondLastLine: false,
-                fontSize: 14
-            });
-            
-            // Sync with hidden textarea
-            window.editor.onDidChangeModelContent(function() {
+    // Wait for Monaco loader to be ready with interval checking
+    var initMonaco = function() {
+        if (typeof require !== 'undefined' && typeof require.config === 'function') {
+            require(['vs/editor/editor.main'], function() {
+                window.editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                    value: '{\n  "type": "bubble",\n  "body": {\n    "type": "box",\n    "layout": "vertical",\n    "contents": [\n      {\n        "type": "text",\n        "text": "Hello World",\n        "weight": "bold",\n        "size": "xl"\n      }\n    ]\n  }\n}',
+                    language: 'json',
+                    theme: 'vs-light',
+                    minimap: { enabled: false },
+                    automaticLayout: true,
+                    formatOnPaste: true,
+                    formatOnType: true,
+                    scrollBeyondLastLine: false,
+                    fontSize: 14
+                });
+                
+                // Sync with hidden textarea
+                window.editor.onDidChangeModelContent(function() {
+                    document.getElementById('flex_json').value = window.editor.getValue();
+                });
+                
+                // Initial sync
                 document.getElementById('flex_json').value = window.editor.getValue();
+                
+                // Trigger ready event for other scripts
+                jQuery(document).trigger('moksa-monaco-ready', [window.editor]);
+                
+                // Restore AMD if it was disabled
+                if (window.moksaMonacoAMD) {
+                    define.amd = window.moksaMonacoAMD;
+                }
             });
-            
-            // Initial sync
-            document.getElementById('flex_json').value = window.editor.getValue();
-            
-            // Trigger ready event for other scripts
-            jQuery(document).trigger('moksa-monaco-ready', [window.editor]);
-            
-            // Restore AMD if it was disabled
-            if (window.moksaMonacoAMD) {
-                define.amd = window.moksaMonacoAMD;
-            }
-        });
-    }
+        } else {
+            // Retry after 100ms if Monaco not ready yet
+            setTimeout(initMonaco, 100);
+        }
+    };
+    
+    initMonaco();
 });
 </script>

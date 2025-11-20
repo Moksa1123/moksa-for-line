@@ -106,75 +106,82 @@
 
 <script>
 jQuery(document).ready(function($) {
-    // Wait for Monaco to be loaded by WordPress
-    if (typeof require !== 'undefined') {
-        require(['vs/editor/editor.main'], function() {
-            window.editor = monaco.editor.create(document.getElementById('moksa-json-editor'), {
-                value: '',
-                language: 'json',
-                theme: 'vs-light',
-                minimap: { enabled: false },
-                automaticLayout: true,
-                formatOnPaste: true,
-                formatOnType: true,
-                scrollBeyondLastLine: false,
-                fontSize: 14
-            });
-            
-            // Initial Load
-            loadTemplate($('#moksa-order-status').val());
-            
-            // Sync with hidden textarea and update preview
-            window.editor.onDidChangeModelContent(function() {
-                var val = window.editor.getValue();
-                $('#moksa_line_order_template').val(val);
-                updatePreview(val);
-            });
-
-            // --- Drag and Drop Implementation ---
-            var editorContainer = document.getElementById('moksa-json-editor');
-            
-            // Handle Drag Start on Variables
-            $('.moksa-variable-item').on('dragstart', function(e) {
-                e.originalEvent.dataTransfer.setData('text/plain', $(this).data('variable'));
-                e.originalEvent.dataTransfer.effectAllowed = 'copy';
-            });
-
-            // Handle Drag Over on Editor
-            editorContainer.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.dataTransfer.dropEffect = 'copy';
-            });
-
-            // Handle Drop on Editor
-            editorContainer.addEventListener('drop', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+    // Wait for Monaco loader to be ready with interval checking
+    var initMonaco = function() {
+        if (typeof require !== 'undefined' && typeof require.config === 'function') {
+            require(['vs/editor/editor.main'], function() {
+                window.editor = monaco.editor.create(document.getElementById('moksa-json-editor'), {
+                    value: '',
+                    language: 'json',
+                    theme: 'vs-light',
+                    minimap: { enabled: false },
+                    automaticLayout: true,
+                    formatOnPaste: true,
+                    formatOnType: true,
+                    scrollBeyondLastLine: false,
+                    fontSize: 14
+                });
                 
-                var text = e.dataTransfer.getData('text/plain');
-                if (!text) return;
-
-                var target = window.editor.getTargetAtClientPoint(e.clientX, e.clientY);
+                // Initial Load
+                loadTemplate($('#moksa-order-status').val());
                 
-                if (target && target.position) {
-                    var position = target.position;
-                    window.editor.executeEdits('dnd', [{
-                        range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
-                        text: text,
-                        forceMoveMarkers: true
-                    }]);
-                    window.editor.setPosition(position);
-                    window.editor.focus();
+                // Sync with hidden textarea and update preview
+                window.editor.onDidChangeModelContent(function() {
+                    var val = window.editor.getValue();
+                    $('#moksa_line_order_template').val(val);
+                    updatePreview(val);
+                });
+
+                // --- Drag and Drop Implementation ---
+                var editorContainer = document.getElementById('moksa-json-editor');
+                
+                // Handle Drag Start on Variables
+                $('.moksa-variable-item').on('dragstart', function(e) {
+                    e.originalEvent.dataTransfer.setData('text/plain', $(this).data('variable'));
+                    e.originalEvent.dataTransfer.effectAllowed = 'copy';
+                });
+
+                // Handle Drag Over on Editor
+                editorContainer.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.dataTransfer.dropEffect = 'copy';
+                });
+
+                // Handle Drop on Editor
+                editorContainer.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    var text = e.dataTransfer.getData('text/plain');
+                    if (!text) return;
+
+                    var target = window.editor.getTargetAtClientPoint(e.clientX, e.clientY);
+                    
+                    if (target && target.position) {
+                        var position = target.position;
+                        window.editor.executeEdits('dnd', [{
+                            range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
+                            text: text,
+                            forceMoveMarkers: true
+                        }]);
+                        window.editor.setPosition(position);
+                        window.editor.focus();
+                    }
+                });
+                
+                // Restore AMD if it was disabled
+                if (window.moksaMonacoAMD) {
+                    define.amd = window.moksaMonacoAMD;
                 }
             });
-            
-            // Restore AMD if it was disabled
-            if (window.moksaMonacoAMD) {
-                define.amd = window.moksaMonacoAMD;
-            }
-        });
-    }
+        } else {
+            // Retry after 100ms if Monaco not ready yet
+            setTimeout(initMonaco, 100);
+        }
+    };
+    
+    initMonaco();
     
     
     // Change Status -> Load Template
