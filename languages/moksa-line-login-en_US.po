@@ -354,3 +354,135 @@ msgstr "Invalid or expired ID Token"
 #: includes/class-moksa-webhook.php:196
 msgid "Please select an option:"
 msgstr "Please select an option:"
+
+#: templates/popup-login.php:11
+msgid "Login with LINE"
+msgstr "Login with LINE"
+
+#: templates/popup-login.php:16
+msgid "Close"
+msgstr "Close"
+
+#: templates/popup-login.php:23
+msgid "By continuing, you agree to our %s and %s."
+msgstr "By continuing, you agree to our %s and %s."
+
+#: templates/popup-login.php:23
+msgid "Terms"
+msgstr "Terms"
+
+#: templates/popup-login.php:23
+msgid "Privacy Policy"
+msgstr "Privacy Policy"
+
+#: templates/liff/profile.php:6
+#: templates/liff/profile.php:110
+#: templates/liff/profile.php:159
+msgid "Update Profile"
+msgstr "Update Profile"
+
+#: templates/liff/profile.php:101
+msgid "Email Address"
+msgstr "Email Address"
+
+#: templates/liff/profile.php:106
+msgid "Phone Number"
+msgstr "Phone Number"
+
+#: templates/admin/woocarousel-generator.php:5
+msgid "WooCommerce is not active. Please activate WooCommerce to use this feature."
+msgstr "WooCommerce is not active. Please activate WooCommerce to use this feature."
+
+#: templates/admin/woocarousel-generator.php:12
+msgid "Carousel Settings"
+msgstr "Carousel Settings"
+
+#: templates/admin/woocarousel-generator.php:16
+msgid "Product Source"
+msgstr "Product Source"
+
+#: templates/admin/woocarousel-generator.php:18
+msgid "Latest Products"
+msgstr "Latest Products"
+
+#: templates/admin/woocarousel-generator.php:19
+msgid "Product Category"
+msgstr "Product Category"
+
+#: templates/admin/woocarousel-generator.php:20
+msgid "Specific Products (IDs)"
+msgstr "Specific Products (IDs)"
+
+#: templates/admin/woocarousel-generator.php:25
+msgid "Number of Products"
+msgstr "Number of Products"
+
+#: templates/admin/woocarousel-generator.php:31
+msgid "Select Category"
+msgstr "Select Category"
+
+#: templates/admin/woocarousel-generator.php:52
+msgid "Product IDs"
+msgstr "Product IDs"
+
+#: templates/admin/woocarousel-generator.php:58
+msgid "Generate JSON"
+msgstr "Generate JSON"
+
+#: templates/admin/woocarousel-generator.php:65
+msgid "Generated JSON"
+msgstr "Generated JSON"
+
+#: templates/admin/woocarousel-generator.php:66
+msgid "Copy this JSON and use it in Auto Reply or Flex Message Sender."
+msgstr "Copy this JSON and use it in Auto Reply or Flex Message Sender."
+
+#: templates/admin/woocarousel-generator.php:68
+msgid "Copy to Clipboard"
+msgstr "Copy to Clipboard"
+
+#: templates/admin/tools-page.php:6
+msgid "Settings imported successfully."
+msgstr "Settings imported successfully."
+
+#: templates/admin/tools-page.php:14
+msgid "Export Users"
+msgstr "Export Users"
+
+#: templates/admin/tools-page.php:15
+msgid "Export all connected LINE users to a CSV file."
+msgstr "Export all connected LINE users to a CSV file."
+
+#: templates/admin/tools-page.php:20
+msgid "Download CSV"
+msgstr "Download CSV"
+
+#: templates/admin/tools-page.php:27
+#: templates/admin/tools-page.php:33
+msgid "Export Settings"
+msgstr "Export Settings"
+
+#: templates/admin/tools-page.php:28
+msgid "Export plugin settings to a JSON file for backup or migration."
+msgstr "Export plugin settings to a JSON file for backup or migration."
+
+#: templates/admin/tools-page.php:40
+#: templates/admin/tools-page.php:49
+msgid "Import Settings"
+msgstr "Import Settings"
+
+#: templates/admin/tools-page.php:41
+msgid "Import settings from a JSON file."
+msgstr "Import settings from a JSON file."
+
+#: includes/class-moksa-auth.php:110
+msgid "Invalid request. Please try again."
+msgstr "Invalid request. Please try again."
+
+#: includes/class-moksa-auth.php:117
+msgid "Session expired. Please try logging in again."
+msgstr "Session expired. Please try logging in again."
+
+#: templates/admin/auto-reply-manager.php:9
+msgid "當使用者將您的帳號加為好友時發送的訊息。"
+msgstr "Message sent when users add your account as a friend."

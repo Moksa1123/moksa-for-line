@@ -354,3 +354,135 @@ msgstr "無効または期限切れのIDトークンです"
 #: includes/class-moksa-webhook.php:196
 msgid "Please select an option:"
 msgstr "オプションを選択してください："
+
+#: templates/popup-login.php:11
+msgid "Login with LINE"
+msgstr "LINEでログイン"
+
+#: templates/popup-login.php:16
+msgid "Close"
+msgstr "閉じる"
+
+#: templates/popup-login.php:23
+msgid "By continuing, you agree to our %s and %s."
+msgstr "続行することで、%sと%sに同意したことになります。"
+
+#: templates/popup-login.php:23
+msgid "Terms"
+msgstr "利用規約"
+
+#: templates/popup-login.php:23
+msgid "Privacy Policy"
+msgstr "プライバシーポリシー"
+
+#: templates/liff/profile.php:6
+#: templates/liff/profile.php:110
+#: templates/liff/profile.php:159
+msgid "Update Profile"
+msgstr "プロフィールを更新"
+
+#: templates/liff/profile.php:101
+msgid "Email Address"
+msgstr "メールアドレス"
+
+#: templates/liff/profile.php:106
+msgid "Phone Number"
+msgstr "電話番号"
+
+#: templates/admin/woocarousel-generator.php:5
+msgid "WooCommerce is not active. Please activate WooCommerce to use this feature."
+msgstr "WooCommerceが無効です。この機能を使用するにはWooCommerceを有効にしてください。"
+
+#: templates/admin/woocarousel-generator.php:12
+msgid "Carousel Settings"
+msgstr "カルーセル設定"
+
+#: templates/admin/woocarousel-generator.php:16
+msgid "Product Source"
+msgstr "商品ソース"
+
+#: templates/admin/woocarousel-generator.php:18
+msgid "Latest Products"
+msgstr "最新の商品"
+
+#: templates/admin/woocarousel-generator.php:19
+msgid "Product Category"
+msgstr "商品カテゴリー"
+
+#: templates/admin/woocarousel-generator.php:20
+msgid "Specific Products (IDs)"
+msgstr "特定の商品 (ID)"
+
+#: templates/admin/woocarousel-generator.php:25
+msgid "Number of Products"
+msgstr "商品数"
+
+#: templates/admin/woocarousel-generator.php:31
+msgid "Select Category"
+msgstr "カテゴリーを選択"
+
+#: templates/admin/woocarousel-generator.php:52
+msgid "Product IDs"
+msgstr "商品ID"
+
+#: templates/admin/woocarousel-generator.php:58
+msgid "Generate JSON"
+msgstr "JSONを生成"
+
+#: templates/admin/woocarousel-generator.php:65
+msgid "Generated JSON"
+msgstr "生成されたJSON"
+
+#: templates/admin/woocarousel-generator.php:66
+msgid "Copy this JSON and use it in Auto Reply or Flex Message Sender."
+msgstr "このJSONをコピーして、自動応答またはFlexメッセージ送信で使用してください。"
+
+#: templates/admin/woocarousel-generator.php:68
+msgid "Copy to Clipboard"
+msgstr "クリップボードにコピー"
+
+#: templates/admin/tools-page.php:6
+msgid "Settings imported successfully."
+msgstr "設定が正常にインポートされました。"
+
+#: templates/admin/tools-page.php:14
+msgid "Export Users"
+msgstr "ユーザーをエクスポート"
+
+#: templates/admin/tools-page.php:15
+msgid "Export all connected LINE users to a CSV file."
+msgstr "連携済みのすべてのLINEユーザーをCSVファイルにエクスポートします。"
+
+#: templates/admin/tools-page.php:20
+msgid "Download CSV"
+msgstr "CSVをダウンロード"
+
+#: templates/admin/tools-page.php:27
+#: templates/admin/tools-page.php:33
+msgid "Export Settings"
+msgstr "設定をエクスポート"
+
+#: templates/admin/tools-page.php:28
+msgid "Export plugin settings to a JSON file for backup or migration."
+msgstr "バックアップまたは移行のためにプラグイン設定をJSONファイルにエクスポートします。"
+
+#: templates/admin/tools-page.php:40
+#: templates/admin/tools-page.php:49
+msgid "Import Settings"
+msgstr "設定をインポート"
+
+#: templates/admin/tools-page.php:41
+msgid "Import settings from a JSON file."
+msgstr "JSONファイルから設定をインポートします。"
+
+#: includes/class-moksa-auth.php:110
+msgid "Invalid request. Please try again."
+msgstr "無効なリクエストです。もう一度お試しください。"
+
+#: includes/class-moksa-auth.php:117
+msgid "Session expired. Please try logging in again."
+msgstr "セッションが期限切れです。もう一度ログインしてください。"
+
+#: templates/admin/auto-reply-manager.php:9
+msgid "當使用者將您的帳號加為好友時發送的訊息。"
+msgstr "ユーザーがあなたのアカウントを友だち追加したときに送信されるメッセージ。"
