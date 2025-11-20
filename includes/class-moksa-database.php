@@ -225,6 +225,7 @@ class Moksa_Line_Database {
     public function get_total_count() {
         global $wpdb;
         
+        // Security: Safe query - $this->table_name is internally defined, no user input
         return $wpdb->get_var("SELECT COUNT(*) FROM {$this->table_name}");
     }
     

@@ -40,12 +40,16 @@ class Moksa_Line_Auth {
         $callback_url = admin_url('admin-ajax.php?action=moksa_line_callback');
         $state = wp_create_nonce('moksa_line_login');
         
-        // Store redirect URL in session
-        if (!session_id()) {
-            session_start();
-        }
-        $_SESSION['moksa_line_redirect'] = !empty($redirect_url) ? $redirect_url : home_url();
-        $_SESSION['moksa_line_state'] = $state;
+        // Security: Use WordPress Transients instead of PHP Session
+        // Generate a unique transient key
+        $transient_key = 'moksa_line_state_' . wp_generate_password(32, false);
+        
+        // Store state and redirect URL in transient (expires in 10 minutes)
+        set_transient($transient_key, array(
+            'state' => $state,
+            'redirect' => !empty($redirect_url) ? $redirect_url : home_url(),
+            'created' => time()
+        ), 600);
         
         $params = array(
             'response_type' => 'code',
@@ -53,6 +57,7 @@ class Moksa_Line_Auth {
             'redirect_uri' => $callback_url,
             'state' => $state,
             'scope' => 'profile openid email',
+            'nonce' => $transient_key, // Pass transient key as nonce parameter
         );
         
         return $this->line_oauth_base . '/authorize?' . http_build_query($params);
@@ -62,15 +67,26 @@ class Moksa_Line_Auth {
      * Handle OAuth callback
      */
     public function handle_callback() {
-        if (!session_id()) {
-            session_start();
+        // Security: Get transient key from nonce parameter
+        $transient_key = isset($_GET['nonce']) ? sanitize_text_field($_GET['nonce']) : '';
+        
+        if (empty($transient_key)) {
+            wp_die(__('Invalid request. Please try again.', 'moksa-line-login'));
+        }
+        
+        // Security: Get stored data from transient
+        $stored_data = get_transient($transient_key);
+        
+        if ($stored_data === false) {
+            wp_die(__('Session expired. Please try logging in again.', 'moksa-line-login'));
         }
         
         // Verify state parameter
         $state = isset($_GET['state']) ? sanitize_text_field($_GET['state']) : '';
-        $stored_state = isset($_SESSION['moksa_line_state']) ? $_SESSION['moksa_line_state'] : '';
+        $stored_state = isset($stored_data['state']) ? $stored_data['state'] : '';
         
         if (empty($state) || $state !== $stored_state) {
+            delete_transient($transient_key);
             wp_die(__('Invalid state parameter. Please try again.', 'moksa-line-login'));
         }
         
@@ -78,6 +94,7 @@ class Moksa_Line_Auth {
         $code = isset($_GET['code']) ? sanitize_text_field($_GET['code']) : '';
         
         if (empty($code)) {
+            delete_transient($transient_key);
             wp_die(__('Authorization code not received.', 'moksa-line-login'));
         }
         
@@ -85,6 +102,7 @@ class Moksa_Line_Auth {
         $token_data = $this->get_access_token($code);
         
         if (is_wp_error($token_data)) {
+            delete_transient($transient_key);
             wp_die($token_data->get_error_message());
         }
         
@@ -92,6 +110,7 @@ class Moksa_Line_Auth {
         $profile = $this->get_user_profile($token_data['access_token']);
         
         if (is_wp_error($profile)) {
+            delete_transient($transient_key);
             wp_die($profile->get_error_message());
         }
         
@@ -99,6 +118,7 @@ class Moksa_Line_Auth {
         $user_id = $this->process_user($profile);
         
         if (is_wp_error($user_id)) {
+            delete_transient($transient_key);
             wp_die($user_id->get_error_message());
         }
         
@@ -107,9 +127,10 @@ class Moksa_Line_Auth {
         do_action('wp_login', get_userdata($user_id)->user_login, get_userdata($user_id));
         
         // Redirect
-        $redirect_url = isset($_SESSION['moksa_line_redirect']) ? $_SESSION['moksa_line_redirect'] : home_url();
-        unset($_SESSION['moksa_line_redirect']);
-        unset($_SESSION['moksa_line_state']);
+        $redirect_url = isset($stored_data['redirect']) ? $stored_data['redirect'] : home_url();
+        
+        // Security: Delete transient after use
+        delete_transient($transient_key);
         
         wp_redirect($redirect_url);
         exit;

@@ -121,6 +121,7 @@ class Moksa_Line_AutoReply {
     public function get_all_rules() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'moksa_line_auto_replies';
+        // Security: Safe query - $table_name is internally defined, no user input
         return $wpdb->get_results("SELECT * FROM $table_name ORDER BY created_at DESC");
     }
     
@@ -132,6 +133,7 @@ class Moksa_Line_AutoReply {
         $table_name = $wpdb->prefix . 'moksa_line_auto_replies';
         
         // Get all active rules
+        // Security: Safe query - $table_name is internally defined, 1 is a constant
         $rules = $wpdb->get_results("SELECT * FROM $table_name WHERE is_active = 1");
         
         foreach ($rules as $rule) {

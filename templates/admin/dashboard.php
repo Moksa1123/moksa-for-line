@@ -21,7 +21,7 @@
         <div class="card" style="flex: 1; text-align: center; padding: 20px;">
             <h2 style="margin-top: 0;"><?php _e('Messages Sent', 'moksa-line-login'); ?></h2>
             <div style="font-size: 48px; font-weight: bold; color: #3b82f6;">
-                <?php echo number_format($message_stats['total_sent']); ?>
+                <?php echo number_format(isset($message_stats['total_sent']) ? $message_stats['total_sent'] : 0); ?>
             </div>
             <p><?php _e('Total Broadcasts/Push', 'moksa-line-login'); ?></p>
         </div>
@@ -40,7 +40,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ($message_stats['by_type']) : ?>
+                    <?php if (isset($message_stats['by_type']) && $message_stats['by_type']) : ?>
                         <?php foreach ($message_stats['by_type'] as $stat) : ?>
                             <tr>
                                 <td><?php echo esc_html(ucfirst($stat->message_type)); ?></td>

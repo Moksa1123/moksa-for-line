@@ -39,9 +39,11 @@ class Moksa_Line_Dashboard {
         $table_name = $wpdb->prefix . 'moksa_line_messages';
         
         // Count sent messages
+        // Security: Safe query - $table_name is internally defined, 'sent' is a constant
         $sent = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE status = 'sent'");
         
         // Count by type
+        // Security: Safe query - $table_name is internally defined, no user input
         $by_type = $wpdb->get_results("SELECT message_type, COUNT(*) as count FROM $table_name GROUP BY message_type");
         
         return array(

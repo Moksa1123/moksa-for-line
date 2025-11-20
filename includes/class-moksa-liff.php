@@ -74,10 +74,6 @@ class Moksa_Line_LIFF {
      * AJAX: Update Profile from LIFF
      */
     public function ajax_update_profile() {
-        // Verify nonce? Since it's from LIFF, we might rely on ID Token verification ideally.
-        // For simplicity in this version, we will trust the data sent if we can verify the LINE User ID exists.
-        // In a production secure environment, we should verify the ID Token sent from LIFF SDK.
-        
         $line_user_id = sanitize_text_field($_POST['line_user_id']);
         $email = sanitize_email($_POST['email']);
         $phone = sanitize_text_field($_POST['phone']);
@@ -87,8 +83,16 @@ class Moksa_Line_LIFF {
             wp_send_json_error('User ID missing');
         }
         
-        // Verify ID Token (Optional but recommended step for security)
-        // $this->verify_id_token($id_token, $line_user_id);
+        // Security: Verify ID Token is required
+        if (empty($id_token)) {
+            wp_send_json_error('ID Token required for security');
+        }
+        
+        // Security: Verify ID Token matches the LINE User ID
+        $verified = $this->verify_id_token($id_token, $line_user_id);
+        if (!$verified) {
+            wp_send_json_error('Invalid or expired ID Token');
+        }
         
         // Update User Meta
         $db = Moksa_Line_Database::get_instance();
@@ -118,5 +122,62 @@ class Moksa_Line_LIFF {
         } else {
             wp_send_json_error('User not found');
         }
+    }
+    
+    /**
+     * Verify LINE ID Token
+     * 
+     * @param string $id_token The ID token from LIFF SDK
+     * @param string $expected_user_id The expected LINE user ID
+     * @return bool True if token is valid and matches user ID
+     */
+    private function verify_id_token($id_token, $expected_user_id) {
+        $channel_id = get_option('moksa_line_channel_id');
+        
+        if (empty($channel_id)) {
+            return false;
+        }
+        
+        // Verify ID Token with LINE API
+        $response = wp_remote_post('https://api.line.me/oauth2/v2.1/verify', array(
+            'body' => array(
+                'id_token' => $id_token,
+                'client_id' => $channel_id
+            ),
+            'timeout' => 10
+        ));
+        
+        if (is_wp_error($response)) {
+            error_log('LIFF ID Token verification failed: ' . $response->get_error_message());
+            return false;
+        }
+        
+        $status_code = wp_remote_retrieve_response_code($response);
+        if ($status_code !== 200) {
+            error_log('LIFF ID Token verification failed with status: ' . $status_code);
+            return false;
+        }
+        
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        
+        // Verify the token is valid and matches the expected user ID
+        if (!isset($body['sub']) || $body['sub'] !== $expected_user_id) {
+            error_log('LIFF ID Token user ID mismatch');
+            return false;
+        }
+        
+        // Verify the token is for our channel
+        if (!isset($body['aud']) || $body['aud'] !== $channel_id) {
+            error_log('LIFF ID Token channel ID mismatch');
+            return false;
+        }
+        
+        // Verify token is not expired
+        if (!isset($body['exp']) || $body['exp'] < time()) {
+            error_log('LIFF ID Token expired');
+            return false;
+        }
+        
+        return true;
     }
 }

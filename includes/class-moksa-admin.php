@@ -199,9 +199,11 @@ class Moksa_Line_Admin {
         wp_enqueue_style('moksa-line-admin', MOKSA_LINE_PLUGIN_URL . 'assets/css/admin.css', array(), MOKSA_LINE_VERSION);
         wp_enqueue_script('moksa-line-admin', MOKSA_LINE_PLUGIN_URL . 'assets/js/admin.js', array('jquery'), MOKSA_LINE_VERSION, true);
         
-        // Enqueue Flex Simulator assets for Flex Editor AND Order Notification page
+        // Enqueue Flex Simulator assets for Flex Editor, Order Notification, AND Auto Reply page
         $screen = get_current_screen();
-        if ($screen && ($screen->id === 'moksa-line-login_page_moksa-line-flex-message' || $screen->id === 'moksa-line-login_page_moksa-line-order-notification')) {
+        if ($screen && ($screen->id === 'moksa-line-login_page_moksa-line-flex-message' || 
+                        $screen->id === 'moksa-line-login_page_moksa-line-order-notification' || 
+                        $screen->id === 'moksa-line-login_page_moksa-line-auto-reply')) {
             wp_enqueue_style('moksa-line-flex-simulator', MOKSA_LINE_PLUGIN_URL . 'assets/css/flex-simulator.css', array(), MOKSA_LINE_VERSION);
             wp_enqueue_script('moksa-line-flex-editor', MOKSA_LINE_PLUGIN_URL . 'assets/js/flex-editor.js', array('jquery'), MOKSA_LINE_VERSION, true);
         }

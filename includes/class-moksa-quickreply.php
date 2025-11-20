@@ -92,6 +92,7 @@ class Moksa_Line_QuickReply {
     public function get_all_quick_replies() {
         global $wpdb;
         $table_name = $wpdb->prefix . 'moksa_line_quick_replies';
+        // Security: Safe query - $table_name is internally defined, no user input
         return $wpdb->get_results("SELECT * FROM $table_name ORDER BY created_at DESC");
     }
 }

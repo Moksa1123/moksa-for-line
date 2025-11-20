@@ -11,12 +11,12 @@
             <table class="form-table">
                 <tr>
                     <th scope="row">
-                        <label for="moksa_line_channel_id">頻道 ID</label>
+                        <label for="moksa_line_channel_id"><?php _e('頻道 ID', 'moksa-line-login'); ?></label>
                     </th>
                     <td>
                         <input type="text" id="moksa_line_channel_id" name="moksa_line_channel_id" 
                                value="<?php echo esc_attr(get_option('moksa_line_channel_id')); ?>" class="regular-text">
-                        <p class="description">請輸入 LINE Login Channel 的 Channel ID。</p>
+                        <p class="description"><?php _e('請輸入 LINE Login Channel 的 Channel ID。', 'moksa-line-login'); ?></p>
                     </td>
                 </tr>
                 
@@ -27,18 +27,18 @@
                     <td>
                         <input type="password" id="moksa_line_channel_secret" name="moksa_line_channel_secret" 
                                value="<?php echo esc_attr(get_option('moksa_line_channel_secret')); ?>" class="regular-text">
-                        <p class="description">請輸入 LINE Login Channel 的 Channel Secret。</p>
+                        <p class="description"><?php _e('請輸入 LINE Login Channel 的 Channel Secret。', 'moksa-line-login'); ?></p>
                     </td>
                 </tr>
 
                 <tr>
                     <th scope="row">
-                        <label for="moksa_line_liff_id">LIFF ID (選填)</label>
+                        <label for="moksa_line_liff_id"><?php _e('LIFF ID (選填)', 'moksa-line-login'); ?></label>
                     </th>
                     <td>
                         <input type="text" id="moksa_line_liff_id" name="moksa_line_liff_id" 
                                value="<?php echo esc_attr(get_option('moksa_line_liff_id')); ?>" class="regular-text">
-                        <p class="description">用於在 LINE 內部瀏覽器中自動登入。請在 LINE Developers Console 中建立 LIFF App，並將 LIFF ID 貼於此處。</p>
+                        <p class="description"><?php _e('用於在 LINE 內部瀏覽器中自動登入。請在 LINE Developers Console 中建立 LIFF App，並將 LIFF ID 貼於此處。', 'moksa-line-login'); ?></p>
                     </td>
                 </tr>
                 
@@ -48,56 +48,56 @@
                     </th>
                     <td>
                         <code><?php echo esc_url(admin_url('admin-ajax.php?action=moksa_line_callback')); ?></code>
-                        <p class="description">請複製此網址並貼到 LINE Developers Console 的 "Callback URL" 欄位中。</p>
+                        <p class="description"><?php _e('請複製此網址並貼到 LINE Developers Console 的 "Callback URL" 欄位中。', 'moksa-line-login'); ?></p>
                     </td>
                 </tr>
                 
                 <tr>
                     <th scope="row">
-                        <label for="moksa_line_auto_register">自動註冊</label>
+                        <label for="moksa_line_auto_register"><?php _e('自動註冊', 'moksa-line-login'); ?></label>
                     </th>
                     <td>
                         <input type="checkbox" id="moksa_line_auto_register" name="moksa_line_auto_register" value="1" 
                                <?php checked('1', get_option('moksa_line_auto_register')); ?>>
-                        <span class="description">當新的 LINE 使用者登入時，自動為其建立 WordPress 帳號。</span>
+                        <span class="description"><?php _e('當新的 LINE 使用者登入時，自動為其建立 WordPress 帳號。', 'moksa-line-login'); ?></span>
                     </td>
                 </tr>
                 
                 <tr>
                     <th scope="row">
-                        <label for="moksa_line_sync_profile">同步個人資料</label>
+                        <label for="moksa_line_sync_profile"><?php _e('同步個人資料', 'moksa-line-login'); ?></label>
                     </th>
                     <td>
                         <input type="checkbox" id="moksa_line_sync_profile" name="moksa_line_sync_profile" value="1" 
                                <?php checked('1', get_option('moksa_line_sync_profile')); ?>>
-                        <span class="description">每次登入時，自動同步 LINE 的顯示名稱和頭像到 WordPress 個人資料。</span>
+                        <span class="description"><?php _e('每次登入時，自動同步 LINE 的顯示名稱和頭像到 WordPress 個人資料。', 'moksa-line-login'); ?></span>
                     </td>
                 </tr>
 
                 <tr>
                     <th scope="row">
-                        <label for="moksa_line_redirect_after_login">登入後跳轉</label>
+                        <label for="moksa_line_redirect_after_login"><?php _e('登入後跳轉', 'moksa-line-login'); ?></label>
                     </th>
                     <td>
                         <input type="text" id="moksa_line_redirect_after_login" name="moksa_line_redirect_after_login" 
                                value="<?php echo esc_attr(get_option('moksa_line_redirect_after_login')); ?>" class="regular-text" placeholder="/my-account">
-                        <p class="description">登入成功後要跳轉的頁面路徑 (例如: /my-account)。留空則跳轉回原頁面。</p>
+                        <p class="description"><?php _e('登入成功後要跳轉的頁面路徑 (例如: /my-account)。留空則跳轉回原頁面。', 'moksa-line-login'); ?></p>
                     </td>
                 </tr>
 
                 <tr>
                     <th scope="row">
-                        <label for="moksa_line_n8n_webhook_url">n8n Webhook 網址</label>
+                        <label for="moksa_line_n8n_webhook_url"><?php _e('n8n Webhook 網址', 'moksa-line-login'); ?></label>
                     </th>
                     <td>
                         <input type="url" id="moksa_line_n8n_webhook_url" name="moksa_line_n8n_webhook_url" 
                                value="<?php echo esc_attr(get_option('moksa_line_n8n_webhook_url')); ?>" class="regular-text">
-                        <p class="description">將所有 LINE Webhook 事件轉發到此 n8n Webhook URL (選填)。</p>
+                        <p class="description"><?php _e('將所有 LINE Webhook 事件轉發到此 n8n Webhook URL (選填)。', 'moksa-line-login'); ?></p>
                     </td>
                 </tr>
             </table>
         </div>
         
-        <?php submit_button('儲存設定'); ?>
+        <?php submit_button(__('儲存設定', 'moksa-line-login')); ?>
     </form>
 </div>

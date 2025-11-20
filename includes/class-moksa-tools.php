@@ -129,10 +129,32 @@ class Moksa_Line_Tools {
             wp_die('Please select a file.');
         }
         
+        // Security: Validate file type
+        $allowed_mime_types = array('application/json', 'text/plain');
+        $file_type = $_FILES['import_file']['type'];
+        
+        if (!in_array($file_type, $allowed_mime_types)) {
+            wp_die('Invalid file type. Only JSON files are allowed.');
+        }
+        
+        // Security: Validate file size (max 1MB)
+        $max_file_size = 1048576; // 1MB in bytes
+        if ($_FILES['import_file']['size'] > $max_file_size) {
+            wp_die('File too large. Maximum size is 1MB.');
+        }
+        
+        // Security: Validate file extension
+        $file_name = $_FILES['import_file']['name'];
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        
+        if ($file_ext !== 'json') {
+            wp_die('Invalid file extension. Only .json files are allowed.');
+        }
+        
         $json = file_get_contents($_FILES['import_file']['tmp_name']);
         $settings = json_decode($json, true);
         
-        if (!$settings) {
+        if (!$settings || !is_array($settings)) {
             wp_die('Invalid JSON file.');
         }
         

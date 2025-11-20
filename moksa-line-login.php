@@ -75,6 +75,7 @@ class Moksa_Line_Login {
         require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-imagemap.php';
         require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-dashboard.php';
         require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-tools.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-security.php';
     }
     
     /**
@@ -100,6 +101,7 @@ class Moksa_Line_Login {
         Moksa_Line_Imagemap::get_instance();
         Moksa_Line_Dashboard::get_instance();
         Moksa_Line_Tools::get_instance();
+        Moksa_Line_Security::get_instance();
         
         // Register activation hook
         register_activation_hook(__FILE__, array($this, 'activate'));
