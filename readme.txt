@@ -1,3 +1,20 @@
+=== Moksa LINE Login ===
+Contributors: moksa
+Tags: line, login, sso, authentication, messaging
+Requires at least: 5.8
+Tested up to: 6.4
+Stable tag: 1.3.2
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+A comprehensive LINE Login and messaging solution for WordPress.
+
+== Description ==
+
+Moksa LINE Login allows users to log in to your WordPress site using their LINE account. It also provides powerful messaging features like Flex Messages, Auto Replies, and Order Notifications.
+
+== Frequently Asked Questions ==
+
 = 為什麼登入後沒有反應？ =
 請確認您的 Callback URL 是否已正確設定在 LINE Developers Console 中。網址格式應為：`https://your-site.com/wp-admin/admin-ajax.php?action=moksa_line_callback`
 
