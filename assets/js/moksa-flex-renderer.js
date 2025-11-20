@@ -6,6 +6,8 @@
 (function (window) {
     'use strict';
 
+    console.log('MoksaFlexRenderer loaded');
+
     var MoksaFlexRenderer = {
         /**
          * Render a Flex Message JSON object into a container
@@ -35,7 +37,7 @@
                     this.renderContainer(flexObj, container);
                 } else {
                     // Handle raw bubble object without type: flex wrapper
-                    this.renderContainer({ type: 'bubble', ...flexObj }, container);
+                    this.renderContainer(Object.assign({ type: 'bubble' }, flexObj), container);
                 }
             } catch (e) {
                 console.error('Flex Render Error:', e);
