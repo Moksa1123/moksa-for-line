@@ -4,7 +4,7 @@ Tags: line, login, social login, woocommerce, messaging api
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,11 @@ Moksa LINE Login 是一個功能強大的 WordPress 外掛，讓您的網站輕�
 3. 自動回覆規則管理
 
 == Changelog ==
+
+= 1.3.1 - 2025-11-20 =
+*   更新翻譯檔案：補齊所有語言 (en_US, ja, ko_KR) 的 29 個缺失字串
+*   優化 POT 模板檔案結構
+*   更新版本控制流程
 
 = 1.3.0 - 2025-11-20 =
 **重大安全更新 - 強烈建議更新**
