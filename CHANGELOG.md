@@ -60,48 +60,6 @@
 
 ### Changed
 - Improved admin UI with modern design
-- Enhanced WooCommerce integration
-
-### Fixed
-- Various bug fixes and improvements
-
----
-
-## [1.1.0] - 2025-11-15
-
-### Added
-- LIFF (LINE Front-end Framework) support
-- Profile synchronization
-- User avatar management
-
-### Changed
-- Improved authentication flow
-- Better error handling
-
----
-
-## [1.0.0] - 2025-11-10
-
-### Added
-- Initial release
-- LINE Login integration
-- User registration and authentication
-- Basic profile management
-- Database storage for LINE users
-- WordPress user linking
-
----
-
-## Version Numbering
-
-We use [Semantic Versioning](https://semver.org/):
-- **MAJOR** version: Incompatible API changes
-- **MINOR** version: New functionality (backwards compatible)
-- **PATCH** version: Bug fixes (backwards compatible)
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability, please email security@moksaweb.com instead of using the issue tracker.
 
 ## Links
 

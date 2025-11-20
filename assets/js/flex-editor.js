@@ -113,108 +113,335 @@ jQuery(document).ready(function ($) {
             var container = $('#preview_container');
             container.empty();
 
+            // Container Style for Preview Area
+            container.css({
+                'background-color': '#849ebf', // LINE Chat Background Color
+                'padding': '20px',
+                'min-height': '300px',
+                'display': 'flex',
+                'flex-direction': 'column',
+                'align-items': 'flex-start', // Align bubbles to left
+                'gap': '10px',
+                'overflow-x': 'hidden' // Prevent container scroll, handle carousel inside
+            });
+
             // Render Flex Message
-            renderSimpleFlex(flexObj, container);
+            if (flexObj.type === 'flex') {
+                renderFlexContainer(flexObj, container);
+            } else if (flexObj.type === 'bubble' || flexObj.type === 'carousel') {
+                renderFlexContainer(flexObj, container);
+            } else {
+                // Handle raw bubble object without type: flex wrapper
+                renderFlexContainer({ type: 'bubble', ...flexObj }, container);
+            }
 
         } catch (e) {
             var container = $('#preview_container');
-            // Don't clear if empty string to avoid flashing error on init if empty
             if (!jsonStr || !jsonStr.trim()) return;
-
             container.html('<div style="background: #fff; padding: 12px 16px; border-radius: 8px; color: #dc2626; border: 1px solid #fecaca; font-size: 13px;">JSON 格式錯誤：' + e.message + '</div>');
         }
     };
 
-    function renderSimpleFlex(obj, container) {
-        // Handle Bubble
+    function renderFlexContainer(obj, container) {
         if (obj.type === 'bubble') {
-            var bubble = $('<div class="flex-bubble" style="background: #fff; border-radius: 12px; overflow: hidden; max-width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"></div>');
-
-            if (obj.header) renderBox(obj.header, bubble, 'flex-header');
-            if (obj.hero) renderImage(obj.hero, bubble, 'flex-hero');
-            if (obj.body) renderBox(obj.body, bubble, 'flex-body');
-            if (obj.footer) renderBox(obj.footer, bubble, 'flex-footer');
-
-            container.append(bubble);
-        } else if (obj.type === 'flex') {
-            if (obj.contents) {
-                renderSimpleFlex(obj.contents, container);
-            }
+            container.append(renderBubble(obj));
         } else if (obj.type === 'carousel') {
-            // Handle carousel (simplified - just show first bubble)
-            if (obj.contents && obj.contents.length > 0) {
-                container.append('<div style="text-align:center; font-size:12px; color:#64748b; margin-bottom:8px;">(Carousel Preview - Showing first item)</div>');
-                renderSimpleFlex(obj.contents[0], container);
+            var carousel = $('<div class="flex-carousel" style="display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; width: 100%; scroll-snap-type: x mandatory;"></div>');
+            if (obj.contents && Array.isArray(obj.contents)) {
+                obj.contents.forEach(function (bubbleObj) {
+                    var bubbleWrapper = $('<div style="flex: 0 0 auto; width: 300px; scroll-snap-align: start;"></div>');
+                    bubbleWrapper.append(renderBubble(bubbleObj));
+                    carousel.append(bubbleWrapper);
+                });
             }
+            container.append(carousel);
+        } else if (obj.contents) {
+            // Handle wrapper object
+            renderFlexContainer(obj.contents, container);
         }
     }
 
-    function renderBox(box, parent, className) {
-        var div = $('<div class="' + (className || '') + '" style="padding: 16px;"></div>');
+    function renderBubble(bubbleObj) {
+        var bubble = $('<div class="flex-bubble" style="background: #fff; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; position: relative;"></div>');
 
-        // Apply styles
-        if (box.backgroundColor) div.css('background-color', box.backgroundColor);
-        if (box.layout === 'horizontal') div.css({ display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center' });
-        if (box.layout === 'vertical') div.css({ display: 'flex', flexDirection: 'column', gap: '5px' });
+        // Bubble Styles
+        if (bubbleObj.size === 'giga') bubble.css('width', '100%');
+        else if (bubbleObj.size === 'mega') bubble.css('width', '300px');
+        else if (bubbleObj.size === 'kilo') bubble.css('width', '260px');
+        else if (bubbleObj.size === 'micro') bubble.css('width', '160px');
+        else if (bubbleObj.size === 'nano') bubble.css('width', '120px');
+        else bubble.css('width', '300px'); // Default to mega-like
 
-        // Padding handling (simplified)
-        if (box.paddingAll) div.css('padding', box.paddingAll);
+        // Direction
+        var dir = bubbleObj.direction || 'ltr';
+        bubble.css('direction', dir);
 
-        if (box.contents && Array.isArray(box.contents)) {
-            box.contents.forEach(function (item) {
-                if (item.type === 'text') {
-                    var p = $('<p class="flex-text" style="margin: 0; line-height: 1.5;"></p>');
-                    p.text(item.text);
-                    if (item.color) p.css('color', item.color);
-                    if (item.size === 'xs') p.css('font-size', '10px');
-                    if (item.size === 'sm') p.css('font-size', '12px');
-                    if (item.size === 'md') p.css('font-size', '14px');
-                    if (item.size === 'lg') p.css('font-size', '16px');
-                    if (item.size === 'xl') p.css('font-size', '18px');
-                    if (item.size === 'xxl') p.css('font-size', '20px');
-                    if (item.weight === 'bold') p.css('font-weight', 'bold');
-                    if (item.align) p.css('text-align', item.align);
-                    if (item.flex) p.css('flex', item.flex);
-                    if (item.wrap) p.css('white-space', 'pre-wrap');
-                    div.append(p);
-                } else if (item.type === 'button') {
-                    var a = $('<a href="#" class="flex-button" style="display: block; text-align: center; padding: 10px; background: #f1f5f9; text-decoration: none; color: #475569; border-radius: 6px; margin-top: 5px; font-weight: 500; transition: all 0.2s;"></a>');
-                    a.text(item.action ? (item.action.label || '按鈕') : '按鈕');
-                    if (item.style === 'primary') a.css({ 'background-color': '#2563eb', 'color': '#fff' });
-                    if (item.style === 'secondary') a.css({ 'background-color': '#e2e8f0', 'color': '#475569' });
-                    if (item.color) a.css('background-color', item.color);
-                    div.append(a);
-                } else if (item.type === 'box') {
-                    renderBox(item, div);
-                } else if (item.type === 'separator') {
-                    div.append('<hr style="border:0; border-top:1px solid #e2e8f0; margin: 8px 0;">');
+        // Header
+        if (bubbleObj.header) {
+            bubble.append(renderBox(bubbleObj.header, 'header'));
+        }
+
+        // Hero
+        if (bubbleObj.hero) {
+            bubble.append(renderImage(bubbleObj.hero, 'hero'));
+        }
+
+        // Body
+        if (bubbleObj.body) {
+            bubble.append(renderBox(bubbleObj.body, 'body'));
+        }
+
+        // Footer
+        if (bubbleObj.footer) {
+            bubble.append(renderBox(bubbleObj.footer, 'footer'));
+        }
+
+        // Styles
+        if (bubbleObj.styles) {
+            if (bubbleObj.styles.header && bubbleObj.styles.header.backgroundColor) {
+                bubble.find('.flex-box-header').css('background-color', bubbleObj.styles.header.backgroundColor);
+            }
+            if (bubbleObj.styles.hero && bubbleObj.styles.hero.backgroundColor) {
+                bubble.find('.flex-image-hero').css('background-color', bubbleObj.styles.hero.backgroundColor);
+            }
+            if (bubbleObj.styles.body && bubbleObj.styles.body.backgroundColor) {
+                bubble.find('.flex-box-body').css('background-color', bubbleObj.styles.body.backgroundColor);
+            }
+            if (bubbleObj.styles.footer && bubbleObj.styles.footer.backgroundColor) {
+                bubble.find('.flex-box-footer').css('background-color', bubbleObj.styles.footer.backgroundColor);
+            }
+        }
+
+        return bubble;
+    }
+
+    function renderBox(boxObj, blockType) {
+        var box = $('<div class="flex-box flex-box-' + blockType + '"></div>');
+
+        // Layout
+        var layout = boxObj.layout || 'vertical';
+        box.css('display', 'flex');
+        box.css('flex-direction', layout === 'horizontal' ? 'row' : 'column');
+
+        // Background Color
+        if (boxObj.backgroundColor) box.css('background-color', boxObj.backgroundColor);
+
+        // Padding
+        if (boxObj.paddingAll) box.css('padding', boxObj.paddingAll);
+        else if (!boxObj.paddingAll && !boxObj.paddingTop && !boxObj.paddingBottom && !boxObj.paddingStart && !boxObj.paddingEnd) {
+            // Default padding if none specified
+            if (blockType === 'body') box.css('padding', '20px');
+            else if (blockType === 'header') box.css('padding', '20px');
+            else if (blockType === 'footer') box.css('padding', '20px');
+        } else {
+            if (boxObj.paddingTop) box.css('padding-top', boxObj.paddingTop);
+            if (boxObj.paddingBottom) box.css('padding-bottom', boxObj.paddingBottom);
+            if (boxObj.paddingStart) box.css('padding-left', boxObj.paddingStart);
+            if (boxObj.paddingEnd) box.css('padding-right', boxObj.paddingEnd);
+        }
+
+        // Spacing (Gap)
+        var spacing = boxObj.spacing || 'none';
+        var gapMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
+        box.css('gap', gapMap[spacing] || spacing);
+
+        // Margin
+        if (boxObj.margin) {
+            var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
+            box.css('margin-top', marginMap[boxObj.margin] || boxObj.margin);
+        }
+
+        // Flex (for child of horizontal box)
+        if (boxObj.flex !== undefined) box.css('flex', boxObj.flex);
+
+        // Width/Height
+        if (boxObj.width) box.css('width', boxObj.width);
+        if (boxObj.height) box.css('height', boxObj.height);
+
+        // Justify Content
+        if (boxObj.justifyContent) {
+            var justifyMap = {
+                'center': 'center', 'flex-start': 'flex-start', 'flex-end': 'flex-end',
+                'space-between': 'space-between', 'space-around': 'space-around', 'space-evenly': 'space-evenly'
+            };
+            box.css('justify-content', justifyMap[boxObj.justifyContent] || 'flex-start');
+        }
+
+        // Align Items
+        if (boxObj.alignItems) {
+            var alignMap = { 'center': 'center', 'flex-start': 'flex-start', 'flex-end': 'flex-end' };
+            box.css('align-items', alignMap[boxObj.alignItems] || 'flex-start');
+        }
+
+        // Border
+        if (boxObj.borderWidth) box.css('border-width', boxObj.borderWidth);
+        if (boxObj.borderColor) box.css('border-color', boxObj.borderColor);
+        if (boxObj.cornerRadius) box.css('border-radius', boxObj.cornerRadius);
+        if (boxObj.borderWidth) box.css('border-style', 'solid');
+
+        // Contents
+        if (boxObj.contents && Array.isArray(boxObj.contents)) {
+            boxObj.contents.forEach(function (item) {
+                if (item.type === 'box') {
+                    box.append(renderBox(item, 'child'));
+                } else if (item.type === 'text') {
+                    box.append(renderText(item));
                 } else if (item.type === 'image') {
-                    renderImage(item, div);
+                    box.append(renderImage(item, 'child'));
+                } else if (item.type === 'button') {
+                    box.append(renderButton(item));
+                } else if (item.type === 'separator') {
+                    box.append(renderSeparator(item));
+                } else if (item.type === 'filler') {
+                    box.append($('<div style="flex-grow: 1;"></div>'));
+                } else if (item.type === 'spacer') {
+                    // Spacer is usually handled by margin/padding in Flex, but simple div here
+                    var sizeMap = { 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
+                    box.append($('<div style="height: ' + (sizeMap[item.size] || '8px') + ';"></div>'));
                 }
             });
         }
 
-        parent.append(div);
+        return box;
     }
 
-    function renderImage(img, parent, className) {
-        var div = $('<div class="' + (className || '') + '"></div>');
-        var imgEl = $('<img style="width: 100%; height: auto; display: block;">');
-        imgEl.attr('src', img.url || '');
-        if (img.aspectRatio) {
-            var ratio = img.aspectRatio.split(':');
-            var percent = (parseFloat(ratio[1]) / parseFloat(ratio[0])) * 100;
-            imgEl.css('aspect-ratio', img.aspectRatio.replace(':', '/'));
-        }
-        if (img.size === 'full') imgEl.css('width', '100%');
-        if (img.size === 'xl') imgEl.css('width', '100%');
-        if (img.size === 'lg') imgEl.css('width', '75%');
-        if (img.size === 'md') imgEl.css('width', '50%');
-        if (img.size === 'sm') imgEl.css('width', '25%');
-        if (img.size === 'xs') imgEl.css('width', '15%');
+    function renderText(textObj) {
+        var p = $('<div class="flex-text"></div>');
+        p.text(textObj.text || '');
 
-        div.append(imgEl);
-        parent.append(div);
+        // Styles
+        p.css('color', textObj.color || '#000000');
+
+        var sizeMap = { 'xxs': '11px', 'xs': '13px', 'sm': '14px', 'md': '16px', 'lg': '19px', 'xl': '22px', 'xxl': '29px', '3xl': '35px', '4xl': '48px', '5xl': '74px' };
+        p.css('font-size', sizeMap[textObj.size] || '16px');
+
+        if (textObj.weight === 'bold') p.css('font-weight', 'bold');
+        if (textObj.style === 'italic') p.css('font-style', 'italic');
+        if (textObj.decoration === 'underline') p.css('text-decoration', 'underline');
+        if (textObj.decoration === 'line-through') p.css('text-decoration', 'line-through');
+
+        if (textObj.align) p.css('text-align', textObj.align);
+        if (textObj.wrap) p.css('white-space', 'pre-wrap');
+        else p.css('white-space', 'nowrap');
+
+        if (textObj.flex !== undefined) p.css('flex', textObj.flex);
+        if (textObj.margin) {
+            var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
+            p.css('margin-top', marginMap[textObj.margin] || textObj.margin);
+        }
+
+        // Line Height (simplified)
+        p.css('line-height', '1.5');
+
+        return p;
+    }
+
+    function renderImage(imgObj, blockType) {
+        var wrapper = $('<div class="flex-image-wrapper flex-image-' + blockType + '" style="position: relative; overflow: hidden;"></div>');
+        var img = $('<img style="display: block; width: 100%; height: 100%;">');
+        img.attr('src', imgObj.url);
+
+        // Aspect Ratio
+        var ratio = imgObj.aspectRatio || '1:1';
+        wrapper.css('aspect-ratio', ratio.replace(':', '/'));
+
+        // Aspect Mode
+        if (imgObj.aspectMode === 'cover') {
+            img.css('object-fit', 'cover');
+        } else {
+            img.css('object-fit', 'contain');
+        }
+
+        // Size
+        if (imgObj.size) {
+            var sizeMap = { 'xxs': '15%', 'xs': '20%', 'sm': '24%', 'md': '30%', 'lg': '46%', 'xl': '50%', 'xxl': '70%', '3xl': '80%', '4xl': '90%', '5xl': '100%', 'full': '100%' };
+            if (sizeMap[imgObj.size]) {
+                wrapper.css('width', sizeMap[imgObj.size]);
+                if (imgObj.align === 'center') wrapper.css('margin', '0 auto');
+                if (imgObj.align === 'end') wrapper.css('margin-left', 'auto');
+            } else {
+                wrapper.css('width', imgObj.size);
+            }
+        } else {
+            wrapper.css('width', '100%');
+        }
+
+        // Background Color
+        if (imgObj.backgroundColor) wrapper.css('background-color', imgObj.backgroundColor);
+
+        // Margin
+        if (imgObj.margin) {
+            var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
+            wrapper.css('margin-top', marginMap[imgObj.margin] || imgObj.margin);
+        }
+
+        // Flex
+        if (imgObj.flex !== undefined) wrapper.css('flex', imgObj.flex);
+
+        wrapper.append(img);
+        return wrapper;
+    }
+
+    function renderButton(btnObj) {
+        var btn = $('<button class="flex-button"></button>');
+        btn.text(btnObj.action ? (btnObj.action.label || 'Button') : 'Button');
+
+        // Basic Styles
+        btn.css({
+            'display': 'block',
+            'width': '100%',
+            'padding': '0 16px',
+            'height': btnObj.height === 'sm' ? '30px' : '40px',
+            'border-radius': '4px',
+            'border': 'none',
+            'cursor': 'pointer',
+            'font-weight': 'bold',
+            'font-size': '14px',
+            'line-height': btnObj.height === 'sm' ? '28px' : '38px',
+            'text-align': 'center',
+            'box-sizing': 'border-box'
+        });
+
+        // Style Types
+        if (btnObj.style === 'primary') {
+            btn.css({ 'background-color': btnObj.color || '#17c950', 'color': '#ffffff' });
+        } else if (btnObj.style === 'secondary') {
+            btn.css({ 'background-color': btnObj.color || '#dcdfe5', 'color': '#111111' });
+        } else if (btnObj.style === 'link') {
+            btn.css({ 'background-color': 'transparent', 'color': btnObj.color || '#17c950' });
+        } else {
+            // Default to link style if not specified
+            btn.css({ 'background-color': 'transparent', 'color': btnObj.color || '#17c950' });
+        }
+
+        // Margin
+        if (btnObj.margin) {
+            var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
+            btn.css('margin-top', marginMap[btnObj.margin] || btnObj.margin);
+        }
+
+        // Flex
+        if (btnObj.flex !== undefined) btn.css('flex', btnObj.flex);
+
+        return btn;
+    }
+
+    function renderSeparator(sepObj) {
+        var hr = $('<hr>');
+        hr.css({
+            'border': 'none',
+            'border-top': '1px solid ' + (sepObj.color || '#e2e5e8'),
+            'margin': 0,
+            'width': '100%'
+        });
+
+        if (sepObj.margin) {
+            var marginMap = { 'none': '0', 'xs': '2px', 'sm': '4px', 'md': '8px', 'lg': '12px', 'xl': '16px', 'xxl': '20px' };
+            hr.css('margin-top', marginMap[sepObj.margin] || sepObj.margin);
+            hr.css('margin-bottom', marginMap[sepObj.margin] || sepObj.margin);
+        }
+
+        return hr;
     }
 
     // Preview Button

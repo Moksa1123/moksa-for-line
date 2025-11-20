@@ -8,8 +8,12 @@
             <h2><?php _e('加入好友歡迎訊息', 'moksa-line-login'); ?></h2>
             <p><?php _e('當使用者將您的帳號加為好友時發送的訊息。', 'moksa-line-login'); ?></p>
             <form id="greeting-form">
-                <div class="form-group">
-                    <textarea id="greeting_message" class="widefat" rows="3" placeholder="<?php _e('請輸入歡迎訊息...', 'moksa-line-login'); ?>"><?php echo esc_textarea(get_option('moksa_line_greeting_message')); ?></textarea>
+                <div class="form-group" style="position: relative;">
+                    <textarea id="greeting_message" class="widefat" rows="5" placeholder="<?php _e('請輸入歡迎訊息...', 'moksa-line-login'); ?>"><?php echo esc_textarea(get_option('moksa_line_greeting_message')); ?></textarea>
+                    <button type="button" id="toggle-emoji" class="button" style="position: absolute; bottom: 10px; right: 10px;">😀</button>
+                    <div id="emoji-picker" style="display: none; position: absolute; bottom: 45px; right: 0; width: 300px; background: #fff; border: 1px solid #ccc; padding: 10px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; max-height: 200px; overflow-y: auto; display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px;">
+                        <!-- Emojis will be loaded here -->
+                    </div>
                 </div>
                 <button type="submit" class="button button-primary" style="margin-top: 10px;"><?php _e('儲存歡迎訊息', 'moksa-line-login'); ?></button>
             </form>
@@ -143,6 +147,69 @@
 <script>
 jQuery(document).ready(function($) {
     
+    // --- Emoji Picker Logic ---
+    var emojis = [
+        '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇',
+        '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚',
+        '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩',
+        '🥳', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣',
+        '😖', '😫', '😩', '🥺', '😢', '😭', '😤', '😠', '😡', '🤬',
+        '🤯', '😳', '🥵', '🥶', '😱', '😨', '😰', '😥', '😓', '🤗',
+        '🤔', '🤭', '🤫', '🤥', '😶', '😐', '😑', '😬', '🙄', '😯',
+        '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵', '🤐',
+        '🥴', '🤢', '🤮', '🤧', '😷', '🤒', '🤕', '🤑', '🤠', '😈',
+        '👿', '👹', '👺', '🤡', '💩', '👻', '💀', '☠️', '👽', '👾',
+        '🤖', '🎃', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿',
+        '😾', '👋', '🤚', '🖐', '✋', '🖖', '👌', '🤏', '✌️', '🤞',
+        '🤟', '🤘', '🤙', '👈', '👉', '👆', '🖕', '👇', '☝️', '👍',
+        '👎', '✊', '👊', '🤛', '🤜', '👏', '🙌', '👐', '🤲', '🤝',
+        '🙏', '✍️', '💅', '🤳', '💪', '🦾', '🦵', '🦿', '🦶', '👂',
+        '🦻', '👃', '🧠', '🦷', '👀', '👁', '👅', '👄', '💋', '❤️',
+        '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️',
+        '💕', '💞', '💓', '💗', '💖', '💘', '💝', '💟', '☮️', '✝️'
+    ];
+
+    var picker = $('#emoji-picker');
+    var pickerInitialized = false;
+
+    $('#toggle-emoji').on('click', function(e) {
+        e.stopPropagation();
+        if (!pickerInitialized) {
+            emojis.forEach(function(emoji) {
+                var span = $('<span style="cursor: pointer; font-size: 20px; text-align: center;">' + emoji + '</span>');
+                span.on('click', function() {
+                    insertAtCursor($('#greeting_message')[0], emoji);
+                    picker.hide();
+                });
+                picker.append(span);
+            });
+            pickerInitialized = true;
+        }
+        picker.toggle();
+    });
+
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#emoji-picker').length && !$(e.target).is('#toggle-emoji')) {
+            picker.hide();
+        }
+    });
+
+    function insertAtCursor(myField, myValue) {
+        if (document.selection) {
+            myField.focus();
+            sel = document.selection.createRange();
+            sel.text = myValue;
+        } else if (myField.selectionStart || myField.selectionStart == '0') {
+            var startPos = myField.selectionStart;
+            var endPos = myField.selectionEnd;
+            myField.value = myField.value.substring(0, startPos)
+                + myValue
+                + myField.value.substring(endPos, myField.value.length);
+        } else {
+            myField.value += myValue;
+        }
+    }
+
     // Save Greeting
     $('#greeting-form').on('submit', function(e) {
         e.preventDefault();
@@ -166,23 +233,38 @@ jQuery(document).ready(function($) {
         // Trigger preview update if switching to flex
         if (type === 'flex') {
             var json = $('#reply_flex').val();
-            if (window.updatePreview && json) {
-                window.updatePreview(json);
-            }
+            updateFlexPreview(json);
         }
     });
     
     // Live Preview for Flex Message
     $('#reply_flex').on('input', function() {
         var json = $(this).val();
-        if (window.updatePreview) {
-            // Debounce
-            clearTimeout(window.flexPreviewTimeout);
-            window.flexPreviewTimeout = setTimeout(function() {
-                window.updatePreview(json);
-            }, 500);
-        }
+        // Debounce
+        clearTimeout(window.flexPreviewTimeout);
+        window.flexPreviewTimeout = setTimeout(function() {
+            updateFlexPreview(json);
+        }, 500);
     });
+    
+    function updateFlexPreview(jsonStr) {
+        var container = $('#preview_container');
+        
+        try {
+            var flexObj = JSON.parse(jsonStr);
+            
+            // Use Shared Renderer
+            if (window.MoksaFlexRenderer) {
+                window.MoksaFlexRenderer.render(flexObj, container);
+            } else {
+                container.html('<div style="color:red;">Flex Renderer not loaded.</div>');
+            }
+            
+        } catch (e) {
+            if (!jsonStr || !jsonStr.trim()) return;
+            container.html('<div style="background: #fff; padding: 12px 16px; border-radius: 8px; color: #dc2626; border: 1px solid #fecaca; font-size: 13px;">JSON 格式錯誤：' + e.message + '</div>');
+        }
+    }
     
     // Save
     $('#autoreply-form').on('submit', function(e) {
@@ -239,11 +321,7 @@ jQuery(document).ready(function($) {
                 jsonStr = data;
             }
             $('#reply_flex').val(jsonStr);
-            
-            // Trigger preview
-            if (window.updatePreview) {
-                window.updatePreview(jsonStr);
-            }
+            updateFlexPreview(jsonStr);
         }
         else if (type === 'quick_reply') $('#reply_qr').val(data);
         
@@ -261,9 +339,7 @@ jQuery(document).ready(function($) {
         $(this).hide();
         
         // Clear preview
-        if (window.updatePreview) {
-            $('#preview_container').html('<div class="flex-bubble-preview" style="background: #fff; padding: 16px; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 13px;"><?php _e('預覽將顯示於此', 'moksa-line-login'); ?></div>');
-        }
+        $('#preview_container').html('<div class="flex-bubble-preview" style="background: #fff; padding: 16px; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 13px;"><?php _e('預覽將顯示於此', 'moksa-line-login'); ?></div>');
     });
     
     // Delete

@@ -205,7 +205,8 @@ class Moksa_Line_Admin {
                         $screen->id === 'moksa-line-login_page_moksa-line-order-notification' || 
                         $screen->id === 'moksa-line-login_page_moksa-line-auto-reply')) {
             wp_enqueue_style('moksa-line-flex-simulator', MOKSA_LINE_PLUGIN_URL . 'assets/css/flex-simulator.css', array(), MOKSA_LINE_VERSION);
-            wp_enqueue_script('moksa-line-flex-editor', MOKSA_LINE_PLUGIN_URL . 'assets/js/flex-editor.js', array('jquery'), MOKSA_LINE_VERSION, true);
+            wp_enqueue_script('moksa-line-flex-renderer', MOKSA_LINE_PLUGIN_URL . 'assets/js/moksa-flex-renderer.js', array('jquery'), MOKSA_LINE_VERSION, true);
+            wp_enqueue_script('moksa-line-flex-editor', MOKSA_LINE_PLUGIN_URL . 'assets/js/flex-editor.js', array('jquery', 'moksa-line-flex-renderer'), MOKSA_LINE_VERSION, true);
         }
     }
     
