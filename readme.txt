@@ -26,6 +26,14 @@ Moksa LINE Login allows users to log in to your WordPress site using their LINE 
 
 == Changelog ==
 
+= 1.3.2 - 2025-11-20 =
+*   Fix: 修復外掛標頭遺失導致無法安裝的問題
+*   Fix: 修復翻譯檔案 (PO) 中的重複欄位導致的潛在錯誤
+*   Fix: 改進 Flex Renderer JavaScript 相容性，解決 "Flex Renderer not loaded" 錯誤
+*   Fix: 統一 Flex 訊息預覽渲染引擎，確保與 LINE 真實顯示一致
+*   New: Flex 訊息編輯器支援變數拖放 (Drag-and-Drop) 功能
+*   New: 自動回覆歡迎訊息新增 Emoji 表情貼選擇器
+
 = 1.3.1 - 2025-11-20 =
 *   更新翻譯檔案：補齊所有語言 (en_US, ja, ko_KR) 的 29 個缺失字串
 *   優化 POT 模板檔案結構
