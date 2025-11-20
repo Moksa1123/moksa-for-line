@@ -1,8 +1,15 @@
-<div class="wrap">
-    <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-    
-    <div class="moksa-line-settings-container" style="display: flex; gap: 40px;">
-        <div class="moksa-line-settings-form" style="flex: 1;">
+<div class="wrap moksa-line-wrap">
+    <div class="moksa-editor-header">
+        <div class="header-left">
+            <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+            <p class="description"><?php _e('自訂 LINE 登入按鈕的外觀。', 'moksa-line-login'); ?></p>
+        </div>
+    </div>
+
+    <div class="moksa-editor-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="moksa-card" style="height: fit-content;">
+            <h2 style="margin-top: 0; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;"><?php _e('按鈕樣式', 'moksa-line-login'); ?></h2>
+            
             <form method="post" action="options.php">
                 <?php
                 settings_fields('moksa_line_button');
@@ -12,7 +19,7 @@
                 <table class="form-table">
                     <tr>
                         <th scope="row">
-                            <label for="moksa_line_button_text">按鈕文字</label>
+                            <label for="moksa_line_button_text"><?php _e('按鈕文字', 'moksa-line-login'); ?></label>
                         </th>
                         <td>
                             <input type="text" id="moksa_line_button_text" name="moksa_line_button_text" 
@@ -22,7 +29,7 @@
                     
                     <tr>
                         <th scope="row">
-                            <label for="moksa_line_button_bg_color">背景顏色</label>
+                            <label for="moksa_line_button_bg_color"><?php _e('背景顏色', 'moksa-line-login'); ?></label>
                         </th>
                         <td>
                             <input type="text" id="moksa_line_button_bg_color" name="moksa_line_button_bg_color" 
@@ -32,7 +39,7 @@
                     
                     <tr>
                         <th scope="row">
-                            <label for="moksa_line_button_text_color">文字顏色</label>
+                            <label for="moksa_line_button_text_color"><?php _e('文字顏色', 'moksa-line-login'); ?></label>
                         </th>
                         <td>
                             <input type="text" id="moksa_line_button_text_color" name="moksa_line_button_text_color" 
@@ -42,7 +49,7 @@
                     
                     <tr>
                         <th scope="row">
-                            <label for="moksa_line_button_border_radius">圓角半徑 (px)</label>
+                            <label for="moksa_line_button_border_radius"><?php _e('圓角半徑 (px)', 'moksa-line-login'); ?></label>
                         </th>
                         <td>
                             <input type="number" id="moksa_line_button_border_radius" name="moksa_line_button_border_radius" 
@@ -52,18 +59,18 @@
                     
                     <tr>
                         <th scope="row">
-                            <label for="moksa_line_button_width">寬度</label>
+                            <label for="moksa_line_button_width"><?php _e('寬度', 'moksa-line-login'); ?></label>
                         </th>
                         <td>
                             <input type="text" id="moksa_line_button_width" name="moksa_line_button_width" 
                                    value="<?php echo esc_attr(get_option('moksa_line_button_width', '100%')); ?>" class="regular-text">
-                            <p class="description">例如：100%, 200px</p>
+                            <p class="description"><?php _e('例如：100%, 200px', 'moksa-line-login'); ?></p>
                         </td>
                     </tr>
                     
                     <tr>
                         <th scope="row">
-                            <label for="moksa_line_button_height">高度 (px)</label>
+                            <label for="moksa_line_button_height"><?php _e('高度 (px)', 'moksa-line-login'); ?></label>
                         </th>
                         <td>
                             <input type="number" id="moksa_line_button_height" name="moksa_line_button_height" 
@@ -72,24 +79,28 @@
                     </tr>
                 </table>
                 
-                <?php submit_button(); ?>
+                <div style="padding-top: 20px; border-top: 1px solid #f1f5f9; margin-top: 20px;">
+                    <?php submit_button(__('儲存設定', 'moksa-line-login'), 'primary large', 'submit', false); ?>
+                </div>
             </form>
         </div>
         
-        <div class="moksa-line-preview-panel" style="flex: 1; padding: 24px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
-            <h3 style="margin-top: 0; color: #1e293b; font-weight: 600; font-size: 1.125rem;">即時預覽</h3>
-            <div style="margin-top: 20px; padding: 40px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
-                <button id="moksa-line-preview-btn" style="display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; gap: 10px;">
+        <div class="moksa-card" style="height: fit-content; background: #f8fafc;">
+            <h2 style="margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; color: #1e293b;"><?php _e('即時預覽', 'moksa-line-login'); ?></h2>
+            
+            <div style="padding: 60px 20px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                <button id="moksa-line-preview-btn" style="display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; gap: 10px; transition: opacity 0.2s;">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10 0C4.477 0 0 3.846 0 8.571c0 4.236 3.756 7.78 8.823 8.456.343.074.81.226.928.52.106.265.07.68.034.948l-.148.89c-.045.266-.208 1.04.91.567 1.118-.473 6.023-3.546 8.218-6.072C19.893 12.238 20 10.45 20 8.571 20 3.846 15.523 0 10 0z" fill="currentColor"/>
                     </svg>
                     <span class="btn-text"></span>
                 </button>
             </div>
-            <p class="description" style="margin-top: 15px;">
-                簡碼用法：<br>
-                <code>[line_login_button]</code>
-            </p>
+            
+            <div style="background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                <p style="margin: 0 0 5px 0; font-weight: 600; font-size: 12px; color: #64748b; text-transform: uppercase;"><?php _e('簡碼用法', 'moksa-line-login'); ?></p>
+                <code style="font-size: 14px; color: #2563eb;">[line_login_button]</code>
+            </div>
         </div>
     </div>
 </div>
@@ -99,7 +110,7 @@ jQuery(document).ready(function($) {
     // Initialize color pickers
     $('.moksa-color-picker').wpColorPicker({
         change: function(event, ui) {
-            updatePreview();
+            setTimeout(updatePreview, 10); // Small delay to ensure value is updated
         }
     });
     
@@ -125,7 +136,7 @@ jQuery(document).ready(function($) {
     }
     
     // Bind events
-    $('input').on('change input', updatePreview);
+    $('input').on('change input keyup', updatePreview);
     
     // Initial update
     updatePreview();

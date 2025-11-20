@@ -1,34 +1,39 @@
-<div class="wrap">
-    <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+<div class="wrap moksa-line-wrap">
+    <div class="moksa-editor-header">
+        <div class="header-left">
+            <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+            <p class="description"><?php _e('從 WooCommerce 商品自動生成 Flex Message 輪播 JSON。', 'moksa-line-login'); ?></p>
+        </div>
+    </div>
     
     <?php if (!class_exists('WooCommerce')) : ?>
-        <div class="notice notice-error"><p><?php _e('WooCommerce is not active. Please activate WooCommerce to use this feature.', 'moksa-line-login'); ?></p></div>
+        <div class="notice notice-error" style="margin-left: 0;"><p><?php _e('WooCommerce 未啟用。請先啟用 WooCommerce 以使用此功能。', 'moksa-line-login'); ?></p></div>
     <?php else : ?>
     
-    <div class="moksa-line-flex-container" style="display: flex; gap: 20px;">
+    <div class="moksa-editor-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
         
         <!-- Settings Column -->
-        <div class="card" style="flex: 1;">
-            <h2><?php _e('Carousel Settings', 'moksa-line-login'); ?></h2>
+        <div class="moksa-card">
+            <h2 style="margin-top: 0; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 15px; font-size: 18px;"><?php _e('輪播設定', 'moksa-line-login'); ?></h2>
             <form id="woocarousel-form">
                 
                 <div class="form-group">
-                    <label for="carousel_type"><?php _e('Product Source', 'moksa-line-login'); ?></label>
+                    <label for="carousel_type" style="display: block; margin-bottom: 5px; font-weight: 600;"><?php _e('商品來源', 'moksa-line-login'); ?></label>
                     <select id="carousel_type" class="widefat">
-                        <option value="latest"><?php _e('Latest Products', 'moksa-line-login'); ?></option>
-                        <option value="category"><?php _e('Product Category', 'moksa-line-login'); ?></option>
-                        <option value="specific"><?php _e('Specific Products (IDs)', 'moksa-line-login'); ?></option>
+                        <option value="latest"><?php _e('最新商品', 'moksa-line-login'); ?></option>
+                        <option value="category"><?php _e('商品分類', 'moksa-line-login'); ?></option>
+                        <option value="specific"><?php _e('指定商品 (ID)', 'moksa-line-login'); ?></option>
                     </select>
                 </div>
                 
                 <div id="setting-limit" class="form-group" style="margin-top: 15px;">
-                    <label for="carousel_limit"><?php _e('Number of Products', 'moksa-line-login'); ?></label>
+                    <label for="carousel_limit" style="display: block; margin-bottom: 5px; font-weight: 600;"><?php _e('商品數量', 'moksa-line-login'); ?></label>
                     <input type="number" id="carousel_limit" class="widefat" value="5" min="1" max="12">
-                    <p class="description">輪播中最多 12 個氣泡。</p>
+                    <p class="description"><?php _e('輪播中最多 12 個氣泡。', 'moksa-line-login'); ?></p>
                 </div>
                 
                 <div id="setting-category" class="form-group" style="margin-top: 15px; display: none;">
-                    <label for="carousel_category"><?php _e('Select Category', 'moksa-line-login'); ?></label>
+                    <label for="carousel_category" style="display: block; margin-bottom: 5px; font-weight: 600;"><?php _e('選擇分類', 'moksa-line-login'); ?></label>
                     <?php
                     $args = array(
                         'taxonomy' => 'product_cat',
@@ -49,23 +54,26 @@
                 </div>
                 
                 <div id="setting-specific" class="form-group" style="margin-top: 15px; display: none;">
-                    <label for="carousel_ids"><?php _e('Product IDs', 'moksa-line-login'); ?></label>
+                    <label for="carousel_ids" style="display: block; margin-bottom: 5px; font-weight: 600;"><?php _e('商品 ID', 'moksa-line-login'); ?></label>
                     <input type="text" id="carousel_ids" class="widefat" placeholder="e.g., 101, 102, 105">
-                    <p class="description">以逗號分隔的商品 ID 列表。</p>
+                    <p class="description"><?php _e('以逗號分隔的商品 ID 列表。', 'moksa-line-login'); ?></p>
                 </div>
                 
-                <div style="margin-top: 20px;">
-                    <button type="submit" class="button button-primary"><?php _e('Generate JSON', 'moksa-line-login'); ?></button>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #f1f5f9;">
+                    <button type="submit" class="button button-primary button-large" style="width: 100%; justify-content: center;"><?php _e('生成 JSON', 'moksa-line-login'); ?></button>
                 </div>
             </form>
         </div>
         
         <!-- Result Column -->
-        <div class="card" style="flex: 1;">
-            <h2><?php _e('Generated JSON', 'moksa-line-login'); ?></h2>
-            <p><?php _e('Copy this JSON and use it in Auto Reply or Flex Message Sender.', 'moksa-line-login'); ?></p>
-            <textarea id="carousel_result" class="widefat" rows="15" readonly></textarea>
-            <button type="button" class="button" id="copy_json" style="margin-top: 10px;"><?php _e('Copy to Clipboard', 'moksa-line-login'); ?></button>
+        <div class="moksa-card">
+            <h2 style="margin-top: 0; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 15px; font-size: 18px;"><?php _e('生成的 JSON', 'moksa-line-login'); ?></h2>
+            <p style="color: #64748b; margin-bottom: 10px;"><?php _e('複製此 JSON 並用於自動回覆或 Flex 訊息發送器。', 'moksa-line-login'); ?></p>
+            <textarea id="carousel_result" class="widefat" rows="15" readonly style="font-family: monospace; background: #f8fafc; font-size: 12px;"></textarea>
+            <button type="button" class="button" id="copy_json" style="margin-top: 15px; width: 100%; justify-content: center;">
+                <span class="dashicons dashicons-clipboard" style="margin-right: 5px; line-height: 1.3;"></span>
+                <?php _e('複製到剪貼簿', 'moksa-line-login'); ?>
+            </button>
         </div>
         
     </div>
@@ -94,6 +102,10 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         
         var type = $('#carousel_type').val();
+        var $btn = $(this).find('button[type="submit"]');
+        var originalText = $btn.text();
+        
+        $btn.prop('disabled', true).text('<?php _e('生成中...', 'moksa-line-login'); ?>');
         
         $.post(moksaLineAdmin.ajaxUrl, {
             action: 'moksa_line_generate_woo_carousel',
@@ -103,6 +115,8 @@ jQuery(document).ready(function($) {
             category: $('#carousel_category').val(),
             product_ids: $('#carousel_ids').val()
         }, function(response) {
+            $btn.prop('disabled', false).text(originalText);
+            
             if (response.success) {
                 $('#carousel_result').val(JSON.stringify(response.data, null, 2));
             } else {
@@ -117,7 +131,13 @@ jQuery(document).ready(function($) {
         copyText.select();
         copyText.setSelectionRange(0, 99999); /* For mobile devices */
         document.execCommand("copy");
-        alert("Copied to clipboard!");
+        
+        var $btn = $(this);
+        var originalText = $btn.html();
+        $btn.html('<span class="dashicons dashicons-yes" style="margin-right: 5px; line-height: 1.3;"></span> <?php _e('已複製！', 'moksa-line-login'); ?>');
+        setTimeout(function() {
+            $btn.html(originalText);
+        }, 2000);
     });
 });
 </script>

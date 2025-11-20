@@ -1,9 +1,10 @@
 === Moksa LINE Login ===
 Contributors: moksa
 Tags: line, login, sso, authentication, messaging
-Requires at least: 5.8
+Requires at least: 6.0
 Tested up to: 6.4
-Stable tag: 1.3.2
+Requires PHP: 7.4
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +26,17 @@ Moksa LINE Login allows users to log in to your WordPress site using their LINE 
 3. 自動回覆規則管理
 
 == Changelog ==
+
+= 1.3.4 - 2025-11-21 =
+*   Fix: 修復 Flex Message 編輯器動態參數 ({{name}}) 導致預覽空白的問題
+*   Fix: 改進 Flex Renderer 錯誤處理，顯示詳細錯誤訊息
+*   Update: 完成所有管理介面 (Dashboard, Settings, Tools, Generators) 的 UI 標準化
+*   Update: 優化 Flex 編輯器介面體驗
+
+= 1.3.3 - 2025-11-21 =
+*   Update: 更新最低環境需求 (WordPress 6.0+, PHP 7.4+)
+*   Update: 全面優化管理介面 UI，採用現代化三欄式設計
+*   Fix: 修復 Flex Message 編輯器 JSON 預覽異常問題
 
 = 1.3.2 - 2025-11-20 =
 *   Fix: 修復外掛標頭遺失導致無法安裝的問題

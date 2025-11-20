@@ -31,6 +31,13 @@
             });
 
             try {
+                if (!flexObj) return;
+
+                if (typeof flexObj === 'string') {
+                    this.renderPlaceholder(flexObj, container);
+                    return;
+                }
+
                 if (flexObj.type === 'flex') {
                     this.renderContainer(flexObj, container);
                 } else if (flexObj.type === 'bubble' || flexObj.type === 'carousel') {
@@ -41,11 +48,18 @@
                 }
             } catch (e) {
                 console.error('Flex Render Error:', e);
-                container.html('<div style="background: #fff; padding: 12px; color: red;">Render Error: ' + e.message + '</div>');
+                container.html('<div class="moksa-error-message" style="background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 12px; border-radius: 8px; font-size: 13px; line-height: 1.5;"><strong>Render Error:</strong> ' + this.escapeHtml(e.message) + '</div>');
             }
         },
 
         renderContainer: function (obj, container) {
+            if (!obj) return;
+
+            if (typeof obj === 'string') {
+                container.append(this.createPlaceholder(obj));
+                return;
+            }
+
             if (obj.type === 'bubble') {
                 container.append(this.renderBubble(obj));
             } else if (obj.type === 'carousel') {
@@ -59,7 +73,11 @@
                     var self = this;
                     obj.contents.forEach(function (bubbleObj) {
                         var bubbleWrapper = $('<div style="flex: 0 0 auto; width: 300px; scroll-snap-align: start;"></div>');
-                        bubbleWrapper.append(self.renderBubble(bubbleObj));
+                        if (typeof bubbleObj === 'string') {
+                            bubbleWrapper.append(self.createPlaceholder(bubbleObj));
+                        } else {
+                            bubbleWrapper.append(self.renderBubble(bubbleObj));
+                        }
                         carousel.append(bubbleWrapper);
                     });
                 }
@@ -70,6 +88,10 @@
         },
 
         renderBubble: function (bubbleObj) {
+            if (typeof bubbleObj === 'string') {
+                return this.createPlaceholder(bubbleObj);
+            }
+
             var bubble = $('<div class="flex-bubble" style="background: #fff; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"></div>');
 
             // Bubble Styles
@@ -124,6 +146,10 @@
         },
 
         renderBox: function (boxObj, blockType) {
+            if (typeof boxObj === 'string') {
+                return this.createPlaceholder(boxObj);
+            }
+
             var box = $('<div class="flex-box flex-box-' + blockType + '"></div>');
 
             // Layout
@@ -193,7 +219,9 @@
             if (boxObj.contents && Array.isArray(boxObj.contents)) {
                 var self = this;
                 boxObj.contents.forEach(function (item) {
-                    if (item.type === 'box') {
+                    if (typeof item === 'string') {
+                        box.append(self.createPlaceholder(item));
+                    } else if (item.type === 'box') {
                         box.append(self.renderBox(item, 'child'));
                     } else if (item.type === 'text') {
                         box.append(self.renderText(item));
@@ -339,6 +367,24 @@
             }
 
             return hr;
+        },
+
+        createPlaceholder: function (text) {
+            return $('<div class="moksa-dynamic-placeholder" style="border: 1px dashed #94a3b8; padding: 8px; background: #f1f5f9; color: #64748b; text-align: center; font-size: 12px; margin: 5px 0; border-radius: 4px;">' + this.escapeHtml(text) + '</div>');
+        },
+
+        renderPlaceholder: function (text, container) {
+            container.append(this.createPlaceholder(text));
+        },
+
+        escapeHtml: function (text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
     };
 
