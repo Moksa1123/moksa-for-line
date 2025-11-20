@@ -1,0 +1,356 @@
+# Japanese translation for Moksa LINE Login
+# Copyright (C) 2025 Moksa Team
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Moksa LINE Login 1.3.0\n"
+"Report-Msgid-Bugs-To: https://moksaweb.com\n"
+"POT-Creation-Date: 2025-11-20 20:49+0800\n"
+"PO-Revision-Date: 2025-11-20 20:54+0800\n"
+"Last-Translator: Moksa Team\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: templates/admin/auto-reply-manager.php:8
+msgid "加入好友歡迎訊息"
+msgstr "友だち追加ウェルカムメッセージ"
+
+#: templates/admin/auto-reply-manager.php:12
+msgid "請輸入歡迎訊息..."
+msgstr "ウェルカムメッセージを入力してください..."
+
+#: templates/admin/auto-reply-manager.php:15
+msgid "儲存歡迎訊息"
+msgstr "ウェルカムメッセージを保存"
+
+#: templates/admin/auto-reply-manager.php:22
+msgid "自動回覆規則"
+msgstr "自動応答ルール"
+
+#: templates/admin/auto-reply-manager.php:28
+msgid "關鍵字"
+msgstr "キーワード"
+
+#: templates/admin/auto-reply-manager.php:29
+msgid "回覆類型"
+msgstr "返信タイプ"
+
+#: templates/admin/auto-reply-manager.php:30
+msgid "回覆內容"
+msgstr "返信内容"
+
+#: templates/admin/auto-reply-manager.php:31
+msgid "啟用"
+msgstr "有効"
+
+#: templates/admin/auto-reply-manager.php:32
+msgid "操作"
+msgstr "操作"
+
+#: templates/admin/auto-reply-manager.php:50
+msgid "編輯"
+msgstr "編集"
+
+#: templates/admin/auto-reply-manager.php:51
+msgid "刪除"
+msgstr "削除"
+
+#: templates/admin/auto-reply-manager.php:56
+msgid "尚無規則"
+msgstr "ルールがまだありません"
+
+#: templates/admin/auto-reply-manager.php:63
+msgid "新增自動回覆規則"
+msgstr "自動応答ルールを追加"
+
+#: templates/admin/auto-reply-manager.php:67
+msgid "例如：你好"
+msgstr "例：こんにちは"
+
+#: templates/admin/auto-reply-manager.php:72
+msgid "比對方式"
+msgstr "マッチタイプ"
+
+#: templates/admin/auto-reply-manager.php:74
+msgid "完全符合"
+msgstr "完全一致"
+
+#: templates/admin/auto-reply-manager.php:75
+msgid "部分符合"
+msgstr "部分一致"
+
+#: templates/admin/auto-reply-manager.php:80
+msgid "回覆類型"
+msgstr "返信タイプ"
+
+#: templates/admin/auto-reply-manager.php:82
+msgid "文字訊息"
+msgstr "テキストメッセージ"
+
+#: templates/admin/auto-reply-manager.php:83
+msgid "Flex Message"
+msgstr "Flexメッセージ"
+
+#: templates/admin/auto-reply-manager.php:84
+msgid "快速回覆"
+msgstr "クイック返信"
+
+#: templates/admin/auto-reply-manager.php:91
+msgid "回覆內容"
+msgstr "返信内容"
+
+#: templates/admin/auto-reply-manager.php:92
+msgid "請輸入回覆文字..."
+msgstr "返信テキストを入力してください..."
+
+#: templates/admin/auto-reply-manager.php:97
+msgid "Flex Message JSON"
+msgstr "Flexメッセージ JSON"
+
+#: templates/admin/auto-reply-manager.php:104
+msgid "快速回覆集"
+msgstr "クイック返信セット"
+
+#: templates/admin/auto-reply-manager.php:114
+msgid "儲存規則"
+msgstr "ルールを保存"
+
+#: templates/admin/auto-reply-manager.php:115
+msgid "取消編輯"
+msgstr "編集をキャンセル"
+
+#: templates/admin/flexmessage-editor.php:8
+msgid "Flex Message 編輯器"
+msgstr "Flexメッセージエディター"
+
+#: templates/admin/flexmessage-editor.php:11
+msgid "替代文字 (Alt Text)"
+msgstr "代替テキスト（Alt Text）"
+
+#: templates/admin/flexmessage-editor.php:12
+msgid "在聊天列表中顯示的訊息預覽文字"
+msgstr "チャットリストに表示されるメッセージプレビューテキスト"
+
+#: templates/admin/flexmessage-editor.php:16
+msgid "JSON 內容"
+msgstr "JSON コンテンツ"
+
+#: templates/admin/flexmessage-editor.php:22
+msgid "載入範例"
+msgstr "サンプルを読み込む"
+
+#: templates/admin/flexmessage-editor.php:23
+msgid "更新預覽"
+msgstr "プレビューを更新"
+
+#: templates/admin/flexmessage-editor.php:31
+msgid "發送訊息"
+msgstr "メッセージを送信"
+
+#: templates/admin/flexmessage-editor.php:33
+msgid "發送對象"
+msgstr "送信先"
+
+#: templates/admin/flexmessage-editor.php:35
+msgid "所有使用者"
+msgstr "すべてのユーザー"
+
+#: templates/admin/flexmessage-editor.php:36
+msgid "特定使用者"
+msgstr "特定のユーザー"
+
+#: templates/admin/flexmessage-editor.php:41
+msgid "請從下方列表中選擇使用者："
+msgstr "以下のリストからユーザーを選択してください："
+
+#: templates/admin/flexmessage-editor.php:51
+msgid "沒有找到 LINE 使用者。"
+msgstr "LINEユーザーが見つかりませんでした。"
+
+#: templates/admin/flexmessage-editor.php:59
+msgid "立即發送"
+msgstr "今すぐ送信"
+
+#: templates/admin/flexmessage-editor.php:72
+msgid "預覽將顯示於此"
+msgstr "プレビューがここに表示されます"
+
+#: templates/admin/settings-general.php:14
+msgid "頻道 ID"
+msgstr "チャネルID"
+
+#: templates/admin/settings-general.php:19
+msgid "請輸入 LINE Login Channel 的 Channel ID。"
+msgstr "LINE LoginチャネルのチャネルIDを入力してください。"
+
+#: templates/admin/settings-general.php:30
+msgid "請輸入 LINE Login Channel 的 Channel Secret。"
+msgstr "LINE LoginチャネルのChannel Secretを入力してください。"
+
+#: templates/admin/settings-general.php:36
+msgid "LIFF ID (選填)"
+msgstr "LIFF ID（オプション）"
+
+#: templates/admin/settings-general.php:41
+msgid "用於在 LINE 內部瀏覽器中自動登入。請在 LINE Developers Console 中建立 LIFF App，並將 LIFF ID 貼於此處。"
+msgstr "LINE内部ブラウザでの自動ログインに使用します。LINE Developers ConsoleでLIFFアプリを作成し、LIFF IDをここに貼り付けてください。"
+
+#: templates/admin/settings-general.php:51
+msgid "請複製此網址並貼到 LINE Developers Console 的 \"Callback URL\" 欄位中。"
+msgstr "このURLをコピーして、LINE Developers Consoleの「Callback URL」フィールドに貼り付けてください。"
+
+#: templates/admin/settings-general.php:57
+msgid "自動註冊"
+msgstr "自動登録"
+
+#: templates/admin/settings-general.php:62
+msgid "當新的 LINE 使用者登入時，自動為其建立 WordPress 帳號。"
+msgstr "新しいLINEユーザーがログインしたときに、自動的にWordPressアカウントを作成します。"
+
+#: templates/admin/settings-general.php:68
+msgid "同步個人資料"
+msgstr "プロフィールを同期"
+
+#: templates/admin/settings-general.php:73
+msgid "每次登入時，自動同步 LINE 的顯示名稱和頭像到 WordPress 個人資料。"
+msgstr "ログインするたびに、LINEの表示名とアバターをWordPressプロフィールに自動同期します。"
+
+#: templates/admin/settings-general.php:79
+msgid "登入後跳轉"
+msgstr "ログイン後のリダイレクト"
+
+#: templates/admin/settings-general.php:84
+msgid "登入成功後要跳轉的頁面路徑 (例如: /my-account)。留空則跳轉回原頁面。"
+msgstr "ログイン成功後にリダイレクトするページパス（例：/my-account）。空白の場合は元のページにリダイレクトします。"
+
+#: templates/admin/settings-general.php:90
+msgid "n8n Webhook 網址"
+msgstr "n8n Webhook URL"
+
+#: templates/admin/settings-general.php:95
+msgid "將所有 LINE Webhook 事件轉發到此 n8n Webhook URL (選填)。"
+msgstr "すべてのLINE Webhookイベントをこのn8n Webhook URLに転送します（オプション）。"
+
+#: templates/admin/settings-general.php:101
+msgid "儲存設定"
+msgstr "設定を保存"
+
+#: templates/admin/settings-messaging.php:14
+msgid "頻道存取權杖"
+msgstr "チャネルアクセストークン"
+
+#: templates/admin/settings-messaging.php:18
+msgid "請輸入 LINE Developers Console 中的 Long-lived Channel Access Token。"
+msgstr "LINE Developers ConsoleのLong-lived Channel Access Tokenを入力してください。"
+
+#: templates/admin/settings-messaging.php:29
+msgid "用於 Webhook 驗證的 Channel Secret (如果與 Login Channel Secret 不同)。"
+msgstr "Webhook検証用のChannel Secret（Login Channel Secretと異なる場合）。"
+
+#: templates/admin/settings-messaging.php:37
+msgid "請將此網址設定到 LINE Developers Console 的 \"Messaging API\" 頁籤中的 Webhook URL。"
+msgstr "このURLをLINE Developers Consoleの「Messaging API」タブのWebhook URLに設定してください。"
+
+#: templates/admin/settings-messaging.php:43
+msgid "加好友連結"
+msgstr "友だち追加リンク"
+
+#: templates/admin/settings-messaging.php:48
+msgid "讓使用者將您的官方帳號加為好友的連結 (例如: https://line.me/R/ti/p/@yourid)。"
+msgstr "ユーザーが公式アカウントを友だち追加するためのリンク（例：https://line.me/R/ti/p/@yourid）。"
+
+#: templates/admin/settings-messaging.php:54
+msgid "訂單通知延遲"
+msgstr "注文通知の遅延"
+
+#: templates/admin/settings-messaging.php:58
+msgid "秒"
+msgstr "秒"
+
+#: templates/admin/settings-messaging.php:59
+msgid "延遲發送訂單狀態通知，以確保第三方物流外掛已更新追蹤號碼。"
+msgstr "サードパーティの配送プラグインが追跡番号を更新したことを確認するため、注文ステータス通知の送信を遅延させます。"
+
+#: templates/admin/settings-messaging.php:60
+msgid "例如: <strong>%s</strong> 代表 10 分鐘。設為 0 則立即發送。"
+msgstr "例：<strong>%s</strong>は10分を表します。0に設定すると即座に送信されます。"
+
+#: templates/admin/dashboard.php:14
+msgid "Total Friends"
+msgstr "友だち総数"
+
+#: templates/admin/dashboard.php:18
+msgid "Linked Users"
+msgstr "連携ユーザー"
+
+#: templates/admin/dashboard.php:22
+msgid "Messages Sent"
+msgstr "送信メッセージ数"
+
+#: templates/admin/dashboard.php:26
+msgid "Total Broadcasts/Push"
+msgstr "総配信/プッシュ数"
+
+#: templates/admin/dashboard.php:34
+msgid "Message Types"
+msgstr "メッセージタイプ"
+
+#: templates/admin/dashboard.php:38
+msgid "Type"
+msgstr "タイプ"
+
+#: templates/admin/dashboard.php:39
+msgid "Count"
+msgstr "件数"
+
+#: templates/admin/dashboard.php:51
+msgid "No data yet."
+msgstr "データがまだありません。"
+
+#: templates/admin/dashboard.php:58
+msgid "Recent Webhook Events"
+msgstr "最近のWebhookイベント"
+
+#: templates/admin/dashboard.php:62
+msgid "Time"
+msgstr "時刻"
+
+#: templates/admin/dashboard.php:63
+msgid "Event"
+msgstr "イベント"
+
+#: templates/admin/dashboard.php:64
+msgid "Source"
+msgstr "ソース"
+
+#: templates/admin/dashboard.php:77
+msgid "No events yet."
+msgstr "イベントがまだありません。"
+
+#: includes/class-moksa-auth.php:74
+msgid "Invalid state parameter. Please try again."
+msgstr "無効なstateパラメータです。もう一度お試しください。"
+
+#: includes/class-moksa-auth.php:81
+msgid "Authorization code not received."
+msgstr "認証コードが受信されませんでした。"
+
+#: includes/class-moksa-auth.php:196
+msgid "User registration is disabled."
+msgstr "ユーザー登録は無効になっています。"
+
+#: includes/class-moksa-liff.php:95
+msgid "ID Token required for security"
+msgstr "セキュリティのためIDトークンが必要です"
+
+#: includes/class-moksa-liff.php:100
+msgid "Invalid or expired ID Token"
+msgstr "無効または期限切れのIDトークンです"
+
+#: includes/class-moksa-webhook.php:196
+msgid "Please select an option:"
+msgstr "オプションを選択してください："
