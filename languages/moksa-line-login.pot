@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Login 1.3.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com\n"
-"POT-Creation-Date: 2025-11-20 20:49+0800\n"
+"POT-Creation-Date: 2025-11-20 21:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,6 +13,126 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Manual\n"
+
+#: templates/popup-login.php:11
+msgid "Login with LINE"
+msgstr ""
+
+#: templates/popup-login.php:16
+msgid "Close"
+msgstr ""
+
+#: templates/popup-login.php:23
+msgid "By continuing, you agree to our %s and %s."
+msgstr ""
+
+#: templates/popup-login.php:23
+msgid "Terms"
+msgstr ""
+
+#: templates/popup-login.php:23
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/liff/profile.php:6
+#: templates/liff/profile.php:110
+#: templates/liff/profile.php:159
+msgid "Update Profile"
+msgstr ""
+
+#: templates/liff/profile.php:101
+msgid "Email Address"
+msgstr ""
+
+#: templates/liff/profile.php:106
+msgid "Phone Number"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:5
+msgid "WooCommerce is not active. Please activate WooCommerce to use this feature."
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:12
+msgid "Carousel Settings"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:16
+msgid "Product Source"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:18
+msgid "Latest Products"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:19
+msgid "Product Category"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:20
+msgid "Specific Products (IDs)"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:25
+msgid "Number of Products"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:31
+msgid "Select Category"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:52
+msgid "Product IDs"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:58
+msgid "Generate JSON"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:65
+msgid "Generated JSON"
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:66
+msgid "Copy this JSON and use it in Auto Reply or Flex Message Sender."
+msgstr ""
+
+#: templates/admin/woocarousel-generator.php:68
+msgid "Copy to Clipboard"
+msgstr ""
+
+#: templates/admin/tools-page.php:6
+msgid "Settings imported successfully."
+msgstr ""
+
+#: templates/admin/tools-page.php:14
+msgid "Export Users"
+msgstr ""
+
+#: templates/admin/tools-page.php:15
+msgid "Export all connected LINE users to a CSV file."
+msgstr ""
+
+#: templates/admin/tools-page.php:20
+msgid "Download CSV"
+msgstr ""
+
+#: templates/admin/tools-page.php:27
+#: templates/admin/tools-page.php:33
+msgid "Export Settings"
+msgstr ""
+
+#: templates/admin/tools-page.php:28
+msgid "Export plugin settings to a JSON file for backup or migration."
+msgstr ""
+
+#: templates/admin/tools-page.php:40
+#: templates/admin/tools-page.php:49
+msgid "Import Settings"
+msgstr ""
+
+#: templates/admin/tools-page.php:41
+msgid "Import settings from a JSON file."
+msgstr ""
 
 #: templates/admin/auto-reply-manager.php:8
 msgid "加入好友歡迎訊息"
@@ -82,10 +202,6 @@ msgstr ""
 msgid "部分符合"
 msgstr ""
 
-#: templates/admin/auto-reply-manager.php:80
-msgid "回覆類型"
-msgstr ""
-
 #: templates/admin/auto-reply-manager.php:82
 msgid "文字訊息"
 msgstr ""
@@ -96,10 +212,6 @@ msgstr ""
 
 #: templates/admin/auto-reply-manager.php:84
 msgid "快速回覆"
-msgstr ""
-
-#: templates/admin/auto-reply-manager.php:91
-msgid "回覆內容"
 msgstr ""
 
 #: templates/admin/auto-reply-manager.php:92
@@ -336,6 +448,14 @@ msgstr ""
 
 #: includes/class-moksa-auth.php:81
 msgid "Authorization code not received."
+msgstr ""
+
+#: includes/class-moksa-auth.php:110
+msgid "Invalid request. Please try again."
+msgstr ""
+
+#: includes/class-moksa-auth.php:117
+msgid "Session expired. Please try logging in again."
 msgstr ""
 
 #: includes/class-moksa-auth.php:196
