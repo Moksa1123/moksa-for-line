@@ -93,20 +93,6 @@ msgstr "텍스트 메시지"
 
 #: templates/admin/auto-reply-manager.php:83
 msgid "Flex Message"
-msgstr "Flex 메시지"
-
-#: templates/admin/auto-reply-manager.php:84
-msgid "快速回覆"
-msgstr "빠른 응답"
-
-#: templates/admin/auto-reply-manager.php:91
-msgid "回覆內容"
-msgstr "응답 내용"
-
-#: templates/admin/auto-reply-manager.php:92
-msgid "請輸入回覆文字..."
-msgstr "응답 텍스트를 입력하세요..."
-
 #: templates/admin/auto-reply-manager.php:97
 msgid "Flex Message JSON"
 msgstr "Flex 메시지 JSON"

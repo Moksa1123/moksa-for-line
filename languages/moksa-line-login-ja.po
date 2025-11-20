@@ -99,9 +99,7 @@ msgstr "Flexメッセージ"
 msgid "快速回覆"
 msgstr "クイック返信"
 
-#: templates/admin/auto-reply-manager.php:91
-msgid "回覆內容"
-msgstr "返信内容"
+
 
 #: templates/admin/auto-reply-manager.php:92
 msgid "請輸入回覆文字..."
