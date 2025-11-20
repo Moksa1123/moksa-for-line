@@ -89,32 +89,39 @@
     </div>
 </div>
 
-<!-- Load Monaco Editor -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js"></script>
 <script>
-    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs' }});
-    require(['vs/editor/editor.main'], function() {
-        window.editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-            value: '{\n  "type": "bubble",\n  "body": {\n    "type": "box",\n    "layout": "vertical",\n    "contents": [\n      {\n        "type": "text",\n        "text": "Hello World",\n        "weight": "bold",\n        "size": "xl"\n      }\n    ]\n  }\n}',
-            language: 'json',
-            theme: 'vs-light',
-            minimap: { enabled: false },
-            automaticLayout: true,
-            formatOnPaste: true,
-            formatOnType: true,
-            scrollBeyondLastLine: false,
-            fontSize: 14
-        });
-        
-        // Sync with hidden textarea
-        window.editor.onDidChangeModelContent(function() {
+jQuery(document).ready(function($) {
+    // Wait for Monaco to be loaded by WordPress
+    if (typeof require !== 'undefined') {
+        require(['vs/editor/editor.main'], function() {
+            window.editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                value: '{\n  "type": "bubble",\n  "body": {\n    "type": "box",\n    "layout": "vertical",\n    "contents": [\n      {\n        "type": "text",\n        "text": "Hello World",\n        "weight": "bold",\n        "size": "xl"\n      }\n    ]\n  }\n}',
+                language: 'json',
+                theme: 'vs-light',
+                minimap: { enabled: false },
+                automaticLayout: true,
+                formatOnPaste: true,
+                formatOnType: true,
+                scrollBeyondLastLine: false,
+                fontSize: 14
+            });
+            
+            // Sync with hidden textarea
+            window.editor.onDidChangeModelContent(function() {
+                document.getElementById('flex_json').value = window.editor.getValue();
+            });
+            
+            // Initial sync
             document.getElementById('flex_json').value = window.editor.getValue();
+            
+            // Trigger ready event for other scripts
+            jQuery(document).trigger('moksa-monaco-ready', [window.editor]);
+            
+            // Restore AMD if it was disabled
+            if (window.moksaMonacoAMD) {
+                define.amd = window.moksaMonacoAMD;
+            }
         });
-        
-        // Initial sync
-        document.getElementById('flex_json').value = window.editor.getValue();
-        
-        // Trigger ready event for other scripts
-        jQuery(document).trigger('moksa-monaco-ready', [window.editor]);
-    });
+    }
+});
 </script>

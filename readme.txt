@@ -4,7 +4,7 @@ Tags: line, login, sso, authentication, messaging
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.3.7
+Stable tag: 1.3.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,13 @@ Moksa LINE Login allows users to log in to your WordPress site using their LINE 
 3. 自動回覆規則管理
 
 == Changelog ==
+
+= 1.3.8 - 2025-11-21 =
+*   Fix: 修復 Monaco Editor AMD 衝突導致的 JavaScript 錯誤
+*   Fix: 移除模板中的直接 CDN 載入，改用 WordPress 腳本系統
+*   Fix: 新增 AMD 環境保護機制，避免與其他外掛衝突
+*   Fix: 修復 wpColorPicker 與 hoverIntent 依賴問題
+*   Enhancement: 改善腳本載入順序與依賴管理
 
 = 1.3.7 - 2025-11-21 =
 *   Fix: 修復預覽容器 ID 不一致導致的渲染失敗問題

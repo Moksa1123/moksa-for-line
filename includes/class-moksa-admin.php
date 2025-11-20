@@ -197,7 +197,8 @@ class Moksa_Line_Admin {
         }
         
         wp_enqueue_style('moksa-line-admin', MOKSA_LINE_PLUGIN_URL . 'assets/css/admin.css', array(), MOKSA_LINE_VERSION);
-        wp_enqueue_script('moksa-line-admin', MOKSA_LINE_PLUGIN_URL . 'assets/js/admin.js', array('jquery'), MOKSA_LINE_VERSION, true);
+        wp_enqueue_script('moksa-line-admin', MOKSA_LINE_PLUGIN_URL . 'assets/js/admin.js', array('jquery', 'wp-color-picker'), MOKSA_LINE_VERSION, true);
+        wp_enqueue_style('wp-color-picker');
         
         // Enqueue Flex Simulator assets for Flex Editor, Order Notification, AND Auto Reply page
         $screen = get_current_screen();
@@ -208,6 +209,27 @@ class Moksa_Line_Admin {
             // Load Renderer in HEADER to ensure it's available for inline scripts
             wp_enqueue_script('moksa-line-flex-renderer', MOKSA_LINE_PLUGIN_URL . 'assets/js/moksa-flex-renderer.js', array('jquery'), MOKSA_LINE_VERSION, false);
             wp_enqueue_script('moksa-line-flex-editor', MOKSA_LINE_PLUGIN_URL . 'assets/js/flex-editor.js', array('jquery', 'moksa-line-flex-renderer'), MOKSA_LINE_VERSION, true);
+            
+            // Register Monaco Editor with noConflict wrapper to avoid AMD issues
+            wp_enqueue_script(
+                'moksa-monaco-loader',
+                'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js',
+                array(),
+                '0.36.1',
+                false // Load in header
+            );
+            
+            // Add inline script to configure Monaco in WordPress-safe mode
+            wp_add_inline_script('moksa-monaco-loader', "
+                if (typeof define === 'function' && define.amd) {
+                    // Save and clear AMD environment temporarily
+                    window.moksaMonacoAMD = define.amd;
+                    define.amd = undefined;
+                }
+                require.config({ 
+                    paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs' }
+                });
+            ", 'after');
         }
     }
     
