@@ -4,7 +4,7 @@ Tags: line, login, sso, authentication, messaging
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,12 @@ Moksa LINE Login allows users to log in to your WordPress site using their LINE 
 3. 自動回覆規則管理
 
 == Changelog ==
+
+= 1.3.7 - 2025-11-21 =
+*   Fix: 修復預覽容器 ID 不一致導致的渲染失敗問題
+*   Fix: 新增渲染器載入重試機制 (500ms timeout)
+*   Enhancement: 加入詳細的控制台除錯日誌 ([Flex Preview] 前綴)
+*   Enhancement: 改善錯誤訊息，提供更友善的使用者指引
 
 = 1.3.6 - 2025-11-21 =
 *   Major: 完全重寫 Flex Message Renderer (Advanced Flexbox Engine)

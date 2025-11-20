@@ -106,22 +106,40 @@ jQuery(document).ready(function ($) {
         updatePreview(editor.getValue());
     });
 
-    // Preview Function
+
+    // Preview Function with enhanced debugging and retry logic
     window.updatePreview = function (jsonStr) {
         var container = $('#preview_container');
+        console.log('[Flex Preview] updatePreview called');
+        console.log('[Flex Preview] MoksaFlexRenderer available:', !!window.MoksaFlexRenderer);
+        console.log('[Flex Preview] jQuery available:', !!window.jQuery);
+        console.log('[Flex Preview] Container found:', container.length > 0);
 
         try {
             var flexObj = JSON.parse(jsonStr);
+            console.log('[Flex Preview] JSON parsed successfully');
 
-            // Use Shared Renderer
+            // Use Shared Renderer with retry logic
             if (window.MoksaFlexRenderer) {
+                console.log('[Flex Preview] Calling renderer...');
                 window.MoksaFlexRenderer.render(flexObj, container);
             } else {
-                container.html('<div style="color:red;">Flex Renderer not loaded.</div>');
+                // Renderer not loaded yet, try waiting
+                console.warn('[Flex Preview] Renderer not loaded, waiting 500ms...');
+                setTimeout(function () {
+                    if (window.MoksaFlexRenderer) {
+                        console.log('[Flex Preview] Renderer loaded after wait, rendering now...');
+                        window.MoksaFlexRenderer.render(flexObj, container);
+                    } else {
+                        console.error('[Flex Preview] Renderer still not loaded after wait');
+                        container.html('<div style="background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 12px; border-radius: 8px; font-size: 13px;"><strong>Flex Renderer not loaded.</strong><br>請重新整理頁面或檢查瀏覽器控制台。</div>');
+                    }
+                }, 500);
             }
 
         } catch (e) {
             if (!jsonStr || !jsonStr.trim()) return;
+            console.error('[Flex Preview] JSON parse error:', e);
             container.html('<div style="background: #fff; padding: 12px 16px; border-radius: 8px; color: #dc2626; border: 1px solid #fecaca; font-size: 13px;">JSON 格式錯誤：' + e.message + '</div>');
         }
     };

@@ -95,7 +95,7 @@
             </div>
             <div id="moksa-flex-preview" class="moksa-phone-preview">
                 <div class="moksa-phone-header">LINE</div>
-                <div class="moksa-phone-content" id="moksa-preview-container">
+                <div class="moksa-phone-content" id="preview_container">
                     <!-- Preview will be rendered here -->
                 </div>
             </div>
@@ -333,7 +333,7 @@ jQuery(document).ready(function($) {
                 .replace(/{{view_order_url}}/g, '#');
             
             var flexObj = JSON.parse(json);
-            var container = $('#moksa-preview-container');
+            var container = $('#preview_container');
             container.empty(); // Clear previous content
             
             // Use Shared Renderer
@@ -345,7 +345,7 @@ jQuery(document).ready(function($) {
             
         } catch (e) {
             // Invalid JSON, show error
-            var container = $('#moksa-preview-container');
+            var container = $('#preview_container');
             if (!jsonStr || !jsonStr.trim()) return;
             container.html('<div style="background: #fff; padding: 12px 16px; border-radius: 8px; color: #dc2626; border: 1px solid #fecaca; font-size: 13px;">JSON 格式錯誤：' + e.message + '</div>');
         }
