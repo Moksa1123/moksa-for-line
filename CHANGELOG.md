@@ -1,3 +1,17 @@
+## [1.4.4] - 2025-11-21
+
+### Changed
+- **UI/UX**: 捨棄內建 Flex Message 編輯器，改為引導用戶使用 LINE 官方 Flex Message Simulator
+- **UI/UX**: 移除 Monaco Editor 依賴，改用簡單的 textarea 輸入框
+- **Code**: 簡化 Flex Message 編輯流程，用戶從官方工具複製 JSON 後貼上即可
+- **Code**: 保留 JSON 格式化、驗證和預覽功能
+
+### Removed
+- **Code**: 移除 Monaco Editor 相關資源載入
+- **Code**: 移除複雜的編輯器初始化邏輯
+
+---
+
 ## [1.4.3] - 2025-11-21
 
 ### Changed

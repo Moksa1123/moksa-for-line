@@ -38,16 +38,15 @@ jQuery(document).ready(function ($) {
             }
         };
 
-        if (window.editor) {
-            window.editor.setValue(JSON.stringify(sample, null, 2));
-            updatePreview(JSON.stringify(sample, null, 2));
-        }
+        var $jsonTextarea = $('#flex_json');
+        $jsonTextarea.val(JSON.stringify(sample, null, 2));
+        updatePreview(JSON.stringify(sample, null, 2));
     });
 
     // Send Flex Message
     $('#send_flex').on('click', function () {
         var $btn = $(this);
-        var json = window.editor ? window.editor.getValue() : $('#flex_json').val();
+        var json = $('#flex_json').val();
         var altText = $('#flex_alt_text').val();
         var targetType = $('#target_type').val();
         var userIds = [];
@@ -89,21 +88,21 @@ jQuery(document).ready(function ($) {
         });
     });
 
-    // Listen for Monaco Editor Ready Event
-    $(document).on('moksa-monaco-ready', function (e, editor) {
-        window.editor = editor; // Ensure global access
-
-        // Auto-update preview when editor changes (debounced)
-        editor.onDidChangeModelContent(function () {
-            clearTimeout(window.flexPreviewTimeout);
-            window.flexPreviewTimeout = setTimeout(function () {
-                var json = editor.getValue();
-                updatePreview(json);
-            }, 500);
-        });
-
-        // Initial preview
-        updatePreview(editor.getValue());
+    // Auto-update preview when textarea changes (debounced)
+    var previewTimeout;
+    $('#flex_json').on('input', function () {
+        clearTimeout(previewTimeout);
+        previewTimeout = setTimeout(function () {
+            var json = $('#flex_json').val();
+            if (json.trim()) {
+                try {
+                    JSON.parse(json);
+                    updatePreview(json);
+                } catch (e) {
+                    // Invalid JSON, don't update preview
+                }
+            }
+        }, 500);
     });
 
 
@@ -146,7 +145,7 @@ jQuery(document).ready(function ($) {
 
     // Preview Button
     $('#preview_flex').on('click', function () {
-        var json = window.editor ? window.editor.getValue() : $('#flex_json').val();
+        var json = $('#flex_json').val();
         updatePreview(json);
     });
 
@@ -160,54 +159,13 @@ jQuery(document).ready(function ($) {
 
     // Refresh Preview
     $('#refresh_preview').on('click', function () {
-        var json = window.editor ? window.editor.getValue() : $('#flex_json').val();
+        var json = $('#flex_json').val();
         updatePreview(json);
     });
 
-    // Format JSON
-    $('#format_json').on('click', function () {
-        if (window.editor) {
-            try {
-                var json = window.editor.getValue();
-                var parsed = JSON.parse(json);
-                var formatted = JSON.stringify(parsed, null, 2);
-                window.editor.setValue(formatted);
-                updateEditorStatus('valid', 'JSON 已格式化');
-            } catch (e) {
-                updateEditorStatus('invalid', 'JSON 格式錯誤: ' + e.message);
-            }
-        }
-    });
-
-    // Copy JSON
-    $('#copy_json').on('click', function () {
-        if (window.editor) {
-            var json = window.editor.getValue();
-            navigator.clipboard.writeText(json).then(function () {
-                var $btn = $('#copy_json');
-                var originalText = $btn.find('span:last').text();
-                $btn.find('span:last').text('已複製！');
-                setTimeout(function () {
-                    $btn.find('span:last').text(originalText);
-                }, 2000);
-            }).catch(function (err) {
-                alert('複製失敗: ' + err);
-            });
-        }
-    });
-
-    // Validate JSON
-    $('#validate_json').on('click', function () {
-        if (window.editor) {
-            try {
-                var json = window.editor.getValue();
-                JSON.parse(json);
-                updateEditorStatus('valid', 'JSON 格式正確');
-            } catch (e) {
-                updateEditorStatus('invalid', 'JSON 格式錯誤: ' + e.message);
-            }
-        }
-    });
+    // Format JSON (handled in template inline script)
+    // Copy JSON (removed, not needed)
+    // Validate JSON (handled in template inline script)
 
     // Update Editor Status Helper
     function updateEditorStatus(type, message) {
@@ -221,23 +179,5 @@ jQuery(document).ready(function ($) {
         }
     }
 
-    // Auto-validate on change
-    $(document).on('moksa-monaco-ready', function (e, editor) {
-        editor.onDidChangeModelContent(function () {
-            clearTimeout(window.jsonValidationTimeout);
-            window.jsonValidationTimeout = setTimeout(function () {
-                try {
-                    var json = editor.getValue();
-                    if (json.trim()) {
-                        JSON.parse(json);
-                        updateEditorStatus('valid', '');
-                    } else {
-                        $('#editor-status').removeClass('valid invalid loading').text('');
-                    }
-                } catch (e) {
-                    updateEditorStatus('invalid', '');
-                }
-            }, 500);
-        });
-    });
+    // Auto-validate on change (handled in template inline script)
 });

@@ -84,14 +84,35 @@
             </div>
         </div>
 
-        <!-- Center Column: Editor -->
+        <!-- Center Column: JSON Input -->
         <div class="moksa-editor-main">
+            <div class="moksa-line-simulator-guide" style="background: linear-gradient(135deg, #06C755 0%, #05B048 100%); color: white; padding: 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
+                <div style="display: flex; align-items: center; margin-bottom: 16px;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 12px;">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    <div>
+                        <h3 style="margin: 0 0 4px 0; font-size: 18px; font-weight: 600;">使用 LINE 官方 Flex Message Simulator</h3>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.95;">我們建議您使用 LINE 官方的 Flex Message Simulator 來設計您的訊息，功能更完整且更易於使用。</p>
+                    </div>
+                </div>
+                <a href="https://developers.line.biz/flex-simulator/" target="_blank" class="button button-primary button-large" style="background: white; color: #06C755; border: none; font-weight: 600; padding: 12px 24px; text-decoration: none; display: inline-block; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.2s;">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 8px;">
+                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+                    </svg>
+                    前往 LINE Flex Message Simulator
+                </a>
+            </div>
+
             <div class="editor-toolbar">
-                <span class="editor-label">JSON 編輯器</span>
+                <span class="editor-label">JSON 輸入</span>
                 <span class="editor-status" id="editor-status"></span>
             </div>
-            <div id="moksa-json-editor"></div>
-            <textarea id="moksa_line_order_template" name="moksa_line_order_template" style="display: none;"></textarea>
+            <textarea id="moksa_line_order_template" name="moksa_line_order_template" class="widefat" rows="20" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical;" placeholder="請從 LINE Flex Message Simulator 複製 JSON 並貼上於此..."></textarea>
+            <p class="description" style="margin-top: 8px; font-size: 12px; color: #64748b;">
+                💡 提示：在 LINE Flex Message Simulator 中設計好訊息後，點擊右上角的「View as JSON」按鈕，複製 JSON 並貼上於此。您可以使用變數（如 {{order_number}}）來動態顯示訂單資訊。
+            </p>
         </div>
 
         <!-- Right Column: Preview -->
@@ -140,117 +161,104 @@
 
 <script>
 jQuery(document).ready(function($) {
-    // Check if require is available
-    if (typeof require === 'undefined') {
-        console.error('[Monaco Editor] require is not defined. Monaco Editor loader may not be loaded.');
-        var editorElement = document.getElementById('moksa-json-editor');
-        if (editorElement) {
-            editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 載入失敗。請重新整理頁面。</div>';
+    var $jsonTextarea = $('#moksa_line_order_template');
+    var $editorStatus = $('#editor-status');
+    
+    // Load template function
+    function loadTemplate(status) {
+        // This function should load template from server or use default
+        // For now, we'll keep it simple
+        if (!$jsonTextarea.val().trim() && status !== 'default') {
+            // Load template logic here if needed
         }
-        return;
     }
     
-    // Simple initialization with delay to ensure Monaco loader is ready
-    setTimeout(function() {
+    // Format JSON
+    function formatJSON() {
         try {
-            require(['vs/editor/editor.main'], function() {
-                if (typeof monaco === 'undefined') {
-                    console.error('[Monaco Editor] monaco is not defined after loading editor.main');
-                    var editorElement = document.getElementById('moksa-json-editor');
-                    if (editorElement) {
-                        editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 初始化失敗。請重新整理頁面。</div>';
-                    }
-                    return;
-                }
-                
-                var editorElement = document.getElementById('moksa-json-editor');
-                if (!editorElement) {
-                    console.error('[Monaco Editor] Editor element not found');
-                    return;
-                }
-                
-                window.editor = monaco.editor.create(editorElement, {
-                    value: '',
-                    language: 'json',
-                    theme: 'vs-light',
-                    minimap: { enabled: false },
-                    automaticLayout: true,
-                    formatOnPaste: true,
-                    formatOnType: true,
-                    scrollBeyondLastLine: false,
-                    fontSize: 14,
-                    readOnly: false
-                });
-                
-                // Initial Load
-                loadTemplate($('#moksa-order-status').val());
-                
-                // Sync with hidden textarea and update preview
-                window.editor.onDidChangeModelContent(function() {
-                    var val = window.editor.getValue();
-                    $('#moksa_line_order_template').val(val);
-                    updatePreview(val);
-                });
-
-                // --- Drag and Drop Implementation ---
-                var editorContainer = document.getElementById('moksa-json-editor');
-                
-                // Handle Drag Start on Variables
-                $('.moksa-variable-item').on('dragstart', function(e) {
-                    e.originalEvent.dataTransfer.setData('text/plain', $(this).data('variable'));
-                    e.originalEvent.dataTransfer.effectAllowed = 'copy';
-                });
-
-                // Handle Drag Over on Editor
-                editorContainer.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.dataTransfer.dropEffect = 'copy';
-                });
-
-                // Handle Drop on Editor
-                editorContainer.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    var text = e.dataTransfer.getData('text/plain');
-                    if (!text) return;
-
-                    var target = window.editor.getTargetAtClientPoint(e.clientX, e.clientY);
-                    
-                    if (target && target.position) {
-                        var position = target.position;
-                        window.editor.executeEdits('dnd', [{
-                            range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
-                            text: text,
-                            forceMoveMarkers: true
-                        }]);
-                        window.editor.setPosition(position);
-                        window.editor.focus();
-                    }
-                });
-                
-                // Restore AMD if it was disabled
-                if (window.moksaMonacoAMD) {
-                    define.amd = window.moksaMonacoAMD;
-                }
-                
-                console.log('[Monaco Editor] Editor initialized successfully');
-            }, function(err) {
-                console.error('[Monaco Editor] Failed to load editor.main:', err);
-                var editorElement = document.getElementById('moksa-json-editor');
-                if (editorElement) {
-                    editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 載入錯誤：' + (err.message || err) + '<br>請重新整理頁面。</div>';
-                }
-            });
-        } catch (e) {
-            console.error('[Monaco Editor] Exception:', e);
-            var editorElement = document.getElementById('moksa-json-editor');
-            if (editorElement) {
-                editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 初始化異常：' + e.message + '<br>請重新整理頁面。</div>';
+            var jsonStr = $jsonTextarea.val().trim();
+            if (!jsonStr) {
+                alert('請先輸入 JSON');
+                return;
             }
+            var jsonObj = JSON.parse(jsonStr);
+            $jsonTextarea.val(JSON.stringify(jsonObj, null, 2));
+            updateEditorStatus('success', '格式化成功');
+        } catch (e) {
+            updateEditorStatus('error', 'JSON 格式錯誤: ' + e.message);
         }
-    }, 500);
+    }
+    
+    // Validate JSON
+    function validateJSON() {
+        try {
+            var jsonStr = $jsonTextarea.val().trim();
+            if (!jsonStr) {
+                updateEditorStatus('warning', '請輸入 JSON');
+                return;
+            }
+            JSON.parse(jsonStr);
+            updateEditorStatus('success', 'JSON 格式正確');
+            // Trigger preview update
+            if (typeof updatePreview === 'function') {
+                updatePreview(jsonStr);
+            }
+        } catch (e) {
+            updateEditorStatus('error', 'JSON 格式錯誤: ' + e.message);
+        }
+    }
+    
+    function updateEditorStatus(type, message) {
+        $editorStatus.text(message)
+            .removeClass('status-success status-error status-warning')
+            .addClass('status-' + type);
+    }
+    
+    // Auto validate on input (debounced)
+    var validateTimeout;
+    $jsonTextarea.on('input', function() {
+        clearTimeout(validateTimeout);
+        validateTimeout = setTimeout(function() {
+            var jsonStr = $jsonTextarea.val().trim();
+            if (jsonStr) {
+                try {
+                    JSON.parse(jsonStr);
+                    updateEditorStatus('success', 'JSON 格式正確');
+                    if (typeof updatePreview === 'function') {
+                        updatePreview(jsonStr);
+                    }
+                } catch (e) {
+                    updateEditorStatus('error', 'JSON 格式錯誤');
+                }
+            } else {
+                $editorStatus.text('').removeClass('status-success status-error status-warning');
+            }
+        }, 500);
+    });
+    
+    // Variable click to insert
+    $('.moksa-variable-item').on('click', function() {
+        var variable = $(this).data('variable');
+        var textarea = $jsonTextarea[0];
+        var start = textarea.selectionStart;
+        var end = textarea.selectionEnd;
+        var text = $jsonTextarea.val();
+        var before = text.substring(0, start);
+        var after = text.substring(end);
+        $jsonTextarea.val(before + variable + after);
+        textarea.selectionStart = textarea.selectionEnd = start + variable.length;
+        $jsonTextarea.focus();
+        // Trigger validation
+        validateJSON();
+    });
+    
+    // Initial Load
+    loadTemplate($('#moksa-order-status').val());
+    
+    // Status change handler
+    $('#moksa-order-status').on('change', function() {
+        loadTemplate($(this).val());
+    });
     
     
     // Change Status -> Load Template
