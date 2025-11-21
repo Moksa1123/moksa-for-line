@@ -14,48 +14,104 @@
         </div>
     </div>
 
-    <div class="moksa-editor-layout" style="display: block; max-width: 1200px;">
-        <!-- Variables Section -->
-        <div class="moksa-card" style="margin-bottom: 20px;">
-            <h2 style="margin-top: 0; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;">可用變數</h2>
-            <p class="description" style="margin-bottom: 15px;">點擊變數即可複製到剪貼簿，然後貼到 JSON 中使用。</p>
+    <div class="moksa-editor-layout" style="display: grid; grid-template-columns: 350px 1fr; gap: 20px;">
+        <!-- Variables Section (Sidebar) -->
+        <div class="moksa-card" style="height: fit-content; position: sticky; top: 20px;">
+            <h2 style="margin-top: 0; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; font-size: 16px;">可用變數</h2>
+            <p class="description" style="margin-bottom: 15px; font-size: 12px;">點擊變數即可複製到剪貼簿</p>
             
-            <div class="moksa-variable-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+            <div class="moksa-variable-list" style="max-height: calc(100vh - 300px); overflow-y: auto; padding-right: 5px;">
                 <?php
                 $variables = array(
                     '基本資訊' => array(
                         '{{order_number}}' => '訂單編號',
                         '{{status_label}}' => '訂單狀態名稱',
+                        '{{order_status}}' => '訂單狀態代碼',
                         '{{total}}' => '訂單總金額',
+                        '{{order_subtotal}}' => '訂單小計',
                         '{{items_count}}' => '商品數量',
+                        '{{order_items}}' => '商品列表',
+                        '{{order_items_nums}}' => '商品列表（含數量）',
                         '{{view_order_url}}' => '訂單連結',
+                        '{{order_link}}' => '訂單連結（同 view_order_url）',
                         '{{status_color}}' => '狀態顏色代碼',
+                        '{{order_date}}' => '訂單日期',
+                        '{{order_date_paid}}' => '付款日期',
+                        '{{order_date_completed}}' => '完成日期',
                     ),
                     '客戶資訊' => array(
+                        '{{customer_email}}' => '客戶電子郵件',
+                        '{{customer_first_name}}' => '客戶名字',
+                        '{{customer_last_name}}' => '客戶姓氏',
+                        '{{customer_full_name}}' => '客戶全名',
+                        '{{customer_phone}}' => '客戶電話',
+                        '{{customer_user_id}}' => '客戶使用者 ID',
+                        '{{customer_username}}' => '客戶使用者名稱',
                         '{{billing_name}}' => '帳單姓名',
+                        '{{billing_first_name}}' => '帳單名字',
+                        '{{billing_last_name}}' => '帳單姓氏',
                         '{{billing_phone}}' => '帳單電話',
+                        '{{billing_email}}' => '帳單電子郵件',
+                        '{{billing_address}}' => '帳單地址',
+                        '{{billing_city}}' => '帳單城市',
+                        '{{billing_postcode}}' => '帳單郵遞區號',
+                        '{{billing_country}}' => '帳單國家',
+                        '{{billing_state}}' => '帳單州/省',
+                        '{{billing_company}}' => '帳單公司',
+                    ),
+                    '收件資訊' => array(
                         '{{shipping_name}}' => '收件姓名',
+                        '{{shipping_first_name}}' => '收件名字',
+                        '{{shipping_last_name}}' => '收件姓氏',
                         '{{shipping_address}}' => '收件地址',
-                        '{{customer_note}}' => '客戶備註',
+                        '{{shipping_address_line_1}}' => '收件地址第一行',
+                        '{{shipping_address_line_2}}' => '收件地址第二行',
+                        '{{shipping_city}}' => '收件城市',
+                        '{{shipping_postcode}}' => '收件郵遞區號',
+                        '{{shipping_country}}' => '收件國家',
+                        '{{shipping_state}}' => '收件州/省',
+                        '{{shipping_company}}' => '收件公司',
+                        '{{shipping_phone}}' => '收件電話',
                     ),
                     '物流與支付' => array(
                         '{{payment_method}}' => '付款方式',
+                        '{{payment_method_title}}' => '付款方式標題',
                         '{{shipping_method}}' => '運送方式',
+                        '{{shipping_method_title}}' => '運送方式標題',
                         '{{tracking_number}}' => '物流追蹤碼',
                         '{{store_name}}' => '超商門市名稱',
                         '{{store_address}}' => '超商門市地址',
+                        '{{customer_note}}' => '客戶備註',
+                        '{{order_note_for_customer}}' => '給客戶的訂單備註',
+                    ),
+                    '商店資訊' => array(
+                        '{{shop_title}}' => '商店名稱',
+                        '{{shop_tagline}}' => '商店標語',
+                        '{{shop_url}}' => '商店網址',
+                        '{{shop_admin_email}}' => '商店管理員電子郵件',
+                        '{{shop_shop_url}}' => '商店購物頁面網址',
                     )
                 );
                 
                 foreach ($variables as $category => $vars) {
-                    echo '<div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">';
-                    echo '<div style="font-weight: 600; color: #334155; margin-bottom: 8px; font-size: 13px;">' . esc_html($category) . '</div>';
+                    echo '<div class="moksa-params-toggle" style="margin-bottom: 12px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #fff;">';
+                    echo '<div class="moksa-params-toggle-header" style="padding: 12px 15px; background: #f8fafc; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s;" onclick="this.parentElement.classList.toggle(\'expanded\');">';
+                    echo '<h3 style="margin: 0; font-size: 13px; font-weight: 600; color: #334155;">' . esc_html($category) . '</h3>';
+                    echo '<svg class="toggle-indicator" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="color: #64748b; transition: transform 0.2s;"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>';
+                    echo '</div>';
+                    echo '<div class="moksa-params-toggle-content" style="display: none; padding: 8px;">';
+                    echo '<ul style="list-style: none; padding: 0; margin: 0;">';
                     foreach ($vars as $var => $desc) {
-                        echo '<div class="moksa-variable-item" data-variable="' . esc_attr($var) . '" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: white; border-radius: 4px; cursor: pointer; transition: all 0.2s; border: 1px solid transparent;" onmouseover="this.style.borderColor=\'#06C755\'; this.style.background=\'#f0fdf4\'" onmouseout="this.style.borderColor=\'transparent\'; this.style.background=\'white\'">';
-                        echo '<code style="font-size: 12px; color: #06C755; font-weight: 600;">' . esc_html($var) . '</code>';
-                        echo '<span style="font-size: 11px; color: #64748b;">' . esc_html($desc) . '</span>';
-                        echo '</div>';
+                        echo '<li style="margin-bottom: 4px;">';
+                        echo '<button type="button" class="moksa-param-btn" data-clipboard-text="' . esc_attr($var) . '" style="width: 100%; text-align: left; padding: 8px 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 12px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.borderColor=\'#06C755\'; this.style.background=\'#f0fdf4\'" onmouseout="this.style.borderColor=\'#e2e8f0\'; this.style.background=\'#fff\'">';
+                        echo '<code style="font-size: 11px; color: #06C755; font-weight: 600; background: transparent; padding: 0;">' . esc_html($var) . '</code>';
+                        echo '<span style="font-size: 11px; color: #64748b; margin-left: 8px; flex: 1; text-align: right;">' . esc_html($desc) . '</span>';
+                        echo '<span class="copy-tooltip" style="display: none; font-size: 10px; color: #06C755; margin-left: 8px; font-weight: 600;">已複製！</span>';
+                        echo '</button>';
+                        echo '</li>';
                     }
+                    echo '</ul>';
+                    echo '</div>';
                     echo '</div>';
                 }
                 ?>
@@ -63,7 +119,7 @@
         </div>
 
         <!-- JSON Input Section -->
-        <div class="moksa-card">
+        <div class="moksa-card" style="grid-column: 2;">
             <div class="moksa-line-simulator-guide" style="background: linear-gradient(135deg, #06C755 0%, #05B048 100%); color: white; padding: 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
                 <div style="display: flex; align-items: center; margin-bottom: 16px;">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 12px;">
@@ -188,18 +244,25 @@ jQuery(document).ready(function($) {
         }, 500);
     });
     
-    // Variable click to copy
-    $('.moksa-variable-item').on('click', function() {
-        var variable = $(this).data('variable');
+    // Variable click to copy (學習 woocommerce-notify 的設計)
+    $('.moksa-param-btn').on('click', function() {
+        var variable = $(this).data('clipboard-text');
+        var $btn = $(this);
+        var $tooltip = $btn.find('.copy-tooltip');
+        
         navigator.clipboard.writeText(variable).then(function() {
-            var $item = $(this);
-            var originalBg = $item.css('background');
-            $item.css('background', '#dcfce7').css('border-color', '#06C755');
+            $tooltip.show();
             setTimeout(function() {
-                $item.css('background', originalBg).css('border-color', 'transparent');
-            }, 500);
-        }.bind(this));
+                $tooltip.fadeOut(200);
+            }, 2000);
+        }).catch(function(err) {
+            console.error('複製失敗:', err);
+            alert('複製失敗，請手動複製：' + variable);
+        });
     });
+    
+    // Auto-expand first category
+    $('.moksa-params-toggle').first().addClass('expanded').find('.moksa-params-toggle-content').show();
     
     // Save Template
     $('#moksa-save-template').on('click', function() {

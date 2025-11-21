@@ -159,6 +159,88 @@
 }
 
 /* Variable List */
+/* Parameter Toggle Styles (學習 woocommerce-notify) */
+.moksa-params-toggle {
+    transition: all 0.2s;
+}
+
+.moksa-params-toggle.expanded .moksa-params-toggle-content {
+    display: block !important;
+}
+
+.moksa-params-toggle.expanded .toggle-indicator {
+    transform: rotate(180deg);
+}
+
+.moksa-params-toggle-header:hover {
+    background: #f1f5f9 !important;
+}
+
+.moksa-param-btn {
+    position: relative;
+}
+
+.moksa-param-btn .copy-tooltip {
+    position: absolute;
+    right: 8px;
+    animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Order Notify CPT List Styles */
+.post-type-moksa-order-notify .wp-list-table .column-trigger_statuses {
+    width: 300px;
+}
+
+.post-type-moksa-order-notify .wp-list-table .column-trigger_statuses span {
+    display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 4px;
+}
+
+/* Order Notify Metabox Styles */
+.moksa-notify-trigger-box .form-table th {
+    width: 180px;
+    padding: 20px 10px 20px 0;
+    vertical-align: top;
+}
+
+.moksa-notify-trigger-box .form-table td {
+    padding: 20px 10px;
+}
+
+.moksa-notify-content-box textarea {
+    font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
+}
+
+.moksa-notify-params-box {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.moksa-notify-params-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.moksa-notify-params-box::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.moksa-notify-params-box::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.moksa-notify-params-box::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
 .moksa-variable-list {
     flex: 1;
     overflow-y: auto;

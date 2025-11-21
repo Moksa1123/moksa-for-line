@@ -3,7 +3,7 @@
  * Plugin Name: Moksa LINE Login
  * Plugin URI: https://moksaweb.com/
  * Description: A comprehensive LINE Login and messaging solution for WordPress.
- * Version: 1.4.5
+ * Version: 1.4.6
  * Author: Moksa
  * Author URI: https://moksaweb.com/
  * Text Domain: moksa-line-login
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('MOKSA_LINE_VERSION', '1.4.5');
+define('MOKSA_LINE_VERSION', '1.4.6');
 define('MOKSA_LINE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('MOKSA_LINE_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('MOKSA_LINE_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -74,6 +74,10 @@ class Moksa_Line_Login {
         require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-dashboard.php';
         require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-tools.php';
         require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-security.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-order-notify.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-notify-check.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-notify-history.php';
+        require_once MOKSA_LINE_PLUGIN_DIR . 'includes/class-moksa-status-manager.php';
     }
     
     /**
@@ -98,6 +102,7 @@ class Moksa_Line_Login {
         Moksa_Line_LIFF::get_instance();
         Moksa_Line_Imagemap::get_instance();
         Moksa_Line_Dashboard::get_instance();
+        Moksa_Line_Order_Notify::get_instance();
         Moksa_Line_Tools::get_instance();
         Moksa_Line_Security::get_instance();
         

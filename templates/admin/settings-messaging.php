@@ -57,12 +57,26 @@
                     
                     <tr>
                         <th scope="row">
-                            <label for="moksa_line_order_delay"><?php _e('訂單通知延遲', 'moksa-line-login'); ?></label>
+                            <label for="moksa_line_order_processing_delay"><?php _e('處理中狀態延遲', 'moksa-line-login'); ?></label>
+                        </th>
+                        <td>
+                            <input type="number" id="moksa_line_order_processing_delay" name="moksa_line_order_processing_delay" min="0" step="1"
+                                   value="<?php echo esc_attr(get_option('moksa_line_order_processing_delay', 30)); ?>" class="regular-text" style="width: 100px;"> <?php _e('秒', 'moksa-line-login'); ?>
+                            <p class="description">
+                                <?php _e('當訂單狀態變更為「處理中」時，延遲發送通知的時間。', 'moksa-line-login'); ?><br>
+                                <?php _e('因為訂單編號可能因第三方 API 回傳而延遲生成，建議設定 30-60 秒。', 'moksa-line-login'); ?>
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <label for="moksa_line_order_delay"><?php _e('其他狀態延遲', 'moksa-line-login'); ?></label>
                         </th>
                         <td>
                             <input type="number" id="moksa_line_order_delay" name="moksa_line_order_delay" min="0" step="1"
                                    value="<?php echo esc_attr(get_option('moksa_line_order_delay', 0)); ?>" class="regular-text" style="width: 100px;"> <?php _e('秒', 'moksa-line-login'); ?>
-                            <p class="description"><?php _e('延遲發送訂單狀態通知，以確保第三方物流外掛已更新追蹤號碼。', 'moksa-line-login'); ?></p>
+                            <p class="description"><?php _e('其他訂單狀態的通知延遲時間（例如：已完成、已取消等）。', 'moksa-line-login'); ?></p>
                             <p class="description"><?php printf(__('例如: <strong>%s</strong> 代表 10 分鐘。設為 0 則立即發送。', 'moksa-line-login'), '600'); ?></p>
                         </td>
                     </tr>

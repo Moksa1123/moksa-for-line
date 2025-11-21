@@ -268,9 +268,22 @@ class Moksa_Line_WooCommerce {
     
     /**
      * Send Order Notification via LINE
+     * 改進：針對 processing 狀態添加延遲，確保訂單編號已生成
      */
     public function send_order_notification($order_id, $old_status, $new_status, $order) {
-        $delay = (int) get_option('moksa_line_order_delay', 0);
+        // 針對 processing 狀態的特殊延遲處理（因為訂單編號可能因 API 回傳而延遲）
+        $processing_delay = (int) get_option('moksa_line_order_processing_delay', 30); // 預設 30 秒
+        $general_delay = (int) get_option('moksa_line_order_delay', 0);
+        
+        // 決定延遲時間
+        $delay = 0;
+        if ($new_status === 'processing') {
+            // 處理中狀態使用專用延遲時間
+            $delay = $processing_delay;
+        } elseif ($general_delay > 0) {
+            // 其他狀態使用一般延遲時間
+            $delay = $general_delay;
+        }
         
         if ($delay > 0) {
             // Schedule delayed event
@@ -283,6 +296,7 @@ class Moksa_Line_WooCommerce {
     
     /**
      * Process Delayed Order Notification
+     * 使用 CPT 系統，支援多個通知範本
      */
     public function process_delayed_order_notification($order_id, $old_status, $new_status) {
         // Re-get order to ensure fresh data (e.g. tracking numbers)
@@ -307,18 +321,76 @@ class Moksa_Line_WooCommerce {
             return;
         }
         
+        // 取得符合此訂單狀態的所有通知範本（包含規則檢查）
+        $notify_ids = Moksa_Line_Order_Notify::get_notify_ids_for_status('wc-' . $new_status, $order);
+        
+        if (empty($notify_ids)) {
+            // 也檢查 new-order 狀態
+            if ($new_status === 'pending' || $new_status === 'processing') {
+                $notify_ids = Moksa_Line_Order_Notify::get_notify_ids_for_status('wc-new-order', $order);
+            }
+        }
+        
+        if (empty($notify_ids)) {
+            return;
+        }
+        
         $messaging = Moksa_Line_Messaging::get_instance();
         
-        // Construct Flex Message
-        $flex_message = $this->get_order_flex_message($order, $new_status);
-        
-        if ($flex_message) {
-            $messaging->push_message($line_user_id, array($flex_message));
+        // 發送所有符合條件的通知範本（記錄歷史）
+        foreach ($notify_ids as $notify_id) {
+            $flex_message = $this->get_order_flex_message_from_notify($order, $new_status, $notify_id);
+            
+            if ($flex_message) {
+                $notify_content = json_encode($flex_message, JSON_UNESCAPED_UNICODE);
+                $user_info = $billing_first_name . ' ' . $billing_last_name . ' (' . $billing_email . ')';
+                
+                // 記錄歷史
+                $history_id = Moksa_Notify_History::insert(
+                    $user_id,
+                    $user_info,
+                    $order_id,
+                    $notify_id,
+                    'line',
+                    $notify_content,
+                    'pending'
+                );
+                
+                // 發送訊息
+                $result = $messaging->push_message($line_user_id, array($flex_message));
+                
+                // 更新歷史記錄狀態
+                if ($history_id) {
+                    if ($result && isset($result['status']) && $result['status'] === 'success') {
+                        Moksa_Notify_History::update($history_id, 'success');
+                    } else {
+                        $error_msg = isset($result['message']) ? $result['message'] : '發送失敗';
+                        Moksa_Notify_History::update($history_id, 'failed', $error_msg);
+                    }
+                }
+            }
         }
     }
     
     /**
-     * Generate Flex Message for Order
+     * Generate Flex Message for Order from Notify CPT
+     * 從 CPT 範本生成訊息
+     */
+    private function get_order_flex_message_from_notify($order, $status, $notify_id) {
+        // Get template from CPT
+        $template_json = get_post_meta($notify_id, '_moksa_notify_content', true);
+        
+        if (empty($template_json)) {
+            // Fallback to default
+            return $this->get_order_flex_message($order, $status);
+        }
+        
+        // Replace variables (使用現有的替換邏輯)
+        return $this->replace_order_variables($template_json, $order, $status);
+    }
+    
+    /**
+     * Generate Flex Message for Order (Legacy - for backward compatibility)
      */
     private function get_order_flex_message($order, $status) {
         $status_label = wc_get_order_status_name($status);
@@ -368,29 +440,220 @@ class Moksa_Line_WooCommerce {
             $template_json = json_encode($template_arr);
         }
         
-        // Replace Variables
+        // Replace Variables (使用統一的替換邏輯)
+        return $this->replace_order_variables($template_json, $order, $status);
+    }
+    
+    /**
+     * Replace Order Variables in Template
+     * 完整的參數替換系統
+     */
+    private function replace_order_variables($template_json, $order, $status) {
+        // Get basic order data
+        $status_label = wc_get_order_status_name($status);
+        $order_number = $order->get_order_number();
+        $total = $order->get_formatted_order_total();
+        $items_count = $order->get_item_count();
+        $billing_first_name = $order->get_billing_first_name();
+        $billing_last_name = $order->get_billing_last_name();
+        $view_order_url = $order->get_view_order_url();
+        
+        // Extended WooCommerce Data
+        $billing_phone = $order->get_billing_phone();
+        $shipping_first_name = $order->get_shipping_first_name();
+        $shipping_last_name = $order->get_shipping_last_name();
+        $shipping_address = $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2() . ', ' . $order->get_shipping_city();
+        $payment_method = $order->get_payment_method_title();
+        $shipping_method = $order->get_shipping_method();
+        $customer_note = $order->get_customer_note();
+        
+        // 3rd Party / Logistics Data (ECPay, RY Tools, AST)
+        $tracking_number = $order->get_meta('_shipping_tracking_number', true);
+        if (!$tracking_number) $tracking_number = $order->get_meta('_ecpay_logistics_id', true);
+        if (!$tracking_number) $tracking_number = $order->get_meta('ry_tracking_number', true);
+        
+        $store_name = $order->get_meta('_shipping_store_name', true);
+        if (!$store_name) $store_name = $order->get_meta('_ecpay_receiver_store_name', true);
+        if (!$store_name) $store_name = $order->get_meta('ry_store_name', true);
+        
+        $store_address = $order->get_meta('_shipping_store_address', true);
+        if (!$store_address) $store_address = $order->get_meta('_ecpay_receiver_store_address', true);
+        
+        // Color based on status
+        $color = '#06C755';
+        if (in_array($status, array('pending', 'on-hold'))) $color = '#ff9800';
+        if (in_array($status, array('cancelled', 'failed', 'refunded'))) $color = '#ff334b';
+        if ($status === 'completed') $color = '#06c755';
+        
+        // Extended Data (學習 woocommerce-notify 的完整參數系統)
+        $billing_email = $order->get_billing_email();
+        $billing_address_1 = $order->get_billing_address_1();
+        $billing_address_2 = $order->get_billing_address_2();
+        $billing_city = $order->get_billing_city();
+        $billing_postcode = $order->get_billing_postcode();
+        $billing_country = $order->get_billing_country();
+        $billing_state = $order->get_billing_state();
+        $billing_company = $order->get_billing_company();
+        
+        $shipping_address_1 = $order->get_shipping_address_1();
+        $shipping_address_2 = $order->get_shipping_address_2();
+        $shipping_city = $order->get_shipping_city();
+        $shipping_postcode = $order->get_shipping_postcode();
+        $shipping_country = $order->get_shipping_country();
+        $shipping_state = $order->get_shipping_state();
+        $shipping_company = $order->get_shipping_company();
+        $shipping_phone = $order->get_shipping_phone();
+        
+        $order_subtotal = number_format($order->get_subtotal(), 0);
+        $order_date = $order->get_date_created() ? $order->get_date_created()->date_i18n('Y-m-d') : '';
+        $order_date_paid = $order->get_date_paid() ? $order->get_date_paid()->date_i18n('Y-m-d') : '';
+        $order_date_completed = $order->get_date_completed() ? $order->get_date_completed()->date_i18n('Y-m-d') : '';
+        
+        // Get order items list
+        $order_items = array();
+        $order_items_nums = array();
+        foreach ($order->get_items() as $item) {
+            $order_items[] = $item->get_name();
+            $order_items_nums[] = $item->get_name() . ' x ' . $item->get_quantity();
+        }
+        
+        // Customer data
+        $customer_id = $order->get_customer_id();
+        $customer_email = $billing_email;
+        $customer_username = '';
+        if ($customer_id) {
+            $customer = get_userdata($customer_id);
+            if ($customer) {
+                $customer_username = $customer->user_login;
+            }
+        }
+        
+        // Get latest order note for customer
+        $order_notes = $order->get_customer_order_notes();
+        $order_note_for_customer = $order_notes ? reset($order_notes)->comment_content : '';
+        
+        // Shop data
+        $shop_title = get_bloginfo('name');
+        $shop_tagline = get_bloginfo('description');
+        $shop_url = get_bloginfo('url');
+        $shop_admin_email = get_bloginfo('admin_email');
+        $shop_shop_url = get_permalink(wc_get_page_id('shop'));
+        
+        // Replace Variables (學習 woocommerce-notify 的完整參數系統)
         $replacements = array(
+            // 基本資訊
             '{{order_number}}' => $order_number,
+            '{{order_status}}' => $status,
             '{{status}}' => $status,
             '{{status_label}}' => $status_label,
             '{{status_color}}' => $color,
             '{{total}}' => strip_tags($total),
+            '{{order_total}}' => strip_tags($total),
+            '{{order_subtotal}}' => $order_subtotal,
             '{{items_count}}' => (string)$items_count,
-            '{{billing_name}}' => $billing_first_name . ' ' . $billing_last_name,
+            '{{order_itemscount}}' => (string)$items_count,
+            '{{order_items}}' => implode(' | ', $order_items),
+            '{{order_items_nums}}' => implode("\\n", $order_items_nums),
+            '{{view_order_url}}' => $view_order_url,
+            '{{order_link}}' => $view_order_url,
+            '{{order_date}}' => $order_date,
+            '{{order_date_paid}}' => $order_date_paid,
+            '{{order_date_completed}}' => $order_date_completed,
+            
+            // 客戶資訊
+            '{{customer_email}}' => $customer_email,
+            '{{customer_first_name}}' => $billing_first_name,
+            '{{customer_last_name}}' => $billing_last_name,
+            '{{customer_full_name}}' => trim($billing_first_name . ' ' . $billing_last_name),
+            '{{customer_user_id}}' => (string)$customer_id,
+            '{{customer_username}}' => $customer_username,
+            '{{billing_name}}' => trim($billing_first_name . ' ' . $billing_last_name),
+            '{{billing_first_name}}' => $billing_first_name,
+            '{{billing_last_name}}' => $billing_last_name,
             '{{billing_phone}}' => $billing_phone,
-            '{{shipping_name}}' => $shipping_first_name . ' ' . $shipping_last_name,
-            '{{shipping_address}}' => $shipping_address,
+            '{{billing_email}}' => $billing_email,
+            '{{billing_address}}' => trim($billing_address_1 . ' ' . $billing_address_2),
+            '{{billing_address_line_1}}' => $billing_address_1,
+            '{{billing_address_line_2}}' => $billing_address_2,
+            '{{billing_city}}' => $billing_city,
+            '{{billing_postcode}}' => $billing_postcode,
+            '{{billing_country}}' => $billing_country,
+            '{{billing_state}}' => $billing_state,
+            '{{billing_company}}' => $billing_company,
+            
+            // 收件資訊
+            '{{shipping_name}}' => trim($shipping_first_name . ' ' . $shipping_last_name),
+            '{{shipping_first_name}}' => $shipping_first_name,
+            '{{shipping_last_name}}' => $shipping_last_name,
+            '{{shipping_address}}' => trim($shipping_address_1 . ' ' . $shipping_address_2 . ', ' . $shipping_city),
+            '{{shipping_address_line_1}}' => $shipping_address_1,
+            '{{shipping_address_line_2}}' => $shipping_address_2,
+            '{{shipping_city}}' => $shipping_city,
+            '{{shipping_postcode}}' => $shipping_postcode,
+            '{{shipping_country}}' => $shipping_country,
+            '{{shipping_state}}' => $shipping_state,
+            '{{shipping_company}}' => $shipping_company,
+            '{{shipping_phone}}' => $shipping_phone,
+            
+            // 物流與支付
             '{{payment_method}}' => $payment_method,
+            '{{payment_method_title}}' => $payment_method,
             '{{shipping_method}}' => $shipping_method,
-            '{{customer_note}}' => $customer_note,
+            '{{shipping_method_title}}' => $shipping_method,
             '{{tracking_number}}' => $tracking_number ? $tracking_number : '無',
             '{{store_name}}' => $store_name ? $store_name : '',
             '{{store_address}}' => $store_address ? $store_address : '',
-            '{{view_order_url}}' => $view_order_url
+            '{{customer_note}}' => $customer_note ? $customer_note : '無',
+            '{{order_note_for_customer}}' => $order_note_for_customer ? str_replace("\n", "\\n", $order_note_for_customer) : '',
+            
+            // 商店資訊
+            '{{shop_title}}' => $shop_title,
+            '{{shop_tagline}}' => $shop_tagline,
+            '{{shop_url}}' => $shop_url,
+            '{{shop_admin_email}}' => $shop_admin_email,
+            '{{shop_shop_url}}' => $shop_shop_url,
         );
         
+        // Replace all variables
         foreach ($replacements as $key => $value) {
-            $template_json = str_replace($key, $value, $template_json);
+            if ($template_json) {
+                $template_json = str_replace($key, $value, $template_json);
+            }
+        }
+        
+        // 學習 woocommerce-notify：支援動態從訂單 meta 和用戶 meta 獲取參數
+        // 匹配所有 {{xxx}} 格式的參數
+        $pattern = '/\{\{([^}]+)\}\}/';
+        preg_match_all($pattern, $template_json, $matches);
+        if ($matches && !empty($matches[1])) {
+            foreach ($matches[1] as $match) {
+                $param_key = '{{' . $match . '}}';
+                
+                // 如果已經替換過，跳過
+                if (isset($replacements[$param_key])) {
+                    continue;
+                }
+                
+                // 嘗試從訂單 meta 獲取
+                $meta_value = $order->get_meta($match, true);
+                if ($meta_value) {
+                    $template_json = str_replace($param_key, is_array($meta_value) ? implode(', ', $meta_value) : $meta_value, $template_json);
+                    continue;
+                }
+                
+                // 嘗試從用戶 meta 獲取
+                if ($customer_id) {
+                    $user_meta = get_user_meta($customer_id, $match, true);
+                    if ($user_meta) {
+                        $data = is_array($user_meta) ? implode(', ', $user_meta) : $user_meta;
+                        $template_json = str_replace($param_key, $data, $template_json);
+                        continue;
+                    }
+                }
+                
+                // 如果找不到，替換為 '-'
+                $template_json = str_replace($param_key, '-', $template_json);
+            }
         }
         
         return json_decode($template_json, true);
