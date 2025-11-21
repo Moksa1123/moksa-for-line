@@ -64,8 +64,24 @@
         <!-- Center Column: Editor -->
         <div class="moksa-editor-main">
             <div class="editor-toolbar">
-                <span class="editor-label"><?php _e('JSON 編輯器', 'moksa-line-login'); ?></span>
-                <span class="editor-status" id="editor-status"></span>
+                <div class="editor-toolbar-left">
+                    <span class="editor-label"><?php _e('JSON 編輯器', 'moksa-line-login'); ?></span>
+                    <span class="editor-status" id="editor-status"></span>
+                </div>
+                <div class="editor-toolbar-right">
+                    <button type="button" class="moksa-json-tool-btn" id="format_json" title="<?php _e('格式化 JSON', 'moksa-line-login'); ?>">
+                        <span class="dashicons dashicons-editor-code"></span>
+                        <span><?php _e('格式化', 'moksa-line-login'); ?></span>
+                    </button>
+                    <button type="button" class="moksa-json-tool-btn" id="copy_json" title="<?php _e('複製 JSON', 'moksa-line-login'); ?>">
+                        <span class="dashicons dashicons-clipboard"></span>
+                        <span><?php _e('複製', 'moksa-line-login'); ?></span>
+                    </button>
+                    <button type="button" class="moksa-json-tool-btn" id="validate_json" title="<?php _e('驗證 JSON', 'moksa-line-login'); ?>">
+                        <span class="dashicons dashicons-yes-alt"></span>
+                        <span><?php _e('驗證', 'moksa-line-login'); ?></span>
+                    </button>
+                </div>
             </div>
             <div id="monaco-editor" style="width: 100%; flex: 1;"></div>
             <textarea id="flex_json" style="display: none;"></textarea>
@@ -76,7 +92,27 @@
             <div class="preview-header">
                 <h3><?php _e('即時預覽', 'moksa-line-login'); ?></h3>
             </div>
-            <div class="moksa-phone-preview">
+            <div class="moksa-preview-toolbar">
+                <div class="moksa-preview-toolbar-left">
+                    <div class="moksa-device-selector">
+                        <button type="button" class="moksa-device-btn active" data-device="mobile" title="<?php _e('手機', 'moksa-line-login'); ?>">
+                            <span class="dashicons dashicons-smartphone"></span>
+                        </button>
+                        <button type="button" class="moksa-device-btn" data-device="tablet" title="<?php _e('平板', 'moksa-line-login'); ?>">
+                            <span class="dashicons dashicons-tablet"></span>
+                        </button>
+                        <button type="button" class="moksa-device-btn" data-device="desktop" title="<?php _e('桌面', 'moksa-line-login'); ?>">
+                            <span class="dashicons dashicons-desktop"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="moksa-preview-toolbar-right">
+                    <button type="button" class="moksa-preview-action-btn" id="refresh_preview" title="<?php _e('重新整理預覽', 'moksa-line-login'); ?>">
+                        <span class="dashicons dashicons-update"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="moksa-phone-preview mobile" id="phone-preview">
                 <div class="moksa-phone-header">LINE</div>
                 <div class="moksa-phone-content" id="preview_container">
                     <!-- Preview content will be rendered here -->

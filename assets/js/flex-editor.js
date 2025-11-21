@@ -149,4 +149,95 @@ jQuery(document).ready(function ($) {
         var json = window.editor ? window.editor.getValue() : $('#flex_json').val();
         updatePreview(json);
     });
+
+    // Device Size Selector
+    $('.moksa-device-btn').on('click', function () {
+        var device = $(this).data('device');
+        $('.moksa-device-btn').removeClass('active');
+        $(this).addClass('active');
+        $('#phone-preview').removeClass('mobile tablet desktop').addClass(device);
+    });
+
+    // Refresh Preview
+    $('#refresh_preview').on('click', function () {
+        var json = window.editor ? window.editor.getValue() : $('#flex_json').val();
+        updatePreview(json);
+    });
+
+    // Format JSON
+    $('#format_json').on('click', function () {
+        if (window.editor) {
+            try {
+                var json = window.editor.getValue();
+                var parsed = JSON.parse(json);
+                var formatted = JSON.stringify(parsed, null, 2);
+                window.editor.setValue(formatted);
+                updateEditorStatus('valid', 'JSON 已格式化');
+            } catch (e) {
+                updateEditorStatus('invalid', 'JSON 格式錯誤: ' + e.message);
+            }
+        }
+    });
+
+    // Copy JSON
+    $('#copy_json').on('click', function () {
+        if (window.editor) {
+            var json = window.editor.getValue();
+            navigator.clipboard.writeText(json).then(function () {
+                var $btn = $('#copy_json');
+                var originalText = $btn.find('span:last').text();
+                $btn.find('span:last').text('已複製！');
+                setTimeout(function () {
+                    $btn.find('span:last').text(originalText);
+                }, 2000);
+            }).catch(function (err) {
+                alert('複製失敗: ' + err);
+            });
+        }
+    });
+
+    // Validate JSON
+    $('#validate_json').on('click', function () {
+        if (window.editor) {
+            try {
+                var json = window.editor.getValue();
+                JSON.parse(json);
+                updateEditorStatus('valid', 'JSON 格式正確');
+            } catch (e) {
+                updateEditorStatus('invalid', 'JSON 格式錯誤: ' + e.message);
+            }
+        }
+    });
+
+    // Update Editor Status Helper
+    function updateEditorStatus(type, message) {
+        var $status = $('#editor-status');
+        $status.removeClass('valid invalid loading').addClass(type);
+        $status.text(message || '');
+        if (message) {
+            setTimeout(function () {
+                $status.text('').removeClass(type);
+            }, 3000);
+        }
+    }
+
+    // Auto-validate on change
+    $(document).on('moksa-monaco-ready', function (e, editor) {
+        editor.onDidChangeModelContent(function () {
+            clearTimeout(window.jsonValidationTimeout);
+            window.jsonValidationTimeout = setTimeout(function () {
+                try {
+                    var json = editor.getValue();
+                    if (json.trim()) {
+                        JSON.parse(json);
+                        updateEditorStatus('valid', '');
+                    } else {
+                        $('#editor-status').removeClass('valid invalid loading').text('');
+                    }
+                } catch (e) {
+                    updateEditorStatus('invalid', '');
+                }
+            }, 500);
+        });
+    });
 });

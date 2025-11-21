@@ -93,7 +93,27 @@
             <div class="preview-header">
                 <h3>即時預覽</h3>
             </div>
-            <div id="moksa-flex-preview" class="moksa-phone-preview">
+            <div class="moksa-preview-toolbar">
+                <div class="moksa-preview-toolbar-left">
+                    <div class="moksa-device-selector">
+                        <button type="button" class="moksa-device-btn active" data-device="mobile" title="<?php _e('手機', 'moksa-line-login'); ?>">
+                            <span class="dashicons dashicons-smartphone"></span>
+                        </button>
+                        <button type="button" class="moksa-device-btn" data-device="tablet" title="<?php _e('平板', 'moksa-line-login'); ?>">
+                            <span class="dashicons dashicons-tablet"></span>
+                        </button>
+                        <button type="button" class="moksa-device-btn" data-device="desktop" title="<?php _e('桌面', 'moksa-line-login'); ?>">
+                            <span class="dashicons dashicons-desktop"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="moksa-preview-toolbar-right">
+                    <button type="button" class="moksa-preview-action-btn" id="refresh_preview_order" title="<?php _e('重新整理預覽', 'moksa-line-login'); ?>">
+                        <span class="dashicons dashicons-update"></span>
+                    </button>
+                </div>
+            </div>
+            <div id="moksa-flex-preview" class="moksa-phone-preview mobile">
                 <div class="moksa-phone-header">LINE</div>
                 <div class="moksa-phone-content" id="preview_container">
                     <!-- Preview will be rendered here -->
@@ -323,7 +343,7 @@ jQuery(document).ready(function($) {
                 .replace(/{{order_number}}/g, '2024111901')
                 .replace(/{{status}}/g, 'processing')
                 .replace(/{{status_label}}/g, '處理中')
-                .replace(/{{status_color}}/g, '#17c950')
+                .replace(/{{status_color}}/g, '#06C755')
                 .replace(/{{total}}/g, 'NT$1,500')
                 .replace(/{{items_count}}/g, '3')
                 .replace(/{{billing_name}}/g, '王小明')
@@ -356,5 +376,19 @@ jQuery(document).ready(function($) {
             container.html('<div style="background: #fff; padding: 12px 16px; border-radius: 8px; color: #dc2626; border: 1px solid #fecaca; font-size: 13px;">JSON 格式錯誤：' + e.message + '</div>');
         }
     }
+
+    // Device Size Selector
+    $('.moksa-device-btn').on('click', function () {
+        var device = $(this).data('device');
+        $('.moksa-device-btn').removeClass('active');
+        $(this).addClass('active');
+        $('#moksa-flex-preview').removeClass('mobile tablet desktop').addClass(device);
+    });
+
+    // Refresh Preview
+    $('#refresh_preview_order').on('click', function () {
+        var json = window.editor ? window.editor.getValue() : $('#moksa_line_order_template').val();
+        updatePreview(json);
+    });
 });
 </script>

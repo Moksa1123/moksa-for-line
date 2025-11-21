@@ -111,7 +111,7 @@ class Moksa_Line_WooCommerce {
      * Get Default Order Template
      */
     public function get_default_order_template($status = 'default') {
-        $color = '#17c950'; // Default Green
+        $color = '#06C755'; // Official LINE Green
         $title = '訂單狀態更新';
         
         if (in_array($status, array('pending', 'on-hold'))) {
@@ -353,7 +353,7 @@ class Moksa_Line_WooCommerce {
         if (!$store_address) $store_address = $order->get_meta('_ecpay_receiver_store_address', true);
         
         // Color based on status
-        $color = '#17c950'; // Default Green
+        $color = '#06C755'; // Official LINE Green
         if (in_array($status, array('pending', 'on-hold'))) $color = '#ff9800';
         if (in_array($status, array('cancelled', 'failed', 'refunded'))) $color = '#ff334b';
         if ($status === 'completed') $color = '#06c755';

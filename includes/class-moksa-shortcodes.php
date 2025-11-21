@@ -26,6 +26,23 @@ class Moksa_Line_Shortcodes {
     }
     
     /**
+     * Get official LINE icon SVG
+     * @param int $size Icon size in pixels (default: 24)
+     * @return string SVG markup
+     */
+    public static function get_line_icon_svg($size = 24) {
+        $unique_id = 'line-icon-' . wp_generate_password(8, false);
+        return sprintf(
+            '<svg width="%d" height="%d" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="LINE" role="img">
+                <rect width="24" height="24" rx="4" fill="#06C755"/>
+                <path d="M12.016 5.5C8.693 5.5 6 7.81 6 10.73c0 2.69 2.38 4.95 5.66 5.35.182.04.43.12.49.28.056.14.037.36.018.5l-.078.47c-.024.14-.11.55.48.3.59-.25 3.19-1.88 4.35-3.22 1.16-1.34 1.7-2.93 1.7-4.38 0-2.92-2.693-5.23-6.016-5.23zm-2.66 7.87h-1.54c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36.18 0 .33.16.33.36v3.09h1.54c.18 0 .33.16.33.36 0 .2-.15.36-.33.36zm-1.1-3.45h-.33c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36.18 0 .33.16.33.36v3.45c0 .2-.15.36-.33.36zm2.89 0h-.33c-.18 0-.33-.16-.33-.36v-2.64l-.83 2.74c-.05.16-.16.26-.3.26h-.33c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36.18 0 .33.16.33.36v2.64l.83-2.74c.05-.16.16-.26.3-.26h.33c.18 0 .33.16.33.36v3.45c0 .2-.15.36-.33.36zm2.34 0h-.33c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36h1.54c.18 0 .33.16.33.36 0 .2-.15.36-.33.36h-1.21v.89h1.21c.18 0 .33.16.33.36 0 .2-.15.36-.33.36h-1.21v1.09h1.21c.18 0 .33.16.33.36 0 .2-.15.36-.33.36z" fill="#FFFFFF"/>
+            </svg>',
+            $size,
+            $size
+        );
+    }
+    
+    /**
      * Render LINE login button shortcode
      * Usage: [line_login_button text="Login with LINE" redirect_url="/my-account"]
      */
@@ -60,17 +77,10 @@ class Moksa_Line_Shortcodes {
         );
         
         // Official LINE Icon SVG
-        $svg_icon = '<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; height: 100%; width: auto; display: block;">
-            <g clip-path="url(#clip0_line)">
-            <path d="M0 0H44V44H0V0Z" fill="#06C755"/>
-            <path d="M22.032 10C15.387 10 10 14.683 10 20.462C10 25.386 14.355 29.558 20.226 30.688C20.699 30.883 21.145 31.624 21.258 32.247C21.36 32.803 21.258 33.973 21.258 33.973C21.258 33.973 21.086 34.938 21.022 35.162C20.84 35.796 20.646 37.121 22.989 36.244C25.333 35.367 33.925 29.392 33.925 29.392C38.065 27.053 40 23.875 40 20.462C40 14.683 34.613 10 22.032 10ZM16.989 24.731H14.075C13.71 24.731 13.409 24.439 13.409 24.073V17.565C13.409 17.199 13.71 16.907 14.075 16.907C14.441 16.907 14.742 17.199 14.742 17.565V23.398H16.989C17.355 23.398 17.656 23.69 17.656 24.055C17.656 24.421 17.355 24.731 16.989 24.731ZM20.183 24.731H19.516C19.151 24.731 18.849 24.439 18.849 24.073V17.565C18.849 17.199 19.151 16.907 19.516 16.907C19.882 16.907 20.183 17.199 20.183 17.565V24.073C20.183 24.439 19.882 24.731 20.183 24.731ZM25.957 24.731H25.29C24.925 24.731 24.624 24.439 24.624 24.073V19.066L22.968 24.239C22.871 24.531 22.591 24.731 22.28 24.731H21.613C21.247 24.731 20.946 24.439 20.946 24.073V17.565C20.946 17.199 21.247 16.907 21.613 16.907C21.978 16.907 22.28 17.199 22.28 17.565V22.43L23.925 17.399C24.022 17.107 24.301 16.907 24.613 16.907H25.28C25.645 16.907 25.946 17.199 25.946 17.565V24.073C25.946 24.439 25.645 24.731 25.957 24.731ZM30.645 24.073C30.645 24.439 30.344 24.731 29.978 24.731H27.065C26.699 24.731 26.398 24.439 26.398 24.073V17.565C26.398 17.199 26.699 16.907 27.065 16.907H29.978C30.344 16.907 30.645 17.199 30.645 17.565C30.645 17.931 30.344 18.222 29.978 18.222H27.731V19.898H29.978C30.344 19.898 30.645 20.19 30.645 20.555C30.645 20.921 30.344 21.213 29.978 21.213H27.731V23.398H29.978C30.344 23.398 30.645 23.69 30.645 24.055V24.073Z" fill="white"/>
-            </g>
-            <defs>
-            <clipPath id="clip0_line">
-            <rect width="44" height="44" fill="white"/>
-            </clipPath>
-            </defs>
-            </svg>';
+        $icon_size = min(intval($height), 24); // Use button height or 24px, whichever is smaller
+        $svg_icon = '<span style="margin-right: 10px; display: inline-flex; align-items: center; height: 100%;">' . 
+                    self::get_line_icon_svg($icon_size) . 
+                    '</span>';
         
         if ($atts['show_popup'] === 'yes') {
             $button_html = sprintf(
@@ -115,12 +125,11 @@ class Moksa_Line_Shortcodes {
         
         return sprintf(
             '<a href="%s" target="_blank" class="moksa-line-add-friend-btn" style="background-color: #00B900; color: #FFFFFF; padding: 10px 20px; border-radius: 4px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10 0C4.477 0 0 3.846 0 8.571c0 4.236 3.756 7.78 8.823 8.456.343.074.81.226.928.52.106.265.07.68.034.948l-.148.89c-.045.266-.208 1.04.91.567 1.118-.473 6.023-3.546 8.218-6.072C19.893 12.238 20 10.45 20 8.571 20 3.846 15.523 0 10 0z" fill="currentColor"/>
-                </svg>
+                %s
                 <span>%s</span>
             </a>',
             esc_url($atts['url']),
+            self::get_line_icon_svg(20),
             esc_html($atts['text'])
         );
     }

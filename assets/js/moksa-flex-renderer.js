@@ -315,7 +315,7 @@
 
             // Style & Color
             var style = btn.style || 'link';
-            var color = btn.color || '#17c950'; // Default LINE Green
+            var color = btn.color || '#06C755'; // Official LINE Green
 
             if (style === 'primary') {
                 el.css({ 'background-color': color, 'color': '#ffffff' });

@@ -89,10 +89,8 @@
             <h2 style="margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; color: #1e293b;"><?php _e('即時預覽', 'moksa-line-login'); ?></h2>
             
             <div style="padding: 60px 20px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
-                <button id="moksa-line-preview-btn" style="display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; gap: 10px; transition: opacity 0.2s;">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 0C4.477 0 0 3.846 0 8.571c0 4.236 3.756 7.78 8.823 8.456.343.074.81.226.928.52.106.265.07.68.034.948l-.148.89c-.045.266-.208 1.04.91.567 1.118-.473 6.023-3.546 8.218-6.072C19.893 12.238 20 10.45 20 8.571 20 3.846 15.523 0 10 0z" fill="currentColor"/>
-                    </svg>
+                <button id="moksa-line-preview-btn" style="display: inline-flex; align-items: center; justify-content: center; border: none; cursor: pointer; gap: 10px; transition: opacity 0.2s; font-weight: bold; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                    <span class="btn-icon"></span>
                     <span class="btn-text"></span>
                 </button>
             </div>
@@ -114,6 +112,14 @@ jQuery(document).ready(function($) {
         }
     });
     
+    // Official LINE Icon SVG
+    function getLineIconSVG(size) {
+        return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="LINE" role="img">' +
+               '<rect width="24" height="24" rx="4" fill="#06C755"/>' +
+               '<path d="M12.016 5.5C8.693 5.5 6 7.81 6 10.73c0 2.69 2.38 4.95 5.66 5.35.182.04.43.12.49.28.056.14.037.36.018.5l-.078.47c-.024.14-.11.55.48.3.59-.25 3.19-1.88 4.35-3.22 1.16-1.34 1.7-2.93 1.7-4.38 0-2.92-2.693-5.23-6.016-5.23zm-2.66 7.87h-1.54c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36.18 0 .33.16.33.36v3.09h1.54c.18 0 .33.16.33.36 0 .2-.15.36-.33.36zm-1.1-3.45h-.33c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36.18 0 .33.16.33.36v3.45c0 .2-.15.36-.33.36zm2.89 0h-.33c-.18 0-.33-.16-.33-.36v-2.64l-.83 2.74c-.05.16-.16.26-.3.26h-.33c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36.18 0 .33.16.33.36v2.64l.83-2.74c.05-.16.16-.26.3-.26h.33c.18 0 .33.16.33.36v3.45c0 .2-.15.36-.33.36zm2.34 0h-.33c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36h1.54c.18 0 .33.16.33.36 0 .2-.15.36-.33.36h-1.21v.89h1.21c.18 0 .33.16.33.36 0 .2-.15.36-.33.36h-1.21v1.09h1.21c.18 0 .33.16.33.36 0 .2-.15.36-.33.36z" fill="#FFFFFF"/>' +
+               '</svg>';
+    }
+    
     // Live preview updates
     function updatePreview() {
         var text = $('#moksa_line_button_text').val();
@@ -124,8 +130,10 @@ jQuery(document).ready(function($) {
         var height = $('#moksa_line_button_height').val();
         
         var $btn = $('#moksa-line-preview-btn');
+        var iconSize = Math.min(parseInt(height) || 24, 24);
         
         $btn.find('.btn-text').text(text);
+        $btn.find('.btn-icon').html(getLineIconSVG(iconSize));
         $btn.css({
             'background-color': bgColor,
             'color': textColor,

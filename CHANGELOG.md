@@ -1,3 +1,25 @@
+## [1.4.1] - 2025-01-XX
+
+### Added
+- **UI/UX**: JSON 預覽功能改進，新增裝置尺寸切換（手機/平板/桌面）
+- **UI/UX**: JSON 編輯器工具列（格式化、複製、驗證功能）
+- **UI/UX**: 即時 JSON 驗證與狀態指示器
+- **Branding**: 統一使用 LINE 官方 SVG 圖示
+- **Branding**: 統一所有 LINE 相關顏色為官方品牌色 #06C755
+
+### Changed
+- **UI/UX**: 改進預覽工具列（裝置切換、重新整理按鈕）
+- **UI/UX**: 更新按鈕設定頁面預覽使用官方 LINE icon
+- **Code**: 建立可重用的 LINE icon SVG 函數
+
+### Fixed
+- **Branding**: 統一所有 LINE 顏色代碼為官方標準
+
+---
+
+## [1.4.0] - 2025-11-21
+
+### Added
 - **Security**: Comprehensive file upload validation (MIME type, size, extension)
 - **Security**: New security utilities class (`class-moksa-security.php`)
 - **Security**: JSON validation with size and depth limits
