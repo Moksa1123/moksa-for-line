@@ -16,7 +16,7 @@
                     <div class="form-group" style="position: relative; margin-bottom: 10px;">
                         <textarea id="greeting_message" class="widefat" rows="3" placeholder="<?php _e('請輸入歡迎訊息...', 'moksa-line-login'); ?>" style="resize: vertical; min-height: 80px;"><?php echo esc_textarea(get_option('moksa_line_greeting_message')); ?></textarea>
                         <button type="button" id="toggle-emoji" class="button button-small" style="position: absolute; bottom: 8px; right: 8px; padding: 0 5px;">😀</button>
-                        <div id="emoji-picker" style="display: none; position: absolute; bottom: 35px; right: 0; width: 250px; background: #fff; border: 1px solid #ccc; padding: 10px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; max-height: 150px; overflow-y: auto; display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px;">
+                        <div id="emoji-picker" style="display: none; position: absolute; bottom: 35px; right: 0; width: 250px; background: #fff; border: 1px solid #ccc; padding: 10px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; max-height: 150px; overflow-y: auto; display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px;">
                             <!-- Emojis will be loaded here -->
                         </div>
                     </div>
@@ -38,10 +38,10 @@
                     
                     if ($rules) {
                         foreach ($rules as $rule) {
-                            echo '<div class="moksa-rule-item" data-id="' . $rule->id . '" style="padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; background: #f8fafc; cursor: pointer; transition: all 0.2s;">';
+                            echo '<div class="moksa-rule-item" data-id="' . $rule->id . '" style="padding: 12px; border: 1px solid #e2e8f0; border-radius: 4px; margin-bottom: 8px; background: #f8fafc; cursor: pointer; transition: all 0.2s;">';
                             echo '<div style="display: flex; justify-content: space-between; margin-bottom: 5px;">';
                             echo '<span style="font-weight: 600; color: #334155;">' . esc_html($rule->keyword) . '</span>';
-                            echo '<span class="badge" style="background: #e2e8f0; color: #64748b; font-size: 10px; padding: 2px 6px; border-radius: 4px;">' . esc_html(ucfirst($rule->reply_type)) . '</span>';
+                            echo '<span class="badge" style="background: #e2e8f0; color: #64748b; font-size: 10px; padding: 2px 6px; border-radius: 2px;">' . esc_html(ucfirst($rule->reply_type)) . '</span>';
                             echo '</div>';
                             echo '<div style="font-size: 12px; color: #64748b; display: flex; justify-content: space-between; align-items: center;">';
                             echo '<span>' . ($rule->match_type === 'exact' ? '完全符合' : '部分符合') . '</span>';
@@ -115,10 +115,10 @@
                             </div>
                             <div style="width: 280px;">
                                 <label style="display: block; margin-bottom: 5px; font-weight: 600;"><?php _e('預覽', 'moksa-line-login'); ?></label>
-                                <div class="moksa-phone-preview" style="height: 400px; border-width: 8px; border-radius: 20px;">
+                                <div class="moksa-phone-preview" style="height: 400px; border-width: 8px; border-radius: 4px;">
                                     <div class="moksa-phone-header" style="padding: 8px; font-size: 12px;">LINE</div>
                                     <div class="moksa-phone-content" id="preview_container" style="padding: 10px;">
-                                        <div class="flex-bubble-preview" style="background: #fff; padding: 16px; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 13px;">
+                                        <div class="flex-bubble-preview" style="background: #fff; padding: 16px; border-radius: 4px; text-align: center; color: #94a3b8; font-size: 13px;">
                                             <?php _e('預覽將顯示於此', 'moksa-line-login'); ?>
                                         </div>
                                     </div>
@@ -271,12 +271,12 @@ jQuery(document).ready(function($) {
             if (window.MoksaFlexRenderer) {
                 window.MoksaFlexRenderer.render(flexObj, container);
             } else {
-                container.html('<div style="background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 12px; border-radius: 8px; font-size: 13px;"><strong>Flex Renderer not loaded.</strong><br>請重新整理頁面或檢查瀏覽器控制台。</div>');
+                container.html('<div style="background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 12px; border-radius: 4px; font-size: 13px;"><strong>Flex Renderer not loaded.</strong><br>請重新整理頁面或檢查瀏覽器控制台。</div>');
             }
             
         } catch (e) {
             if (!jsonStr || !jsonStr.trim()) return;
-            container.html('<div style="background: #fff; padding: 12px 16px; border-radius: 8px; color: #dc2626; border: 1px solid #fecaca; font-size: 13px;">JSON 格式錯誤：' + e.message + '</div>');
+            container.html('<div style="background: #fff; padding: 12px 16px; border-radius: 4px; color: #dc2626; border: 1px solid #fecaca; font-size: 13px;">JSON 格式錯誤：' + e.message + '</div>');
         }
     }
     
@@ -372,7 +372,7 @@ jQuery(document).ready(function($) {
         $('.moksa-rule-item').css('border-color', '#e2e8f0').css('background', '#f8fafc');
         
         // Clear preview
-        $('#preview_container').html('<div class="flex-bubble-preview" style="background: #fff; padding: 16px; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 13px;"><?php _e('預覽將顯示於此', 'moksa-line-login'); ?></div>');
+        $('#preview_container').html('<div class="flex-bubble-preview" style="background: #fff; padding: 16px; border-radius: 4px; text-align: center; color: #94a3b8; font-size: 13px;"><?php _e('預覽將顯示於此', 'moksa-line-login'); ?></div>');
     }
     
     // Delete

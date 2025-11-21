@@ -78,7 +78,7 @@
                             </svg>
                             <?php _e('上傳圖片', 'moksa-line-login'); ?>
                         </button>
-                        <div id="image-preview" style="max-width: 200px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;"></div>
+                        <div id="image-preview" style="max-width: 200px; border-radius: 4px; overflow: hidden; border: 1px solid #e2e8f0;"></div>
                     </div>
                     <p class="description" style="margin-top: 8px; color: #64748b; font-size: 12px;">
                         <?php _e('建議寬度：1040px。JPEG 格式。', 'moksa-line-login'); ?>

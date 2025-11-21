@@ -69,7 +69,7 @@
 
         <!-- Center Column: JSON Input -->
         <div class="moksa-editor-main">
-            <div class="moksa-line-simulator-guide" style="background: linear-gradient(135deg, #06C755 0%, #05B048 100%); color: white; padding: 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
+            <div class="moksa-line-simulator-guide" style="background: linear-gradient(135deg, #06C755 0%, #05B048 100%); color: white; padding: 24px; border-radius: 4px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
                 <div style="display: flex; align-items: center; margin-bottom: 16px;">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 12px;">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -79,7 +79,7 @@
                         <p style="margin: 0; font-size: 14px; opacity: 0.95;"><?php _e('我們建議您使用 LINE 官方的 Flex Message Simulator 來設計您的訊息，功能更完整且更易於使用。', 'moksa-line-login'); ?></p>
                     </div>
                 </div>
-                <a href="https://developers.line.biz/flex-simulator/" target="_blank" class="button button-primary button-large" style="background: white; color: #06C755; border: none; font-weight: 600; padding: 12px 24px; text-decoration: none; display: inline-block; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.2s;">
+                <a href="https://developers.line.biz/flex-simulator/" target="_blank" class="button button-primary button-large" style="background: white; color: #06C755; border: none; font-weight: 600; padding: 12px 24px; text-decoration: none; display: inline-block; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.2s;">
                     <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 8px;">
                         <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
                         <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
@@ -108,7 +108,7 @@
                     </button>
                 </div>
             </div>
-            <textarea id="flex_json" class="widefat" rows="20" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical;" placeholder='<?php _e('請從 LINE Flex Message Simulator 複製 JSON 並貼上於此...', 'moksa-line-login'); ?>'></textarea>
+            <textarea id="flex_json" class="widefat" rows="20" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; padding: 16px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical;" placeholder='<?php _e('請從 LINE Flex Message Simulator 複製 JSON 並貼上於此...', 'moksa-line-login'); ?>'></textarea>
             <p class="description" style="margin-top: 8px; font-size: 12px; color: #64748b;">
                 <?php _e('💡 提示：在 LINE Flex Message Simulator 中設計好訊息後，點擊右上角的「View as JSON」按鈕，複製 JSON 並貼上於此。', 'moksa-line-login'); ?>
             </p>
@@ -151,7 +151,7 @@
                 <div class="moksa-phone-header">LINE</div>
                 <div class="moksa-phone-content" id="preview_container">
                     <!-- Preview content will be rendered here -->
-                    <div class="flex-bubble-preview" style="background: #fff; padding: 16px; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 13px;">
+                    <div class="flex-bubble-preview" style="background: #fff; padding: 16px; border-radius: 4px; text-align: center; color: #94a3b8; font-size: 13px;">
                         <?php _e('預覽將顯示於此', 'moksa-line-login'); ?>
                     </div>
                 </div>

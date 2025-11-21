@@ -40,7 +40,7 @@
                             </svg>
                             <?php _e('選擇圖片', 'moksa-line-login'); ?>
                         </button>
-                        <div id="rm_image_preview" style="max-width: 300px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;"></div>
+                        <div id="rm_image_preview" style="max-width: 300px; border-radius: 4px; overflow: hidden; border: 1px solid #e2e8f0;"></div>
                     </div>
                 </div>
 

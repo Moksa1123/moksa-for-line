@@ -4,7 +4,7 @@ Tags: line, login, sso, authentication, messaging
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.4.7
+Stable tag: 1.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,14 @@ Moksa LINE Login allows users to log in to your WordPress site using their LINE 
 3. 自動回覆規則管理
 
 == Changelog ==
+
+= 1.4.8 - 2025-11-21 =
+*   Changed: 移除按鈕樣式設定頁面的可編輯選項，改為只顯示預覽
+*   Changed: 重新設計整體UI，減少圓角邊框設計（統一為4px），現代化設計
+*   Changed: 改進所有功能分頁的UI設計，確保整體一致性和現代感
+*   Changed: 移除舊的單一訂單通知範本頁面，改為使用CPT系統管理多個通知範本
+*   Fix: 修正訂單通知收合容器的圓角樣式
+*   Fix: 統一所有按鈕、卡片、輸入框的圓角為4px，避免過度圓角設計
 
 = 1.4.7 - 2025-11-21 =
 *   Changed: 改進處理中狀態的延遲邏輯，針對物流編號回傳延遲問題

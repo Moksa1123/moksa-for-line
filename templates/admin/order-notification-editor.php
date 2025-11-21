@@ -94,7 +94,7 @@
                 );
                 
                 foreach ($variables as $category => $vars) {
-                    echo '<div class="moksa-params-toggle" style="margin-bottom: 12px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #fff;">';
+                    echo '<div class="moksa-params-toggle" style="margin-bottom: 12px; border: 1px solid #e2e8f0; border-radius: 4px; overflow: hidden; background: #fff;">';
                     echo '<div class="moksa-params-toggle-header" style="padding: 12px 15px; background: #f8fafc; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s;" onclick="this.parentElement.classList.toggle(\'expanded\');">';
                     echo '<h3 style="margin: 0; font-size: 13px; font-weight: 600; color: #334155;">' . esc_html($category) . '</h3>';
                     echo '<svg class="toggle-indicator" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="color: #64748b; transition: transform 0.2s;"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>';
@@ -103,7 +103,7 @@
                     echo '<ul style="list-style: none; padding: 0; margin: 0;">';
                     foreach ($vars as $var => $desc) {
                         echo '<li style="margin-bottom: 4px;">';
-                        echo '<button type="button" class="moksa-param-btn" data-clipboard-text="' . esc_attr($var) . '" style="width: 100%; text-align: left; padding: 8px 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 12px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.borderColor=\'#06C755\'; this.style.background=\'#f0fdf4\'" onmouseout="this.style.borderColor=\'#e2e8f0\'; this.style.background=\'#fff\'">';
+                        echo '<button type="button" class="moksa-param-btn" data-clipboard-text="' . esc_attr($var) . '" style="width: 100%; text-align: left; padding: 8px 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 4px; cursor: pointer; transition: all 0.2s; font-size: 12px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.borderColor=\'#06C755\'; this.style.background=\'#f0fdf4\'" onmouseout="this.style.borderColor=\'#e2e8f0\'; this.style.background=\'#fff\'">';
                         echo '<code style="font-size: 11px; color: #06C755; font-weight: 600; background: transparent; padding: 0;">' . esc_html($var) . '</code>';
                         echo '<span style="font-size: 11px; color: #64748b; margin-left: 8px; flex: 1; text-align: right;">' . esc_html($desc) . '</span>';
                         echo '<span class="copy-tooltip" style="display: none; font-size: 10px; color: #06C755; margin-left: 8px; font-weight: 600;">已複製！</span>';
@@ -120,7 +120,7 @@
 
         <!-- JSON Input Section -->
         <div class="moksa-card" style="grid-column: 2;">
-            <div class="moksa-line-simulator-guide" style="background: linear-gradient(135deg, #06C755 0%, #05B048 100%); color: white; padding: 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
+            <div class="moksa-line-simulator-guide" style="background: linear-gradient(135deg, #06C755 0%, #05B048 100%); color: white; padding: 24px; border-radius: 4px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
                 <div style="display: flex; align-items: center; margin-bottom: 16px;">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 12px;">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -130,7 +130,7 @@
                         <p style="margin: 0; font-size: 14px; opacity: 0.95;">我們建議您使用 LINE 官方的 Flex Message Simulator 來設計您的訊息，功能更完整且更易於使用。</p>
                     </div>
                 </div>
-                <a href="https://developers.line.biz/flex-simulator/" target="_blank" class="button button-primary button-large" style="background: white; color: #06C755; border: none; font-weight: 600; padding: 12px 24px; text-decoration: none; display: inline-block; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.2s;">
+                <a href="https://developers.line.biz/flex-simulator/" target="_blank" class="button button-primary button-large" style="background: white; color: #06C755; border: none; font-weight: 600; padding: 12px 24px; text-decoration: none; display: inline-block; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.2s;">
                     <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 8px;">
                         <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
                         <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
@@ -143,7 +143,7 @@
                 <span class="editor-label">JSON 範本</span>
                 <span class="editor-status" id="editor-status"></span>
             </div>
-            <textarea id="moksa_line_order_template" name="moksa_line_order_template" class="widefat" rows="25" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; resize: vertical;"><?php
+            <textarea id="moksa_line_order_template" name="moksa_line_order_template" class="widefat" rows="25" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; padding: 16px; border: 1px solid #e2e8f0; border-radius: 4px; resize: vertical;"><?php
                 // 直接輸出預設 JSON 範本
                 $default_template = array(
                     "type" => "bubble",

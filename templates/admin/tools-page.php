@@ -49,7 +49,7 @@
                 <?php wp_nonce_field('moksa_line_tools_action'); ?>
                 <input type="hidden" name="moksa_line_action" value="import_settings">
                 <div style="margin-bottom: 16px;">
-                    <input type="file" name="import_file" accept=".json" required style="width: 100%; padding: 12px; border: 2px dashed #cbd5e1; border-radius: 10px; background: #f8fafc; cursor: pointer; transition: all 0.2s;">
+                    <input type="file" name="import_file" accept=".json" required style="width: 100%; padding: 12px; border: 2px dashed #cbd5e1; border-radius: 4px; background: #f8fafc; cursor: pointer; transition: all 0.2s;">
                 </div>
                 <button type="submit" class="button button-primary">
                     <?php _e('匯入設定', 'moksa-line-login'); ?>

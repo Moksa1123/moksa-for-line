@@ -351,7 +351,7 @@ class Moksa_Line_Order_Notify {
         
         ?>
         <div class="moksa-notify-content-box">
-            <div class="moksa-line-simulator-guide" style="background: linear-gradient(135deg, #06C755 0%, #05B048 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
+            <div class="moksa-line-simulator-guide" style="background: linear-gradient(135deg, #06C755 0%, #05B048 100%); color: white; padding: 20px; border-radius: 4px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);">
                 <div style="display: flex; align-items: center; margin-bottom: 12px;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 10px;">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -361,7 +361,7 @@ class Moksa_Line_Order_Notify {
                         <p style="margin: 0; font-size: 13px; opacity: 0.95;">建議使用 LINE 官方的 Flex Message Simulator 來設計訊息。</p>
                     </div>
                 </div>
-                <a href="https://developers.line.biz/flex-simulator/" target="_blank" class="button button-primary" style="background: white; color: #06C755; border: none; font-weight: 600; padding: 10px 20px; text-decoration: none; display: inline-block; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                <a href="https://developers.line.biz/flex-simulator/" target="_blank" class="button button-primary" style="background: white; color: #06C755; border: none; font-weight: 600; padding: 10px 20px; text-decoration: none; display: inline-block; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
                     <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
                         <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
                         <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
@@ -424,7 +424,7 @@ class Moksa_Line_Order_Notify {
         <div class="moksa-notify-params-box" style="max-height: calc(100vh - 300px); overflow-y: auto;">
             <p class="description" style="margin-bottom: 12px; font-size: 12px;">點擊變數即可複製</p>
             <?php foreach ($variables as $category => $vars): ?>
-                <div class="moksa-params-toggle" style="margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #fff;">
+                <div class="moksa-params-toggle" style="margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 4px; overflow: hidden; background: #fff;">
                     <div class="moksa-params-toggle-header" style="padding: 10px 12px; background: #f8fafc; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center;" onclick="this.parentElement.classList.toggle('expanded');">
                         <h3 style="margin: 0; font-size: 12px; font-weight: 600; color: #334155;"><?php echo esc_html($category); ?></h3>
                         <svg class="toggle-indicator" width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="color: #64748b; transition: transform 0.2s;"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
@@ -433,7 +433,7 @@ class Moksa_Line_Order_Notify {
                         <ul style="list-style: none; padding: 0; margin: 0;">
                             <?php foreach ($vars as $var => $desc): ?>
                                 <li style="margin-bottom: 4px;">
-                                    <button type="button" class="moksa-param-btn" data-clipboard-text="<?php echo esc_attr($var); ?>" style="width: 100%; text-align: left; padding: 6px 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 11px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.borderColor='#06C755'; this.style.background='#f0fdf4'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#fff'">
+                                    <button type="button" class="moksa-param-btn" data-clipboard-text="<?php echo esc_attr($var); ?>" style="width: 100%; text-align: left; padding: 6px 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 4px; cursor: pointer; transition: all 0.2s; font-size: 11px; display: flex; justify-content: space-between; align-items: center;" onmouseover="this.style.borderColor='#06C755'; this.style.background='#f0fdf4'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#fff'">
                                         <code style="font-size: 10px; color: #06C755; font-weight: 600; background: transparent; padding: 0;"><?php echo esc_html($var); ?></code>
                                         <span style="font-size: 10px; color: #64748b; margin-left: 8px; flex: 1; text-align: right;"><?php echo esc_html($desc); ?></span>
                                         <span class="copy-tooltip" style="display: none; font-size: 9px; color: #06C755; margin-left: 8px; font-weight: 600;">已複製！</span>

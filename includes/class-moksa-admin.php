@@ -115,14 +115,8 @@ class Moksa_Line_Admin {
             array($this, 'render_woocarousel_page')
         );
         
-        add_submenu_page(
-            'moksa-line-login',
-            '訂單通知範本',
-            '訂單通知',
-            'manage_options',
-            'moksa-line-order-notification',
-            array($this, 'render_order_notification_page')
-        );
+        // 訂單通知已改為 CPT 系統，移除舊的單一範本頁面
+        // 訂單通知現在通過 'moksa-order-notify' CPT 管理
         
         add_submenu_page(
             'moksa-line-login',
