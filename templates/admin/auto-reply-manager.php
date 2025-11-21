@@ -130,19 +130,23 @@
                     <!-- Quick Reply Select -->
                     <div id="input-quick_reply" class="reply-input-group" style="display: none;">
                         <label for="reply_qr" style="display: block; margin-bottom: 5px; font-weight: 600;"><?php _e('選擇快速回覆組', 'moksa-line-login'); ?></label>
-                        <select id="reply_qr" class="widefat">
+                        <select id="reply_qr" class="widefat" required>
+                            <option value=""><?php _e('-- 請選擇快速回覆組 --', 'moksa-line-login'); ?></option>
                             <?php
                             $qr_manager = Moksa_Line_QuickReply::get_instance();
                             $qrs = $qr_manager->get_all_quick_replies();
                             if ($qrs) {
                                 foreach ($qrs as $qr) {
-                                    echo '<option value="' . $qr->id . '">' . esc_html($qr->name) . '</option>';
+                                    echo '<option value="' . esc_attr($qr->id) . '">' . esc_html($qr->name) . '</option>';
                                 }
                             } else {
-                                echo '<option value="">' . __('找不到快速回覆組', 'moksa-line-login') . '</option>';
+                                echo '<option value="" disabled>' . __('目前沒有快速回覆組，請先建立快速回覆組。', 'moksa-line-login') . '</option>';
                             }
                             ?>
                         </select>
+                        <p class="description" style="margin-top: 8px; font-size: 12px; color: #64748b;">
+                            <?php _e('💡 提示：如果沒有快速回覆組，請先前往「快速回覆管理」頁面建立。', 'moksa-line-login'); ?>
+                        </p>
                     </div>
                     
                     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
@@ -329,8 +333,9 @@ jQuery(document).ready(function($) {
         $('#match_type').val(match);
         $('#reply_type').val(type).trigger('change');
         
-        if (type === 'text') $('#reply_text').val(data);
-        else if (type === 'flex') {
+        if (type === 'text') {
+            $('#reply_text').val(data);
+        } else if (type === 'flex') {
             var jsonStr = '';
             if (typeof data === 'object') {
                 jsonStr = JSON.stringify(data, null, 2);
@@ -339,8 +344,9 @@ jQuery(document).ready(function($) {
             }
             $('#reply_flex').val(jsonStr);
             updateFlexPreview(jsonStr);
+        } else if (type === 'quick_reply') {
+            $('#reply_qr').val(data || '');
         }
-        else if (type === 'quick_reply') $('#reply_qr').val(data);
         
         $('#editor-title').text('<?php _e('編輯規則', 'moksa-line-login'); ?>');
         $('#cancel_edit').show();

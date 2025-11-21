@@ -1,29 +1,34 @@
 <div class="wrap moksa-line-wrap">
-    <h1>Moksa LINE Login - 使用手冊</h1>
+    <div class="moksa-editor-header">
+        <div class="header-left">
+            <h1>Moksa LINE Login - 使用手冊</h1>
+            <p class="description">完整的使用指南，幫助您快速上手 Moksa LINE Login 外掛。</p>
+        </div>
+    </div>
     
-    <div class="moksa-line-flex-container" style="display: flex; gap: 20px;">
+    <div class="moksa-editor-layout" style="display: grid; grid-template-columns: 250px 1fr; gap: 20px;">
         
         <!-- Sidebar Navigation -->
-        <div class="card" style="flex: 0 0 250px; height: fit-content;">
-            <h3>目錄</h3>
+        <div class="moksa-card" style="height: fit-content; position: sticky; top: 20px;">
+            <h3 style="margin-top: 0; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 15px; font-size: 16px;">目錄</h3>
             <ul style="list-style: none; padding: 0; margin: 0;">
-                <li style="margin-bottom: 10px;"><a href="#setup" style="text-decoration: none; font-weight: bold;">1. 初始設定</a></li>
-                <li style="margin-bottom: 10px;"><a href="#login" style="text-decoration: none; font-weight: bold;">2. 登入與註冊</a></li>
-                <li style="margin-bottom: 10px;"><a href="#woocommerce" style="text-decoration: none; font-weight: bold;">3. WooCommerce 整合</a></li>
-                <li style="margin-bottom: 10px;"><a href="#richmenu" style="text-decoration: none; font-weight: bold;">4. 圖文選單 (Rich Menu)</a></li>
-                <li style="margin-bottom: 10px;"><a href="#autoreply" style="text-decoration: none; font-weight: bold;">5. 自動回覆與歡迎訊息</a></li>
-                <li style="margin-bottom: 10px;"><a href="#flex" style="text-decoration: none; font-weight: bold;">6. Flex Message</a></li>
-                <li style="margin-bottom: 10px;"><a href="#imagemap" style="text-decoration: none; font-weight: bold;">7. 圖片地圖 (Imagemap)</a></li>
-                <li style="margin-bottom: 10px;"><a href="#liff" style="text-decoration: none; font-weight: bold;">8. LIFF 整合</a></li>
-                <li style="margin-bottom: 10px;"><a href="#shortcodes" style="text-decoration: none; font-weight: bold;">9. 簡碼</a></li>
+                <li style="margin-bottom: 8px;"><a href="#setup" style="text-decoration: none; color: #06C755; font-weight: 500; font-size: 13px; display: block; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">1. 初始設定</a></li>
+                <li style="margin-bottom: 8px;"><a href="#login" style="text-decoration: none; color: #06C755; font-weight: 500; font-size: 13px; display: block; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">2. 登入與註冊</a></li>
+                <li style="margin-bottom: 8px;"><a href="#woocommerce" style="text-decoration: none; color: #06C755; font-weight: 500; font-size: 13px; display: block; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">3. WooCommerce 整合</a></li>
+                <li style="margin-bottom: 8px;"><a href="#richmenu" style="text-decoration: none; color: #06C755; font-weight: 500; font-size: 13px; display: block; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">4. 圖文選單</a></li>
+                <li style="margin-bottom: 8px;"><a href="#autoreply" style="text-decoration: none; color: #06C755; font-weight: 500; font-size: 13px; display: block; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">5. 自動回覆</a></li>
+                <li style="margin-bottom: 8px;"><a href="#flex" style="text-decoration: none; color: #06C755; font-weight: 500; font-size: 13px; display: block; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">6. Flex Message</a></li>
+                <li style="margin-bottom: 8px;"><a href="#imagemap" style="text-decoration: none; color: #06C755; font-weight: 500; font-size: 13px; display: block; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">7. 圖片地圖</a></li>
+                <li style="margin-bottom: 8px;"><a href="#liff" style="text-decoration: none; color: #06C755; font-weight: 500; font-size: 13px; display: block; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">8. LIFF 整合</a></li>
+                <li style="margin-bottom: 8px;"><a href="#shortcodes" style="text-decoration: none; color: #06C755; font-weight: 500; font-size: 13px; display: block; padding: 6px 10px; border-radius: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">9. 簡碼</a></li>
             </ul>
         </div>
         
         <!-- Content -->
-        <div style="flex: 1;">
+        <div>
             
             <!-- Setup -->
-            <div id="setup" class="card" style="margin-top: 0;">
+            <div id="setup" class="moksa-card" style="margin-top: 0;">
                 <h2>1. 初始設定</h2>
                 <ol>
                     <li>前往 <strong>LINE Developers Console</strong> 並建立新的 Provider 和 Channel (LINE Login)。</li>
@@ -35,7 +40,7 @@
             </div>
             
             <!-- Login -->
-            <div id="login" class="card">
+            <div id="login" class="moksa-card">
                 <h2>2. 登入與註冊</h2>
                 <p>此外掛會自動處理使用者註冊。</p>
                 <ul>
@@ -45,7 +50,7 @@
             </div>
             
             <!-- WooCommerce -->
-            <div id="woocommerce" class="card">
+            <div id="woocommerce" class="moksa-card">
                 <h2>3. WooCommerce 整合</h2>
                 <p>如果已啟用 WooCommerce，此外掛會新增以下功能：</p>
                 <ul>
@@ -56,7 +61,7 @@
             </div>
             
             <!-- Rich Menu -->
-            <div id="richmenu" class="card">
+            <div id="richmenu" class="moksa-card">
                 <h2>4. 圖文選單 (Rich Menu)</h2>
                 <p>在聊天畫面底部建立互動式選單。</p>
                 <ol>
@@ -68,7 +73,7 @@
             </div>
             
             <!-- Auto Reply -->
-            <div id="autoreply" class="card">
+            <div id="autoreply" class="moksa-card">
                 <h2>5. 自動回覆與歡迎訊息</h2>
                 <ul>
                     <li><strong>歡迎訊息：</strong> 設定當使用者將您的帳號加為好友時發送的歡迎訊息。</li>
@@ -77,7 +82,7 @@
             </div>
             
             <!-- Flex Messages -->
-            <div id="flex" class="card">
+            <div id="flex" class="moksa-card">
                 <h2>6. Flex Message</h2>
                 <p>發送高度自訂的訊息。</p>
                 <ul>
@@ -88,7 +93,7 @@
             </div>
             
             <!-- Imagemap -->
-            <div id="imagemap" class="card">
+            <div id="imagemap" class="moksa-card">
                 <h2>7. 圖片地圖 (Imagemap)</h2>
                 <p>發送帶有多個可點擊連結的大圖。</p>
                 <ol>
@@ -99,7 +104,7 @@
             </div>
             
             <!-- LIFF -->
-            <div id="liff" class="card">
+            <div id="liff" class="moksa-card">
                 <h2>8. LIFF 整合</h2>
                 <p>讓使用者在 LINE 內部瀏覽器中開啟網頁。</p>
                 <ul>
@@ -109,9 +114,9 @@
             </div>
             
             <!-- Shortcodes -->
-            <div id="shortcodes" class="card">
-                <h2>9. 簡碼</h2>
-                <table class="widefat striped">
+            <div id="shortcodes" class="moksa-card">
+                <h2 style="margin-top: 0; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;">9. 簡碼</h2>
+                <table class="wp-list-table widefat fixed striped">
                     <thead>
                         <tr>
                             <th>簡碼</th>
