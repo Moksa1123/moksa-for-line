@@ -1,9 +1,54 @@
-/* Admin General Styles */
+/* Admin General Styles - Modern Design */
 .moksa-line-wrap {
     max-width: 1400px;
     margin: 40px auto;
+    padding: 0 20px;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: #1e293b;
+    background: transparent;
+}
+
+/* Override WordPress default styles */
+.moksa-line-wrap .wrap {
+    margin: 0;
+    padding: 0;
+}
+
+.moksa-line-wrap * {
+    box-sizing: border-box;
+}
+
+/* Override WordPress input classes with modern styles */
+.moksa-line-wrap .regular-text,
+.moksa-line-wrap .widefat,
+.moksa-line-wrap .large-text {
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    color: #1e293b;
+    font-family: inherit;
+}
+
+.moksa-line-wrap .regular-text:focus,
+.moksa-line-wrap .widefat:focus,
+.moksa-line-wrap .large-text:focus {
+    border-color: #06C755;
+    box-shadow: 0 0 0 4px rgba(6, 199, 85, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
+    outline: none;
+}
+
+.moksa-line-wrap .regular-text {
+    max-width: 400px;
+}
+
+.moksa-line-wrap .large-text {
+    min-height: 120px;
 }
 
 .moksa-line-wrap h1 {
@@ -464,52 +509,245 @@
     display: none;
 }
 
-/* Form Elements Polish */
+/* Form Elements Polish - Modern Design */
 input[type="text"],
 input[type="email"],
 input[type="password"],
+input[type="number"],
+input[type="url"],
 textarea,
 select {
     border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    padding: 10px 14px;
+    border-radius: 10px;
+    padding: 12px 16px;
     font-size: 14px;
-    transition: all 0.2s;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    color: #1e293b;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    border-color: #06C755;
+    box-shadow: 0 0 0 4px rgba(6, 199, 85, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
     outline: none;
+    background: #fff;
 }
 
-/* Buttons */
-.button.button-primary {
-    background: #06c755;
-    /* LINE Green */
-    border-color: #06c755;
-    color: #fff;
-    padding: 6px 16px;
-    border-radius: 6px;
+input::placeholder,
+textarea::placeholder {
+    color: #94a3b8;
+    opacity: 1;
+}
+
+/* Modern Tables - Replace WordPress default */
+.moksa-line-wrap table,
+.moksa-line-wrap .wp-list-table,
+.moksa-line-wrap .widefat {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.moksa-line-wrap table thead,
+.moksa-line-wrap .wp-list-table thead {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.moksa-line-wrap table th,
+.moksa-line-wrap .wp-list-table th {
+    padding: 16px 20px;
+    text-align: left;
     font-weight: 600;
-    transition: all 0.2s;
-    text-shadow: none;
+    font-size: 13px;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: none;
+    background: transparent;
+}
+
+.moksa-line-wrap table td,
+.moksa-line-wrap .wp-list-table td {
+    padding: 16px 20px;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: none;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.moksa-line-wrap table tbody tr,
+.moksa-line-wrap .wp-list-table tbody tr {
+    transition: all 0.2s ease;
+    background: #fff;
+}
+
+.moksa-line-wrap table tbody tr:hover,
+.moksa-line-wrap .wp-list-table tbody tr:hover {
+    background: #f8fafc;
+    transform: scale(1.001);
+}
+
+.moksa-line-wrap table tbody tr:first-child td,
+.moksa-line-wrap .wp-list-table tbody tr:first-child td {
+    border-top: none;
+}
+
+.moksa-line-wrap table.striped tbody tr:nth-child(even),
+.moksa-line-wrap .wp-list-table.striped tbody tr:nth-child(even) {
+    background: #fafbfc;
+}
+
+.moksa-line-wrap table.striped tbody tr:nth-child(even):hover,
+.moksa-line-wrap .wp-list-table.striped tbody tr:nth-child(even):hover {
+    background: #f1f5f9;
+}
+
+/* Form Table - Modern Design */
+.moksa-line-wrap .form-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.moksa-line-wrap .form-table th {
+    width: 200px;
+    padding: 20px 24px 20px 0;
+    font-weight: 600;
+    font-size: 14px;
+    color: #334155;
+    vertical-align: top;
+    border: none;
+    background: transparent;
+}
+
+.moksa-line-wrap .form-table td {
+    padding: 20px 0;
+    border: none;
+    vertical-align: top;
+}
+
+.moksa-line-wrap .form-table .description {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* Badge Component */
+.moksa-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: linear-gradient(135deg, #06C755 0%, #05b34c 100%);
+    color: #fff;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
     box-shadow: 0 2px 4px rgba(6, 199, 85, 0.2);
 }
 
-.button.button-primary:hover {
-    background: #05b34c;
-    border-color: #05b34c;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(6, 199, 85, 0.25);
+/* Modern Buttons - Replace WordPress Default */
+.moksa-line-wrap .button,
+.moksa-line-wrap button.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    min-height: 40px;
 }
 
-.button.button-small {
-    padding: 4px 10px;
+.moksa-line-wrap .button:hover,
+.moksa-line-wrap button.button:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+    color: #1e293b;
+}
+
+.moksa-line-wrap .button:active,
+.moksa-line-wrap button.button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.moksa-line-wrap .button.button-primary,
+.moksa-line-wrap button.button-primary {
+    background: linear-gradient(135deg, #06C755 0%, #05b34c 100%);
+    border-color: #06C755;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3);
+}
+
+.moksa-line-wrap .button.button-primary:hover,
+.moksa-line-wrap button.button-primary:hover {
+    background: linear-gradient(135deg, #05b34c 0%, #049a3f 100%);
+    border-color: #05b34c;
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(6, 199, 85, 0.4);
+}
+
+.moksa-line-wrap .button.button-large,
+.moksa-line-wrap button.button-large {
+    padding: 14px 28px;
+    font-size: 15px;
+    min-height: 48px;
+}
+
+.moksa-line-wrap .button.button-small,
+.moksa-line-wrap button.button-small {
+    padding: 6px 12px;
     font-size: 12px;
+    min-height: 32px;
+    border-radius: 8px;
+}
+
+.moksa-line-wrap .button.button-link-delete,
+.moksa-line-wrap button.button-link-delete {
+    background: transparent;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    box-shadow: none;
+}
+
+.moksa-line-wrap .button.button-link-delete:hover,
+.moksa-line-wrap button.button-link-delete:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.15);
+}
+
+.moksa-line-wrap .button:disabled,
+.moksa-line-wrap button.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
 /* Spin Animation */
@@ -521,6 +759,205 @@ select:focus {
 
 .spin {
     animation: spin 2s linear infinite;
+}
+
+/* Code Blocks */
+.moksa-line-wrap code {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    color: #2563eb;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.moksa-line-wrap .code,
+.moksa-line-wrap textarea.code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Courier New', monospace;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #1e293b;
+}
+
+/* Checkbox & Radio Modern Style */
+.moksa-line-wrap input[type="checkbox"],
+.moksa-line-wrap input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 10px;
+    vertical-align: middle;
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    background: #fff;
+}
+
+.moksa-line-wrap input[type="checkbox"]:checked,
+.moksa-line-wrap input[type="radio"]:checked {
+    background: linear-gradient(135deg, #06C755 0%, #05b34c 100%);
+    border-color: #06C755;
+}
+
+.moksa-line-wrap input[type="checkbox"]:checked::before {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.moksa-line-wrap input[type="radio"] {
+    border-radius: 50%;
+}
+
+.moksa-line-wrap input[type="radio"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+.moksa-line-wrap input[type="checkbox"]:hover,
+.moksa-line-wrap input[type="radio"]:hover {
+    border-color: #06C755;
+    box-shadow: 0 0 0 4px rgba(6, 199, 85, 0.1);
+}
+
+/* File Input Modern Style */
+.moksa-line-wrap input[type="file"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    color: #334155;
+}
+
+.moksa-line-wrap input[type="file"]:hover {
+    border-color: #06C755;
+    background: #f0fdf4;
+    box-shadow: 0 0 0 4px rgba(6, 199, 85, 0.1);
+}
+
+.moksa-line-wrap input[type="file"]:focus {
+    outline: none;
+    border-color: #06C755;
+    box-shadow: 0 0 0 4px rgba(6, 199, 85, 0.15);
+}
+
+/* Label Styles */
+.moksa-line-wrap label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #334155;
+    font-size: 14px;
+}
+
+/* Empty State */
+.moksa-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+}
+
+.moksa-empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.moksa-empty-state-text {
+    font-size: 15px;
+    color: #64748b;
+}
+
+/* Loading States */
+.moksa-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f1f5f9;
+    border-top-color: #06C755;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Success/Error Messages */
+.moksa-notice {
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.moksa-notice-success {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border: 1px solid #6ee7b7;
+    color: #065f46;
+}
+
+.moksa-notice-error {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border: 1px solid #fca5a5;
+    color: #b91c1c;
+}
+
+.moksa-notice-warning {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1px solid #fcd34d;
+    color: #92400e;
+}
+
+.moksa-notice-info {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border: 1px solid #93c5fd;
+    color: #1e40af;
+}
+
+/* User Item Styles */
+.moksa-user-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.moksa-user-item:hover {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+    transform: translateX(4px);
 }
 
 /* Responsive */
@@ -558,5 +995,17 @@ select:focus {
 
     .moksa-phone-preview {
         margin: 0 auto;
+    }
+    
+    .moksa-line-wrap table,
+    .moksa-line-wrap .wp-list-table {
+        font-size: 13px;
+    }
+    
+    .moksa-line-wrap table th,
+    .moksa-line-wrap .wp-list-table th,
+    .moksa-line-wrap table td,
+    .moksa-line-wrap .wp-list-table td {
+        padding: 12px 16px;
     }
 }

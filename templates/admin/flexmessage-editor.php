@@ -127,37 +127,62 @@
 
 <script>
 jQuery(document).ready(function($) {
+    // Check if require is available
+    if (typeof require === 'undefined') {
+        console.error('[Monaco Editor] require is not defined. Monaco Editor loader may not be loaded.');
+        document.getElementById('monaco-editor').innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 載入失敗。請重新整理頁面。</div>';
+        return;
+    }
+    
     // Simple initialization with delay to ensure Monaco loader is ready
     setTimeout(function() {
-        require(['vs/editor/editor.main'], function() {
-            window.editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-                value: '{\n  "type": "bubble",\n  "body": {\n    "type": "box",\n    "layout": "vertical",\n    "contents": [\n      {\n        "type": "text",\n        "text": "Hello World",\n        "weight": "bold",\n        "size": "xl"\n      }\n    ]\n  }\n}',
-                language: 'json',
-                theme: 'vs-light',
-                minimap: { enabled: false },
-                automaticLayout: true,
-                formatOnPaste: true,
-                formatOnType: true,
-                scrollBeyondLastLine: false,
-                fontSize: 14
-            });
-            
-            // Sync with hidden textarea
-            window.editor.onDidChangeModelContent(function() {
+        try {
+            require(['vs/editor/editor.main'], function() {
+                if (typeof monaco === 'undefined') {
+                    console.error('[Monaco Editor] monaco is not defined after loading editor.main');
+                    document.getElementById('monaco-editor').innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 初始化失敗。請重新整理頁面。</div>';
+                    return;
+                }
+                
+                var editorElement = document.getElementById('monaco-editor');
+                if (!editorElement) {
+                    console.error('[Monaco Editor] Editor element not found');
+                    return;
+                }
+                
+                window.editor = monaco.editor.create(editorElement, {
+                    value: '{\n  "type": "bubble",\n  "body": {\n    "type": "box",\n    "layout": "vertical",\n    "contents": [\n      {\n        "type": "text",\n        "text": "Hello World",\n        "weight": "bold",\n        "size": "xl"\n      }\n    ]\n  }\n}',
+                    language: 'json',
+                    theme: 'vs-light',
+                    minimap: { enabled: false },
+                    automaticLayout: true,
+                    formatOnPaste: true,
+                    formatOnType: true,
+                    scrollBeyondLastLine: false,
+                    fontSize: 14,
+                    readOnly: false
+                });
+                
+                // Sync with hidden textarea
+                window.editor.onDidChangeModelContent(function() {
+                    document.getElementById('flex_json').value = window.editor.getValue();
+                });
+                
+                // Initial sync
                 document.getElementById('flex_json').value = window.editor.getValue();
+                
+                // Trigger ready event for other scripts
+                jQuery(document).trigger('moksa-monaco-ready', [window.editor]);
+                
+                console.log('[Monaco Editor] Editor initialized successfully');
+            }, function(err) {
+                console.error('[Monaco Editor] Failed to load editor.main:', err);
+                document.getElementById('monaco-editor').innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 載入錯誤：' + (err.message || err) + '<br>請重新整理頁面。</div>';
             });
-            
-            // Initial sync
-            document.getElementById('flex_json').value = window.editor.getValue();
-            
-            // Trigger ready event for other scripts
-            jQuery(document).trigger('moksa-monaco-ready', [window.editor]);
-            
-            // Restore AMD if it was disabled
-            if (window.moksaMonacoAMD) {
-                define.amd = window.moksaMonacoAMD;
-            }
-        });
+        } catch (e) {
+            console.error('[Monaco Editor] Exception:', e);
+            document.getElementById('monaco-editor').innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 初始化異常：' + e.message + '<br>請重新整理頁面。</div>';
+        }
     }, 500);
 });
 </script>

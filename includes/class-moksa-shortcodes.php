@@ -26,17 +26,13 @@ class Moksa_Line_Shortcodes {
     }
     
     /**
-     * Get official LINE icon SVG
+     * Get official LINE icon image
      * @param int $size Icon size in pixels (default: 24)
-     * @return string SVG markup
+     * @return string IMG markup
      */
-    public static function get_line_icon_svg($size = 24) {
-        $unique_id = 'line-icon-' . wp_generate_password(8, false);
+    public static function get_line_icon($size = 24) {
         return sprintf(
-            '<svg width="%d" height="%d" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="LINE" role="img">
-                <rect width="24" height="24" rx="4" fill="#06C755"/>
-                <path d="M12.016 5.5C8.693 5.5 6 7.81 6 10.73c0 2.69 2.38 4.95 5.66 5.35.182.04.43.12.49.28.056.14.037.36.018.5l-.078.47c-.024.14-.11.55.48.3.59-.25 3.19-1.88 4.35-3.22 1.16-1.34 1.7-2.93 1.7-4.38 0-2.92-2.693-5.23-6.016-5.23zm-2.66 7.87h-1.54c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36.18 0 .33.16.33.36v3.09h1.54c.18 0 .33.16.33.36 0 .2-.15.36-.33.36zm-1.1-3.45h-.33c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36.18 0 .33.16.33.36v3.45c0 .2-.15.36-.33.36zm2.89 0h-.33c-.18 0-.33-.16-.33-.36v-2.64l-.83 2.74c-.05.16-.16.26-.3.26h-.33c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36.18 0 .33.16.33.36v2.64l.83-2.74c.05-.16.16-.26.3-.26h.33c.18 0 .33.16.33.36v3.45c0 .2-.15.36-.33.36zm2.34 0h-.33c-.18 0-.33-.16-.33-.36v-3.45c0-.2.15-.36.33-.36h1.54c.18 0 .33.16.33.36 0 .2-.15.36-.33.36h-1.21v.89h1.21c.18 0 .33.16.33.36 0 .2-.15.36-.33.36h-1.21v1.09h1.21c.18 0 .33.16.33.36 0 .2-.15.36-.33.36z" fill="#FFFFFF"/>
-            </svg>',
+            '<img src="https://moksaweb.com/wp-content/uploads/2025/11/LINE_Brand_icon.png" alt="LINE" width="%d" height="%d" style="display: inline-block; vertical-align: middle;" />',
             $size,
             $size
         );
@@ -76,10 +72,10 @@ class Moksa_Line_Shortcodes {
             esc_attr($height)
         );
         
-        // Official LINE Icon SVG
+        // Official LINE Icon
         $icon_size = min(intval($height), 24); // Use button height or 24px, whichever is smaller
-        $svg_icon = '<span style="margin-right: 10px; display: inline-flex; align-items: center; height: 100%;">' . 
-                    self::get_line_icon_svg($icon_size) . 
+        $line_icon = '<span style="margin-right: 10px; display: inline-flex; align-items: center; height: 100%;">' . 
+                    self::get_line_icon($icon_size) . 
                     '</span>';
         
         if ($atts['show_popup'] === 'yes') {
@@ -90,7 +86,7 @@ class Moksa_Line_Shortcodes {
                 </button>',
                 esc_url($login_url),
                 esc_attr($style),
-                $svg_icon,
+                $line_icon,
                 esc_html($atts['text'])
             );
         } else {
@@ -101,7 +97,7 @@ class Moksa_Line_Shortcodes {
                 </a>',
                 esc_url($login_url),
                 esc_attr($style),
-                $svg_icon,
+                $line_icon,
                 esc_html($atts['text'])
             );
         }
@@ -129,7 +125,7 @@ class Moksa_Line_Shortcodes {
                 <span>%s</span>
             </a>',
             esc_url($atts['url']),
-            self::get_line_icon_svg(20),
+            self::get_line_icon(20),
             esc_html($atts['text'])
         );
     }

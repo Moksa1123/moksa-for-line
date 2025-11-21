@@ -208,7 +208,20 @@ class Moksa_Line_Admin {
             wp_enqueue_style('moksa-line-flex-simulator', MOKSA_LINE_PLUGIN_URL . 'assets/css/flex-simulator.css', array(), MOKSA_LINE_VERSION);
             // Load Renderer in HEADER to ensure it's available for inline scripts
             wp_enqueue_script('moksa-line-flex-renderer', MOKSA_LINE_PLUGIN_URL . 'assets/js/moksa-flex-renderer.js', array('jquery'), MOKSA_LINE_VERSION, false);
-            wp_enqueue_script('moksa-line-flex-editor', MOKSA_LINE_PLUGIN_URL . 'assets/js/flex-editor.js', array('jquery', 'moksa-line-flex-renderer'), MOKSA_LINE_VERSION, true);
+            
+            // Load Monaco Editor from CDN
+            wp_enqueue_script('monaco-editor-loader', 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js', array(), '0.45.0', false);
+            
+            // Configure Monaco Editor path
+            wp_add_inline_script('monaco-editor-loader', '
+                require.config({ paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs" } });
+                // Protect AMD if it exists
+                if (typeof define !== "undefined" && define.amd) {
+                    window.moksaMonacoAMD = define.amd;
+                }
+            ', 'after');
+            
+            wp_enqueue_script('moksa-line-flex-editor', MOKSA_LINE_PLUGIN_URL . 'assets/js/flex-editor.js', array('jquery', 'moksa-line-flex-renderer', 'monaco-editor-loader'), MOKSA_LINE_VERSION, true);
         }
     }
     

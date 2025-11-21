@@ -7,7 +7,10 @@
     </div>
     
     <?php if (!class_exists('WooCommerce')) : ?>
-        <div class="notice notice-error" style="margin-left: 0;"><p><?php _e('WooCommerce 未啟用。請先啟用 WooCommerce 以使用此功能。', 'moksa-line-login'); ?></p></div>
+        <div class="moksa-notice moksa-notice-error" style="margin-bottom: 24px;">
+            <span class="dashicons dashicons-warning" style="font-size: 20px;"></span>
+            <span><?php _e('WooCommerce 未啟用。請先啟用 WooCommerce 以使用此功能。', 'moksa-line-login'); ?></span>
+        </div>
     <?php else : ?>
     
     <div class="moksa-editor-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">

@@ -126,74 +126,116 @@
 
 <script>
 jQuery(document).ready(function($) {
+    // Check if require is available
+    if (typeof require === 'undefined') {
+        console.error('[Monaco Editor] require is not defined. Monaco Editor loader may not be loaded.');
+        var editorElement = document.getElementById('moksa-json-editor');
+        if (editorElement) {
+            editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 載入失敗。請重新整理頁面。</div>';
+        }
+        return;
+    }
+    
     // Simple initialization with delay to ensure Monaco loader is ready
     setTimeout(function() {
-        require(['vs/editor/editor.main'], function() {
-            window.editor = monaco.editor.create(document.getElementById('moksa-json-editor'), {
-                value: '',
-                language: 'json',
-                theme: 'vs-light',
-                minimap: { enabled: false },
-                automaticLayout: true,
-                formatOnPaste: true,
-                formatOnType: true,
-                scrollBeyondLastLine: false,
-                fontSize: 14
-            });
-            
-            // Initial Load
-            loadTemplate($('#moksa-order-status').val());
-            
-            // Sync with hidden textarea and update preview
-            window.editor.onDidChangeModelContent(function() {
-                var val = window.editor.getValue();
-                $('#moksa_line_order_template').val(val);
-                updatePreview(val);
-            });
-
-            // --- Drag and Drop Implementation ---
-            var editorContainer = document.getElementById('moksa-json-editor');
-            
-            // Handle Drag Start on Variables
-            $('.moksa-variable-item').on('dragstart', function(e) {
-                e.originalEvent.dataTransfer.setData('text/plain', $(this).data('variable'));
-                e.originalEvent.dataTransfer.effectAllowed = 'copy';
-            });
-
-            // Handle Drag Over on Editor
-            editorContainer.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.dataTransfer.dropEffect = 'copy';
-            });
-
-            // Handle Drop on Editor
-            editorContainer.addEventListener('drop', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+        try {
+            require(['vs/editor/editor.main'], function() {
+                if (typeof monaco === 'undefined') {
+                    console.error('[Monaco Editor] monaco is not defined after loading editor.main');
+                    var editorElement = document.getElementById('moksa-json-editor');
+                    if (editorElement) {
+                        editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 初始化失敗。請重新整理頁面。</div>';
+                    }
+                    return;
+                }
                 
-                var text = e.dataTransfer.getData('text/plain');
-                if (!text) return;
-
-                var target = window.editor.getTargetAtClientPoint(e.clientX, e.clientY);
+                var editorElement = document.getElementById('moksa-json-editor');
+                if (!editorElement) {
+                    console.error('[Monaco Editor] Editor element not found');
+                    return;
+                }
                 
-                if (target && target.position) {
-                    var position = target.position;
-                    window.editor.executeEdits('dnd', [{
-                        range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
-                        text: text,
-                        forceMoveMarkers: true
-                    }]);
-                    window.editor.setPosition(position);
-                    window.editor.focus();
+                window.editor = monaco.editor.create(editorElement, {
+                    value: '',
+                    language: 'json',
+                    theme: 'vs-light',
+                    minimap: { enabled: false },
+                    automaticLayout: true,
+                    formatOnPaste: true,
+                    formatOnType: true,
+                    scrollBeyondLastLine: false,
+                    fontSize: 14,
+                    readOnly: false
+                });
+                
+                // Initial Load
+                loadTemplate($('#moksa-order-status').val());
+                
+                // Sync with hidden textarea and update preview
+                window.editor.onDidChangeModelContent(function() {
+                    var val = window.editor.getValue();
+                    $('#moksa_line_order_template').val(val);
+                    updatePreview(val);
+                });
+
+                // --- Drag and Drop Implementation ---
+                var editorContainer = document.getElementById('moksa-json-editor');
+                
+                // Handle Drag Start on Variables
+                $('.moksa-variable-item').on('dragstart', function(e) {
+                    e.originalEvent.dataTransfer.setData('text/plain', $(this).data('variable'));
+                    e.originalEvent.dataTransfer.effectAllowed = 'copy';
+                });
+
+                // Handle Drag Over on Editor
+                editorContainer.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.dataTransfer.dropEffect = 'copy';
+                });
+
+                // Handle Drop on Editor
+                editorContainer.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    var text = e.dataTransfer.getData('text/plain');
+                    if (!text) return;
+
+                    var target = window.editor.getTargetAtClientPoint(e.clientX, e.clientY);
+                    
+                    if (target && target.position) {
+                        var position = target.position;
+                        window.editor.executeEdits('dnd', [{
+                            range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
+                            text: text,
+                            forceMoveMarkers: true
+                        }]);
+                        window.editor.setPosition(position);
+                        window.editor.focus();
+                    }
+                });
+                
+                // Restore AMD if it was disabled
+                if (window.moksaMonacoAMD) {
+                    define.amd = window.moksaMonacoAMD;
+                }
+                
+                console.log('[Monaco Editor] Editor initialized successfully');
+            }, function(err) {
+                console.error('[Monaco Editor] Failed to load editor.main:', err);
+                var editorElement = document.getElementById('moksa-json-editor');
+                if (editorElement) {
+                    editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 載入錯誤：' + (err.message || err) + '<br>請重新整理頁面。</div>';
                 }
             });
-            
-            // Restore AMD if it was disabled
-            if (window.moksaMonacoAMD) {
-                define.amd = window.moksaMonacoAMD;
+        } catch (e) {
+            console.error('[Monaco Editor] Exception:', e);
+            var editorElement = document.getElementById('moksa-json-editor');
+            if (editorElement) {
+                editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 初始化異常：' + e.message + '<br>請重新整理頁面。</div>';
             }
-        });
+        }
     }, 500);
     
     
@@ -366,7 +408,7 @@ jQuery(document).ready(function($) {
             if (window.MoksaFlexRenderer) {
                 window.MoksaFlexRenderer.render(flexObj, container);
             } else {
-                container.html('<div style="color:red;">Flex Renderer not loaded.</div>');
+                container.html('<div style="background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 12px; border-radius: 8px; font-size: 13px;"><strong>Flex Renderer not loaded.</strong><br>請重新整理頁面或檢查瀏覽器控制台。</div>');
             }
             
         } catch (e) {

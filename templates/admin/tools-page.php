@@ -7,8 +7,9 @@
     </div>
     
     <?php if (isset($_GET['imported'])): ?>
-    <div class="notice notice-success is-dismissible" style="margin-left: 0; margin-bottom: 20px;">
-        <p><?php _e('設定匯入成功。', 'moksa-line-login'); ?></p>
+    <div class="moksa-notice moksa-notice-success" style="margin-bottom: 24px;">
+        <span class="dashicons dashicons-yes-alt" style="font-size: 20px;"></span>
+        <span><?php _e('設定匯入成功。', 'moksa-line-login'); ?></span>
     </div>
     <?php endif; ?>
     
@@ -47,9 +48,9 @@
             <form method="post" enctype="multipart/form-data">
                 <?php wp_nonce_field('moksa_line_tools_action'); ?>
                 <input type="hidden" name="moksa_line_action" value="import_settings">
-                <p>
-                    <input type="file" name="import_file" accept=".json" required style="width: 100%;">
-                </p>
+                <div style="margin-bottom: 16px;">
+                    <input type="file" name="import_file" accept=".json" required style="width: 100%; padding: 12px; border: 2px dashed #cbd5e1; border-radius: 10px; background: #f8fafc; cursor: pointer; transition: all 0.2s;">
+                </div>
                 <button type="submit" class="button button-primary">
                     <?php _e('匯入設定', 'moksa-line-login'); ?>
                 </button>

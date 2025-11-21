@@ -267,7 +267,7 @@ jQuery(document).ready(function($) {
             if (window.MoksaFlexRenderer) {
                 window.MoksaFlexRenderer.render(flexObj, container);
             } else {
-                container.html('<div style="color:red;">Flex Renderer not loaded.</div>');
+                container.html('<div style="background: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 12px; border-radius: 8px; font-size: 13px;"><strong>Flex Renderer not loaded.</strong><br>請重新整理頁面或檢查瀏覽器控制台。</div>');
             }
             
         } catch (e) {

@@ -3,7 +3,7 @@
  * Plugin Name: Moksa LINE Login
  * Plugin URI: https://moksaweb.com/
  * Description: A comprehensive LINE Login and messaging solution for WordPress.
- * Version: 1.4.1
+ * Version: 1.4.2
  * Author: Moksa
  * Author URI: https://moksaweb.com/
  * Text Domain: moksa-line-login
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('MOKSA_LINE_VERSION', '1.4.1');
+define('MOKSA_LINE_VERSION', '1.4.2');
 define('MOKSA_LINE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('MOKSA_LINE_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('MOKSA_LINE_PLUGIN_BASENAME', plugin_basename(__FILE__));
