@@ -372,7 +372,10 @@ class Moksa_Line_WooCommerce {
             
             if ($flex_message) {
                 $notify_content = json_encode($flex_message, JSON_UNESCAPED_UNICODE);
-                $user_info = $billing_first_name . ' ' . $billing_last_name . ' (' . $billing_email . ')';
+                $billing_first_name = $order->get_billing_first_name();
+                $billing_last_name = $order->get_billing_last_name();
+                $billing_email = $order->get_billing_email();
+                $user_info = trim($billing_first_name . ' ' . $billing_last_name) . ' (' . $billing_email . ')';
                 
                 // 記錄歷史
                 $history_id = Moksa_Notify_History::insert(
@@ -440,10 +443,7 @@ class Moksa_Line_WooCommerce {
         $customer_note = $order->get_customer_note();
         
         // 3rd Party / Logistics Data (ECPay, RY Tools, AST)
-        // Try to find tracking number from common keys
-        $tracking_number = $order->get_meta('_shipping_tracking_number', true); // AST
-        if (!$tracking_number) $tracking_number = $order->get_meta('_ecpay_logistics_id', true); // ECPay
-        if (!$tracking_number) $tracking_number = $order->get_meta('ry_tracking_number', true); // RY Tools (Generic guess)
+        $tracking_number = $this->get_tracking_number($order);
         
         // Convenience Store Info
         $store_name = $order->get_meta('_shipping_store_name', true); // Common
