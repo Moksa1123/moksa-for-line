@@ -268,17 +268,17 @@ class Moksa_Line_WooCommerce {
     
     /**
      * Send Order Notification via LINE
-     * 改進：針對 processing 狀態添加延遲，確保訂單編號已生成
+     * 改進：針對 processing 狀態添加延遲，確保物流編號已從物流商回傳並更新
      */
     public function send_order_notification($order_id, $old_status, $new_status, $order) {
-        // 針對 processing 狀態的特殊延遲處理（因為訂單編號可能因 API 回傳而延遲）
-        $processing_delay = (int) get_option('moksa_line_order_processing_delay', 30); // 預設 30 秒
+        // 針對 processing 狀態的特殊延遲處理（因為物流編號需要等待物流商 API 回傳）
+        $processing_delay = (int) get_option('moksa_line_order_processing_delay', 60); // 預設 60 秒
         $general_delay = (int) get_option('moksa_line_order_delay', 0);
         
         // 決定延遲時間
         $delay = 0;
         if ($new_status === 'processing') {
-            // 處理中狀態使用專用延遲時間
+            // 處理中狀態使用專用延遲時間（等待物流編號回傳）
             $delay = $processing_delay;
         } elseif ($general_delay > 0) {
             // 其他狀態使用一般延遲時間
@@ -297,11 +297,40 @@ class Moksa_Line_WooCommerce {
     /**
      * Process Delayed Order Notification
      * 使用 CPT 系統，支援多個通知範本
+     * 改進：針對 processing 狀態，檢查物流編號是否已更新，如果沒有則再次延遲
      */
     public function process_delayed_order_notification($order_id, $old_status, $new_status) {
         // Re-get order to ensure fresh data (e.g. tracking numbers)
         $order = wc_get_order($order_id);
         if (!$order) return;
+        
+        // 改進：針對 processing 狀態，檢查物流編號是否已更新
+        if ($new_status === 'processing') {
+            $tracking_number = $this->get_tracking_number($order);
+            $processing_delay = (int) get_option('moksa_line_order_processing_delay', 60);
+            $max_retries = (int) get_option('moksa_line_order_processing_max_retries', 3); // 最多重試 3 次
+            $retry_count = (int) get_post_meta($order_id, '_moksa_notify_retry_count', true);
+            
+            // 如果物流編號不存在且未超過重試次數，則再次延遲
+            if (empty($tracking_number) && $retry_count < $max_retries) {
+                $retry_count++;
+                update_post_meta($order_id, '_moksa_notify_retry_count', $retry_count);
+                
+                // 再次延遲發送
+                wp_schedule_single_event(
+                    time() + $processing_delay,
+                    'moksa_line_send_delayed_order_notification',
+                    array($order_id, $old_status, $new_status)
+                );
+                
+                return; // 等待下次重試
+            }
+            
+            // 重置重試計數
+            if ($retry_count > 0) {
+                delete_post_meta($order_id, '_moksa_notify_retry_count');
+            }
+        }
         
         $user_id = $order->get_user_id();
         
@@ -468,9 +497,7 @@ class Moksa_Line_WooCommerce {
         $customer_note = $order->get_customer_note();
         
         // 3rd Party / Logistics Data (ECPay, RY Tools, AST)
-        $tracking_number = $order->get_meta('_shipping_tracking_number', true);
-        if (!$tracking_number) $tracking_number = $order->get_meta('_ecpay_logistics_id', true);
-        if (!$tracking_number) $tracking_number = $order->get_meta('ry_tracking_number', true);
+        $tracking_number = $this->get_tracking_number($order);
         
         $store_name = $order->get_meta('_shipping_store_name', true);
         if (!$store_name) $store_name = $order->get_meta('_ecpay_receiver_store_name', true);
@@ -657,6 +684,51 @@ class Moksa_Line_WooCommerce {
         }
         
         return json_decode($template_json, true);
+    }
+    
+    /**
+     * Get Tracking Number from Order
+     * 改進：統一獲取物流編號的方法，支援多種物流外掛
+     */
+    private function get_tracking_number($order) {
+        // 常見的物流編號 meta key
+        $tracking_keys = array(
+            '_shipping_tracking_number',      // AST (Advanced Shipment Tracking)
+            '_ecpay_logistics_id',            // ECPay 物流
+            'ry_tracking_number',             // RY Tools
+            '_tracking_number',               // 通用
+            '_wc_shipment_tracking_items',    // WooCommerce Shipment Tracking
+            '_tracking_provider',             // 某些外掛使用
+            '_tracking_link',                 // 某些外掛使用
+        );
+        
+        // 嘗試從各種 meta key 獲取物流編號
+        foreach ($tracking_keys as $key) {
+            $value = $order->get_meta($key, true);
+            
+            // 如果是陣列（例如 WooCommerce Shipment Tracking）
+            if (is_array($value) && !empty($value)) {
+                // 嘗試從陣列中提取追蹤號碼
+                if (isset($value[0]['tracking_number'])) {
+                    return $value[0]['tracking_number'];
+                }
+                if (isset($value['tracking_number'])) {
+                    return $value['tracking_number'];
+                }
+                // 如果陣列中有字串值，取第一個
+                $first_value = reset($value);
+                if (is_string($first_value) && !empty($first_value)) {
+                    return $first_value;
+                }
+            }
+            
+            // 如果是字串且不為空
+            if (is_string($value) && !empty($value)) {
+                return $value;
+            }
+        }
+        
+        return '';
     }
     
     /**

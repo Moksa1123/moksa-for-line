@@ -61,10 +61,24 @@
                         </th>
                         <td>
                             <input type="number" id="moksa_line_order_processing_delay" name="moksa_line_order_processing_delay" min="0" step="1"
-                                   value="<?php echo esc_attr(get_option('moksa_line_order_processing_delay', 30)); ?>" class="regular-text" style="width: 100px;"> <?php _e('秒', 'moksa-line-login'); ?>
+                                   value="<?php echo esc_attr(get_option('moksa_line_order_processing_delay', 60)); ?>" class="regular-text" style="width: 100px;"> <?php _e('秒', 'moksa-line-login'); ?>
                             <p class="description">
                                 <?php _e('當訂單狀態變更為「處理中」時，延遲發送通知的時間。', 'moksa-line-login'); ?><br>
-                                <?php _e('因為訂單編號可能因第三方 API 回傳而延遲生成，建議設定 30-60 秒。', 'moksa-line-login'); ?>
+                                <?php _e('因為物流編號需要等待物流商 API 回傳並更新到訂單 meta，建議設定 60-120 秒。', 'moksa-line-login'); ?>
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <label for="moksa_line_order_processing_max_retries"><?php _e('處理中狀態最大重試次數', 'moksa-line-login'); ?></label>
+                        </th>
+                        <td>
+                            <input type="number" id="moksa_line_order_processing_max_retries" name="moksa_line_order_processing_max_retries" min="1" max="10" step="1"
+                                   value="<?php echo esc_attr(get_option('moksa_line_order_processing_max_retries', 3)); ?>" class="regular-text" style="width: 100px;">
+                            <p class="description">
+                                <?php _e('如果物流編號尚未更新，系統會自動重試發送。', 'moksa-line-login'); ?><br>
+                                <?php _e('建議設定 3-5 次，每次間隔為上述延遲時間。', 'moksa-line-login'); ?>
                             </p>
                         </td>
                     </tr>

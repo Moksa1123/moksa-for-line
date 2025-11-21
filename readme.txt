@@ -4,7 +4,7 @@ Tags: line, login, sso, authentication, messaging
 Requires at least: 6.0
 Tested up to: 6.4
 Requires PHP: 7.4
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,30 @@ Moksa LINE Login allows users to log in to your WordPress site using their LINE 
 3. 自動回覆規則管理
 
 == Changelog ==
+
+= 1.4.7 - 2025-01-27 =
+*   Changed: 改進處理中狀態的延遲邏輯，針對物流編號回傳延遲問題
+*   Changed: 添加智能重試機制，如果物流編號尚未更新則自動重試
+*   Changed: 新增最大重試次數設定，避免無限重試
+*   Changed: 統一物流編號獲取方法，支援多種物流外掛格式
+*   Fix: 修復處理中狀態通知時物流編號尚未更新的問題
+*   Fix: 改進物流編號獲取邏輯，支援陣列格式的追蹤號碼
+
+= 1.4.6 - 2025-01-27 =
+*   Added: 訂單通知系統改為 CPT 架構，支援一筆一筆新增通知範本
+*   Added: 完整的觸發規則系統（支付方式、運送方式、訂單金額等）
+*   Added: 狀態管理系統，避免重複發送通知
+*   Added: 歷史記錄功能，完整追蹤所有通知發送記錄
+*   Added: 測試發送功能，可選擇訂單進行測試
+*   Added: 統計功能，列表頁顯示成功/失敗統計
+*   Added: 處理中狀態專用延遲設定，解決訂單編號因 API 回傳延遲的問題
+*   Changed: 改進訂單通知範本管理介面，使用現代化可摺疊參數區塊
+*   Changed: 改進觸發條件設定，支援複雜的規則組合
+*   Changed: 改進 JSON 編輯器，添加格式化和複製按鈕
+*   Changed: 完整的動態參數系統，支援從訂單 meta 和用戶 meta 動態獲取
+*   Changed: 改進錯誤處理，發送失敗時記錄到訂單備註
+*   Changed: 針對 processing 狀態添加專用延遲處理（預設 30 秒）
+*   Fixed: 修復訂單編號在 API 回傳延遲時無法正確顯示的問題
 
 = 1.4.5 - 2025-11-21 =
 *   Update: 改進訂單通知範本設定頁面，移除範本載入功能，直接顯示預設 JSON 範本
