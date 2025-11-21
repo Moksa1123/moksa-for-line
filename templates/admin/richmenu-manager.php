@@ -8,7 +8,7 @@
 
     <div class="moksa-editor-layout" style="display: block;">
         <!-- Create New Rich Menu -->
-        <div class="moksa-card" style="max-width: 800px; margin-bottom: 30px;">
+        <div class="moksa-card" style="max-width: 100%; margin-bottom: 30px;">
             <h2 style="margin-top: 0; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;"><?php _e('建立新圖文選單', 'moksa-line-login'); ?></h2>
             <form id="moksa-line-richmenu-form">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">

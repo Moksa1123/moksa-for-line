@@ -6,26 +6,98 @@
         </div>
     </div>
 
-    <div class="moksa-editor-layout" style="display: block; max-width: 800px;">
-        <div class="moksa-card" style="text-align: center;">
-            <h2 style="margin-top: 0; margin-bottom: 24px; color: #1e293b;"><?php _e('LINE 登入按鈕預覽', 'moksa-line-login'); ?></h2>
+    <div class="moksa-editor-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 100%;">
+        <div class="moksa-card" style="height: fit-content;">
+            <h2 style="margin-top: 0; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;"><?php _e('按鈕樣式', 'moksa-line-login'); ?></h2>
             
-            <div style="padding: 60px 20px; background: #f8fafc; border: 1px solid #e2e8f0; margin-bottom: 24px; display: flex; justify-content: center; align-items: center;">
-                <button id="moksa-line-preview-btn" style="display: inline-flex; align-items: center; justify-content: center; border: none; cursor: default; gap: 10px; font-weight: bold; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; pointer-events: none;">
+            <form method="post" action="options.php">
+                <?php
+                settings_fields('moksa_line_button');
+                do_settings_sections('moksa_line_button');
+                ?>
+                
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">
+                            <label for="moksa_line_button_text"><?php _e('按鈕文字', 'moksa-line-login'); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" id="moksa_line_button_text" name="moksa_line_button_text" 
+                                   value="<?php echo esc_attr(get_option('moksa_line_button_text', '使用 LINE 登入')); ?>" class="regular-text">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <label for="moksa_line_button_bg_color"><?php _e('背景顏色', 'moksa-line-login'); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" id="moksa_line_button_bg_color" name="moksa_line_button_bg_color" 
+                                   value="<?php echo esc_attr(get_option('moksa_line_button_bg_color', '#06C755')); ?>" class="moksa-color-picker">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <label for="moksa_line_button_text_color"><?php _e('文字顏色', 'moksa-line-login'); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" id="moksa_line_button_text_color" name="moksa_line_button_text_color" 
+                                   value="<?php echo esc_attr(get_option('moksa_line_button_text_color', '#FFFFFF')); ?>" class="moksa-color-picker">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <label for="moksa_line_button_border_radius"><?php _e('圓角半徑 (px)', 'moksa-line-login'); ?></label>
+                        </th>
+                        <td>
+                            <input type="number" id="moksa_line_button_border_radius" name="moksa_line_button_border_radius" 
+                                   value="<?php echo esc_attr(get_option('moksa_line_button_border_radius', '4')); ?>" class="small-text">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <label for="moksa_line_button_width"><?php _e('寬度', 'moksa-line-login'); ?></label>
+                        </th>
+                        <td>
+                            <input type="text" id="moksa_line_button_width" name="moksa_line_button_width" 
+                                   value="<?php echo esc_attr(get_option('moksa_line_button_width', '100%')); ?>" class="regular-text">
+                            <p class="description"><?php _e('例如：100%, 200px', 'moksa-line-login'); ?></p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <label for="moksa_line_button_height"><?php _e('高度 (px)', 'moksa-line-login'); ?></label>
+                        </th>
+                        <td>
+                            <input type="number" id="moksa_line_button_height" name="moksa_line_button_height" 
+                                   value="<?php echo esc_attr(get_option('moksa_line_button_height', '44')); ?>" class="small-text">
+                        </td>
+                    </tr>
+                </table>
+                
+                <div style="padding-top: 20px; border-top: 1px solid #f1f5f9; margin-top: 20px;">
+                    <?php submit_button(__('儲存設定', 'moksa-line-login'), 'primary large', 'submit', false); ?>
+                </div>
+            </form>
+        </div>
+        
+        <div class="moksa-card" style="height: fit-content; background: #f8fafc;">
+            <h2 style="margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; color: #1e293b;"><?php _e('即時預覽', 'moksa-line-login'); ?></h2>
+            
+            <div style="padding: 60px 20px; background: #fff; border: 1px solid #e2e8f0; border-radius: 4px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                <button id="moksa-line-preview-btn" style="display: inline-flex; align-items: center; justify-content: center; border: none; cursor: pointer; gap: 10px; transition: opacity 0.2s; font-weight: bold; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                     <span class="btn-icon"></span>
                     <span class="btn-text"></span>
                 </button>
             </div>
             
-            <div style="background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-                <p style="margin: 0 0 12px 0; font-weight: 600; font-size: 13px; color: #475569;"><?php _e('簡碼用法', 'moksa-line-login'); ?></p>
-                <code style="font-size: 14px; color: #2563eb; background: #fff; padding: 8px 12px; display: inline-block; border: 1px solid #e2e8f0;">[line_login_button]</code>
-            </div>
-            
-            <div style="background: #fef3c7; border: 1px solid #fbbf24; padding: 16px; text-align: left;">
-                <p style="margin: 0; color: #92400e; font-size: 13px; line-height: 1.6;">
-                    <strong><?php _e('注意：', 'moksa-line-login'); ?></strong> <?php _e('按鈕樣式已固定為 LINE 官方規範，無法自訂修改。', 'moksa-line-login'); ?>
-                </p>
+            <div style="background: #fff; padding: 15px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                <p style="margin: 0 0 5px 0; font-weight: 600; font-size: 12px; color: #64748b; text-transform: uppercase;"><?php _e('簡碼用法', 'moksa-line-login'); ?></p>
+                <code style="font-size: 14px; color: #2563eb;">[line_login_button]</code>
             </div>
         </div>
     </div>
@@ -33,23 +105,32 @@
 
 <script>
 jQuery(document).ready(function($) {
+    // Initialize color pickers
+    $('.moksa-color-picker').wpColorPicker({
+        change: function(event, ui) {
+            setTimeout(updatePreview, 10); // Small delay to ensure value is updated
+        }
+    });
+    
     // Official LINE Icon Image
     function getLineIcon(size) {
         return '<img src="https://moksaweb.com/wp-content/uploads/2025/11/LINE_Brand_icon.png" alt="LINE" width="' + size + '" height="' + size + '" style="display: inline-block; vertical-align: middle;" />';
     }
     
-    // Fixed preview (no customization allowed)
+    // Live preview updates
     function updatePreview() {
+        var text = $('#moksa_line_button_text').val();
+        var bgColor = $('#moksa_line_button_bg_color').val();
+        var textColor = $('#moksa_line_button_text_color').val();
+        var radius = $('#moksa_line_button_border_radius').val();
+        var width = $('#moksa_line_button_width').val();
+        var height = $('#moksa_line_button_height').val();
+        
         var $btn = $('#moksa-line-preview-btn');
-        var text = '<?php echo esc_js(get_option('moksa_line_button_text', '使用 LINE 登入')); ?>';
-        var bgColor = '#06C755';
-        var textColor = '#FFFFFF';
-        var radius = '4';
-        var width = '100%';
-        var height = '44';
+        var iconSize = Math.min(parseInt(height) || 24, 24);
         
         $btn.find('.btn-text').text(text);
-        $btn.find('.btn-icon').html(getLineIcon(24));
+        $btn.find('.btn-icon').html(getLineIcon(iconSize));
         $btn.css({
             'background-color': bgColor,
             'color': textColor,
@@ -60,6 +141,9 @@ jQuery(document).ready(function($) {
             'font-size': '16px'
         });
     }
+    
+    // Bind events
+    $('input').on('change input keyup', updatePreview);
     
     // Initial update
     updatePreview();

@@ -6,7 +6,7 @@
         </div>
     </div>
 
-    <div class="moksa-editor-layout" style="display: block; max-width: 800px;">
+    <div class="moksa-editor-layout" style="display: block; max-width: 100%;">
         <div class="moksa-card">
             <form method="post" action="options.php">
                 <?php
