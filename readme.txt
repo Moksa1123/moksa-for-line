@@ -27,7 +27,7 @@ Moksa LINE Login allows users to log in to your WordPress site using their LINE 
 
 == Changelog ==
 
-= 1.4.7 - 2025-01-27 =
+= 1.4.7 - 2025-11-21 =
 *   Changed: 改進處理中狀態的延遲邏輯，針對物流編號回傳延遲問題
 *   Changed: 添加智能重試機制，如果物流編號尚未更新則自動重試
 *   Changed: 新增最大重試次數設定，避免無限重試
@@ -35,7 +35,7 @@ Moksa LINE Login allows users to log in to your WordPress site using their LINE 
 *   Fix: 修復處理中狀態通知時物流編號尚未更新的問題
 *   Fix: 改進物流編號獲取邏輯，支援陣列格式的追蹤號碼
 
-= 1.4.6 - 2025-01-27 =
+= 1.4.6 - 2025-11-21 =
 *   Added: 訂單通知系統改為 CPT 架構，支援一筆一筆新增通知範本
 *   Added: 完整的觸發規則系統（支付方式、運送方式、訂單金額等）
 *   Added: 狀態管理系統，避免重複發送通知
