@@ -35,7 +35,10 @@
                     <input type="hidden" id="rm_image_id" name="image_id" required>
                     <div style="display: flex; align-items: flex-start; gap: 15px;">
                         <button type="button" class="button" id="rm_upload_image">
-                            <span class="dashicons dashicons-format-image" style="margin-top: 3px;"></span> <?php _e('選擇圖片', 'moksa-line-login'); ?>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                            </svg>
+                            <?php _e('選擇圖片', 'moksa-line-login'); ?>
                         </button>
                         <div id="rm_image_preview" style="max-width: 300px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;"></div>
                     </div>
@@ -91,7 +94,9 @@
                         <td style="vertical-align: middle;"><?php echo esc_html($rm->size); ?></td>
                         <td style="vertical-align: middle;">
                             <?php if ($rm->is_default): ?>
-                                <span class="dashicons dashicons-yes" style="color: #10b981; font-size: 24px;"></span>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="#10b981" style="vertical-align: middle;">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
                             <?php else: ?>
                                 <button type="button" class="button button-small set-default-rm" data-id="<?php echo esc_attr($rm->id); ?>">
                                     <?php _e('設為預設', 'moksa-line-login'); ?>

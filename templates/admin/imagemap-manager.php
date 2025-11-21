@@ -73,7 +73,10 @@
                     <input type="hidden" id="image_id" name="image_id" required>
                     <div style="display: flex; align-items: flex-start; gap: 15px;">
                         <button type="button" class="button" id="upload_image">
-                            <span class="dashicons dashicons-format-image" style="margin-top: 3px;"></span> <?php _e('上傳圖片', 'moksa-line-login'); ?>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                            </svg>
+                            <?php _e('上傳圖片', 'moksa-line-login'); ?>
                         </button>
                         <div id="image-preview" style="max-width: 200px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;"></div>
                     </div>

@@ -8,7 +8,9 @@
     
     <?php if (!class_exists('WooCommerce')) : ?>
         <div class="moksa-notice moksa-notice-error" style="margin-bottom: 24px;">
-            <span class="dashicons dashicons-warning" style="font-size: 20px;"></span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle;">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
             <span><?php _e('WooCommerce 未啟用。請先啟用 WooCommerce 以使用此功能。', 'moksa-line-login'); ?></span>
         </div>
     <?php else : ?>
@@ -74,7 +76,9 @@
             <p style="color: #64748b; margin-bottom: 10px;"><?php _e('複製此 JSON 並用於自動回覆或 Flex 訊息發送器。', 'moksa-line-login'); ?></p>
             <textarea id="carousel_result" class="widefat" rows="15" readonly style="font-family: monospace; background: #f8fafc; font-size: 12px;"></textarea>
             <button type="button" class="button" id="copy_json" style="margin-top: 15px; width: 100%; justify-content: center;">
-                <span class="dashicons dashicons-clipboard" style="margin-right: 5px; line-height: 1.3;"></span>
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 5px;">
+                    <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z"/><path d="M6 4a2 2 0 012-2h2a2 2 0 012 2v2h2a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h2V4z"/>
+                </svg>
                 <?php _e('複製到剪貼簿', 'moksa-line-login'); ?>
             </button>
         </div>
@@ -137,7 +141,7 @@ jQuery(document).ready(function($) {
         
         var $btn = $(this);
         var originalText = $btn.html();
-        $btn.html('<span class="dashicons dashicons-yes" style="margin-right: 5px; line-height: 1.3;"></span> <?php _e('已複製！', 'moksa-line-login'); ?>');
+        $btn.html('<svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 5px; display: inline-block;"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> <?php _e('已複製！', 'moksa-line-login'); ?>');
         setTimeout(function() {
             $btn.html(originalText);
         }, 2000);

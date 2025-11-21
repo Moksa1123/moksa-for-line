@@ -205,7 +205,14 @@ class Moksa_Line_Admin {
         if ($screen && ($screen->id === 'moksa-line-login_page_moksa-line-flex-message' || 
                         $screen->id === 'moksa-line-login_page_moksa-line-order-notification' || 
                         $screen->id === 'moksa-line-login_page_moksa-line-auto-reply')) {
-            wp_enqueue_style('moksa-line-flex-simulator', MOKSA_LINE_PLUGIN_URL . 'assets/css/flex-simulator.css', array(), MOKSA_LINE_VERSION);
+            // LINE Simulator CSS only (extract useful styles, no Vue.js dependencies)
+            // Note: LINE Simulator's Vue.js app requires backend API which we don't have,
+            // so we only use CSS styles and keep our jQuery-based implementation
+            wp_enqueue_style('line-simulator-main', MOKSA_LINE_PLUGIN_URL . 'assets/css/line-simulator-main.css', array(), MOKSA_LINE_VERSION);
+            
+            // Our custom Flex Simulator CSS (jQuery-based, compatible with WordPress)
+            wp_enqueue_style('moksa-line-flex-simulator', MOKSA_LINE_PLUGIN_URL . 'assets/css/flex-simulator.css', array('line-simulator-main'), MOKSA_LINE_VERSION);
+            
             // Load Renderer in HEADER to ensure it's available for inline scripts
             wp_enqueue_script('moksa-line-flex-renderer', MOKSA_LINE_PLUGIN_URL . 'assets/js/moksa-flex-renderer.js', array('jquery'), MOKSA_LINE_VERSION, false);
             

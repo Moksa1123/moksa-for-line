@@ -6,10 +6,16 @@
         </div>
         <div class="header-actions">
             <button type="button" class="button" id="load_sample">
-                <span class="dashicons dashicons-welcome-add-page"></span> <?php _e('載入範例', 'moksa-line-login'); ?>
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                    <path d="M10 2L3 7v11h4v-6h6v6h4V7l-7-5z"/>
+                </svg>
+                <?php _e('載入範例', 'moksa-line-login'); ?>
             </button>
             <button type="button" class="button button-primary button-large" id="send_flex">
-                <span class="dashicons dashicons-paperplane"></span> <?php _e('立即發送', 'moksa-line-login'); ?>
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+                <?php _e('立即發送', 'moksa-line-login'); ?>
             </button>
         </div>
     </div>
@@ -70,15 +76,21 @@
                 </div>
                 <div class="editor-toolbar-right">
                     <button type="button" class="moksa-json-tool-btn" id="format_json" title="<?php _e('格式化 JSON', 'moksa-line-login'); ?>">
-                        <span class="dashicons dashicons-editor-code"></span>
+                        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 4px;">
+                            <path d="M3 3h14v2H3V3zm0 4h14v2H3V7zm0 4h14v2H3v-2zm0 4h14v2H3v-2z"/>
+                        </svg>
                         <span><?php _e('格式化', 'moksa-line-login'); ?></span>
                     </button>
                     <button type="button" class="moksa-json-tool-btn" id="copy_json" title="<?php _e('複製 JSON', 'moksa-line-login'); ?>">
-                        <span class="dashicons dashicons-clipboard"></span>
+                        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 4px;">
+                            <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z"/><path d="M6 4a2 2 0 012-2h2a2 2 0 012 2v2h2a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h2V4z"/>
+                        </svg>
                         <span><?php _e('複製', 'moksa-line-login'); ?></span>
                     </button>
                     <button type="button" class="moksa-json-tool-btn" id="validate_json" title="<?php _e('驗證 JSON', 'moksa-line-login'); ?>">
-                        <span class="dashicons dashicons-yes-alt"></span>
+                        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 4px;">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
                         <span><?php _e('驗證', 'moksa-line-login'); ?></span>
                     </button>
                 </div>
@@ -96,19 +108,27 @@
                 <div class="moksa-preview-toolbar-left">
                     <div class="moksa-device-selector">
                         <button type="button" class="moksa-device-btn active" data-device="mobile" title="<?php _e('手機', 'moksa-line-login'); ?>">
-                            <span class="dashicons dashicons-smartphone"></span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z"/>
+                            </svg>
                         </button>
                         <button type="button" class="moksa-device-btn" data-device="tablet" title="<?php _e('平板', 'moksa-line-login'); ?>">
-                            <span class="dashicons dashicons-tablet"></span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2 4a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4zm3 1h10v10H5V5z"/>
+                            </svg>
                         </button>
                         <button type="button" class="moksa-device-btn" data-device="desktop" title="<?php _e('桌面', 'moksa-line-login'); ?>">
-                            <span class="dashicons dashicons-desktop"></span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"/>
+                            </svg>
                         </button>
                     </div>
                 </div>
                 <div class="moksa-preview-toolbar-right">
                     <button type="button" class="moksa-preview-action-btn" id="refresh_preview" title="<?php _e('重新整理預覽', 'moksa-line-login'); ?>">
-                        <span class="dashicons dashicons-update"></span>
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -127,62 +147,89 @@
 
 <script>
 jQuery(document).ready(function($) {
-    // Check if require is available
-    if (typeof require === 'undefined') {
-        console.error('[Monaco Editor] require is not defined. Monaco Editor loader may not be loaded.');
-        document.getElementById('monaco-editor').innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 載入失敗。請重新整理頁面。</div>';
-        return;
-    }
+    var editorElement = document.getElementById('monaco-editor');
+    var maxRetries = 10;
+    var retryCount = 0;
     
-    // Simple initialization with delay to ensure Monaco loader is ready
-    setTimeout(function() {
+    function initMonaco() {
+        // Check if require is available
+        if (typeof require === 'undefined') {
+            retryCount++;
+            if (retryCount < maxRetries) {
+                console.log('[Monaco Editor] Waiting for require... (' + retryCount + '/' + maxRetries + ')');
+                setTimeout(initMonaco, 200);
+                return;
+            }
+            console.error('[Monaco Editor] require is not defined after ' + maxRetries + ' retries');
+            editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2; margin: 20px;"><strong>Monaco Editor 載入失敗</strong><br>請確認網路連線正常，或重新整理頁面。</div>';
+            return;
+        }
+        
         try {
+            // Check if Monaco is already loaded
+            if (typeof monaco !== 'undefined' && monaco.editor) {
+                createEditor();
+                return;
+            }
+            
+            // Load Monaco Editor
             require(['vs/editor/editor.main'], function() {
-                if (typeof monaco === 'undefined') {
+                if (typeof monaco === 'undefined' || !monaco.editor) {
                     console.error('[Monaco Editor] monaco is not defined after loading editor.main');
-                    document.getElementById('monaco-editor').innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 初始化失敗。請重新整理頁面。</div>';
+                    editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2; margin: 20px;"><strong>Monaco Editor 初始化失敗</strong><br>請重新整理頁面。</div>';
                     return;
                 }
-                
-                var editorElement = document.getElementById('monaco-editor');
-                if (!editorElement) {
-                    console.error('[Monaco Editor] Editor element not found');
-                    return;
-                }
-                
-                window.editor = monaco.editor.create(editorElement, {
-                    value: '{\n  "type": "bubble",\n  "body": {\n    "type": "box",\n    "layout": "vertical",\n    "contents": [\n      {\n        "type": "text",\n        "text": "Hello World",\n        "weight": "bold",\n        "size": "xl"\n      }\n    ]\n  }\n}',
-                    language: 'json',
-                    theme: 'vs-light',
-                    minimap: { enabled: false },
-                    automaticLayout: true,
-                    formatOnPaste: true,
-                    formatOnType: true,
-                    scrollBeyondLastLine: false,
-                    fontSize: 14,
-                    readOnly: false
-                });
-                
-                // Sync with hidden textarea
-                window.editor.onDidChangeModelContent(function() {
-                    document.getElementById('flex_json').value = window.editor.getValue();
-                });
-                
-                // Initial sync
-                document.getElementById('flex_json').value = window.editor.getValue();
-                
-                // Trigger ready event for other scripts
-                jQuery(document).trigger('moksa-monaco-ready', [window.editor]);
-                
-                console.log('[Monaco Editor] Editor initialized successfully');
+                createEditor();
             }, function(err) {
                 console.error('[Monaco Editor] Failed to load editor.main:', err);
-                document.getElementById('monaco-editor').innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 載入錯誤：' + (err.message || err) + '<br>請重新整理頁面。</div>';
+                editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2; margin: 20px;"><strong>Monaco Editor 載入錯誤</strong><br>' + (err.message || err) + '<br>請重新整理頁面。</div>';
             });
         } catch (e) {
             console.error('[Monaco Editor] Exception:', e);
-            document.getElementById('monaco-editor').innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2;">Monaco Editor 初始化異常：' + e.message + '<br>請重新整理頁面。</div>';
+            editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2; margin: 20px;"><strong>Monaco Editor 初始化異常</strong><br>' + e.message + '<br>請重新整理頁面。</div>';
         }
-    }, 500);
+    }
+    
+    function createEditor() {
+        if (!editorElement) {
+            console.error('[Monaco Editor] Editor element not found');
+            return;
+        }
+        
+        try {
+            window.editor = monaco.editor.create(editorElement, {
+                value: '{\n  "type": "bubble",\n  "body": {\n    "type": "box",\n    "layout": "vertical",\n    "contents": [\n      {\n        "type": "text",\n        "text": "Hello World",\n        "weight": "bold",\n        "size": "xl"\n      }\n    ]\n  }\n}',
+                language: 'json',
+                theme: 'vs-light',
+                minimap: { enabled: false },
+                automaticLayout: true,
+                formatOnPaste: true,
+                formatOnType: true,
+                scrollBeyondLastLine: false,
+                fontSize: 14,
+                readOnly: false,
+                wordWrap: 'on'
+            });
+            
+            // Sync with hidden textarea
+            window.editor.onDidChangeModelContent(function() {
+                document.getElementById('flex_json').value = window.editor.getValue();
+            });
+            
+            // Initial sync
+            document.getElementById('flex_json').value = window.editor.getValue();
+            
+            // Trigger ready event for other scripts
+            jQuery(document).trigger('moksa-monaco-ready', [window.editor]);
+            
+            console.log('[Monaco Editor] Editor initialized successfully');
+        } catch (e) {
+            console.error('[Monaco Editor] Failed to create editor:', e);
+            editorElement.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc2626; border: 1px solid #fecaca; border-radius: 8px; background: #fee2e2; margin: 20px;"><strong>Monaco Editor 建立失敗</strong><br>' + e.message + '<br>請重新整理頁面。</div>';
+        }
+    }
+    
+    // Start initialization
+    initMonaco();
 });
 </script>

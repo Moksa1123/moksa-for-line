@@ -1,3 +1,16 @@
+## [1.4.3] - 2025-11-21
+
+### Changed
+- **Code**: 移除 LINE Simulator 的 Vue.js 相關 JS 文件（無法在 WordPress 環境中使用）
+- **Code**: 僅保留 LINE Simulator 的 CSS 樣式，繼續使用 jQuery 實現
+- **Code**: 優化資源載入邏輯，避免框架衝突
+
+### Fixed
+- **Code**: 修正 Vue.js 與 jQuery 衝突問題
+- **Code**: 確保 WordPress jQuery 不會被覆蓋
+
+---
+
 ## [1.4.2] - 2025-11-21
 
 ### Added

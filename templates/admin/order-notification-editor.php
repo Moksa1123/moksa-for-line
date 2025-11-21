@@ -6,10 +6,16 @@
         </div>
         <div class="header-actions">
             <button type="button" class="button button-primary button-large" id="moksa-save-template">
-                <span class="dashicons dashicons-saved"></span> 儲存範本
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                    <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"/>
+                </svg>
+                儲存範本
             </button>
             <button type="button" class="button button-secondary" id="moksa-reset-template">
-                <span class="dashicons dashicons-undo"></span> 重置為預設值
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="vertical-align: middle; margin-right: 6px;">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                </svg>
+                重置為預設值
             </button>
         </div>
     </div>
@@ -97,19 +103,27 @@
                 <div class="moksa-preview-toolbar-left">
                     <div class="moksa-device-selector">
                         <button type="button" class="moksa-device-btn active" data-device="mobile" title="<?php _e('手機', 'moksa-line-login'); ?>">
-                            <span class="dashicons dashicons-smartphone"></span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z"/>
+                            </svg>
                         </button>
                         <button type="button" class="moksa-device-btn" data-device="tablet" title="<?php _e('平板', 'moksa-line-login'); ?>">
-                            <span class="dashicons dashicons-tablet"></span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2 4a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4zm3 1h10v10H5V5z"/>
+                            </svg>
                         </button>
                         <button type="button" class="moksa-device-btn" data-device="desktop" title="<?php _e('桌面', 'moksa-line-login'); ?>">
-                            <span class="dashicons dashicons-desktop"></span>
+                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"/>
+                            </svg>
                         </button>
                     </div>
                 </div>
                 <div class="moksa-preview-toolbar-right">
                     <button type="button" class="moksa-preview-action-btn" id="refresh_preview_order" title="<?php _e('重新整理預覽', 'moksa-line-login'); ?>">
-                        <span class="dashicons dashicons-update"></span>
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -292,7 +306,7 @@ jQuery(document).ready(function($) {
             return;
         }
         
-        btn.prop('disabled', true).find('span').removeClass('dashicons-saved').addClass('dashicons-update spin');
+        btn.prop('disabled', true).find('svg').html('<path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/><style>@keyframes spin { 100% { transform: rotate(360deg); } } svg { animation: spin 1s linear infinite; }</style>');
         
         $.post(ajaxurl, {
             action: 'moksa_line_save_order_template',
@@ -300,7 +314,7 @@ jQuery(document).ready(function($) {
             status: status,
             template: json
         }, function(response) {
-            btn.prop('disabled', false).find('span').removeClass('dashicons-update spin').addClass('dashicons-saved');
+            btn.prop('disabled', false).find('svg').html('<path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"/>').find('style').remove();
             if (response.success) {
                 // Show toast or small notification instead of alert if possible, but alert is fine for now
                 alert('範本儲存成功！');
