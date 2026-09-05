@@ -43,6 +43,10 @@ class Options {
 			'login_redirect'       => array( 'type' => 'url', 'default' => '' ),
 			'bot_prompt'           => array( 'type' => 'enum', 'default' => 'none', 'enum' => array( 'none', 'normal', 'aggressive' ) ),
 			'request_email'        => array( 'type' => 'bool', 'default' => false ),
+			// Merging by email lets anyone who controls a LINE account with a
+			// matching address take over the WordPress account, so it is off
+			// unless an administrator deliberately turns it on.
+			'link_by_email'        => array( 'type' => 'bool', 'default' => false ),
 
 			// --- Messaging API channel -------------------------------------------
 			'messaging_channel_id' => array( 'type' => 'string', 'default' => '' ),
