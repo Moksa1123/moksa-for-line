@@ -108,6 +108,10 @@ extensions; without them the encryption checks fail even though the plugin
 itself degrades gracefully.
 
 ```bash
+# Against a throwaway WordPress install: rebuild a 1.4.0-shaped database and
+# assert the migrator carries everything across without loss or double-encryption
+wp eval-file tests/migration-check.php
+
 # Regenerate the translation template after changing any user-facing string
 php bin/make-pot.php
 

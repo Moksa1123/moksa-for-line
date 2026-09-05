@@ -244,9 +244,38 @@ class Dispatcher {
 	 * @param string $line_user_id LINE user id.
 	 */
 	public static function refresh_profile( string $line_user_id ): void {
+		if ( '' === $line_user_id ) {
+			return;
+		}
+
+		// Record that this person exists before asking LINE anything about
+		// them. They have just interacted with the bot, so the id is a fact;
+		// the display name is merely a nicety. Doing this the other way round
+		// meant a failed profile lookup left the LINE users screen empty and
+		// the inbox showing raw U... ids, with nothing explaining why.
+		Users::upsert( $line_user_id );
+
 		$profile = MessagingClient::profile( $line_user_id );
 
 		if ( is_wp_error( $profile ) ) {
+			// Worth a warning rather than silence: the usual cause is a
+			// missing or wrong channel access token, and the visible symptom
+			// (no names anywhere) does not point at it. Throttled to once an
+			// hour, because when the token is wrong this fails on every single
+			// inbound message and would otherwise bury the log.
+			if ( false === get_transient( 'moksa_line_profile_warned' ) ) {
+				set_transient( 'moksa_line_profile_warned', 1, HOUR_IN_SECONDS );
+
+				Logger::warning(
+					'Could not fetch a LINE profile, so contacts are recorded without display names. Check the Messaging API channel access token.',
+					array(
+						'line_user_id' => $line_user_id,
+						'detail'       => $profile->get_error_message(),
+					),
+					'webhook'
+				);
+			}
+
 			return;
 		}
 

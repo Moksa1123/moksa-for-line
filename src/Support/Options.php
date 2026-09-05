@@ -93,7 +93,11 @@ class Options {
 			'inbox_retention_days' => array( 'type' => 'int', 'default' => 180 ),
 
 			// --- Housekeeping ---------------------------------------------------------
-			'log_level'            => array( 'type' => 'enum', 'default' => 'error', 'enum' => array( 'debug', 'info', 'warning', 'error', 'off' ) ),
+			// Warning, not error: the failures that actually strand an
+			// administrator during setup -- a rejected webhook signature, a
+			// profile that cannot be fetched, a rate limit -- are warnings.
+			// Defaulting to error hid exactly the messages worth reading.
+			'log_level'            => array( 'type' => 'enum', 'default' => 'warning', 'enum' => array( 'debug', 'info', 'warning', 'error', 'off' ) ),
 			'log_retention_days'   => array( 'type' => 'int', 'default' => 30 ),
 			'db_version'           => array( 'type' => 'string', 'default' => '0' ),
 		);
