@@ -62,6 +62,7 @@ class AdminModule {
 			array( self::SLUG . '-richmenus', __( 'Rich menus', 'moksa-line' ), 'render_richmenus' ),
 			array( self::SLUG . '-broadcast', __( 'Broadcast', 'moksa-line' ), 'render_broadcast' ),
 			array( self::SLUG . '-users', __( 'LINE users', 'moksa-line' ), 'render_users' ),
+			array( self::SLUG . '-notifications', __( 'Order notifications', 'moksa-line' ), 'render_notifications' ),
 			array( self::SLUG . '-payments', __( 'Payments', 'moksa-line' ), 'render_payments' ),
 			array( self::SLUG . '-logs', __( 'Logs', 'moksa-line' ), 'render_logs' ),
 			array( self::SLUG . '-settings', __( 'Settings', 'moksa-line' ), 'render_settings' ),
@@ -87,10 +88,16 @@ class AdminModule {
 	 * @param string $hook Current admin page hook.
 	 */
 	public function enqueue( $hook ): void {
-		// The profile screens need the script too, for the unlink button.
+		// The profile screens need the script too, for the unlink button, and
+		// so does the notification template editor, which is a post type screen
+		// rather than one of this plugin's own pages.
 		$profile_screens = array( 'profile.php', 'user-edit.php' );
+		$screen          = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		$is_template     = $screen && \Moksa\Line\Woo\NotifyTemplates::POST_TYPE === $screen->post_type;
 
-		if ( false === strpos( (string) $hook, self::SLUG ) && ! in_array( $hook, $profile_screens, true ) ) {
+		if ( false === strpos( (string) $hook, self::SLUG )
+			&& ! in_array( $hook, $profile_screens, true )
+			&& ! $is_template ) {
 			return;
 		}
 
@@ -469,6 +476,10 @@ class AdminModule {
 
 	public function render_users(): void {
 		$this->view( 'users' );
+	}
+
+	public function render_notifications(): void {
+		$this->view( 'notifications' );
 	}
 
 	public function render_payments(): void {

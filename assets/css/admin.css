@@ -431,3 +431,18 @@
 	margin: 0 16px 6px 0;
 	font-weight: 400;
 }
+
+.moksa-rules select,
+.moksa-rules input {
+	width: 100%;
+}
+
+.moksa-params {
+	margin: 0;
+	max-height: 340px;
+	overflow-y: auto;
+}
+
+.moksa-params li {
+	margin-bottom: 8px;
+}

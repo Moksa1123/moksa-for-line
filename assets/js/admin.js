@@ -624,6 +624,93 @@
 		});
 	}
 
+	// --- Order notification templates ------------------------------------------------------
+
+	function bindNotifyTemplates() {
+		var $rules = $('[data-moksa-rules]');
+		var $testButton = $('[data-moksa-notify-test]');
+
+		if (!$rules.length && !$testButton.length) {
+			return;
+		}
+
+		// Only show the operators that belong to the chosen condition type,
+		// so "order total is not" cannot be selected.
+		function syncOperators($row) {
+			var type = $row.find('select[name*="[type]"]').val();
+			var $operator = $row.find('select[name*="[operator]"]');
+			var current = $operator.val();
+			var firstMatch = null;
+
+			$operator.find('option').each(function () {
+				var matches = $(this).data('for') === type;
+
+				$(this).prop('hidden', !matches).prop('disabled', !matches);
+
+				if (matches && firstMatch === null) {
+					firstMatch = this.value;
+				}
+			});
+
+			if (!$operator.find('option[value="' + current + '"]').filter(function () {
+				return $(this).data('for') === type;
+			}).length && firstMatch) {
+				$operator.val(firstMatch);
+			}
+		}
+
+		$rules.find('tr').each(function () {
+			syncOperators($(this));
+		});
+
+		$rules.on('change', 'select[name*="[type]"]', function () {
+			syncOperators($(this).closest('tr'));
+		});
+
+		$('[data-moksa-add-rule]').on('click', function () {
+			var $last = $rules.find('tr').last();
+			var $row = $last.clone();
+			var index = $rules.find('tr').length;
+
+			$row.find('select, input').each(function () {
+				if (this.name) {
+					this.name = this.name.replace(/\[\d+\]/, '[' + index + ']');
+				}
+
+				if (this.tagName === 'INPUT') {
+					this.value = '';
+				}
+			});
+
+			$rules.find('tbody').append($row);
+			syncOperators($row);
+		});
+
+		$rules.on('click', '[data-moksa-remove-rule]', function () {
+			if ($rules.find('tr').length > 1) {
+				$(this).closest('tr').remove();
+			} else {
+				$(this).closest('tr').find('input').val('');
+			}
+		});
+
+		$testButton.on('click', function () {
+			var $button = $(this);
+			var $scope = $button.closest('.postbox, body');
+
+			feedback($scope, strings.working, 'busy');
+
+			post('notify_test', {
+				template_id: $button.data('moksa-notify-test'),
+				line_user_id: $('[data-moksa-notify-test-to]').val()
+			}).then(function (result) {
+				feedback($scope, result.message, 'ok');
+			}, function (error) {
+				feedback($scope, error.message, 'bad', error.problems);
+			});
+		});
+	}
+
 	// --- Copy to clipboard ----------------------------------------------------------------
 
 	function bindCopy() {
@@ -650,6 +737,7 @@
 		bindInbox();
 		bindBroadcast();
 		bindPayLinks();
+		bindNotifyTemplates();
 		bindUnlink();
 		bindCopy();
 	});

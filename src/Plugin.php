@@ -145,6 +145,10 @@ final class Plugin {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$sessions} WHERE expires_at < %s", current_time( 'mysql', true ) ) );
 
+		if ( class_exists( Woo\NotifyHistory::class ) ) {
+			Woo\NotifyHistory::purge( (int) Options::get( 'woo_history_days' ) );
+		}
+
 		$retention = (int) Options::get( 'inbox_retention_days' );
 
 		if ( $retention > 0 ) {

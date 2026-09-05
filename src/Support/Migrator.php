@@ -35,7 +35,11 @@ class Migrator {
 	public static function maybe_upgrade( bool $force = false ): void {
 		$installed = (string) Options::get( 'db_version' );
 
-		if ( ! $force && version_compare( $installed, self::DB_VERSION, '>=' ) ) {
+		// The version check is the fast path, but it only protects against
+		// schema changes that were remembered to bump DB_VERSION. Checking that
+		// the tables actually exist turns "someone forgot to bump it" from a
+		// feature that silently does nothing into a self-healing no-op.
+		if ( ! $force && version_compare( $installed, self::DB_VERSION, '>=' ) && ! self::tables_missing() ) {
 			return;
 		}
 
@@ -46,9 +50,62 @@ class Migrator {
 	}
 
 	/**
+	 * Every logical table this plugin owns.
+	 *
+	 * @return string[]
+	 */
+	public static function table_keys(): array {
+		return array(
+			'users', 'events', 'conversations', 'messages', 'auto_replies',
+			'quick_replies', 'flex', 'richmenus', 'flows', 'flow_sessions',
+			'flow_submissions', 'payments', 'imagemaps', 'notify_history', 'logs',
+		);
+	}
+
+	/**
+	 * Whether any table is absent.
+	 *
+	 * Cached, because this runs on every load and the answer is almost always
+	 * "no". The cache is short enough that a dropped table heals within the
+	 * hour without anyone reinstalling the plugin.
+	 */
+	private static function tables_missing(): bool {
+		$cached = get_transient( 'moksa_line_schema_ok' );
+
+		if ( '1' === $cached ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		$prefix = $wpdb->prefix . 'moksa_line_';
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- listing our own tables.
+		$found = (array) $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $prefix ) . '%' ) );
+
+		$expected = array();
+
+		foreach ( self::table_keys() as $key ) {
+			$expected[] = $prefix . $key;
+		}
+
+		$missing = array_diff( $expected, $found );
+
+		if ( empty( $missing ) ) {
+			set_transient( 'moksa_line_schema_ok', '1', HOUR_IN_SECONDS );
+
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Create or update every table.
 	 */
 	public static function install(): void {
+		delete_transient( 'moksa_line_schema_ok' );
+
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		foreach ( self::schemas() as $sql ) {
@@ -302,6 +359,29 @@ class Migrator {
 				PRIMARY KEY  (id)
 			) {$collate};",
 
+			// What was sent to which customer about which order, and whether
+			// LINE accepted it.
+			"CREATE TABLE {$t( 'notify_history' )} (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				wp_user_id bigint(20) unsigned NOT NULL DEFAULT 0,
+				line_user_id varchar(64) NOT NULL DEFAULT '',
+				recipient varchar(255) NOT NULL DEFAULT '',
+				order_id bigint(20) unsigned NOT NULL DEFAULT 0,
+				template_id bigint(20) unsigned NOT NULL DEFAULT 0,
+				order_status varchar(40) NOT NULL DEFAULT '',
+				channel varchar(20) NOT NULL DEFAULT 'line',
+				content longtext NULL,
+				status varchar(20) NOT NULL DEFAULT 'pending',
+				error text NULL,
+				created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+				settled_at datetime DEFAULT NULL,
+				PRIMARY KEY  (id),
+				KEY order_id (order_id),
+				KEY template_id (template_id),
+				KEY status_created (status,created_at),
+				KEY line_user_id (line_user_id)
+			) {$collate};",
+
 			"CREATE TABLE {$t( 'logs' )} (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				level varchar(10) NOT NULL DEFAULT 'error',
@@ -427,6 +507,51 @@ class Migrator {
 			)
 		);
 
+		// 7. The old plugin kept notification history in its own table, under a
+		//    different prefix, created outside its installer. Copy it across so
+		//    the record of what customers were told is not lost, and so
+		//    uninstall can actually clean it up.
+		$legacy_history = $wpdb->prefix . 'moksa_notify_history';
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- checking for a table by name.
+		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $legacy_history ) );
+
+		if ( $exists ) {
+			$history = self::table( 'notify_history' );
+
+			// The old rows recorded a status of 'failed' even for successful
+			// sends, because the code checked for a 'status' key the LINE API
+			// does not return. That cannot be reconstructed after the fact, so
+			// they are imported as 'unknown' rather than as lies.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table names.
+			$wpdb->query(
+				"INSERT INTO {$history}
+					(wp_user_id, recipient, order_id, template_id, order_status, channel, content, status, error, created_at)
+				 SELECT
+					COALESCE(user_id, 0),
+					COALESCE(user_info, ''),
+					COALESCE(order_id, 0),
+					COALESCE(notify_id, 0),
+					'',
+					COALESCE(notify_type, 'line'),
+					notify_content,
+					'unknown',
+					error_message,
+					COALESCE(notify_time, UTC_TIMESTAMP())
+				 FROM {$legacy_history}"
+			);
+
+			$imported = (int) $wpdb->rows_affected;
+
+			if ( $imported > 0 ) {
+				Logger::info(
+					'Imported notification history from the previous plugin',
+					array( 'rows' => $imported ),
+					'migrator'
+				);
+			}
+		}
+
 		Logger::info( 'Upgraded schema from ' . $from . ' to ' . self::DB_VERSION, array(), 'migrator' );
 	}
 
@@ -448,13 +573,7 @@ class Migrator {
 	public static function drop_all(): void {
 		global $wpdb;
 
-		$keys = array(
-			'users', 'events', 'conversations', 'messages', 'auto_replies',
-			'quick_replies', 'flex', 'richmenus', 'flows', 'flow_sessions',
-			'flow_submissions', 'payments', 'imagemaps', 'logs',
-		);
-
-		foreach ( $keys as $key ) {
+		foreach ( self::table_keys() as $key ) {
 			$table = self::table( $key );
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table name.
 			$wpdb->query( "DROP TABLE IF EXISTS {$table}" );

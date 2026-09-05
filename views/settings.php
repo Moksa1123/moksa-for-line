@@ -295,7 +295,58 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 						</p>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Templates', 'moksa-line' ); ?></th>
+					<td>
+						<p class="description">
+							<?php
+							printf(
+								/* translators: %s: URL of the notification templates screen. */
+								wp_kses_post( __( 'The statuses above use a built-in card. For full control -- your own Flex design, and conditions such as payment or shipping method -- create <a href="%s">notification templates</a>. When a template matches, it replaces the built-in card.', 'moksa-line' ) ),
+								esc_url( admin_url( 'edit.php?post_type=' . \Moksa\Line\Woo\NotifyTemplates::POST_TYPE ) )
+							);
+							?>
+						</p>
+					</td>
+				</tr>
+
 				<?php
+				$field( 'woo_notify_delay', __( 'Delay before sending', 'moksa-line' ), __( 'Seconds. Useful when another plugin adjusts the order right after the status changes. 0 sends immediately.', 'moksa-line' ), 'number' );
+				$checkbox( 'woo_wait_for_tracking', __( 'Wait for tracking', 'moksa-line' ), __( 'Hold the shipping notification until the tracking number appears', 'moksa-line' ) );
+				?>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Tracking wait', 'moksa-line' ); ?></th>
+					<td>
+						<label>
+							<?php esc_html_e( 'On status', 'moksa-line' ); ?>
+							<select name="moksa_line[woo_tracking_status]">
+								<?php foreach ( \Moksa\Line\Woo\NotifyTemplates::order_statuses() as $slug => $label ) : ?>
+									<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( (string) Options::get( 'woo_tracking_status' ), $slug ); ?>>
+										<?php echo esc_html( $label ); ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						</label>
+						<label>
+							<?php esc_html_e( 'check every', 'moksa-line' ); ?>
+							<input type="number" name="moksa_line[woo_tracking_delay]" class="small-text"
+								value="<?php echo esc_attr( (string) Options::get( 'woo_tracking_delay' ) ); ?>" />
+							<?php esc_html_e( 'seconds,', 'moksa-line' ); ?>
+						</label>
+						<label>
+							<?php esc_html_e( 'up to', 'moksa-line' ); ?>
+							<input type="number" name="moksa_line[woo_tracking_retries]" class="small-text"
+								value="<?php echo esc_attr( (string) Options::get( 'woo_tracking_retries' ) ); ?>" />
+							<?php esc_html_e( 'times', 'moksa-line' ); ?>
+						</label>
+						<p class="description">
+							<?php esc_html_e( 'Tracking numbers are read from ECPay, RY Tools, Advanced Shipment Tracking and WooCommerce Shipment Tracking. After the last attempt the notification is sent anyway, without the number.', 'moksa-line' ); ?>
+						</p>
+					</td>
+				</tr>
+
+				<?php
+				$field( 'woo_history_days', __( 'Keep notification history for', 'moksa-line' ), __( 'Days. Set to 0 to keep it indefinitely.', 'moksa-line' ), 'number' );
 				$checkbox( 'woo_account_tab', __( 'My Account tab', 'moksa-line' ), __( 'Add a LINE tab where customers can link and unlink their account', 'moksa-line' ) );
 				$checkbox( 'woo_login_buttons', __( 'Login buttons', 'moksa-line' ), __( 'Offer LINE sign-in on the account and checkout pages', 'moksa-line' ) );
 				?>

@@ -25,12 +25,30 @@ class WooModule {
 	const ENDPOINT = 'line-account';
 	const META_KEY = '_moksa_line_user_id';
 
+	/** Which statuses this order has already been notified about. */
+	const META_SENT = '_moksa_line_notified';
+
+	/** How many times we have waited for a tracking number on this order. */
+	const META_ATTEMPTS = '_moksa_line_notify_attempts';
+
+	/**
+	 * @var NotifyTemplates
+	 */
+	private $templates;
+
+	public function __construct() {
+		$this->templates = new NotifyTemplates();
+	}
+
 	public function register(): void {
 		if ( ! class_exists( 'WooCommerce' ) ) {
 			return;
 		}
 
+		$this->templates->register();
+
 		add_action( 'woocommerce_order_status_changed', array( $this, 'on_status_changed' ), 10, 4 );
+		add_action( 'moksa_line_order_notify', array( $this, 'dispatch' ), 10, 2 );
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'store_line_id_on_order' ), 10, 2 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'show_line_id_in_admin' ) );
 
@@ -63,11 +81,86 @@ class WooModule {
 			return;
 		}
 
-		$statuses = (array) Options::get( 'woo_notify_statuses' );
-
-		if ( ! in_array( $new_status, $statuses, true ) ) {
+		if ( ! $this->status_is_notifiable( $new_status, $order ) ) {
 			return;
 		}
+
+		// Shipping notifications are worth holding briefly: the logistics
+		// plugin usually writes the tracking number a moment after the status
+		// changes, and a "your order has shipped" message with no tracking
+		// number in it is the one thing customers write in about.
+		if ( $this->awaiting_tracking( $order, $new_status ) ) {
+			$this->schedule( (int) $order_id, $new_status, (int) Options::get( 'woo_tracking_delay' ) );
+
+			return;
+		}
+
+		$delay = max( 0, (int) Options::get( 'woo_notify_delay' ) );
+
+		if ( $delay > 0 ) {
+			$this->schedule( (int) $order_id, $new_status, $delay );
+
+			return;
+		}
+
+		$this->dispatch( (int) $order_id, $new_status );
+	}
+
+	/**
+	 * Send the notification for an order and status.
+	 *
+	 * Also the cron callback, so everything that must be true before a message
+	 * goes out is checked here rather than at scheduling time -- by the time a
+	 * delayed job runs, the order may have moved on again.
+	 *
+	 * @param int    $order_id Order id.
+	 * @param string $status   Status slug being notified about.
+	 */
+	public function dispatch( $order_id, $status ): void {
+		$order_id = (int) $order_id;
+		$status   = (string) $status;
+
+		if ( ! function_exists( 'wc_get_order' ) ) {
+			return;
+		}
+
+		$order = wc_get_order( $order_id );
+
+		if ( ! $order || ! Options::get( 'woo_notify' ) ) {
+			return;
+		}
+
+		// One notification per order per status. The previous plugin shipped a
+		// class for this that nothing ever called, so a status set twice sent
+		// the customer two messages.
+		if ( $this->already_notified( $order, $status ) ) {
+			return;
+		}
+
+		// Still waiting on a tracking number, and retries left?
+		if ( $this->awaiting_tracking( $order, $status ) ) {
+			$attempts = (int) $order->get_meta( self::META_ATTEMPTS );
+			$max      = max( 0, (int) Options::get( 'woo_tracking_retries' ) );
+
+			if ( $attempts < $max ) {
+				$order->update_meta_data( self::META_ATTEMPTS, $attempts + 1 );
+				$order->save();
+
+				$this->schedule( $order_id, $status, (int) Options::get( 'woo_tracking_delay' ) );
+
+				return;
+			}
+
+			// Out of retries: send without the tracking number rather than
+			// never telling the customer anything.
+			Logger::info(
+				'Sending an order notification without a tracking number after exhausting retries',
+				array( 'order_id' => $order_id, 'attempts' => $attempts ),
+				'woo'
+			);
+		}
+
+		$order->delete_meta_data( self::META_ATTEMPTS );
 
 		$line_user_id = $this->line_id_for_order( $order );
 
@@ -75,41 +168,215 @@ class WooModule {
 			return;
 		}
 
-		$message = $this->build_order_message( $order, $new_status );
+		$messages = $this->messages_for( $order, $status, $line_user_id );
 
-		/**
-		 * Filter the order notification before it is sent.
-		 *
-		 * @param array     $message      Flex message object.
-		 * @param \WC_Order $order        Order.
-		 * @param string    $new_status   New status slug.
-		 * @param string    $line_user_id Recipient.
-		 */
-		$message = apply_filters( 'moksa_line_order_message', $message, $order, $new_status, $line_user_id );
-
-		if ( empty( $message ) ) {
+		if ( empty( $messages ) ) {
 			return;
 		}
 
-		$result = MessagingClient::push(
-			$line_user_id,
-			array( $message ),
-			// Keyed on order and status: a hook that fires twice, or a status
-			// toggled back and forth, will not message the customer again.
-			array( 'retry_key' => 'order-' . $order_id . '-' . $new_status )
+		$recipient = trim(
+			$order->get_billing_first_name() . ' ' . $order->get_billing_last_name()
+			. ' (' . $order->get_billing_email() . ')'
 		);
 
-		if ( Logger::capture( $result, 'Could not deliver an order notification', 'woo' ) ) {
+		$delivered = 0;
+
+		foreach ( $messages as $template_id => $message ) {
+			$history_id = NotifyHistory::begin(
+				array(
+					'wp_user_id'   => (int) $order->get_customer_id(),
+					'line_user_id' => $line_user_id,
+					'recipient'    => $recipient,
+					'order_id'     => $order_id,
+					'template_id'  => (int) $template_id,
+					'order_status' => $status,
+					'content'      => (string) wp_json_encode( $message, JSON_UNESCAPED_UNICODE ),
+				)
+			);
+
+			$result = MessagingClient::push(
+				$line_user_id,
+				array( $message ),
+				// Keyed on order, status and template so LINE also refuses a
+				// duplicate if this runs twice within its retry window.
+				array( 'retry_key' => sprintf( 'order-%d-%s-%d', $order_id, $status, (int) $template_id ) )
+			);
+
+			// The LINE push endpoint answers 200 with an empty body, so success
+			// is "not a WP_Error". The previous plugin looked for a status key
+			// that is never present and recorded every successful send as
+			// failed.
+			$failed = is_wp_error( $result );
+
+			NotifyHistory::settle( $history_id, ! $failed, $failed ? $result->get_error_message() : '' );
+
+			if ( $failed ) {
+				Logger::capture( $result, 'Could not deliver an order notification', 'woo' );
+				continue;
+			}
+
+			++$delivered;
+		}
+
+		if ( 0 === $delivered ) {
 			return;
 		}
+
+		$this->mark_notified( $order, $status );
 
 		$order->add_order_note(
 			sprintf(
-				/* translators: %s: order status label. */
-				__( 'LINE notification sent for status: %s', 'moksa-line' ),
-				wc_get_order_status_name( $new_status )
+				/* translators: 1: number of messages, 2: order status label. */
+				_n(
+					'%1$d LINE notification sent for status: %2$s',
+					'%1$d LINE notifications sent for status: %2$s',
+					$delivered,
+					'moksa-line'
+				),
+				$delivered,
+				wc_get_order_status_name( $status )
 			)
 		);
+	}
+
+	/**
+	 * The messages to send for this order and status.
+	 *
+	 * Templates take precedence; the built-in card is the fallback for shops
+	 * that have not written any, so notifications work out of the box.
+	 *
+	 * @param \WC_Order $order        Order.
+	 * @param string    $status       Status slug.
+	 * @param string    $line_user_id Recipient.
+	 * @return array<int,array> Template id (0 for the built-in card) => message.
+	 */
+	private function messages_for( $order, string $status, string $line_user_id ): array {
+		$messages = array();
+
+		foreach ( NotifyTemplates::for_status( $status, $order ) as $template_id ) {
+			$message = NotifyTemplates::render( $template_id, $order, $status );
+
+			if ( null !== $message ) {
+				$messages[ $template_id ] = $message;
+			}
+		}
+
+		if ( empty( $messages ) && in_array( $status, (array) Options::get( 'woo_notify_statuses' ), true ) ) {
+			$messages[0] = $this->build_order_message( $order, $status );
+		}
+
+		/**
+		 * Filter the order notifications before they are sent.
+		 *
+		 * @param array     $messages     Template id => flex message.
+		 * @param \WC_Order $order        Order.
+		 * @param string    $status       Status slug.
+		 * @param string    $line_user_id Recipient.
+		 */
+		return (array) apply_filters( 'moksa_line_order_messages', $messages, $order, $status, $line_user_id );
+	}
+
+	/**
+	 * Whether anything is configured to fire for this status.
+	 *
+	 * @param string    $status Status slug.
+	 * @param \WC_Order $order  Order.
+	 */
+	private function status_is_notifiable( string $status, $order ): bool {
+		if ( in_array( $status, (array) Options::get( 'woo_notify_statuses' ), true ) ) {
+			return true;
+		}
+
+		return ! empty( NotifyTemplates::for_status( $status, $order ) );
+	}
+
+	/**
+	 * Whether this notification should wait for a tracking number.
+	 *
+	 * @param \WC_Order $order  Order.
+	 * @param string    $status Status slug.
+	 */
+	private function awaiting_tracking( $order, string $status ): bool {
+		if ( ! Options::get( 'woo_wait_for_tracking' ) ) {
+			return false;
+		}
+
+		if ( $status !== (string) Options::get( 'woo_tracking_status' ) ) {
+			return false;
+		}
+
+		if ( (int) Options::get( 'woo_tracking_retries' ) <= 0 ) {
+			return false;
+		}
+
+		return '' === OrderContext::tracking_number( $order );
+	}
+
+	/**
+	 * Queue a notification.
+	 *
+	 * @param int    $order_id Order id.
+	 * @param string $status   Status slug.
+	 * @param int    $delay    Seconds to wait.
+	 */
+	private function schedule( int $order_id, string $status, int $delay ): void {
+		$args = array( $order_id, $status );
+
+		// Never stack two jobs for the same order and status.
+		if ( wp_next_scheduled( 'moksa_line_order_notify', $args ) ) {
+			return;
+		}
+
+		wp_schedule_single_event( time() + max( 5, $delay ), 'moksa_line_order_notify', $args );
+	}
+
+	/**
+	 * Whether this order has already been notified about this status.
+	 *
+	 * @param \WC_Order $order  Order.
+	 * @param string    $status Status slug.
+	 */
+	private function already_notified( $order, string $status ): bool {
+		$sent = $order->get_meta( self::META_SENT );
+
+		return is_array( $sent ) && isset( $sent[ $status ] );
+	}
+
+	/**
+	 * Record that this status has been notified about.
+	 *
+	 * @param \WC_Order $order  Order.
+	 * @param string    $status Status slug.
+	 */
+	private function mark_notified( $order, string $status ): void {
+		$sent = $order->get_meta( self::META_SENT );
+		$sent = is_array( $sent ) ? $sent : array();
+
+		$sent[ $status ] = current_time( 'mysql', true );
+
+		$order->update_meta_data( self::META_SENT, $sent );
+		$order->save();
+	}
+
+	/**
+	 * Allow a status to be notified about again, for resends.
+	 *
+	 * @param \WC_Order $order  Order.
+	 * @param string    $status Status slug, or '' to clear them all.
+	 */
+	public static function reset_notified( $order, string $status = '' ): void {
+		if ( '' === $status ) {
+			$order->delete_meta_data( self::META_SENT );
+		} else {
+			$sent = $order->get_meta( self::META_SENT );
+
+			if ( is_array( $sent ) ) {
+				unset( $sent[ $status ] );
+				$order->update_meta_data( self::META_SENT, $sent );
+			}
+		}
+
+		$order->save();
 	}
 
 	/**

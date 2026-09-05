@@ -1,0 +1,191 @@
+<?php
+/**
+ * Delivery history for order notifications.
+ *
+ * This is the record of what was actually sent to which customer about which
+ * order, and whether LINE accepted it. It exists because "did the customer get
+ * told their order shipped?" is a question a shop has to be able to answer
+ * after the fact, and a log that only records failures cannot answer it.
+ *
+ * @package Moksa\Line
+ */
+
+namespace Moksa\Line\Woo;
+
+use Moksa\Line\Support\Migrator;
+
+defined( 'ABSPATH' ) || exit;
+
+class NotifyHistory {
+
+	public static function table(): string {
+		return Migrator::table( 'notify_history' );
+	}
+
+	/**
+	 * Record an attempt, before it is made.
+	 *
+	 * The row is written first with status 'pending' and settled afterwards, so
+	 * a send that fatals mid-flight still leaves evidence it was attempted.
+	 *
+	 * @param array $fields wp_user_id, line_user_id, recipient, order_id,
+	 *                      template_id, content.
+	 * @return int Row id, or 0 on failure.
+	 */
+	public static function begin( array $fields ): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
+		$wpdb->insert(
+			self::table(),
+			array(
+				'wp_user_id'   => (int) ( $fields['wp_user_id'] ?? 0 ),
+				'line_user_id' => (string) ( $fields['line_user_id'] ?? '' ),
+				'recipient'    => (string) ( $fields['recipient'] ?? '' ),
+				'order_id'     => (int) ( $fields['order_id'] ?? 0 ),
+				'template_id'  => (int) ( $fields['template_id'] ?? 0 ),
+				'order_status' => (string) ( $fields['order_status'] ?? '' ),
+				'channel'      => 'line',
+				'content'      => (string) ( $fields['content'] ?? '' ),
+				'status'       => 'pending',
+				'created_at'   => current_time( 'mysql', true ),
+			),
+			array( '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s' )
+		);
+
+		return (int) $wpdb->insert_id;
+	}
+
+	/**
+	 * Settle an attempt.
+	 *
+	 * @param int    $id      Row id from begin().
+	 * @param bool   $success Whether LINE accepted the message.
+	 * @param string $error   Failure detail.
+	 */
+	public static function settle( int $id, bool $success, string $error = '' ): void {
+		if ( $id <= 0 ) {
+			return;
+		}
+
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
+		$wpdb->update(
+			self::table(),
+			array(
+				'status'     => $success ? 'sent' : 'failed',
+				'error'      => '' !== $error ? substr( $error, 0, 1000 ) : null,
+				'settled_at' => current_time( 'mysql', true ),
+			),
+			array( 'id' => $id ),
+			array( '%s', '%s', '%s' ),
+			array( '%d' )
+		);
+	}
+
+	/**
+	 * Recent rows for the admin screen.
+	 *
+	 * @param array $args order_id, status, per_page, page.
+	 * @return array{rows:array,total:int}
+	 */
+	public static function paginate( array $args = array() ): array {
+		global $wpdb;
+		$table = self::table();
+
+		$per_page = max( 1, min( 200, (int) ( $args['per_page'] ?? 30 ) ) );
+		$page     = max( 1, (int) ( $args['page'] ?? 1 ) );
+		$offset   = ( $page - 1 ) * $per_page;
+
+		$where  = array( '1=1' );
+		$params = array();
+
+		if ( ! empty( $args['order_id'] ) ) {
+			$where[]  = 'order_id = %d';
+			$params[] = (int) $args['order_id'];
+		}
+
+		if ( ! empty( $args['status'] ) ) {
+			$where[]  = 'status = %s';
+			$params[] = (string) $args['status'];
+		}
+
+		$clause = implode( ' AND ', $where );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table, values prepared.
+		$total = (int) $wpdb->get_var(
+			$params
+				? $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE {$clause}", $params )
+				: "SELECT COUNT(*) FROM {$table} WHERE {$clause}"
+		);
+
+		$query_params   = $params;
+		$query_params[] = $per_page;
+		$query_params[] = $offset;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table, values prepared.
+		$rows = (array) $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table} WHERE {$clause} ORDER BY id DESC LIMIT %d OFFSET %d",
+				$query_params
+			)
+		);
+
+		return array(
+			'rows'  => $rows,
+			'total' => $total,
+		);
+	}
+
+	/**
+	 * How many notifications were sent and how many failed, for the dashboard.
+	 *
+	 * @param int $days Window to count over.
+	 * @return array{sent:int,failed:int}
+	 */
+	public static function tally( int $days = 30 ): array {
+		global $wpdb;
+		$table  = self::table();
+		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( max( 1, $days ) * DAY_IN_SECONDS ) );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT
+					SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) AS sent,
+					SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) AS failed
+				 FROM {$table} WHERE created_at >= %s",
+				$cutoff
+			)
+		);
+
+		return array(
+			'sent'   => $row ? (int) $row->sent : 0,
+			'failed' => $row ? (int) $row->failed : 0,
+		);
+	}
+
+	/**
+	 * Trim rows past the retention window. Called from the daily maintenance.
+	 *
+	 * @param int $days Retention in days.
+	 * @return int Rows removed.
+	 */
+	public static function purge( int $days ): int {
+		if ( $days <= 0 ) {
+			return 0;
+		}
+
+		global $wpdb;
+		$table = self::table();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+		return (int) $wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$table} WHERE created_at < %s",
+				gmdate( 'Y-m-d H:i:s', time() - ( $days * DAY_IN_SECONDS ) )
+			)
+		);
+	}
+}

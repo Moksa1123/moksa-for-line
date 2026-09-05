@@ -87,6 +87,17 @@ class Options {
 			'woo_notify_statuses'  => array( 'type' => 'json', 'default' => array( 'processing', 'completed' ) ),
 			'woo_login_buttons'    => array( 'type' => 'bool', 'default' => true ),
 			'woo_account_tab'      => array( 'type' => 'bool', 'default' => true ),
+			// Seconds to wait before notifying, so a status set by an
+			// automation has settled before the customer hears about it.
+			'woo_notify_delay'     => array( 'type' => 'int', 'default' => 0 ),
+			// Shipping notifications are worth delaying until the logistics
+			// plugin has written the tracking number, which it usually does a
+			// moment after the status changes.
+			'woo_wait_for_tracking' => array( 'type' => 'bool', 'default' => true ),
+			'woo_tracking_status'  => array( 'type' => 'string', 'default' => 'processing' ),
+			'woo_tracking_delay'   => array( 'type' => 'int', 'default' => 60 ),
+			'woo_tracking_retries' => array( 'type' => 'int', 'default' => 3 ),
+			'woo_history_days'     => array( 'type' => 'int', 'default' => 180 ),
 
 			// --- Inbox ---------------------------------------------------------------
 			'inbox_enabled'        => array( 'type' => 'bool', 'default' => true ),
