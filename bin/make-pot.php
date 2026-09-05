@@ -329,7 +329,7 @@ function write_pot( string $path, array $entries ): void {
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa LINE Suite 2.0.0\\n"
+"Project-Id-Version: Moksa LINE Suite 1.0.0\\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\\n"
 "POT-Creation-Date: {$now}\\n"
 "MIME-Version: 1.0\\n"

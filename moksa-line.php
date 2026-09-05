@@ -3,7 +3,7 @@
  * Plugin Name: Moksa LINE Suite
  * Plugin URI: https://moksaweb.com/
  * Description: LINE Login, Messaging API bot, Flex Message builder, tabbed rich menus, customer-service inbox, AI replies and LINE Pay for WordPress and WooCommerce.
- * Version: 2.0.0
+ * Version: 1.0.0
  * Author: Moksa
  * Author URI: https://moksaweb.com/
  * Text Domain: moksa-line
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MOKSA_LINE_VERSION', '2.0.0' );
+define( 'MOKSA_LINE_VERSION', '1.0.0' );
 define( 'MOKSA_LINE_FILE', __FILE__ );
 define( 'MOKSA_LINE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MOKSA_LINE_URL', plugin_dir_url( __FILE__ ) );

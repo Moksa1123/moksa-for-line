@@ -1,92 +1,74 @@
 # Changelog
 
-## 2.0.0
+## 1.0.0
 
-A rewrite. The plugin keeps its slug, its settings and its data, but the code
-underneath is new. Upgrading in place is supported and no reconfiguration is
-needed; the schema and settings migrate on first load.
+Initial release.
 
-### Fixed (things that were silently broken in 1.x)
+LINE Login, a Messaging API bot, Flex Messages, tabbed rich menus, a
+customer-service inbox, AI replies and LINE Pay, for WordPress and WooCommerce.
 
-- **Missing tables.** The installer created four tables while the code wrote to
-  nine. Rich menus, webhook logs and Flex templates were writing into tables
-  that did not exist, and the failures were never surfaced. All fourteen tables
-  are now created and versioned.
-- **Column mismatches.** Auto-replies were saved to `reply_data` and read from
-  `reply_content`; quick replies were saved with `name`/`items` into a table
-  with `keyword`/`reply_message`. Existing rows are migrated rather than lost.
-- **Upgrades depended on the activation hook.** `register_activation_hook` was
-  called from a constructor, where it does not reliably fire. Schema changes now
-  apply on load whenever the stored version is behind.
-- **Rich menu images.** Out-of-bounds tap areas and wrong-sized images produced
-  an opaque 400 from LINE. Both are checked locally with a message naming the
-  actual problem.
+### Replacing Moksa LINE Login
 
-### Security
+This plugin supersedes **Moksa LINE Login** (1.4.0 and earlier), which was not
+published to the plugin directory. It is a new plugin rather than an update:
+the folder, main file and text domain are all different, so WordPress treats
+them as unrelated and both can be installed at once.
 
-- **OAuth state and nonce are now separate.** 1.x passed the transient key
-  through the OIDC `nonce` parameter, so replay protection was never actually
-  in use.
-- **The ID token is verified.** Identity comes from the `sub` claim of a token
-  LINE has verified, plus local issuer, audience, expiry and nonce checks,
-  rather than from an unauthenticated profile read.
-- **PKCE (S256)** is used on the authorization request.
-- **Open redirect closed.** The post-login destination is passed through
-  `wp_validate_redirect`.
-- **Credentials are encrypted at rest** with AES-256-GCM keyed off the site's
-  WordPress salts, instead of being stored as plain text in `wp_options`.
-- **Stateless channel access tokens** (15 minutes, unlimited issuance) replace a
-  stored long-lived token as the default.
-- **Webhook replies cannot be duplicated.** `webhookEventId` carries a UNIQUE
-  index, and events are claimed with a conditional UPDATE, so LINE's retries and
-  an overlapping cron drain cannot both answer the customer.
-- **Account takeover paths removed.** Matching an existing account by email is
-  opt-in and off by default; a LINE identity already bound to another user is
-  refused; email is never synced onto an existing account; the new-user role
-  cannot be administrator.
-- Credentials are redacted from logs.
+They do, however, share the `moksa_line_` option and table prefix, and that is
+deliberate. Installing this on a site that ran the old plugin imports
+everything on first load:
 
-### Added
+- Channel IDs, secrets and every other setting carry over. Credentials that
+  were stored as plain text are re-stored encrypted.
+- Auto-reply rules move from the column the old plugin created
+  (`reply_content`) to the one its code actually read (`reply_data`), which is
+  why some rules may appear to work for the first time.
+- Quick replies, which the old plugin stored as a single keyword and message,
+  are folded into the LINE quick-reply format.
+- LINE users and their WordPress account bindings are preserved, and a
+  conversation is opened for each so the inbox is not empty on first use.
+- The n8n-specific forwarding URL becomes the general webhook forwarding URL.
 
-- **Customer-service inbox.** Conversations and messages are recorded, unread
-  counts tracked, and agents can reply from wp-admin. Replying takes the
-  conversation over so the bot cannot talk across an agent.
-- **Conversation flows.** Multi-step scenarios with per-step validation, choices
-  as quick replies, a working cancel path, expiry, stored submissions and
-  optional email notification.
-- **AI replies** through AI Engine's chatbot API, with a stable per-user
-  conversation id so context carries between messages. Guarded by a daily cap, a
-  length limit and a hand-off keyword.
-- **Tabbed rich menus** built the way LINE intends, with one menu and alias per
-  tab and `richmenuswitch` actions between them.
-- **LINE Pay** (Online API v3): a WooCommerce gateway with refunds and voids,
-  standalone payment links deliverable as a Flex bubble, in-app payment URLs for
-  customers already inside LINE, and an hourly sweep that recovers payments the
-  customer never returned from.
-- **Flex editor** with local structural validation, LINE's own validation
-  endpoint, live preview and a test send.
-- **Broadcast** to everyone or to recorded friends, with a typed confirmation
-  and remaining quota shown.
-- **Logs screen** showing webhook deliveries and plugin errors, so failures are
-  diagnosable without SSH.
-- LIFF profile and chat shortcodes, both verifying the ID token server-side.
-- A setup checklist that reports what is still missing and why it matters.
+Deactivate and delete Moksa LINE Login after confirming this plugin works.
+Leaving both active means two webhook handlers competing for the same events.
 
-### Changed
+The import runs once, is safe to repeat, and does not double-encrypt
+credentials or duplicate conversations if it does.
 
-- Namespaced (`Moksa\Line`) with a PSR-4 autoloader and module bootstrap.
-- Keyword rules rank by match strength and an explicit priority, rather than
-  whichever row the database returned first.
-- The webhook forwarding URL is generic rather than n8n-specific; the old
-  option migrates automatically.
+### What the old plugin got wrong
+
+Worth stating, because it explains what may look different:
+
+- Its installer created four database tables while its code wrote to nine.
+  Rich menus, webhook logs and Flex templates were writing into tables that did
+  not exist, and the failures were never surfaced. All fourteen tables are now
+  created and versioned.
+- Schema changes depended on `register_activation_hook`, which it called from a
+  constructor where it does not reliably fire.
+- Its OAuth flow passed the session key through the OpenID Connect `nonce`
+  parameter, so replay protection was never actually in use; it never verified
+  the ID token, taking identity from an unauthenticated profile read; and the
+  post-login redirect was not validated. Login now uses separate state and
+  nonce values, PKCE, a verified ID token, and a validated redirect.
+- Channel secrets and access tokens sat in `wp_options` as plain text. They are
+  now encrypted at rest with AES-256-GCM keyed off the site's WordPress salts.
+- Its webhook had no idempotency, so LINE's retries could send a customer the
+  same reply twice. Events are now deduplicated by `webhookEventId`.
+- Keyword rules were returned in whatever order the database chose, so which
+  rule won depended on insertion order. Rules now rank by match strength and an
+  explicit priority.
+
+### Not carried over
+
+The imagemap builder and the WooCommerce product carousel generator from the
+old plugin are not reimplemented. The imagemap table is preserved, so nothing
+is lost if they return.
 
 ### Notes
 
 - The Messaging API cannot read past chats. The inbox only contains messages
   received after this plugin was installed and the webhook switched on.
+- Answering an inbound message within a minute is free; anything sent
+  afterwards is a push message and is billed by LINE.
 - Uninstalling leaves data in place unless `MOKSA_LINE_REMOVE_DATA` is defined
   as `true` in `wp-config.php`.
-
-## 1.4.0 and earlier
-
-See the git history.

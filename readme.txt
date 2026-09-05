@@ -4,7 +4,7 @@ Tags: line, line login, line pay, chatbot, woocommerce
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,32 +89,43 @@ No, unless you define `MOKSA_LINE_REMOVE_DATA` as `true` in `wp-config.php`. Pay
 
 Because a self-service login flow that can mint administrators is a way to lose a site.
 
+= I already use the Moksa LINE Login plugin. What happens to my data? =
+
+It is imported automatically. The two plugins share the same option and table prefix, so activating this one carries across your channel settings, LINE users, WordPress account bindings and reply rules. Credentials that were stored as plain text are re-stored encrypted, and reply rules are moved to the column the code actually reads, so some may work for the first time.
+
+Deactivate and delete the older plugin once you have confirmed this one works. Leaving both active means two webhook handlers competing for the same events.
+
+= Do I have to reconfigure anything after switching? =
+
+No. The callback and webhook URLs are unchanged, so the settings already registered in the LINE Developers Console keep working.
+
 == Upgrade Notice ==
 
-= 2.0.0 =
-A rewrite that fixes several silently broken features and closes security issues in the 1.x login flow. Settings and data are migrated automatically; no reconfiguration is needed. Review the LINE Pay settings before going live.
+= 1.0.0 =
+First release. If you previously ran the Moksa LINE Login plugin, this imports its settings and data automatically on activation; deactivate that plugin afterwards so the two are not both answering the same webhook.
 
 == Changelog ==
 
-= 2.0.0 =
+= 1.0.0 =
 
-Fixed:
-* The installer created four database tables while the code wrote to nine, so rich menus, webhook logs and Flex templates were failing silently. All tables are now created and versioned.
-* Auto-replies and quick replies were written to columns that did not match the ones they were read from. Existing rows are migrated rather than lost.
-* Schema upgrades no longer depend on the activation hook, which was registered where it did not reliably fire.
-* Rich menu images and tap areas are checked locally, so a rejected menu says what is actually wrong.
+Initial release.
 
-Security:
-* The OAuth state and OIDC nonce are separate random values; 1.x reused the nonce parameter to carry a transient key, leaving replay protection unused.
-* The ID token is verified with LINE, and the login is bound to the request through PKCE.
-* The post-login redirect is validated, closing an open redirect.
-* Channel secrets and tokens are encrypted at rest instead of stored as plain text.
-* Short-lived channel access tokens replace a stored long-lived token by default.
-* Webhook retries can no longer produce a duplicate reply to a customer.
-* Matching an account by email is opt-in, a LINE identity bound elsewhere is refused, and new accounts cannot be given the administrator role.
+* LINE Login using OAuth 2.0 and OpenID Connect with PKCE, with identity taken from a verified ID token.
+* Messaging API bot: keyword rules ranked by match strength and priority, replying with text, Flex, quick replies, stickers, images or raw JSON.
+* Conversation flows that collect answers over several messages, with validation, a cancel path, stored submissions and optional email notification.
+* AI replies through the AI Engine plugin, with a daily cap, a length limit and a hand-off keyword.
+* Customer-service inbox with unread counts, bot/human/closed status and replies sent from wp-admin.
+* Rich menus, including tabbed menus built from rich menu aliases.
+* Flex message editor with live preview, local validation and LINE's own validation endpoint.
+* LINE Pay: a WooCommerce gateway with refunds and voids, plus standalone payment links.
+* WooCommerce order notifications and account linking from My Account.
+* LIFF profile and chat shortcodes, with every request's ID token verified server-side.
+* Broadcasting, a logs screen, and a setup checklist.
 
-Added:
-* Customer-service inbox, conversation flows, AI replies through AI Engine, tabbed rich menus, LINE Pay for WooCommerce and payment links, a Flex editor, broadcasting, LIFF shortcodes, and a logs screen.
+Replacing Moksa LINE Login:
 
-= 1.4.0 =
-* Earlier releases: see the repository history.
+* This is a separate plugin, not an update. Both can be installed at once, but only one should be active, or two webhook handlers will compete for the same events.
+* It shares the moksa_line_ option and table prefix, so the older plugin's settings, LINE users, account bindings and reply rules are imported on first load.
+* Credentials that were stored as plain text are re-stored encrypted.
+* Auto-reply rules are moved to the column the code actually reads, so some rules may work for the first time.
+* The import runs once, is safe to repeat, and neither double-encrypts credentials nor duplicates conversations.

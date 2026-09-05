@@ -3,7 +3,7 @@
 LINE Login, a Messaging API bot, Flex Messages, tabbed rich menus, a
 customer-service inbox, AI replies and LINE Pay, for WordPress and WooCommerce.
 
-Version 2.0.0. Requires WordPress 6.2 and PHP 7.4.
+Version 1.0.0. Requires WordPress 6.2 and PHP 7.4.
 
 ## What it does
 

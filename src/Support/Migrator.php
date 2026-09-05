@@ -2,10 +2,14 @@
 /**
  * Versioned database schema.
  *
- * 1.x created four tables while the code wrote to nine, and the column names
- * did not match the ones the code used. This class owns the whole schema in
- * one place and runs on every load when the stored db_version is behind, so
- * upgrades never depend on the activation hook firing.
+ * The plugin this one replaces -- Moksa LINE Login -- created four tables
+ * while its code wrote to nine, and the column names it created did not match
+ * the ones it read. This class owns the whole schema in one place and runs on
+ * every load when the stored version is behind, so schema changes never depend
+ * on the activation hook firing.
+ *
+ * It also imports that plugin's data, which is possible because both share the
+ * moksa_line_ option and table prefix.
  *
  * @package Moksa\Line
  */
@@ -17,9 +21,11 @@ defined( 'ABSPATH' ) || exit;
 class Migrator {
 
 	/**
-	 * Bump this whenever a table definition below changes.
+	 * Schema version. Deliberately independent of the plugin version: the
+	 * plugin can ship many releases without the tables changing, and this only
+	 * moves when they do.
 	 */
-	const DB_VERSION = '2.0.0';
+	const DB_VERSION = '1.0.0';
 
 	/**
 	 * Run dbDelta when the stored version is behind the code version.
@@ -34,7 +40,7 @@ class Migrator {
 		}
 
 		self::install();
-		self::migrate_from_v1( $installed );
+		self::migrate_from_legacy( $installed );
 
 		Options::set( 'db_version', self::DB_VERSION );
 	}
@@ -311,15 +317,18 @@ class Migrator {
 	}
 
 	/**
-	 * Carry 1.x data and settings forward.
+	 * Import data left behind by the Moksa LINE Login plugin this one replaces.
 	 *
-	 * Runs once, guarded by the stored db_version. Every step is written to be
+	 * That plugin shared the moksa_line_ option and table prefix, so installing
+	 * this one on a site that ran it finds its data already there. The import
+	 * is guarded by the stored schema version and every step is written to be
 	 * safe to repeat, because a half-finished upgrade must be resumable.
 	 *
-	 * @param string $from Previously installed db_version ('0' for fresh installs).
+	 * @param string $from Previously installed db_version ('0' when there is none).
 	 */
-	private static function migrate_from_v1( string $from ): void {
-		if ( version_compare( $from, '2.0.0', '>=' ) ) {
+	private static function migrate_from_legacy( string $from ): void {
+		// Anything already on the current schema has nothing legacy to import.
+		if ( version_compare( $from, self::DB_VERSION, '>=' ) ) {
 			return;
 		}
 

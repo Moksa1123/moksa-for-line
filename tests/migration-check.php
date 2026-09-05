@@ -102,17 +102,19 @@ echo "Done.\n\n";
 
 // ---------------------------------------------------------------- assertions
 
-$failures = 0;
+// wp-cli includes this inside a function, so a file-scope variable is not
+// actually global here. $GLOBALS is explicit and works either way -- without
+// it the summary reported success while individual checks were failing.
+$GLOBALS['moksa_migration_failures'] = 0;
 
 function check( $condition, $label, $detail = '' ) {
-	global $failures;
 
 	if ( $condition ) {
 		echo "  ok    {$label}\n";
 		return;
 	}
 
-	$failures++;
+	++$GLOBALS['moksa_migration_failures'];
 	echo "  FAIL  {$label}" . ( '' !== $detail ? " -- {$detail}" : '' ) . "\n";
 }
 
@@ -165,7 +167,11 @@ check( 2 === count( $conversations ), 'a conversation was seeded per known user'
 check( 'Legacy Person' === $conversations[0]->display_name, 'seeded conversation carries the name' );
 
 echo "\n== Version recorded ==\n";
-check( '2.0.0' === Moksa\Line\Support\Options::get( 'db_version' ), 'db_version is 2.0.0' );
+check(
+	Moksa\Line\Support\Migrator::DB_VERSION === Moksa\Line\Support\Options::get( 'db_version' ),
+	'db_version matches Migrator::DB_VERSION',
+	(string) Moksa\Line\Support\Options::get( 'db_version' )
+);
 
 echo "\n== Re-running the migrator must be harmless ==\n";
 Moksa\Line\Support\Migrator::maybe_upgrade( true );
@@ -174,5 +180,22 @@ $conversations_again = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$prefix}conv
 check( 2 === $conversations_again, 'conversations not duplicated on a second run', $conversations_again . ' found' );
 check( 'PLAINTEXT-messaging-secret' === Moksa\Line\Support\Options::get( 'messaging_secret' ), 'secrets not double-encrypted' );
 
+$failures = (int) $GLOBALS['moksa_migration_failures'];
+
 echo "\n";
-echo 0 === $failures ? "MIGRATION OK\n" : "{$failures} FAILURE(S)\n";
+
+// A plain exit() is swallowed by wp-cli's eval-file, so a failing run would
+// still report success to anything checking the status code. WP_CLI::error()
+// is the only thing that exits non-zero here, which is what makes this usable
+// as a gate rather than something a human has to remember to read.
+if ( $failures > 0 ) {
+	echo "{$failures} FAILURE(S)\n";
+
+	if ( class_exists( 'WP_CLI' ) ) {
+		WP_CLI::error( sprintf( '%d migration check(s) failed.', $failures ) );
+	}
+
+	exit( 1 );
+}
+
+echo "MIGRATION OK\n";
