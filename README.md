@@ -96,7 +96,16 @@ Other useful hooks: `moksa_line_logged_in`, `moksa_line_user_registered`,
 # Syntax check everything
 find src views -name '*.php' -exec php -l {} \;
 node --check assets/js/admin.js
+
+# Exercise the pure logic outside WordPress: credential encryption, webhook
+# signature verification, the LINE Pay v3 string-to-sign, and the Flex validator.
+php tests/logic-check.php
 ```
+
+`tests/logic-check.php` stubs just enough of WordPress to load the relevant
+classes, so it runs anywhere PHP does. It needs the `openssl` and `mbstring`
+extensions; without them the encryption checks fail even though the plugin
+itself degrades gracefully.
 
 ## Licence
 

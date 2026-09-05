@@ -85,7 +85,12 @@ class AiResponder {
 
 		$handoff = trim( (string) Options::get( 'ai_handoff_keyword' ) );
 
-		if ( '' !== $handoff && false !== mb_stripos( $text, $handoff ) ) {
+		// stripos rather than mb_stripos: WordPress polyfills mb_substr and
+		// mb_strlen on hosts without mbstring, but not mb_stripos. UTF-8 is
+		// self-synchronising, so a byte-wise substring search is correct here;
+		// only case folding of non-ASCII differs, which does not matter for a
+		// keyword an administrator typed.
+		if ( '' !== $handoff && false !== stripos( $text, $handoff ) ) {
 			Conversations::set_status( $line_user_id, 'human' );
 
 			return array(
