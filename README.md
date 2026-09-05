@@ -79,7 +79,7 @@ add_filter( 'moksa_line_compose_reply', function ( $messages, $text, $event, $li
 	}
 
 	if ( 'order status' === strtolower( trim( $text ) ) ) {
-		return array( Moksa\Line\Line\MessagingClient::text( my_lookup_order( $line_user_id ) ) );
+		return array( Moksa\Line\Api\MessagingClient::text( my_lookup_order( $line_user_id ) ) );
 	}
 
 	return $messages;
