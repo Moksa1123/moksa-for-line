@@ -208,7 +208,17 @@ class WooModule {
 				'layout'   => 'vertical',
 				'contents' => $body,
 			),
-			'footer' => array(
+		);
+
+		// LINE only accepts https, tel: and its own schemes in a uri action, so
+		// a site served over plain http cannot carry a link. Dropping just the
+		// button keeps the notification itself deliverable -- attaching it
+		// anyway makes LINE reject the whole message, and the customer hears
+		// nothing at all about their order.
+		$view_url = (string) $order->get_view_order_url();
+
+		if ( 0 === strpos( $view_url, 'https://' ) ) {
+			$bubble['footer'] = array(
 				'type'     => 'box',
 				'layout'   => 'vertical',
 				'contents' => array(
@@ -220,12 +230,18 @@ class WooModule {
 						'action' => array(
 							'type'  => 'uri',
 							'label' => __( 'View order', 'moksa-line' ),
-							'uri'   => $order->get_view_order_url(),
+							'uri'   => $view_url,
 						),
 					),
 				),
-			),
-		);
+			);
+		} else {
+			Logger::warning(
+				'Order notifications are being sent without a "View order" button because this site is not served over https, which LINE requires for links.',
+				array( 'url' => $view_url ),
+				'woo'
+			);
+		}
 
 		return MessagingClient::flex(
 			sprintf(

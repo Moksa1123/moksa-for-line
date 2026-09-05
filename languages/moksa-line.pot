@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 2.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-05 05:44+0000\n"
+"POT-Creation-Date: 2026-09-05 06:18+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -225,7 +225,7 @@ msgstr ""
 msgid "All conversations"
 msgstr ""
 
-#: src/Woo/WooModule.php:461
+#: src/Woo/WooModule.php:477
 msgid "Already shopped with us?"
 msgstr ""
 
@@ -378,7 +378,7 @@ msgstr ""
 msgid "Context"
 msgstr ""
 
-#: src/Woo/WooModule.php:444
+#: src/Woo/WooModule.php:460
 msgid "Continue with LINE"
 msgstr ""
 
@@ -749,7 +749,7 @@ msgstr ""
 
 #: src/Admin/AdminModule.php:47
 #: src/Admin/AdminModule.php:48
-#: src/Woo/WooModule.php:351
+#: src/Woo/WooModule.php:367
 #: views/dashboard.php:34
 msgid "LINE"
 msgstr ""
@@ -861,7 +861,7 @@ msgid "LINE accepts at most %d messages per send."
 msgstr ""
 
 #: src/Frontend/ShortcodeModule.php:186
-#: src/Woo/WooModule.php:313
+#: src/Woo/WooModule.php:329
 msgid "LINE account"
 msgstr ""
 
@@ -948,7 +948,7 @@ msgid "Level"
 msgstr ""
 
 #: src/Frontend/ShortcodeModule.php:219
-#: src/Woo/WooModule.php:417
+#: src/Woo/WooModule.php:433
 msgid "Link my LINE account"
 msgstr ""
 
@@ -956,7 +956,7 @@ msgstr ""
 msgid "Link to an existing account when the email matches"
 msgstr ""
 
-#: src/Woo/WooModule.php:405
+#: src/Woo/WooModule.php:421
 msgid "Link your LINE account to get order updates in LINE and to sign in with one tap."
 msgstr ""
 
@@ -1283,7 +1283,7 @@ msgid "Order #%d"
 msgstr ""
 
 #. translators: 1: order number, 2: status label.
-#: src/Woo/WooModule.php:233
+#: src/Woo/WooModule.php:249
 msgid "Order %1$s: %2$s"
 msgstr ""
 
@@ -1680,7 +1680,7 @@ msgstr ""
 msgid "Shown in the chat list and in push notifications, where the bubble cannot be drawn."
 msgstr ""
 
-#: src/Woo/WooModule.php:471
+#: src/Woo/WooModule.php:487
 msgid "Sign in with LINE"
 msgstr ""
 
@@ -2178,7 +2178,7 @@ msgstr ""
 msgid "Type your message"
 msgstr ""
 
-#: src/Woo/WooModule.php:385
+#: src/Woo/WooModule.php:401
 msgid "Unlink"
 msgstr ""
 
@@ -2186,7 +2186,7 @@ msgstr ""
 msgid "Unlink LINE account"
 msgstr ""
 
-#: src/Woo/WooModule.php:396
+#: src/Woo/WooModule.php:412
 msgid "Unlink your LINE account?"
 msgstr ""
 
@@ -2206,7 +2206,7 @@ msgstr ""
 msgid "Used by the LIFF shortcodes unless one is given explicitly."
 msgstr ""
 
-#: src/Woo/WooModule.php:222
+#: src/Woo/WooModule.php:232
 msgid "View order"
 msgstr ""
 
@@ -2351,7 +2351,7 @@ msgstr ""
 msgid "You do not have permission to view this page."
 msgstr ""
 
-#: src/Woo/WooModule.php:382
+#: src/Woo/WooModule.php:398
 msgid "Your LINE account is linked. Order updates will be sent to you on LINE."
 msgstr ""
 
