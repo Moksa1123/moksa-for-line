@@ -1,0 +1,126 @@
+/**
+ * Front-end styles: login button, profile chip and LIFF widgets.
+ *
+ * Deliberately small and unopinionated -- these elements sit inside whatever
+ * theme the site uses, so they inherit type and spacing rather than fighting it.
+ */
+
+.moksa-line-button {
+	--moksa-green: #06c755;
+
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: var(--moksa-green);
+	color: #fff;
+	border-radius: 6px;
+	padding: 10px 18px;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	transition: background-color 0.15s ease;
+}
+
+.moksa-line-button:hover,
+.moksa-line-button:focus {
+	background: #05b34c;
+	color: #fff;
+}
+
+.moksa-line-button:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+.moksa-line-button--small {
+	padding: 6px 12px;
+	font-size: 0.875em;
+}
+
+.moksa-line-button--large {
+	padding: 14px 26px;
+	font-size: 1.125em;
+}
+
+.moksa-line-button--friend {
+	background: #fff;
+	color: var(--moksa-green);
+	border: 2px solid var(--moksa-green);
+}
+
+.moksa-line-button--friend:hover,
+.moksa-line-button--friend:focus {
+	background: #f2fdf6;
+	color: var(--moksa-green);
+}
+
+.moksa-line-button__logo {
+	flex: 0 0 auto;
+}
+
+.moksa-line-profile {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.moksa-line-profile__avatar {
+	border-radius: 50%;
+}
+
+.moksa-line-notice {
+	padding: 8px 12px;
+	background: #fcf4e4;
+	border-left: 4px solid #dba617;
+}
+
+/* LIFF widgets ----------------------------------------------------------- */
+
+.moksa-liff {
+	max-width: 480px;
+}
+
+.moksa-liff__avatar {
+	border-radius: 50%;
+}
+
+.moksa-liff__greeting {
+	font-size: 1.125em;
+	font-weight: 600;
+}
+
+.moksa-liff__status {
+	color: #666;
+}
+
+.moksa-liff__form {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.moksa-liff__form textarea {
+	width: 100%;
+}
+
+.moksa-liff__send {
+	align-self: flex-start;
+	background: #06c755;
+	color: #fff;
+	border: 0;
+	border-radius: 6px;
+	padding: 10px 20px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.moksa-liff__send:disabled {
+	opacity: 0.6;
+	cursor: default;
+}
+
+.moksa-liff__notice {
+	padding: 8px 12px;
+	background: #fcf4e4;
+	border-left: 4px solid #dba617;
+}

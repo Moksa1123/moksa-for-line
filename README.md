@@ -1,77 +1,103 @@
-# Moksa LINE Login for WordPress
+# Moksa LINE Suite
 
-完整的 WordPress LINE Login 整合外掛，包含使用者註冊、個人資料管理、WooCommerce 支援，以及 Messaging API 功能。
+LINE Login, a Messaging API bot, Flex Messages, tabbed rich menus, a
+customer-service inbox, AI replies and LINE Pay, for WordPress and WooCommerce.
 
-## 功能特色
+Version 2.0.0. Requires WordPress 6.2 and PHP 7.4.
 
-### 核心功能
-- **LINE Login**：安全的 OAuth 2.1 登入流程
-- **自動註冊**：自動將 LINE 帳號轉換為 WordPress 使用者
-- **資料同步**：同步 LINE 顯示名稱與大頭貼
-- **現代化 UI**：全新設計的專業藍色系後台介面，美觀且易於操作
-- **彈窗登入**：現代化、響應式的彈窗登入介面
-- **短代碼**：輕鬆在任何地方放置登入按鈕
+## What it does
 
-### 進階訊息互動
-- **快速回覆 (Quick Reply)**：建立並管理訊息下方的快速回覆按鈕
-- **關鍵字自動回覆**：設定關鍵字觸發自動回覆（文字、Flex Message、Quick Reply）
-- **Flex Message 編輯器**：內建即時預覽的 Flex Message 編輯器
-- **圖片地圖 (Imagemap)**：支援上傳並設定多區域點擊的 Imagemap 訊息
-- **歡迎訊息**：自訂好友加入時的歡迎訊息
+| Area | Summary |
+|---|---|
+| **LINE Login** | OAuth 2.0 + OIDC with PKCE. Identity comes from a verified ID token. Accounts can be created automatically or linked to an existing WordPress user from the profile screen. |
+| **Bot** | Keyword rules (exact, prefix, contains, pattern, catch-all) ranked by match strength and priority, replying with text, Flex, quick replies, stickers, images or raw JSON. |
+| **Conversation flows** | Multi-step scenarios that collect answers -- bookings, enquiries, sign-ups -- with validation, a cancel path, stored submissions and email notification. |
+| **AI** | Answers anything the rules did not, through the AI Engine plugin's chatbot (including its knowledge base), with a daily cap and a hand-off keyword. |
+| **Inbox** | Conversations recorded from the webhook, with unread counts, bot/human/closed status and replies sent from wp-admin. |
+| **Rich menus** | Including tabbed menus, built from rich menu aliases and `richmenuswitch` actions so tabs change instantly inside LINE. |
+| **Flex messages** | An editor with live preview, local structural checks, LINE's own validation endpoint and a test send. |
+| **LINE Pay** | Online API v3. A WooCommerce gateway with refunds and voids, plus standalone payment links you can send into a chat. |
+| **LIFF** | Profile and chat pages that run inside the LINE in-app browser, with the ID token verified server-side. |
+| **Broadcast** | To all followers or to the friends this site has recorded, with a typed confirmation and remaining quota shown. |
 
-### WooCommerce 整合
-- **商品推薦輪播**：自動將 WooCommerce 商品轉換為美觀的 Flex Carousel
-- **我的帳戶**：新增「LINE 帳號」分頁，讓使用者管理綁定狀態
-- **結帳頁面**：在結帳頁面提供 LINE 登入按鈕
-- **訂單通知**：訂單狀態變更時自動發送 LINE Flex Message 通知
+## Setup
 
-### 數據與工具
-- **儀表板**：視覺化統計好友數、訊息發送量與近期互動
-- **LIFF 整合**：內建 LIFF 支援，提供會員資料補全頁面
-- **圖文選單 (Rich Menu)**：視覺化管理介面，輕鬆設定官方帳號選單
-- **教學手冊**：內建完整的後台操作說明文件
+1. Create a **LINE Login** channel and a **Messaging API** channel in the
+   [LINE Developers Console](https://developers.line.biz/), both under the same
+   provider. (User ids are per-provider: put them under different providers and
+   the same person will look like two different people.)
+2. In WordPress, go to **LINE > Settings**.
+   - *LINE Login*: paste the Channel ID and secret, and copy the Callback URL
+     shown there into the LINE Console.
+   - *Messaging API*: paste the Channel ID and secret, and copy the Webhook URL
+     into the Console. Turn on "Use webhook", then press Verify.
+3. The **Dashboard** checklist reports what is still missing.
 
-## 安裝說明
+### Shortcodes
 
-1. 將外掛檔案上傳至 `/wp-content/plugins/moksa-line-login` 目錄
-2. 在 WordPress 外掛管理頁面啟用外掛
-3. 前往 **LINE Login** 設定頁面配置您的憑證
+```
+[moksa_line_login label="Log in with LINE" redirect="/account/"]
+[moksa_line_add_friend]
+[moksa_line_profile]
+[moksa_liff_profile]
+[moksa_line_chat]
+```
 
-## 設定指南
+### Optional constants
 
-### 1. LINE Login Channel
+```php
+// wp-config.php
+define( 'MOKSA_LINE_ENCRYPTION_KEY', '...' ); // Key for credentials at rest; defaults to the WP salts.
+define( 'MOKSA_LINE_REMOVE_DATA', true );     // Delete all plugin data on uninstall. Off by default.
+```
 
-1. 前往 [LINE Developers Console](https://developers.line.biz/)
-2. 建立一個新的 Provider 並新增 **LINE Login** Channel
-3. 在 "LINE Login" 分頁中啟用 "Web app"
-4. 將 **Callback URL** 設定為：`https://your-site.com/wp-admin/admin-ajax.php?action=moksa_line_callback`
-5. 複製 **Channel ID** 與 **Channel Secret** 到外掛設定頁面
+## Things worth knowing before you rely on it
 
-### 2. Messaging API Channel (選用)
+- **There is no chat history to import.** The Messaging API has no endpoint for
+  reading past conversations. The inbox starts from the moment the webhook is
+  switched on.
+- **Replies are free, pushes are not.** Answering an inbound message within a
+  minute uses a reply token and costs nothing. Anything the inbox, broadcast or
+  a receipt sends afterwards is a push, and is billed.
+- **LINE Pay v3, not v4.** v3's signature construction is documented and in wide
+  production use; v4's is not published in the same detail. The client is
+  written so a v4 path can be added when that changes.
+- **Rich menus are immutable on LINE.** Editing one publishes a replacement and
+  moves the alias to it. That is why publishing is a separate, explicit step
+  from saving.
+- **Changing the WordPress salts** in `wp-config.php` makes stored credentials
+  unreadable; they will need re-entering.
 
-1. 在同一個 Provider 下建立 **Messaging API** Channel
-2. 發行長效的 **Channel Access Token**
-3. 將 **Webhook URL** 設定為：`https://your-site.com/wp-json/moksa-line/v1/webhook`
-4. 在 LINE Console 中啟用 Webhooks
-5. 複製 Token 與 Channel Secret 到外掛設定頁面
+## Extending
 
-## 短代碼
+The bot's reply pipeline is a filter chain, so a site can add its own step:
 
-- `[line_login_button]`：顯示登入按鈕
-  - 參數：`text` (按鈕文字), `redirect_url` (跳轉網址), `show_popup` (yes/no)
-- `[line_add_friend]`：顯示加入好友按鈕
-- `[line_user_info]`：顯示已連結的 LINE 使用者資訊
+```php
+add_filter( 'moksa_line_compose_reply', function ( $messages, $text, $event, $line_user_id ) {
+	if ( null !== $messages ) {
+		return $messages; // Something earlier already answered.
+	}
 
-## 系統需求
+	if ( 'order status' === strtolower( trim( $text ) ) ) {
+		return array( Moksa\Line\Line\MessagingClient::text( my_lookup_order( $line_user_id ) ) );
+	}
 
-- WordPress 6.7 或更新版本
-- PHP 8.0 或更新版本
-- 啟用 SSL/HTTPS（LINE Login 要求）
+	return $messages;
+}, 25, 4 ); // Between flow triggers (20) and keyword rules (30).
+```
 
-## 授權
+Other useful hooks: `moksa_line_logged_in`, `moksa_line_user_registered`,
+`moksa_line_inbound_message`, `moksa_line_postback`, `moksa_line_flow_completed`,
+`moksa_line_payment_completed`, `moksa_line_ai_answer`, `moksa_line_modules`.
 
-本外掛採用 GPL v2 或更新版本授權。
+## Development
 
-## 支援
+```bash
+# Syntax check everything
+find src views -name '*.php' -exec php -l {} \;
+node --check assets/js/admin.js
+```
 
-如有問題或建議，請前往外掛設定頁面的「教學手冊」查看完整說明文件。
+## Licence
+
+GPL v2 or later.

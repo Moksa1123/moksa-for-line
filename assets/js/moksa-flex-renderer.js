@@ -7,7 +7,6 @@
 (function ($) {
     'use strict';
 
-    console.log('MoksaFlexRenderer: Initializing Advanced Renderer...');
 
     var MoksaFlexRenderer = {
 

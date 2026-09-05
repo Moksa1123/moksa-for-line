@@ -1,0 +1,389 @@
+<?php
+/**
+ * LIFF: pages that run inside the LINE in-app browser.
+ *
+ * The single rule that matters here: the browser tells us who it claims to
+ * be, and that claim is worthless on its own. Every endpoint verifies the
+ * LIFF ID token with LINE before believing any user id, so a crafted request
+ * cannot post into someone else's conversation.
+ *
+ * @package Moksa\Line
+ */
+
+namespace Moksa\Line\Liff;
+
+use Moksa\Line\Data\Users;
+use Moksa\Line\Inbox\Conversations;
+use Moksa\Line\Inbox\Messages;
+use Moksa\Line\Support\Logger;
+use Moksa\Line\Support\Options;
+use WP_Error;
+use WP_REST_Request;
+use WP_REST_Response;
+
+defined( 'ABSPATH' ) || exit;
+
+class LiffModule {
+
+	const NAMESPACE_V1 = 'moksa-line/v1';
+	const SDK_URL      = 'https://static.line-scdn.net/liff/edge/2/sdk.js';
+	const VERIFY_URL   = 'https://api.line.me/oauth2/v2.1/verify';
+
+	public function register(): void {
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_shortcode( 'moksa_liff_profile', array( $this, 'shortcode_profile' ) );
+		add_shortcode( 'moksa_line_chat', array( $this, 'shortcode_chat' ) );
+	}
+
+	public function register_routes(): void {
+		register_rest_route(
+			self::NAMESPACE_V1,
+			'/liff/session',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_session' ),
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'id_token' => array( 'required' => true, 'type' => 'string' ),
+				),
+			)
+		);
+
+		register_rest_route(
+			self::NAMESPACE_V1,
+			'/liff/message',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_message' ),
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'id_token' => array( 'required' => true, 'type' => 'string' ),
+					'message'  => array( 'required' => true, 'type' => 'string' ),
+				),
+			)
+		);
+	}
+
+	// --- Endpoints ---------------------------------------------------------------
+
+	/**
+	 * Exchange a verified LIFF ID token for a profile the page can display,
+	 * and record the visitor.
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function handle_session( WP_REST_Request $request ) {
+		$claims = self::verify_id_token( (string) $request->get_param( 'id_token' ) );
+
+		if ( is_wp_error( $claims ) ) {
+			return $claims;
+		}
+
+		$line_user_id = (string) $claims['sub'];
+
+		Users::upsert(
+			$line_user_id,
+			array(
+				'display_name' => isset( $claims['name'] ) ? sanitize_text_field( (string) $claims['name'] ) : '',
+				'picture_url'  => isset( $claims['picture'] ) ? esc_url_raw( (string) $claims['picture'] ) : '',
+			)
+		);
+
+		$record = Users::by_line_id( $line_user_id );
+
+		return new WP_REST_Response(
+			array(
+				'display_name' => $record ? (string) $record->display_name : '',
+				'picture_url'  => $record ? (string) $record->picture_url : '',
+				'linked'       => $record ? ( (int) $record->wp_user_id > 0 ) : false,
+			),
+			200
+		);
+	}
+
+	/**
+	 * Receive a message typed into a LIFF chat page.
+	 *
+	 * The message lands in the customer-service inbox. An agent's reply goes
+	 * out as a LINE push, so the customer sees it in their normal LINE chat
+	 * rather than only inside the web page they may already have closed.
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function handle_message( WP_REST_Request $request ) {
+		if ( ! Options::get( 'inbox_enabled' ) ) {
+			return new WP_Error(
+				'moksa_line_inbox_off',
+				__( 'Messaging is not available right now.', 'moksa-line-login' ),
+				array( 'status' => 503 )
+			);
+		}
+
+		$claims = self::verify_id_token( (string) $request->get_param( 'id_token' ) );
+
+		if ( is_wp_error( $claims ) ) {
+			return $claims;
+		}
+
+		$line_user_id = (string) $claims['sub'];
+		$text         = trim( sanitize_textarea_field( (string) $request->get_param( 'message' ) ) );
+
+		if ( '' === $text ) {
+			return new WP_Error(
+				'moksa_line_empty_message',
+				__( 'Write something first.', 'moksa-line-login' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		// A chat widget is an obvious spam target, so cap what one identity can
+		// send before an agent has had a chance to look at it.
+		if ( ! self::within_rate_limit( $line_user_id ) ) {
+			return new WP_Error(
+				'moksa_line_too_fast',
+				__( 'That is a lot of messages at once. Please wait a moment.', 'moksa-line-login' ),
+				array( 'status' => 429 )
+			);
+		}
+
+		$text = mb_substr( $text, 0, 2000 );
+
+		$conversation_id = Conversations::ensure( $line_user_id );
+
+		Messages::record(
+			array(
+				'conversation_id' => $conversation_id,
+				'line_user_id'    => $line_user_id,
+				'direction'       => 'in',
+				'message_type'    => 'text',
+				'body'            => $text,
+				'sender_kind'     => 'user',
+			)
+		);
+
+		Conversations::touch( $line_user_id, $text, true );
+
+		/**
+		 * Fires when a message arrives through a LIFF chat page rather than
+		 * the LINE chat itself.
+		 *
+		 * @param string $text         Message text.
+		 * @param string $line_user_id LINE user id.
+		 */
+		do_action( 'moksa_line_liff_message', $text, $line_user_id );
+
+		return new WP_REST_Response( array( 'status' => 'received' ), 200 );
+	}
+
+	// --- Verification -------------------------------------------------------------
+
+	/**
+	 * Verify a LIFF ID token against LINE and return its claims.
+	 *
+	 * @param string $id_token JWT from liff.getIDToken().
+	 * @return array|WP_Error
+	 */
+	public static function verify_id_token( string $id_token ) {
+		if ( '' === $id_token ) {
+			return new WP_Error(
+				'moksa_line_liff_no_token',
+				__( 'This page could not identify you. Reopen it from LINE.', 'moksa-line-login' ),
+				array( 'status' => 401 )
+			);
+		}
+
+		// The LIFF app belongs to the LINE Login channel, so that channel id is
+		// the audience -- not the Messaging API one.
+		$channel_id = (string) Options::get( 'channel_id' );
+
+		$response = wp_remote_post(
+			self::VERIFY_URL,
+			array(
+				'timeout' => 15,
+				'headers' => array( 'Content-Type' => 'application/x-www-form-urlencoded' ),
+				'body'    => array(
+					'id_token'  => $id_token,
+					'client_id' => $channel_id,
+				),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			Logger::capture( $response, 'Could not verify a LIFF ID token', 'liff' );
+
+			return new WP_Error(
+				'moksa_line_liff_unreachable',
+				__( 'Could not reach LINE to verify this session.', 'moksa-line-login' ),
+				array( 'status' => 503 )
+			);
+		}
+
+		$claims = json_decode( (string) wp_remote_retrieve_body( $response ), true );
+
+		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) || empty( $claims['sub'] ) ) {
+			return new WP_Error(
+				'moksa_line_liff_invalid',
+				__( 'This session could not be verified. Reopen the page from LINE.', 'moksa-line-login' ),
+				array( 'status' => 401 )
+			);
+		}
+
+		if ( '' !== $channel_id ) {
+			$audience = isset( $claims['aud'] ) ? (array) $claims['aud'] : array();
+
+			if ( ! in_array( $channel_id, $audience, true ) ) {
+				return new WP_Error(
+					'moksa_line_liff_wrong_channel',
+					__( 'This session belongs to a different channel.', 'moksa-line-login' ),
+					array( 'status' => 401 )
+				);
+			}
+		}
+
+		return $claims;
+	}
+
+	/**
+	 * Simple per-identity throttle for LIFF chat.
+	 *
+	 * @param string $line_user_id LINE user id.
+	 */
+	private static function within_rate_limit( string $line_user_id ): bool {
+		$key   = 'moksa_liff_rate_' . substr( hash( 'sha256', $line_user_id ), 0, 24 );
+		$count = (int) get_transient( $key );
+
+		if ( $count >= 20 ) {
+			return false;
+		}
+
+		set_transient( $key, $count + 1, MINUTE_IN_SECONDS );
+
+		return true;
+	}
+
+	// --- Shortcodes ------------------------------------------------------------------
+
+	/**
+	 * A LIFF page that greets the visitor by name.
+	 *
+	 * @param array $atts Shortcode attributes.
+	 */
+	public function shortcode_profile( $atts ): string {
+		$atts = shortcode_atts(
+			array(
+				'liff_id' => (string) Options::get( 'liff_id' ),
+			),
+			(array) $atts,
+			'moksa_liff_profile'
+		);
+
+		if ( '' === $atts['liff_id'] ) {
+			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-line-login' ) );
+		}
+
+		$this->enqueue( $atts['liff_id'] );
+
+		return '<div class="moksa-liff moksa-liff--profile" data-moksa-liff-profile>'
+			. '<p class="moksa-liff__status">' . esc_html__( 'Connecting to LINE...', 'moksa-line-login' ) . '</p>'
+			. '</div>';
+	}
+
+	/**
+	 * A chat box that posts into the customer-service inbox.
+	 *
+	 * @param array $atts Shortcode attributes.
+	 */
+	public function shortcode_chat( $atts ): string {
+		$atts = shortcode_atts(
+			array(
+				'liff_id'     => (string) Options::get( 'liff_chat_id' ),
+				'placeholder' => __( 'Type your message', 'moksa-line-login' ),
+				'intro'       => __( 'Send us a message and we will reply in your LINE chat.', 'moksa-line-login' ),
+			),
+			(array) $atts,
+			'moksa_line_chat'
+		);
+
+		if ( '' === $atts['liff_id'] ) {
+			$atts['liff_id'] = (string) Options::get( 'liff_id' );
+		}
+
+		if ( '' === $atts['liff_id'] ) {
+			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-line-login' ) );
+		}
+
+		$this->enqueue( $atts['liff_id'] );
+
+		ob_start();
+		?>
+		<div class="moksa-liff moksa-liff--chat" data-moksa-liff-chat>
+			<p class="moksa-liff__intro"><?php echo esc_html( $atts['intro'] ); ?></p>
+			<p class="moksa-liff__status" data-moksa-chat-status><?php esc_html_e( 'Connecting to LINE...', 'moksa-line-login' ); ?></p>
+			<form class="moksa-liff__form" data-moksa-chat-form hidden>
+				<label class="screen-reader-text" for="moksa-chat-message"><?php esc_html_e( 'Your message', 'moksa-line-login' ); ?></label>
+				<textarea id="moksa-chat-message" name="message" rows="3" required
+					placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"></textarea>
+				<button type="submit" class="moksa-liff__send"><?php esc_html_e( 'Send', 'moksa-line-login' ); ?></button>
+			</form>
+		</div>
+		<?php
+
+		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Load the LIFF SDK and the plugin's front-end script.
+	 *
+	 * @param string $liff_id LIFF app id.
+	 */
+	private function enqueue( string $liff_id ): void {
+		wp_enqueue_script( 'moksa-line-liff-sdk', self::SDK_URL, array(), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- LINE serves an unversioned edge SDK.
+
+		wp_enqueue_script(
+			'moksa-line-liff',
+			MOKSA_LINE_URL . 'assets/js/liff.js',
+			array( 'moksa-line-liff-sdk' ),
+			MOKSA_LINE_VERSION,
+			true
+		);
+
+		wp_enqueue_style(
+			'moksa-line-front',
+			MOKSA_LINE_URL . 'assets/css/front.css',
+			array(),
+			MOKSA_LINE_VERSION
+		);
+
+		wp_localize_script(
+			'moksa-line-liff',
+			'moksaLineLiff',
+			array(
+				'liffId'     => $liff_id,
+				'sessionUrl' => rest_url( self::NAMESPACE_V1 . '/liff/session' ),
+				'messageUrl' => rest_url( self::NAMESPACE_V1 . '/liff/message' ),
+				'strings'    => array(
+					'greeting'  => __( 'Hello, %s', 'moksa-line-login' ),
+					'sending'   => __( 'Sending...', 'moksa-line-login' ),
+					'sent'      => __( 'Sent. We will reply in your LINE chat.', 'moksa-line-login' ),
+					'failed'    => __( 'That did not send. Please try again.', 'moksa-line-login' ),
+					'notInLine' => __( 'Open this page from LINE to continue.', 'moksa-line-login' ),
+				),
+			)
+		);
+	}
+
+	/**
+	 * An admin-only notice rendered in place of a broken shortcode.
+	 *
+	 * @param string $message What is missing.
+	 */
+	private function notice( string $message ): string {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return '';
+		}
+
+		return '<p class="moksa-liff__notice">' . esc_html( $message ) . '</p>';
+	}
+}

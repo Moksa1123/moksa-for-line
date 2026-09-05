@@ -17,7 +17,9 @@
 namespace Moksa\Line\Bot;
 
 use Moksa\Line\Bot\Ai\AiResponder;
+use Moksa\Line\Data\QuickReplies;
 use Moksa\Line\Inbox\Conversations;
+use Moksa\Line\Line\MessagingClient;
 use Moksa\Line\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
@@ -40,6 +42,199 @@ class BotModule {
 		add_filter( 'moksa_line_compose_reply', array( $this, 'ai_reply' ), 40, 4 );
 
 		add_filter( 'moksa_line_compose_postback_reply', array( $this, 'postback_reply' ), 10, 4 );
+
+		add_action( 'wp_ajax_moksa_line_rule_save', array( $this, 'ajax_save_rule' ) );
+		add_action( 'wp_ajax_moksa_line_rule_delete', array( $this, 'ajax_delete_rule' ) );
+		add_action( 'wp_ajax_moksa_line_flow_save', array( $this, 'ajax_save_flow' ) );
+		add_action( 'wp_ajax_moksa_line_flow_delete', array( $this, 'ajax_delete_flow' ) );
+		add_action( 'wp_ajax_moksa_line_quick_reply_save', array( $this, 'ajax_save_quick_reply' ) );
+		add_action( 'wp_ajax_moksa_line_quick_reply_delete', array( $this, 'ajax_delete_quick_reply' ) );
+	}
+
+	// --- Admin AJAX -------------------------------------------------------------
+
+	/**
+	 * Save a keyword rule.
+	 */
+	public function ajax_save_rule(): void {
+		$this->guard();
+
+		$reply_type = isset( $_POST['reply_type'] ) ? sanitize_key( wp_unslash( $_POST['reply_type'] ) ) : 'text';
+		$reply_data = isset( $_POST['reply_data'] ) ? wp_unslash( $_POST['reply_data'] ) : '';
+
+		// Raw and Flex payloads are JSON and must survive intact, so they are
+		// validated rather than sanitised into uselessness.
+		if ( in_array( $reply_type, array( 'raw', 'flex' ), true ) && '' !== trim( (string) $reply_data ) && ! ctype_digit( trim( (string) $reply_data ) ) ) {
+			$decoded = json_decode( (string) $reply_data, true );
+
+			if ( ! is_array( $decoded ) ) {
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+							/* translators: %s: JSON parser message. */
+							__( 'That is not valid JSON: %s', 'moksa-line-login' ),
+							json_last_error_msg()
+						),
+					)
+				);
+			}
+
+			$reply_data = wp_json_encode( $decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+		} elseif ( 'text' === $reply_type ) {
+			$reply_data = sanitize_textarea_field( (string) $reply_data );
+		} else {
+			$reply_data = sanitize_text_field( (string) $reply_data );
+		}
+
+		$keyword    = isset( $_POST['keyword'] ) ? sanitize_text_field( wp_unslash( $_POST['keyword'] ) ) : '';
+		$match_type = isset( $_POST['match_type'] ) ? sanitize_key( wp_unslash( $_POST['match_type'] ) ) : 'exact';
+
+		if ( 'any' !== $match_type && '' === trim( $keyword ) ) {
+			wp_send_json_error( array( 'message' => __( 'Give the rule something to match on.', 'moksa-line-login' ) ) );
+		}
+
+		// A broken pattern would otherwise silently match nothing forever.
+		if ( 'regex' === $match_type && false === @preg_match( '/' . str_replace( '/', '\\/', $keyword ) . '/iu', '' ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors -- the point is to detect the failure.
+			wp_send_json_error( array( 'message' => __( 'That pattern is not valid.', 'moksa-line-login' ) ) );
+		}
+
+		$id = AutoReply::save(
+			array(
+				'id'         => isset( $_POST['id'] ) ? (int) $_POST['id'] : 0,
+				'name'       => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+				'keyword'    => $keyword,
+				'match_type' => $match_type,
+				'reply_type' => $reply_type,
+				'reply_data' => $reply_data,
+				'priority'   => isset( $_POST['priority'] ) ? (int) $_POST['priority'] : 10,
+				'is_active'  => ! empty( $_POST['is_active'] ),
+			)
+		);
+
+		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Rule saved.', 'moksa-line-login' ) ) );
+	}
+
+	/**
+	 * Delete a keyword rule.
+	 */
+	public function ajax_delete_rule(): void {
+		$this->guard();
+
+		AutoReply::delete( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
+
+		wp_send_json_success( array( 'message' => __( 'Rule deleted.', 'moksa-line-login' ) ) );
+	}
+
+	/**
+	 * Save a conversation flow.
+	 */
+	public function ajax_save_flow(): void {
+		$this->guard();
+
+		$definition = json_decode( (string) wp_unslash( $_POST['definition'] ?? '' ), true );
+
+		if ( ! is_array( $definition ) ) {
+			wp_send_json_error( array( 'message' => __( 'The flow definition is not valid JSON.', 'moksa-line-login' ) ) );
+		}
+
+		if ( empty( $definition['steps'] ) || ! is_array( $definition['steps'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'A flow needs at least one step.', 'moksa-line-login' ) ) );
+		}
+
+		foreach ( $definition['steps'] as $index => $step ) {
+			if ( empty( $step['prompt'] ) ) {
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+							/* translators: %d: step number. */
+							__( 'Step %d has no question to ask.', 'moksa-line-login' ),
+							(int) $index + 1
+						),
+					)
+				);
+			}
+		}
+
+		$email = isset( $_POST['notify_email'] ) ? sanitize_email( wp_unslash( $_POST['notify_email'] ) ) : '';
+
+		if ( '' !== $email && ! is_email( $email ) ) {
+			wp_send_json_error( array( 'message' => __( 'That notification address is not valid.', 'moksa-line-login' ) ) );
+		}
+
+		$id = Flow::save(
+			array(
+				'id'            => isset( $_POST['id'] ) ? (int) $_POST['id'] : 0,
+				'name'          => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+				'trigger_type'  => isset( $_POST['trigger_type'] ) && 'contains' === $_POST['trigger_type'] ? 'contains' : 'keyword',
+				'trigger_value' => isset( $_POST['trigger_value'] ) ? sanitize_text_field( wp_unslash( $_POST['trigger_value'] ) ) : '',
+				'definition'    => wp_json_encode( $definition, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ),
+				'notify_email'  => $email,
+				'is_active'     => ! empty( $_POST['is_active'] ) ? 1 : 0,
+			)
+		);
+
+		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Flow saved.', 'moksa-line-login' ) ) );
+	}
+
+	/**
+	 * Delete a conversation flow.
+	 */
+	public function ajax_delete_flow(): void {
+		$this->guard();
+
+		Flow::delete( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
+
+		wp_send_json_success( array( 'message' => __( 'Flow deleted.', 'moksa-line-login' ) ) );
+	}
+
+	/**
+	 * Save a quick reply set.
+	 */
+	public function ajax_save_quick_reply(): void {
+		$this->guard();
+
+		$items = json_decode( (string) wp_unslash( $_POST['items'] ?? '' ), true );
+
+		if ( ! is_array( $items ) || empty( $items ) ) {
+			wp_send_json_error( array( 'message' => __( 'Add at least one quick reply button.', 'moksa-line-login' ) ) );
+		}
+
+		if ( count( $items ) > 13 ) {
+			wp_send_json_error( array( 'message' => __( 'LINE allows at most 13 quick reply buttons.', 'moksa-line-login' ) ) );
+		}
+
+		$id = QuickReplies::save(
+			array(
+				'id'        => isset( $_POST['id'] ) ? (int) $_POST['id'] : 0,
+				'name'      => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+				'items'     => wp_json_encode( $items, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ),
+				'is_active' => 1,
+			)
+		);
+
+		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Quick reply set saved.', 'moksa-line-login' ) ) );
+	}
+
+	/**
+	 * Delete a quick reply set.
+	 */
+	public function ajax_delete_quick_reply(): void {
+		$this->guard();
+
+		QuickReplies::delete( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
+
+		wp_send_json_success( array( 'message' => __( 'Quick reply set deleted.', 'moksa-line-login' ) ) );
+	}
+
+	/**
+	 * Shared nonce and capability check.
+	 */
+	private function guard(): void {
+		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to change bot settings.', 'moksa-line-login' ) ), 403 );
+		}
 	}
 
 	/**
@@ -185,7 +380,7 @@ class BotModule {
 			Conversations::set_status( $line_user_id, 'human' );
 
 			return array(
-				\Moksa\Line\Line\MessagingClient::text(
+				MessagingClient::text(
 					__( 'A member of our team will reply here shortly.', 'moksa-line-login' )
 				),
 			);

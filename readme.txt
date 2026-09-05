@@ -1,143 +1,96 @@
-=== Moksa LINE Login ===
+=== Moksa LINE Suite ===
 Contributors: moksa
-Tags: line, login, sso, authentication, messaging
-Requires at least: 6.0
-Tested up to: 6.4
+Tags: line, line login, line pay, chatbot, woocommerce
+Requires at least: 6.2
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 2.0.0
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A comprehensive LINE Login and messaging solution for WordPress.
+LINE Login, a Messaging API bot, Flex Messages, tabbed rich menus, a customer-service inbox, AI replies and LINE Pay.
 
 == Description ==
 
-Moksa LINE Login allows users to log in to your WordPress site using their LINE account. It also provides powerful messaging features like Flex Messages, Auto Replies, and Order Notifications.
+Connects a WordPress site to the LINE platform.
+
+* **LINE Login** — OAuth 2.0 and OpenID Connect with PKCE. Identity comes from a verified ID token, not an unauthenticated profile read. Visitors can register automatically or link LINE to an existing account from their profile.
+* **Bot** — keyword rules matched by exact text, prefix, substring, regular expression or catch-all, ranked by match strength and priority. Replies can be text, a Flex template, a quick reply set, a sticker, an image or raw message JSON.
+* **Conversation flows** — multi-step scenarios that collect answers for bookings, enquiries or sign-ups, with per-step validation, choices as quick reply buttons, a cancel path, stored submissions and optional email notification.
+* **AI replies** — answers whatever the rules did not, using the AI Engine plugin's chatbot and its knowledge base. Protected by a daily cap, a length limit and a hand-off keyword that passes the conversation to a person.
+* **Customer-service inbox** — conversations captured from the webhook, with unread counts, bot/human/closed status, and replies sent from wp-admin.
+* **Rich menus** — including tabbed menus, built from rich menu aliases so tabs switch instantly inside LINE.
+* **Flex messages** — an editor with live preview, structural validation, LINE's own validation endpoint and a test send.
+* **LINE Pay** — a WooCommerce gateway with full and partial refunds, plus standalone payment links you can send straight into a chat.
+* **LIFF** — profile and chat pages that run inside LINE, with every request's ID token verified against LINE before it is trusted.
+* **Broadcast** — to every follower or to the friends this site has recorded, with a typed confirmation and the remaining monthly quota shown.
+
+= Two things to know first =
+
+The Messaging API provides no way to read past conversations, so the inbox starts from the moment the webhook is switched on. And answering an inbound message within a minute is free, while anything sent afterwards — inbox replies, broadcasts, receipts — is a push message and is billed by LINE.
+
+= Privacy =
+
+The plugin stores LINE user ids, display names, profile picture URLs and, where the channel is approved for it, email addresses. Messages exchanged with the bot are stored so the inbox can show them, and are deleted after the retention period set in the settings. Credentials are encrypted at rest using keys derived from the site's WordPress salts.
+
+Data is sent to LINE Corporation (api.line.me) to deliver messages and verify logins, to LINE Pay (api-pay.line.me) when payments are enabled, and to any forwarding URL an administrator configures. When AI replies are enabled, message text is passed to the AI Engine plugin, which sends it to whichever AI provider that plugin is configured with.
+
+== Installation ==
+
+1. Upload the plugin folder to `/wp-content/plugins/` and activate it.
+2. Create a LINE Login channel and a Messaging API channel in the LINE Developers Console, both under the same provider.
+3. Go to **LINE > Settings** and paste the Channel IDs and secrets. Copy the Callback URL and Webhook URL shown there into the LINE Console.
+4. In the Console, enable "Use webhook" and press Verify.
+5. The Dashboard checklist shows anything still outstanding.
 
 == Frequently Asked Questions ==
 
-= 為什麼登入後沒有反應？ =
-請確認您的 Callback URL 是否已正確設定在 LINE Developers Console 中。網址格式應為：`https://your-site.com/wp-admin/admin-ajax.php?action=moksa_line_callback`
+= Can it show conversations from before I installed it? =
 
-== Screenshots ==
+No. LINE does not provide an endpoint for reading chat history. Everything the inbox shows arrived by webhook after the plugin was set up.
 
-1. 外掛設定頁面
-2. Flex Message 編輯器
-3. 自動回覆規則管理
+= Do I need the LINE Login and Messaging API channels under the same provider? =
 
-== Changelog ==
+Yes, if you want the same person to be recognised in both. LINE user ids are issued per provider, so channels under different providers report different ids for the same human.
 
-= 1.4.0 - 2025-11-21 =
-*   Fix: 簡化 Monaco Editor 載入機制，使用固定延遲取代複雜檢測
-*   Fix: Monaco 透過 WordPress 腳本系統註冊，保持 AMD 保護
-*   Fix: 修復編輯器無法初始化的問題
-*   Note: 使用 500ms 延遲確保腳本就緒
+= Which LINE Pay API version does this use? =
 
-= 1.3.8 - 2025-11-21 =
-*   Fix: 修復 Monaco Editor AMD 衝突導致的 JavaScript 錯誤
-*   Fix: 移除模板中的直接 CDN 載入，改用 WordPress 腳本系統
-*   Fix: 新增 AMD 環境保護機制，避免與其他外掛衝突
-*   Fix: 修復 wpColorPicker 與 hoverIntent 依賴問題
-*   Enhancement: 改善腳本載入順序與依賴管理
+Online API v3. Its signature construction is publicly documented and widely used in production. v4 exists, but its string-to-sign is not published in the same detail.
 
-= 1.3.7 - 2025-11-21 =
-*   Fix: 修復預覽容器 ID 不一致導致的渲染失敗問題
-*   Fix: 新增渲染器載入重試機制 (500ms timeout)
-*   Enhancement: 加入詳細的控制台除錯日誌 ([Flex Preview] 前綴)
-*   Enhancement: 改善錯誤訊息，提供更友善的使用者指引
+= Does uninstalling delete my data? =
 
-= 1.3.6 - 2025-11-21 =
-*   Major: 完全重寫 Flex Message Renderer (Advanced Flexbox Engine)
-*   New: 支援所有 LINE Flex Message 組件 (bubble, carousel, box, text, image, button, separator, spacer, icon)
-*   New: 完整支援 Flexbox 佈局屬性 (flex, justifyContent, alignItems, spacing, margin, padding)
-*   New: 支援樣式屬性 (backgroundColor, borderWidth, cornerRadius, aspectRatio)
-*   Fix: 修復複雜嵌套結構與動態參數的渲染問題
-*   Tested: 通過基礎測試與複雜訂單通知 JSON 驗證
+No, unless you define `MOKSA_LINE_REMOVE_DATA` as `true` in `wp-config.php`. Payment records and conversation history are the kind of thing a shop may need to keep.
 
-= 1.3.5 - 2025-11-21 =
-*   Fix: 修復 "Flex Renderer not loaded" 錯誤 (調整腳本載入順序)
-*   Update: 全新 Premium UI 設計 (擬真手機預覽、LINE 官方配色、現代化字體與陰影)
-*   Update: 優化自動回覆頁面與 Flex 編輯器的使用者體驗
+= Why can I not select administrator as the role for new accounts? =
 
-= 1.3.4 - 2025-11-21 =
-*   Fix: 修復 Flex Message 編輯器動態參數 ({{name}}) 導致預覽空白的問題
-*   Fix: 改進 Flex Renderer 錯誤處理，顯示詳細錯誤訊息
-*   Update: 完成所有管理介面 (Dashboard, Settings, Tools, Generators) 的 UI 標準化
-*   Update: 優化 Flex 編輯器介面體驗
-
-= 1.3.3 - 2025-11-21 =
-*   Update: 更新最低環境需求 (WordPress 6.0+, PHP 7.4+)
-*   Update: 全面優化管理介面 UI，採用現代化三欄式設計
-*   Fix: 修復 Flex Message 編輯器 JSON 預覽異常問題
-
-= 1.3.2 - 2025-11-20 =
-*   Fix: 修復外掛標頭遺失導致無法安裝的問題
-*   Fix: 修復翻譯檔案 (PO) 中的重複欄位導致的潛在錯誤
-*   Fix: 改進 Flex Renderer JavaScript 相容性，解決 "Flex Renderer not loaded" 錯誤
-*   Fix: 統一 Flex 訊息預覽渲染引擎，確保與 LINE 真實顯示一致
-*   New: Flex 訊息編輯器支援變數拖放 (Drag-and-Drop) 功能
-*   New: 自動回覆歡迎訊息新增 Emoji 表情貼選擇器
-
-= 1.3.1 - 2025-11-20 =
-*   更新翻譯檔案：補齊所有語言 (en_US, ja, ko_KR) 的 29 個缺失字串
-*   優化 POT 模板檔案結構
-*   更新版本控制流程
-
-= 1.3.0 - 2025-11-20 =
-**重大安全更新 - 強烈建議更新**
-
-**新增功能**
-*   新增 LIFF ID Token 驗證機制，防止帳號劫持
-*   新增 Rate Limiting 功能，防止 DDoS 攻擊（Webhook 端點限流 60 req/min）
-*   新增安全標頭（X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, Referrer-Policy）
-*   新增完整的檔案上傳驗證（MIME 類型、大小、副檔名）
-*   新增安全工具類別，包含 JSON 驗證和安全事件日誌
-*   新增 Flex Message 預覽功能到自動回覆管理器
-*   新增完整的繁體中文本地化
-*   新增英文、日文、韓文翻譯檔案
-*   新增 CHANGELOG.md 版本追蹤
-
-**安全性改進**
-*   修正 LIFF 端點缺乏 ID Token 驗證的嚴重漏洞
-*   修正檔案上傳缺乏驗證的安全問題
-*   改用 WordPress Transients 取代 PHP Session，支援多伺服器環境
-*   為所有 SQL 查詢加入安全註釋
-*   加強錯誤處理和日誌記錄
-
-**效能優化**
-*   優化 Transient-based session 管理
-*   改善 Webhook 回應時間（非阻塞式 n8n 轉發）
-
-**合規性**
-*   OWASP Top 10 合規率：60% → 98%
-*   WordPress.org 合規率：100%
-*   Wordfence 評級：A+
-*   安全評分：7.0/10 → 9.8/10
-
-= 1.2.0 - 2025-11-19 =
-*   新增 Flex Message 編輯器（Monaco Editor）
-*   新增 WooCommerce 訂單通知範本
-*   新增圖文選單管理器
-*   新增快速回覆管理器
-*   新增 Imagemap 管理器
-*   新增關鍵字自動回覆系統
-*   新增儀表板統計功能
-*   新增 n8n Webhook 整合
-
-= 1.1.0 - 2025-11-15 =
-*   新增 LIFF (LINE Front-end Framework) 支援
-*   新增個人資料同步功能
-*   新增使用者頭像管理
-*   改善認證流程
-*   改善錯誤處理
-
-= 1.0.0 - 2025-11-10 =
-*   初始版本發布
-*   整合 LINE Login 與 Messaging API
-*   新增 WooCommerce 訂單通知功能
-*   新增 Flex Message 預覽功能
+Because a self-service login flow that can mint administrators is a way to lose a site.
 
 == Upgrade Notice ==
 
-= 1.3.0 =
-重大安全更新！修正多個安全漏洞，強烈建議所有使用者立即更新。此版本包含 LIFF ID Token 驗證、Rate Limiting、安全標頭等重要安全改進。
+= 2.0.0 =
+A rewrite that fixes several silently broken features and closes security issues in the 1.x login flow. Settings and data are migrated automatically; no reconfiguration is needed. Review the LINE Pay settings before going live.
+
+== Changelog ==
+
+= 2.0.0 =
+
+Fixed:
+* The installer created four database tables while the code wrote to nine, so rich menus, webhook logs and Flex templates were failing silently. All tables are now created and versioned.
+* Auto-replies and quick replies were written to columns that did not match the ones they were read from. Existing rows are migrated rather than lost.
+* Schema upgrades no longer depend on the activation hook, which was registered where it did not reliably fire.
+* Rich menu images and tap areas are checked locally, so a rejected menu says what is actually wrong.
+
+Security:
+* The OAuth state and OIDC nonce are separate random values; 1.x reused the nonce parameter to carry a transient key, leaving replay protection unused.
+* The ID token is verified with LINE, and the login is bound to the request through PKCE.
+* The post-login redirect is validated, closing an open redirect.
+* Channel secrets and tokens are encrypted at rest instead of stored as plain text.
+* Short-lived channel access tokens replace a stored long-lived token by default.
+* Webhook retries can no longer produce a duplicate reply to a customer.
+* Matching an account by email is opt-in, a LINE identity bound elsewhere is refused, and new accounts cannot be given the administrator role.
+
+Added:
+* Customer-service inbox, conversation flows, AI replies through AI Engine, tabbed rich menus, LINE Pay for WooCommerce and payment links, a Flex editor, broadcasting, LIFF shortcodes, and a logs screen.
+
+= 1.4.0 =
+* Earlier releases: see the repository history.

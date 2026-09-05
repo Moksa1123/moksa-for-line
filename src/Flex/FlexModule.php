@@ -1,0 +1,290 @@
+<?php
+/**
+ * Flex Message templates.
+ *
+ * The editor's value is in catching mistakes before a customer sees them, so
+ * saving runs the local structural checks and, when the channel is connected,
+ * LINE's own validation endpoint. A template that will not send cannot be
+ * saved as if it were fine.
+ *
+ * @package Moksa\Line
+ */
+
+namespace Moksa\Line\Flex;
+
+use Moksa\Line\Data\Flex;
+use Moksa\Line\Line\MessagingClient;
+use Moksa\Line\Line\TokenManager;
+
+defined( 'ABSPATH' ) || exit;
+
+class FlexModule {
+
+	public function register(): void {
+		add_action( 'wp_ajax_moksa_line_flex_save', array( $this, 'ajax_save' ) );
+		add_action( 'wp_ajax_moksa_line_flex_delete', array( $this, 'ajax_delete' ) );
+		add_action( 'wp_ajax_moksa_line_flex_validate', array( $this, 'ajax_validate' ) );
+		add_action( 'wp_ajax_moksa_line_flex_send_test', array( $this, 'ajax_send_test' ) );
+	}
+
+	/**
+	 * Save a template.
+	 */
+	public function ajax_save(): void {
+		$this->guard();
+
+		$contents_raw = isset( $_POST['contents'] ) ? wp_unslash( $_POST['contents'] ) : '';
+		$decoded      = json_decode( (string) $contents_raw, true );
+
+		if ( ! is_array( $decoded ) ) {
+			wp_send_json_error(
+				array(
+					'message' => sprintf(
+						/* translators: %s: JSON parser message. */
+						__( 'That is not valid JSON: %s', 'moksa-line-login' ),
+						json_last_error_msg()
+					),
+				)
+			);
+		}
+
+		$alt_text = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : '';
+		$problems = Validator::check_message( MessagingClient::flex( $alt_text, $decoded ) );
+
+		if ( ! empty( $problems ) ) {
+			wp_send_json_error(
+				array(
+					'message'  => __( 'This template will not send as it stands.', 'moksa-line-login' ),
+					'problems' => $problems,
+				)
+			);
+		}
+
+		$id = Flex::save(
+			array(
+				'id'       => isset( $_POST['id'] ) ? (int) $_POST['id'] : 0,
+				'name'     => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+				'alt_text' => $alt_text,
+				'category' => isset( $_POST['category'] ) ? sanitize_text_field( wp_unslash( $_POST['category'] ) ) : '',
+				// Re-encode from the decoded structure so what is stored is
+				// always canonical JSON, whatever the editor sent.
+				'contents' => wp_json_encode( $decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ),
+			)
+		);
+
+		if ( ! $id ) {
+			wp_send_json_error( array( 'message' => __( 'The template could not be saved.', 'moksa-line-login' ) ) );
+		}
+
+		wp_send_json_success(
+			array(
+				'id'      => $id,
+				'message' => __( 'Template saved.', 'moksa-line-login' ),
+			)
+		);
+	}
+
+	/**
+	 * Delete a template.
+	 */
+	public function ajax_delete(): void {
+		$this->guard();
+
+		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
+
+		if ( ! Flex::delete( $id ) ) {
+			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-line-login' ) ), 404 );
+		}
+
+		wp_send_json_success( array( 'message' => __( 'Template deleted.', 'moksa-line-login' ) ) );
+	}
+
+	/**
+	 * Check a template without saving it: local rules first, then LINE's own
+	 * validator when a channel is connected.
+	 */
+	public function ajax_validate(): void {
+		$this->guard();
+
+		$decoded = json_decode( (string) wp_unslash( $_POST['contents'] ?? '' ), true );
+
+		if ( ! is_array( $decoded ) ) {
+			wp_send_json_error(
+				array(
+					'message'  => __( 'That is not valid JSON.', 'moksa-line-login' ),
+					'problems' => array( json_last_error_msg() ),
+				)
+			);
+		}
+
+		$alt_text = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : 'Preview';
+		$message  = MessagingClient::flex( $alt_text, $decoded );
+		$problems = Validator::check_message( $message );
+
+		if ( ! empty( $problems ) ) {
+			wp_send_json_error(
+				array(
+					'message'  => __( 'Found problems before contacting LINE.', 'moksa-line-login' ),
+					'problems' => $problems,
+					'source'   => 'local',
+				)
+			);
+		}
+
+		if ( ! TokenManager::is_configured() ) {
+			wp_send_json_success(
+				array(
+					'message' => __( 'Passed the local checks. Connect the Messaging API channel to also validate against LINE.', 'moksa-line-login' ),
+					'source'  => 'local',
+				)
+			);
+		}
+
+		$remote = MessagingClient::validate( array( $message ), 'push' );
+
+		if ( is_wp_error( $remote ) ) {
+			wp_send_json_error(
+				array(
+					'message'  => __( 'LINE rejected this template.', 'moksa-line-login' ),
+					'problems' => array( $remote->get_error_message() ),
+					'source'   => 'line',
+				)
+			);
+		}
+
+		wp_send_json_success(
+			array(
+				'message' => __( 'LINE accepted this template.', 'moksa-line-login' ),
+				'source'  => 'line',
+			)
+		);
+	}
+
+	/**
+	 * Push a template to one LINE user so it can be seen in a real chat.
+	 */
+	public function ajax_send_test(): void {
+		$this->guard();
+
+		$line_user_id = isset( $_POST['line_user_id'] ) ? sanitize_text_field( wp_unslash( $_POST['line_user_id'] ) ) : '';
+
+		if ( '' === $line_user_id ) {
+			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line-login' ) ) );
+		}
+
+		$decoded = json_decode( (string) wp_unslash( $_POST['contents'] ?? '' ), true );
+
+		if ( ! is_array( $decoded ) ) {
+			wp_send_json_error( array( 'message' => __( 'That is not valid JSON.', 'moksa-line-login' ) ) );
+		}
+
+		$alt_text = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : 'Preview';
+
+		$result = MessagingClient::push( $line_user_id, array( MessagingClient::flex( $alt_text, $decoded ) ) );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+		}
+
+		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-line-login' ) ) );
+	}
+
+	/**
+	 * Starter templates offered in the editor.
+	 *
+	 * @return array<string,array{label:string,contents:array}>
+	 */
+	public static function starters(): array {
+		return array(
+			'card'    => array(
+				'label'    => __( 'Image card with a button', 'moksa-line-login' ),
+				'contents' => array(
+					'type' => 'bubble',
+					'hero' => array(
+						'type'        => 'image',
+						'url'         => 'https://via.placeholder.com/1024x682.png',
+						'size'        => 'full',
+						'aspectRatio' => '20:13',
+						'aspectMode'  => 'cover',
+					),
+					'body' => array(
+						'type'     => 'box',
+						'layout'   => 'vertical',
+						'spacing'  => 'sm',
+						'contents' => array(
+							array(
+								'type'   => 'text',
+								'text'   => __( 'Headline', 'moksa-line-login' ),
+								'weight' => 'bold',
+								'size'   => 'xl',
+								'wrap'   => true,
+							),
+							array(
+								'type'  => 'text',
+								'text'  => __( 'A sentence or two about what this is.', 'moksa-line-login' ),
+								'size'  => 'sm',
+								'color' => '#666666',
+								'wrap'  => true,
+							),
+						),
+					),
+					'footer' => array(
+						'type'     => 'box',
+						'layout'   => 'vertical',
+						'contents' => array(
+							array(
+								'type'   => 'button',
+								'style'  => 'primary',
+								'color'  => '#06C755',
+								'action' => array(
+									'type'  => 'uri',
+									'label' => __( 'Find out more', 'moksa-line-login' ),
+									'uri'   => home_url(),
+								),
+							),
+						),
+					),
+				),
+			),
+			'receipt' => array(
+				'label'    => __( 'Order summary', 'moksa-line-login' ),
+				'contents' => array(
+					'type' => 'bubble',
+					'body' => array(
+						'type'     => 'box',
+						'layout'   => 'vertical',
+						'spacing'  => 'md',
+						'contents' => array(
+							array(
+								'type'   => 'text',
+								'text'   => __( 'Order confirmed', 'moksa-line-login' ),
+								'weight' => 'bold',
+								'size'   => 'lg',
+							),
+							array( 'type' => 'separator' ),
+							array(
+								'type'     => 'box',
+								'layout'   => 'horizontal',
+								'contents' => array(
+									array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line-login' ), 'size' => 'sm', 'color' => '#888888' ),
+									array( 'type' => 'text', 'text' => 'NT$0', 'size' => 'sm', 'align' => 'end' ),
+								),
+							),
+						),
+					),
+				),
+			),
+		);
+	}
+
+	/**
+	 * Shared nonce and capability check.
+	 */
+	private function guard(): void {
+		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage templates.', 'moksa-line-login' ) ), 403 );
+		}
+	}
+}
