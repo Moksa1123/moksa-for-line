@@ -18,7 +18,7 @@ $collate = $wpdb->get_charset_collate();
 
 echo "== Tearing down and recreating a 1.4.0 install ==\n";
 
-foreach ( array( 'users', 'events', 'conversations', 'messages', 'auto_replies', 'quick_replies', 'flex', 'richmenus', 'flows', 'flow_sessions', 'flow_submissions', 'payments', 'imagemaps', 'logs' ) as $t ) {
+foreach ( Moksa\Line\Support\Migrator::table_keys() as $t ) {
 	$wpdb->query( "DROP TABLE IF EXISTS {$prefix}{$t}" );
 }
 
@@ -119,8 +119,26 @@ function check( $condition, $label, $detail = '' ) {
 }
 
 echo "== Schema ==\n";
-$tables = $wpdb->get_col( "SHOW TABLES LIKE '{$prefix}%'" );
-check( 14 === count( $tables ), 'all 14 tables present', count( $tables ) . ' found' );
+$tables   = $wpdb->get_col( "SHOW TABLES LIKE '{$prefix}%'" );
+$expected = Moksa\Line\Support\Migrator::table_keys();
+
+// Counted against the migrator's own list rather than a number typed here,
+// which drifts the moment a table is added.
+check(
+	count( $expected ) === count( $tables ),
+	sprintf( 'all %d tables present', count( $expected ) ),
+	count( $tables ) . ' found'
+);
+
+$missing = array();
+
+foreach ( $expected as $key ) {
+	if ( ! in_array( $prefix . $key, $tables, true ) ) {
+		$missing[] = $key;
+	}
+}
+
+check( empty( $missing ), 'no table is missing', implode( ', ', $missing ) );
 
 echo "\n== Auto replies: reply_content -> reply_data ==\n";
 $rules = $wpdb->get_results( "SELECT * FROM {$prefix}auto_replies ORDER BY id" );

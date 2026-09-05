@@ -8,23 +8,32 @@
 .moksa-line-button {
 	--moksa-green: #06c755;
 
+	/* Each of these can be overridden per-site from the settings screen, which
+	   emits the custom property inline. Unset means the default here wins. */
+	background: var(--moksa-line-button-bg, var(--moksa-green));
+	color: var(--moksa-line-button-fg, #fff);
+	border-radius: var(--moksa-line-button-radius, 6px);
+	width: var(--moksa-line-button-width, auto);
+	min-height: var(--moksa-line-button-height, auto);
+
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: 8px;
-	background: var(--moksa-green);
-	color: #fff;
-	border-radius: 6px;
 	padding: 10px 18px;
 	font-weight: 600;
 	line-height: 1.2;
 	text-decoration: none;
-	transition: background-color 0.15s ease;
+	box-sizing: border-box;
+	transition: filter 0.15s ease;
 }
 
 .moksa-line-button:hover,
 .moksa-line-button:focus {
-	background: #05b34c;
-	color: #fff;
+	/* Darkening what is there beats hardcoding a second green, which would
+	   ignore whatever colour the site actually configured. */
+	filter: brightness(0.93);
+	color: var(--moksa-line-button-fg, #fff);
 }
 
 .moksa-line-button:focus-visible {
@@ -44,14 +53,15 @@
 
 .moksa-line-button--friend {
 	background: #fff;
-	color: var(--moksa-green);
-	border: 2px solid var(--moksa-green);
+	color: var(--moksa-line-button-bg, var(--moksa-green));
+	border: 2px solid var(--moksa-line-button-bg, var(--moksa-green));
 }
 
 .moksa-line-button--friend:hover,
 .moksa-line-button--friend:focus {
+	filter: none;
 	background: #f2fdf6;
-	color: var(--moksa-green);
+	color: var(--moksa-line-button-bg, var(--moksa-green));
 }
 
 .moksa-line-button__logo {

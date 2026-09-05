@@ -42,6 +42,16 @@ class Options {
 			'new_user_role'        => array( 'type' => 'string', 'default' => 'subscriber' ),
 			'login_redirect'       => array( 'type' => 'url', 'default' => '' ),
 			'bot_prompt'           => array( 'type' => 'enum', 'default' => 'none', 'enum' => array( 'none', 'normal', 'aggressive' ) ),
+
+			// --- Login button appearance ------------------------------------------
+			// These keys match the ones the previous plugin used, so a site that
+			// had styled its button keeps that styling without touching anything.
+			'button_text'          => array( 'type' => 'string', 'default' => '' ),
+			'button_bg_color'      => array( 'type' => 'string', 'default' => '#06C755' ),
+			'button_text_color'    => array( 'type' => 'string', 'default' => '#FFFFFF' ),
+			'button_border_radius' => array( 'type' => 'int', 'default' => 6 ),
+			'button_width'         => array( 'type' => 'string', 'default' => '' ),
+			'button_height'        => array( 'type' => 'int', 'default' => 0 ),
 			'request_email'        => array( 'type' => 'bool', 'default' => false ),
 			// Merging by email lets anyone who controls a LINE account with a
 			// matching address take over the WordPress account, so it is off

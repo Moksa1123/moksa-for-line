@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-05 07:31+0000\n"
+"POT-Creation-Date: 2026-09-05 07:38+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -131,6 +131,10 @@ msgstr ""
 msgid "A flow needs at least one step."
 msgstr ""
 
+#: views/settings.php:192
+msgid "A hex colour, for example #06C755."
+msgstr ""
+
 #: src/Bot/BotModule.php:384
 msgid "A member of our team will reply here shortly."
 msgstr ""
@@ -168,7 +172,7 @@ msgstr ""
 msgid "A visitor completed \"%s\" on LINE."
 msgstr ""
 
-#: views/settings.php:237
+#: views/settings.php:272
 msgid "AI Engine is not active"
 msgstr ""
 
@@ -181,7 +185,7 @@ msgid "AI provider available"
 msgstr ""
 
 #: views/settings.php:19
-#: views/settings.php:244
+#: views/settings.php:279
 msgid "AI replies"
 msgstr ""
 
@@ -194,7 +198,7 @@ msgstr ""
 msgid "About %s messages remain in this month allowance."
 msgstr ""
 
-#: views/settings.php:203
+#: views/settings.php:238
 msgid "Access token"
 msgstr ""
 
@@ -211,7 +215,7 @@ msgstr ""
 msgid "Active templates"
 msgstr ""
 
-#: views/settings.php:350
+#: views/settings.php:385
 msgid "Add a LINE tab where customers can link and unlink their account"
 msgstr ""
 
@@ -243,7 +247,7 @@ msgstr ""
 msgid "Add the LINE Pay Channel ID and Channel Secret."
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:106
+#: src/Frontend/ShortcodeModule.php:155
 msgid "Add us on LINE"
 msgstr ""
 
@@ -292,7 +296,7 @@ msgstr ""
 msgid "Answers"
 msgstr ""
 
-#: views/settings.php:253
+#: views/settings.php:288
 msgid "Answers longer than this are truncated. LINE hard-limits a text message at 5000 characters."
 msgstr ""
 
@@ -323,6 +327,10 @@ msgstr ""
 
 #: src/Woo/NotifyTemplates.php:88
 msgid "Available values"
+msgstr ""
+
+#: views/settings.php:192
+msgid "Background"
 msgstr ""
 
 #: src/Woo/OrderContext.php:273
@@ -371,6 +379,10 @@ msgstr ""
 msgid "Built-in card"
 msgstr ""
 
+#: views/settings.php:191
+msgid "Button text"
+msgstr ""
+
 #: views/settings.php:142
 msgid "Callback URL"
 msgstr ""
@@ -381,21 +393,21 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: views/settings.php:381
+#: views/settings.php:416
 msgid "Capture immediately"
 msgstr ""
 
 #: views/settings.php:152
-#: views/settings.php:199
+#: views/settings.php:234
 msgid "Channel ID"
 msgstr ""
 
 #: views/settings.php:153
-#: views/settings.php:200
+#: views/settings.php:235
 msgid "Channel secret"
 msgstr ""
 
-#: views/settings.php:261
+#: views/settings.php:296
 msgid "Chat LIFF ID"
 msgstr ""
 
@@ -403,11 +415,11 @@ msgstr ""
 msgid "Chat bar label"
 msgstr ""
 
-#: views/settings.php:247
+#: views/settings.php:282
 msgid "Chatbot"
 msgstr ""
 
-#: views/settings.php:249
+#: views/settings.php:284
 msgid "Chatbot ID"
 msgstr ""
 
@@ -469,6 +481,10 @@ msgstr ""
 msgid "Conversations waiting"
 msgstr ""
 
+#: views/settings.php:194
+msgid "Corner radius"
+msgstr ""
+
 #. translators: %d: HTTP status code.
 #: src/Api/Client.php:245
 msgid "Could not download the message content (HTTP %d)."
@@ -515,11 +531,11 @@ msgid "Credentials"
 msgstr ""
 
 #: src/Admin/AdminModule.php:226
-#: views/settings.php:413
+#: views/settings.php:448
 msgid "Credentials are encrypted at rest"
 msgstr ""
 
-#: views/settings.php:377
+#: views/settings.php:412
 msgid "Currency"
 msgstr ""
 
@@ -535,7 +551,7 @@ msgstr ""
 msgid "Customer note"
 msgstr ""
 
-#: views/settings.php:252
+#: views/settings.php:287
 msgid "Daily reply limit"
 msgstr ""
 
@@ -547,19 +563,19 @@ msgstr ""
 msgid "Date the order was placed"
 msgstr ""
 
-#: views/settings.php:406
+#: views/settings.php:441
 msgid "Days. Older rows are deleted daily."
 msgstr ""
 
-#: views/settings.php:349
+#: views/settings.php:384
 msgid "Days. Set to 0 to keep it indefinitely."
 msgstr ""
 
-#: views/settings.php:407
+#: views/settings.php:442
 msgid "Days. Set to 0 to keep messages forever."
 msgstr ""
 
-#: views/settings.php:260
+#: views/settings.php:295
 msgid "Default LIFF ID"
 msgstr ""
 
@@ -571,7 +587,7 @@ msgstr ""
 msgid "Default destination"
 msgstr ""
 
-#: views/settings.php:314
+#: views/settings.php:349
 msgid "Delay before sending"
 msgstr ""
 
@@ -619,7 +635,7 @@ msgstr ""
 msgid "Do not invite"
 msgstr ""
 
-#: views/settings.php:294
+#: views/settings.php:329
 msgid "Each notification is a push message and is billed. The customer only hears about a given order and status once, however many times the status is set."
 msgstr ""
 
@@ -648,11 +664,11 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-#: views/settings.php:371
+#: views/settings.php:406
 msgid "Enable LINE Pay for WooCommerce and payment links"
 msgstr ""
 
-#: views/settings.php:410
+#: views/settings.php:445
 msgid "Encryption"
 msgstr ""
 
@@ -669,7 +685,7 @@ msgstr ""
 msgid "Enter the LINE user id to send the test to."
 msgstr ""
 
-#: views/settings.php:402
+#: views/settings.php:437
 msgid "Errors only"
 msgstr ""
 
@@ -681,7 +697,7 @@ msgstr ""
 msgid "Everyone who follows the account"
 msgstr ""
 
-#: views/settings.php:399
+#: views/settings.php:434
 msgid "Everything"
 msgstr ""
 
@@ -739,11 +755,15 @@ msgstr ""
 msgid "Flow saved."
 msgstr ""
 
-#: views/settings.php:211
+#: views/settings.php:195
+msgid "For example 100%, 240px, or blank to fit the text."
+msgstr ""
+
+#: views/settings.php:246
 msgid "For example @moksa. Used by the add-friend shortcode."
 msgstr ""
 
-#: views/settings.php:221
+#: views/settings.php:256
 msgid "Forward events to"
 msgstr ""
 
@@ -772,11 +792,11 @@ msgstr ""
 msgid "From the LINE Login channel, not the Messaging API one."
 msgstr ""
 
-#: views/settings.php:372
+#: views/settings.php:407
 msgid "From the LINE Pay merchant console, not the Developers Console."
 msgstr ""
 
-#: views/settings.php:199
+#: views/settings.php:234
 msgid "From the Messaging API channel."
 msgstr ""
 
@@ -792,7 +812,7 @@ msgstr ""
 msgid "Give the rule something to match on."
 msgstr ""
 
-#: views/settings.php:214
+#: views/settings.php:249
 msgid "Greeting message"
 msgstr ""
 
@@ -800,7 +820,7 @@ msgstr ""
 msgid "Half (2500 x 843)"
 msgstr ""
 
-#: views/settings.php:254
+#: views/settings.php:289
 msgid "Hand-off keyword"
 msgstr ""
 
@@ -820,7 +840,7 @@ msgstr ""
 msgid "Hits"
 msgstr ""
 
-#: views/settings.php:315
+#: views/settings.php:350
 msgid "Hold the shipping notification until the tracking number appears"
 msgstr ""
 
@@ -843,11 +863,11 @@ msgstr ""
 #: src/Admin/AdminModule.php:37
 #: views/inbox.php:16
 #: views/inbox.php:35
-#: views/settings.php:222
+#: views/settings.php:257
 msgid "Inbox"
 msgstr ""
 
-#: views/settings.php:238
+#: views/settings.php:273
 msgid "Install and activate AI Engine, then configure a chatbot in it. AI replies stay switched off until then."
 msgstr ""
 
@@ -855,7 +875,7 @@ msgstr ""
 msgid "Invite to add the bot"
 msgstr ""
 
-#: views/settings.php:205
+#: views/settings.php:240
 msgid "Issue short-lived tokens automatically (recommended)"
 msgstr ""
 
@@ -863,15 +883,15 @@ msgstr ""
 msgid "Just one person (a test)"
 msgstr ""
 
-#: views/settings.php:407
+#: views/settings.php:442
 msgid "Keep conversations for"
 msgstr ""
 
-#: views/settings.php:406
+#: views/settings.php:441
 msgid "Keep logs for"
 msgstr ""
 
-#: views/settings.php:349
+#: views/settings.php:384
 msgid "Keep notification history for"
 msgstr ""
 
@@ -879,7 +899,7 @@ msgstr ""
 msgid "Keep the WordPress display name in step with the LINE display name"
 msgstr ""
 
-#: views/settings.php:414
+#: views/settings.php:449
 msgid "Keys are derived from this site's WordPress salts, so a database dump alone cannot reveal them. Changing the salts in wp-config.php makes stored credentials unreadable and they will need re-entering."
 msgstr ""
 
@@ -915,7 +935,7 @@ msgstr ""
 #: src/Pay/WooGateway.php:35
 #: src/Pay/WooGateway.php:54
 #: views/settings.php:21
-#: views/settings.php:371
+#: views/settings.php:406
 msgid "LINE Pay"
 msgstr ""
 
@@ -948,7 +968,7 @@ msgstr ""
 msgid "LINE Pay had an internal error. Try again shortly."
 msgstr ""
 
-#: views/settings.php:360
+#: views/settings.php:395
 msgid "LINE Pay is configured on the <a href=\"%s\">LINE Pay tab</a>, and the gateway is switched on under WooCommerce > Settings > Payments."
 msgstr ""
 
@@ -1000,7 +1020,7 @@ msgstr ""
 msgid "LINE accepts at most %d messages per send."
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:186
+#: src/Frontend/ShortcodeModule.php:235
 #: src/Woo/WooModule.php:596
 msgid "LINE account"
 msgstr ""
@@ -1070,11 +1090,15 @@ msgstr ""
 msgid "Leave blank for a standalone menu."
 msgstr ""
 
+#: views/settings.php:191
+msgid "Leave blank to use the shortcode label, or the default wording."
+msgstr ""
+
 #: views/settings.php:56
 msgid "Leave unchanged to keep the stored value"
 msgstr ""
 
-#: views/settings.php:244
+#: views/settings.php:279
 msgid "Let the AI answer messages no rule or flow handled"
 msgstr ""
 
@@ -1082,7 +1106,7 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:219
+#: src/Frontend/ShortcodeModule.php:268
 #: src/Woo/WooModule.php:700
 msgid "Link my LINE account"
 msgstr ""
@@ -1104,7 +1128,7 @@ msgid "Linked WordPress accounts"
 msgstr ""
 
 #. translators: %s: LINE display name.
-#: src/Frontend/ShortcodeModule.php:196
+#: src/Frontend/ShortcodeModule.php:245
 msgid "Linked to %s."
 msgstr ""
 
@@ -1117,14 +1141,19 @@ msgid "Location"
 msgstr ""
 
 #: src/Frontend/ShortcodeModule.php:52
+#: views/settings.php:213
 msgid "Log in with LINE"
 msgstr ""
 
-#: views/settings.php:397
+#: views/settings.php:432
 msgid "Log level"
 msgstr ""
 
-#: views/settings.php:351
+#: views/settings.php:187
+msgid "Login button"
+msgstr ""
+
+#: views/settings.php:386
 msgid "Login buttons"
 msgstr ""
 
@@ -1133,7 +1162,7 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
-#: views/settings.php:210
+#: views/settings.php:245
 msgid "Long-lived token"
 msgstr ""
 
@@ -1162,7 +1191,7 @@ msgstr ""
 msgid "Matching by email means anyone who controls a LINE account with that address can sign in as the matching WordPress user. Leave it off unless you know every LINE email on your site is verified and trusted."
 msgstr ""
 
-#: views/settings.php:253
+#: views/settings.php:288
 msgid "Maximum reply length"
 msgstr ""
 
@@ -1201,7 +1230,7 @@ msgstr ""
 msgid "Message quota this month"
 msgstr ""
 
-#: views/settings.php:277
+#: views/settings.php:312
 msgid "Message the customer in LINE when their order status changes"
 msgstr ""
 
@@ -1221,6 +1250,10 @@ msgstr ""
 msgid "Messaging is not available right now."
 msgstr ""
 
+#: views/settings.php:196
+msgid "Minimum height"
+msgstr ""
+
 #: src/Admin/AdminModule.php:258
 msgid "Moksa LINE Suite is installed but not connected to a LINE channel yet."
 msgstr ""
@@ -1229,11 +1262,11 @@ msgstr ""
 msgid "Must be HTTPS, JPEG or PNG, and at most 10 MB."
 msgstr ""
 
-#: views/settings.php:379
+#: views/settings.php:414
 msgid "Must match both your LINE Pay merchant currency and the WooCommerce store currency, or the gateway hides itself at checkout."
 msgstr ""
 
-#: views/settings.php:350
+#: views/settings.php:385
 msgid "My Account tab"
 msgstr ""
 
@@ -1279,7 +1312,7 @@ msgstr ""
 msgid "No LIFF ID has been configured yet."
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:221
+#: src/Frontend/ShortcodeModule.php:270
 msgid "No LINE account is linked. Only this user can link their own."
 msgstr ""
 
@@ -1336,7 +1369,7 @@ msgstr ""
 msgid "None yet."
 msgstr ""
 
-#: views/settings.php:416
+#: views/settings.php:451
 msgid "Not available on this server"
 msgstr ""
 
@@ -1344,7 +1377,7 @@ msgstr ""
 msgid "Not linked"
 msgstr ""
 
-#: views/settings.php:400
+#: views/settings.php:435
 msgid "Notable events"
 msgstr ""
 
@@ -1364,7 +1397,7 @@ msgstr ""
 msgid "Nothing yet. If you have already pressed Verify in the LINE Console and this is still empty, the signature check is rejecting deliveries, which almost always means the Messaging API channel secret is wrong."
 msgstr ""
 
-#: views/settings.php:280
+#: views/settings.php:315
 msgid "Notify on"
 msgstr ""
 
@@ -1372,7 +1405,7 @@ msgstr ""
 msgid "Number of items"
 msgstr ""
 
-#: views/settings.php:403
+#: views/settings.php:438
 msgid "Off"
 msgstr ""
 
@@ -1380,7 +1413,7 @@ msgstr ""
 msgid "Offer LINE Pay at checkout"
 msgstr ""
 
-#: views/settings.php:351
+#: views/settings.php:386
 msgid "Offer LINE sign-in on the account and checkout pages"
 msgstr ""
 
@@ -1388,11 +1421,11 @@ msgstr ""
 msgid "Offers the official account while the visitor is logging in."
 msgstr ""
 
-#: views/settings.php:211
+#: views/settings.php:246
 msgid "Official account ID"
 msgstr ""
 
-#: views/settings.php:321
+#: views/settings.php:356
 msgid "On status"
 msgstr ""
 
@@ -1409,7 +1442,7 @@ msgstr ""
 msgid "Only messages received after this plugin was installed appear here. LINE provides no way to read earlier chat history."
 msgstr ""
 
-#: views/settings.php:210
+#: views/settings.php:245
 msgid "Only needed when the mode above is set to long-lived."
 msgstr ""
 
@@ -1429,7 +1462,7 @@ msgstr ""
 msgid "Open this page from LINE to continue."
 msgstr ""
 
-#: views/settings.php:417
+#: views/settings.php:452
 msgid "OpenSSL with AES-256-GCM is missing, so credentials are stored as plain text."
 msgstr ""
 
@@ -1437,15 +1470,15 @@ msgstr ""
 msgid "OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text."
 msgstr ""
 
-#: views/settings.php:262
+#: views/settings.php:297
 msgid "Optional separate LIFF app for in-app payment pages."
 msgstr ""
 
-#: views/settings.php:261
+#: views/settings.php:296
 msgid "Optional separate LIFF app for the chat shortcode."
 msgstr ""
 
-#: views/settings.php:221
+#: views/settings.php:256
 msgid "Optional. Every webhook delivery is relayed here unchanged, with its signature header, for n8n, Make or your own service."
 msgstr ""
 
@@ -1486,7 +1519,7 @@ msgstr ""
 #: src/Woo/NotifyTemplates.php:44
 #: views/notifications.php:17
 #: views/notifications.php:40
-#: views/settings.php:277
+#: views/settings.php:312
 msgid "Order notifications"
 msgstr ""
 
@@ -1530,15 +1563,15 @@ msgstr ""
 msgid "Paste this into the LINE Login channel as a Callback URL. It must match exactly, including https and any trailing path."
 msgstr ""
 
-#: views/settings.php:193
+#: views/settings.php:228
 msgid "Paste this into the Messaging API channel, turn on \"Use webhook\", then press Verify."
 msgstr ""
 
-#: views/settings.php:372
+#: views/settings.php:407
 msgid "Pay Channel ID"
 msgstr ""
 
-#: views/settings.php:373
+#: views/settings.php:408
 msgid "Pay Channel secret"
 msgstr ""
 
@@ -1551,7 +1584,7 @@ msgstr ""
 msgid "Pay with LINE Pay, LINE Points or a registered card."
 msgstr ""
 
-#: views/settings.php:262
+#: views/settings.php:297
 msgid "Payment LIFF ID"
 msgstr ""
 
@@ -1581,7 +1614,7 @@ msgstr ""
 #: src/Admin/AdminModule.php:66
 #: views/payments.php:17
 #: views/payments.php:27
-#: views/settings.php:354
+#: views/settings.php:389
 msgid "Payments"
 msgstr ""
 
@@ -1591,6 +1624,14 @@ msgstr ""
 
 #: src/Woo/OrderContext.php:280
 msgid "Pickup store name"
+msgstr ""
+
+#: views/settings.php:194
+msgid "Pixels. 0 gives square corners."
+msgstr ""
+
+#: views/settings.php:196
+msgid "Pixels. 0 lets the padding decide."
 msgstr ""
 
 #: src/Bot/AutoReply.php:306
@@ -1619,6 +1660,7 @@ msgid "Plugin log"
 msgstr ""
 
 #: views/flex.php:76
+#: views/settings.php:200
 msgid "Preview"
 msgstr ""
 
@@ -1631,7 +1673,7 @@ msgstr ""
 msgid "Profile sync"
 msgstr ""
 
-#: views/settings.php:232
+#: views/settings.php:267
 msgid "Provider status"
 msgstr ""
 
@@ -1703,7 +1745,7 @@ msgstr ""
 msgid "Recipient"
 msgstr ""
 
-#: views/settings.php:222
+#: views/settings.php:257
 msgid "Record conversations and allow replying from WordPress"
 msgstr ""
 
@@ -1774,7 +1816,7 @@ msgstr ""
 msgid "Rules are checked in order of match strength first (exact, then prefix, then pattern, then partial, then catch-all) and priority second, so a lower priority number wins between rules of equal strength."
 msgstr ""
 
-#: views/settings.php:374
+#: views/settings.php:409
 msgid "Sandbox"
 msgstr ""
 
@@ -1796,6 +1838,10 @@ msgstr ""
 
 #: views/flex.php:58
 msgid "Save template"
+msgstr ""
+
+#: views/settings.php:217
+msgid "Save to update the preview."
 msgstr ""
 
 #: views/flows.php:85
@@ -1826,7 +1872,7 @@ msgstr ""
 msgid "Search notifications"
 msgstr ""
 
-#: views/settings.php:314
+#: views/settings.php:349
 msgid "Seconds. Useful when another plugin adjusts the order right after the status changes. 0 sends immediately."
 msgstr ""
 
@@ -1871,7 +1917,7 @@ msgstr ""
 msgid "Sent to %d people."
 msgstr ""
 
-#: views/settings.php:217
+#: views/settings.php:252
 msgid "Sent when someone adds the account. You can use {display_name}, {site_name} and {site_url}."
 msgstr ""
 
@@ -1892,7 +1938,7 @@ msgstr ""
 msgid "Sent. We will reply in your LINE chat."
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:118
+#: src/Frontend/ShortcodeModule.php:167
 msgid "Set the official account basic ID in the LINE settings first."
 msgstr ""
 
@@ -1930,11 +1976,11 @@ msgstr ""
 msgid "Shipping, fees and tax"
 msgstr ""
 
-#: views/settings.php:208
+#: views/settings.php:243
 msgid "Short-lived tokens last 15 minutes, are unlimited in number, and never need storing. A long-lived token never expires, which means a leak is unrecoverable without rotating the channel."
 msgstr ""
 
-#: views/settings.php:265
+#: views/settings.php:300
 msgid "Shortcodes"
 msgstr ""
 
@@ -1974,7 +2020,7 @@ msgstr ""
 msgid "Start when a message"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:189
+#: src/Frontend/ShortcodeModule.php:238
 #: views/logs.php:31
 #: views/notifications.php:104
 #: views/payments.php:69
@@ -2002,7 +2048,7 @@ msgstr ""
 msgid "Steps"
 msgstr ""
 
-#: views/settings.php:252
+#: views/settings.php:287
 msgid "Stops the AI answering after this many replies in a day. Set to 0 for no limit -- but every reply costs money."
 msgstr ""
 
@@ -2040,7 +2086,7 @@ msgstr ""
 msgid "Take payments through LINE Pay. Credentials are configured under LINE > Settings > LINE Pay."
 msgstr ""
 
-#: views/settings.php:381
+#: views/settings.php:416
 msgid "Take the money as soon as the customer confirms"
 msgstr ""
 
@@ -2069,7 +2115,7 @@ msgstr ""
 msgid "Template saved."
 msgstr ""
 
-#: views/settings.php:299
+#: views/settings.php:334
 msgid "Templates"
 msgstr ""
 
@@ -2079,6 +2125,10 @@ msgstr ""
 
 #: views/replies.php:94
 msgid "Text"
+msgstr ""
+
+#: views/settings.php:193
+msgid "Text colour"
 msgstr ""
 
 #: src/Bot/Flow.php:229
@@ -2189,7 +2239,7 @@ msgstr ""
 msgid "The bot cannot send or receive anything until this is set."
 msgstr ""
 
-#: views/settings.php:249
+#: views/settings.php:284
 msgid "The bot id from AI Engine."
 msgstr ""
 
@@ -2321,7 +2371,7 @@ msgstr ""
 msgid "The selected image could not be read from the media library."
 msgstr ""
 
-#: views/settings.php:305
+#: views/settings.php:340
 msgid "The statuses above use a built-in card. For full control -- your own Flex design, and conditions such as payment or shipping method -- create <a href=\"%s\">notification templates</a>. When a template matches, it replaces the built-in card."
 msgstr ""
 
@@ -2466,11 +2516,11 @@ msgstr ""
 msgid "Tracking number, from ECPay, RY Tools, AST or Shipment Tracking"
 msgstr ""
 
-#: views/settings.php:343
+#: views/settings.php:378
 msgid "Tracking numbers are read from ECPay, RY Tools, Advanced Shipment Tracking and WooCommerce Shipment Tracking. After the last attempt the notification is sent anyway, without the number."
 msgstr ""
 
-#: views/settings.php:318
+#: views/settings.php:353
 msgid "Tracking wait"
 msgstr ""
 
@@ -2511,7 +2561,7 @@ msgstr ""
 msgid "Unlink"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:203
+#: src/Frontend/ShortcodeModule.php:252
 msgid "Unlink LINE account"
 msgstr ""
 
@@ -2519,7 +2569,7 @@ msgstr ""
 msgid "Unlink your LINE account?"
 msgstr ""
 
-#: views/settings.php:206
+#: views/settings.php:241
 msgid "Use a long-lived token I paste below"
 msgstr ""
 
@@ -2527,11 +2577,11 @@ msgstr ""
 msgid "Use as the default menu for everyone"
 msgstr ""
 
-#: views/settings.php:374
+#: views/settings.php:409
 msgid "Use the sandbox environment (no real money moves)"
 msgstr ""
 
-#: views/settings.php:260
+#: views/settings.php:295
 msgid "Used by the LIFF shortcodes unless one is given explicitly."
 msgstr ""
 
@@ -2547,7 +2597,7 @@ msgstr ""
 msgid "Visitor"
 msgstr ""
 
-#: views/settings.php:315
+#: views/settings.php:350
 msgid "Wait for tracking"
 msgstr ""
 
@@ -2555,11 +2605,11 @@ msgstr ""
 msgid "Waiting for the customer to complete payment on LINE Pay."
 msgstr ""
 
-#: views/settings.php:401
+#: views/settings.php:436
 msgid "Warnings and errors"
 msgstr ""
 
-#: views/settings.php:189
+#: views/settings.php:224
 msgid "Webhook URL"
 msgstr ""
 
@@ -2567,7 +2617,7 @@ msgstr ""
 msgid "Webhook has received an event"
 msgstr ""
 
-#: views/settings.php:200
+#: views/settings.php:235
 msgid "Webhook signatures are verified with this. Without it, nothing the bot receives can be trusted."
 msgstr ""
 
@@ -2592,7 +2642,7 @@ msgstr ""
 msgid "When"
 msgstr ""
 
-#: views/settings.php:254
+#: views/settings.php:289
 msgid "When a message contains this, the bot stops answering and the conversation is flagged for a human."
 msgstr ""
 
@@ -2604,7 +2654,7 @@ msgstr ""
 msgid "Where to send people after login. Leave blank to return them to the page they came from."
 msgstr ""
 
-#: views/settings.php:247
+#: views/settings.php:282
 msgid "Whichever chatbot you have set up in AI Engine, including its knowledge base."
 msgstr ""
 
@@ -2612,7 +2662,11 @@ msgstr ""
 msgid "Who"
 msgstr ""
 
-#: views/settings.php:387
+#: views/settings.php:195
+msgid "Width"
+msgstr ""
+
+#: views/settings.php:422
 msgid "With immediate capture off, payments are only authorised. You then have to capture or void each one, and an order cancelled in WooCommerce releases its authorisation automatically."
 msgstr ""
 
@@ -2742,11 +2796,11 @@ msgstr ""
 msgid "[Video]"
 msgstr ""
 
-#: views/settings.php:270
+#: views/settings.php:305
 msgid "a link to your official account"
 msgstr ""
 
-#: views/settings.php:268
+#: views/settings.php:303
 msgid "a message box that posts into the inbox"
 msgstr ""
 
@@ -2754,7 +2808,7 @@ msgstr ""
 msgid "altText is limited to 400 characters."
 msgstr ""
 
-#: views/settings.php:331
+#: views/settings.php:366
 msgid "check every"
 msgstr ""
 
@@ -2778,7 +2832,7 @@ msgstr ""
 msgid "equals"
 msgstr ""
 
-#: views/settings.php:267
+#: views/settings.php:302
 msgid "greets the visitor by their LINE name"
 msgstr ""
 
@@ -2837,19 +2891,19 @@ msgstr ""
 msgid "refunded %s"
 msgstr ""
 
-#: views/settings.php:334
+#: views/settings.php:369
 msgid "seconds,"
 msgstr ""
 
-#: views/settings.php:269
+#: views/settings.php:304
 msgid "the sign-in button"
 msgstr ""
 
-#: views/settings.php:340
+#: views/settings.php:375
 msgid "times"
 msgstr ""
 
-#: views/settings.php:337
+#: views/settings.php:372
 msgid "up to"
 msgstr ""
 

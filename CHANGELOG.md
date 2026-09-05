@@ -58,6 +58,33 @@ Worth stating, because it explains what may look different:
   rule won depended on insertion order. Rules now rank by match strength and an
   explicit priority.
 
+### WooCommerce order notifications
+
+Carried over in full from the plugin this replaces, with the data model kept
+compatible so existing templates and history survive:
+
+- Notification templates remain a custom post type with the same meta keys, so
+  templates already written keep working, including those whose statuses were
+  stored with the `wc-` prefix.
+- Trigger conditions on payment method, shipping method and order total.
+- Tracking numbers are read from ECPay, RY Tools, Advanced Shipment Tracking
+  and WooCommerce Shipment Tracking, along with convenience-store pickup
+  details.
+- A shipping notification waits for the tracking number to appear, retrying on
+  a schedule, and sends without it once the budget is spent rather than never
+  arriving at all.
+- Delivery history records what was sent to whom about which order, and rows
+  from the old table are imported.
+
+Three faults in that system were fixed while porting:
+
+- Every successful send was recorded in the history as failed, because the code
+  checked the push response for a key the LINE API does not return.
+- The class meant to stop an order being notified twice about the same status
+  was never called from anywhere, so it never did.
+- Values were spliced into the template's JSON unescaped, so a customer whose
+  name contained a quotation mark silently received nothing.
+
 ### Not carried over
 
 The imagemap builder and the WooCommerce product carousel generator from the

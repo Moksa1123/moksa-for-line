@@ -183,6 +183,41 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				$field( 'login_redirect', __( 'Default destination', 'moksa-line' ), __( 'Where to send people after login. Leave blank to return them to the page they came from.', 'moksa-line' ), 'url' );
 				?>
 
+				<tr>
+					<th scope="row" colspan="2"><h2 class="moksa-subhead"><?php esc_html_e( 'Login button', 'moksa-line' ); ?></h2></th>
+				</tr>
+
+				<?php
+				$field( 'button_text', __( 'Button text', 'moksa-line' ), __( 'Leave blank to use the shortcode label, or the default wording.', 'moksa-line' ) );
+				$field( 'button_bg_color', __( 'Background', 'moksa-line' ), __( 'A hex colour, for example #06C755.', 'moksa-line' ), 'color' );
+				$field( 'button_text_color', __( 'Text colour', 'moksa-line' ), '', 'color' );
+				$field( 'button_border_radius', __( 'Corner radius', 'moksa-line' ), __( 'Pixels. 0 gives square corners.', 'moksa-line' ), 'number' );
+				$field( 'button_width', __( 'Width', 'moksa-line' ), __( 'For example 100%, 240px, or blank to fit the text.', 'moksa-line' ) );
+				$field( 'button_height', __( 'Minimum height', 'moksa-line' ), __( 'Pixels. 0 lets the padding decide.', 'moksa-line' ), 'number' );
+				?>
+
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Preview', 'moksa-line' ); ?></th>
+					<td>
+						<?php
+						// Rendered with the real front-end markup and settings, so
+						// what is shown here is what a visitor sees.
+						wp_enqueue_style( 'moksa-line-front' );
+
+						printf(
+							'<a class="moksa-line-button" href="#" onclick="return false;"%s>%s</a>',
+							\Moksa\Line\Frontend\ShortcodeModule::style_attribute(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside.
+							esc_html(
+								'' !== trim( (string) Options::get( 'button_text' ) )
+									? (string) Options::get( 'button_text' )
+									: __( 'Log in with LINE', 'moksa-line' )
+							)
+						);
+						?>
+						<p class="description"><?php esc_html_e( 'Save to update the preview.', 'moksa-line' ); ?></p>
+					</td>
+				</tr>
+
 			<?php elseif ( 'messaging' === $current ) : ?>
 
 				<tr>

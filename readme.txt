@@ -118,7 +118,8 @@ Initial release.
 * Rich menus, including tabbed menus built from rich menu aliases.
 * Flex message editor with live preview, local validation and LINE's own validation endpoint.
 * LINE Pay: a WooCommerce gateway with refunds and voids, plus standalone payment links.
-* WooCommerce order notifications and account linking from My Account.
+* WooCommerce order notifications: templates with conditions on payment method, shipping method and order total; tracking numbers read from ECPay, RY Tools, Advanced Shipment Tracking and WooCommerce Shipment Tracking; a wait-and-retry so shipping notices carry the tracking number; and a delivery history of what was sent to whom.
+* Account linking from My Account, and a configurable login button.
 * LIFF profile and chat shortcodes, with every request's ID token verified server-side.
 * Broadcasting, a logs screen, and a setup checklist.
 

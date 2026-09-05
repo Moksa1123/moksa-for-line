@@ -19,6 +19,7 @@ Version 1.0.0. Requires WordPress 6.2 and PHP 7.4.
 | **LINE Pay** | Online API v3. A WooCommerce gateway with refunds and voids, plus standalone payment links you can send into a chat. |
 | **LIFF** | Profile and chat pages that run inside the LINE in-app browser, with the ID token verified server-side. |
 | **Broadcast** | To all followers or to the friends this site has recorded, with a typed confirmation and remaining quota shown. |
+| **Order notifications** | Templates with conditions on payment method, shipping method and order total. Tracking numbers are read from ECPay, RY Tools, AST and WooCommerce Shipment Tracking, and a shipping notice waits for one to appear before going out. Every send is recorded. |
 
 ## Setup
 
@@ -111,6 +112,11 @@ itself degrades gracefully.
 # Against a throwaway WordPress install: rebuild a 1.4.0-shaped database and
 # assert the migrator carries everything across without loss or double-encryption
 wp eval-file tests/migration-check.php
+
+# Needs WooCommerce. Exercises the order notification pipeline: placeholders,
+# JSON safety, rule evaluation, template selection, dispatch, history,
+# the duplicate guard, the tracking wait and the retry budget.
+wp eval-file tests/notify-check.php
 
 # Regenerate the translation template after changing any user-facing string
 php bin/make-pot.php
