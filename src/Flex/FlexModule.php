@@ -13,8 +13,8 @@
 namespace Moksa\Line\Flex;
 
 use Moksa\Line\Data\Flex;
-use Moksa\Line\Line\MessagingClient;
-use Moksa\Line\Line\TokenManager;
+use Moksa\Line\Api\MessagingClient;
+use Moksa\Line\Api\TokenManager;
 
 defined( 'ABSPATH' ) || exit;
 

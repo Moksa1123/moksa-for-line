@@ -15,7 +15,7 @@ namespace Moksa\Line\Bot;
 
 use Moksa\Line\Data\Flex;
 use Moksa\Line\Data\QuickReplies;
-use Moksa\Line\Line\MessagingClient;
+use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Migrator;
 

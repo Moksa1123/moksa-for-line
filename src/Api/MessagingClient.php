@@ -8,7 +8,7 @@
  * @package Moksa\Line
  */
 
-namespace Moksa\Line\Line;
+namespace Moksa\Line\Api;
 
 use Moksa\Line\Flex\Validator;
 use WP_Error;

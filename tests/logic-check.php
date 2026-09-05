@@ -58,11 +58,11 @@ $base = getenv( 'MOKSA_BASE' ) ?: $base;
 
 require_once $base . '/src/Support/Crypto.php';
 require_once $base . '/src/Support/Options.php';
-require_once $base . '/src/Line/Signature.php';
+require_once $base . '/src/Api/Signature.php';
 require_once $base . '/src/Flex/Validator.php';
 
 use Moksa\Line\Flex\Validator;
-use Moksa\Line\Line\Signature;
+use Moksa\Line\Api\Signature;
 use Moksa\Line\Support\Crypto;
 use Moksa\Line\Support\Options;
 
@@ -143,7 +143,7 @@ check(
 check( strlen( $reference ) === 44, 'a v3 signature is 44 base64 characters' );
 
 echo "\nAmount formatting\n";
-require_once $base . '/src/Line/Client.php';
+require_once $base . '/src/Api/Client.php';
 // format_amount lives on the pay client; exercise its rules directly.
 $format = function ( $amount, $currency ) {
 	if ( in_array( strtoupper( $currency ), array( 'TWD', 'JPY', 'KRW' ), true ) ) {

@@ -13,7 +13,7 @@
 
 namespace Moksa\Line\Pay;
 
-use Moksa\Line\Line\MessagingClient;
+use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Options;
 use WP_Error;

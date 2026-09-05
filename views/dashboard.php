@@ -8,8 +8,8 @@
 use Moksa\Line\Admin\AdminModule;
 use Moksa\Line\Data\Users;
 use Moksa\Line\Inbox\Conversations;
-use Moksa\Line\Line\MessagingClient;
-use Moksa\Line\Line\TokenManager;
+use Moksa\Line\Api\MessagingClient;
+use Moksa\Line\Api\TokenManager;
 
 defined( 'ABSPATH' ) || exit;
 

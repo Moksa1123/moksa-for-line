@@ -12,7 +12,7 @@
 
 namespace Moksa\Line\Webhook;
 
-use Moksa\Line\Line\Signature;
+use Moksa\Line\Api\Signature;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Options;
 use WP_REST_Request;

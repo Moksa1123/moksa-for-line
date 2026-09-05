@@ -10,7 +10,7 @@
  * @package Moksa\Line
  */
 
-namespace Moksa\Line\Line;
+namespace Moksa\Line\Api;
 
 use Moksa\Line\Support\Options;
 

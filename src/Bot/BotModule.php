@@ -19,7 +19,7 @@ namespace Moksa\Line\Bot;
 use Moksa\Line\Bot\Ai\AiResponder;
 use Moksa\Line\Data\QuickReplies;
 use Moksa\Line\Inbox\Conversations;
-use Moksa\Line\Line\MessagingClient;
+use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Support\Options;
 
 defined( 'ABSPATH' ) || exit;

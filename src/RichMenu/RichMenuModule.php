@@ -16,7 +16,7 @@
 namespace Moksa\Line\RichMenu;
 
 use Moksa\Line\Data\Repository;
-use Moksa\Line\Line\RichMenuClient;
+use Moksa\Line\Api\RichMenuClient;
 use Moksa\Line\Support\Logger;
 use WP_Error;
 

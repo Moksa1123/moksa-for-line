@@ -13,7 +13,7 @@
 namespace Moksa\Line\Woo;
 
 use Moksa\Line\Data\Users;
-use Moksa\Line\Line\MessagingClient;
+use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Login\LoginModule;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Options;

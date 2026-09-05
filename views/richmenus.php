@@ -5,7 +5,7 @@
  * @package Moksa\Line
  */
 
-use Moksa\Line\Line\RichMenuClient;
+use Moksa\Line\Api\RichMenuClient;
 use Moksa\Line\RichMenu\RichMenuModule;
 
 defined( 'ABSPATH' ) || exit;

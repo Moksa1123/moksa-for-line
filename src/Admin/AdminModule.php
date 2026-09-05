@@ -172,13 +172,13 @@ class AdminModule {
 		);
 
 		$items[] = array(
-			'done'  => \Moksa\Line\Line\TokenManager::is_configured(),
+			'done'  => \Moksa\Line\Api\TokenManager::is_configured(),
 			'label' => __( 'Messaging API channel connected', 'moksa-line-login' ),
 			'hint'  => __( 'The bot cannot send or receive anything until this is set.', 'moksa-line-login' ),
 		);
 
 		$items[] = array(
-			'done'  => ! \Moksa\Line\Line\Signature::using_fallback_secret(),
+			'done'  => ! \Moksa\Line\Api\Signature::using_fallback_secret(),
 			'label' => __( 'Webhook signing secret is the Messaging API one', 'moksa-line-login' ),
 			'hint'  => __( 'Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual.', 'moksa-line-login' ),
 		);
@@ -240,7 +240,7 @@ class AdminModule {
 
 		// Only nag about the two things that make the plugin do nothing at all.
 		$login     = '' !== (string) Options::get( 'channel_id' );
-		$messaging = \Moksa\Line\Line\TokenManager::is_configured();
+		$messaging = \Moksa\Line\Api\TokenManager::is_configured();
 
 		if ( $login || $messaging ) {
 			return;
@@ -312,7 +312,7 @@ class AdminModule {
 		Options::flush_cache();
 
 		// A changed messaging secret invalidates any cached token.
-		\Moksa\Line\Line\TokenManager::forget();
+		\Moksa\Line\Api\TokenManager::forget();
 
 		Migrator::maybe_upgrade();
 
@@ -359,11 +359,11 @@ class AdminModule {
 				wp_send_json_error( array( 'message' => __( 'That template could not be loaded.', 'moksa-line-login' ) ) );
 			}
 
-			$messages[] = \Moksa\Line\Line\MessagingClient::flex( (string) $template->alt_text, $contents );
+			$messages[] = \Moksa\Line\Api\MessagingClient::flex( (string) $template->alt_text, $contents );
 		}
 
 		if ( '' !== trim( $body ) ) {
-			array_unshift( $messages, \Moksa\Line\Line\MessagingClient::text( $body ) );
+			array_unshift( $messages, \Moksa\Line\Api\MessagingClient::text( $body ) );
 		}
 
 		if ( empty( $messages ) ) {
@@ -375,7 +375,7 @@ class AdminModule {
 				wp_send_json_error( array( 'message' => __( 'Enter a LINE user id to send the test to.', 'moksa-line-login' ) ) );
 			}
 
-			$result = \Moksa\Line\Line\MessagingClient::push( $target, $messages );
+			$result = \Moksa\Line\Api\MessagingClient::push( $target, $messages );
 
 			if ( is_wp_error( $result ) ) {
 				wp_send_json_error( array( 'message' => $result->get_error_message() ) );
@@ -393,7 +393,7 @@ class AdminModule {
 		}
 
 		if ( 'all' === $mode ) {
-			$result = \Moksa\Line\Line\MessagingClient::broadcast( $messages );
+			$result = \Moksa\Line\Api\MessagingClient::broadcast( $messages );
 
 			if ( is_wp_error( $result ) ) {
 				wp_send_json_error( array( 'message' => $result->get_error_message() ) );
@@ -410,7 +410,7 @@ class AdminModule {
 			wp_send_json_error( array( 'message' => __( 'No friends have been recorded on this site yet.', 'moksa-line-login' ) ) );
 		}
 
-		$report = \Moksa\Line\Line\MessagingClient::multicast( $recipients, $messages );
+		$report = \Moksa\Line\Api\MessagingClient::multicast( $recipients, $messages );
 
 		if ( $report['failed'] > 0 ) {
 			wp_send_json_error(

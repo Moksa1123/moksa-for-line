@@ -11,7 +11,7 @@
  * @package Moksa\Line
  */
 
-namespace Moksa\Line\Line;
+namespace Moksa\Line\Api;
 
 use Moksa\Line\Support\Logger;
 use WP_Error;
