@@ -298,6 +298,17 @@ class AdminModule {
 			}
 		}
 
+		// Order status checkboxes are a list rather than a single value, so
+		// they are handled outside the schema loop. An empty submission on the
+		// WooCommerce tab means "notify on nothing", which is a real choice.
+		if ( 'woo' === $tab ) {
+			$statuses = isset( $_POST['moksa_line_woo_statuses'] )
+				? array_map( 'sanitize_key', (array) wp_unslash( $_POST['moksa_line_woo_statuses'] ) )
+				: array();
+
+			Options::set( 'woo_notify_statuses', array_values( $statuses ) );
+		}
+
 		Options::flush_cache();
 
 		// A changed messaging secret invalidates any cached token.

@@ -80,6 +80,10 @@ final class Plugin {
 			'admin'    => Admin\AdminModule::class,
 		);
 
+		// The WooCommerce module checks for WooCommerce itself and does nothing
+		// when it is absent, so it is always registered.
+		$modules['woo'] = Woo\WooModule::class;
+
 		if ( Options::get( 'pay_enabled' ) ) {
 			$modules['pay'] = Pay\PayModule::class;
 		}

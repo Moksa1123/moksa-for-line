@@ -22,6 +22,12 @@ $tabs = array(
 	'advanced'  => __( 'Advanced', 'moksa-line-login' ),
 );
 
+if ( class_exists( 'WooCommerce' ) ) {
+	$tabs = array_slice( $tabs, 0, 4, true )
+		+ array( 'woo' => __( 'WooCommerce', 'moksa-line-login' ) )
+		+ array_slice( $tabs, 4, null, true );
+}
+
 $current = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'general';
 $current = isset( $tabs[ $current ] ) ? $current : 'general';
 
@@ -262,6 +268,49 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 						<p><code>[moksa_line_chat]</code> &mdash; <?php esc_html_e( 'a message box that posts into the inbox', 'moksa-line-login' ); ?></p>
 						<p><code>[moksa_line_login]</code> &mdash; <?php esc_html_e( 'the sign-in button', 'moksa-line-login' ); ?></p>
 						<p><code>[moksa_line_add_friend]</code> &mdash; <?php esc_html_e( 'a link to your official account', 'moksa-line-login' ); ?></p>
+					</td>
+				</tr>
+
+			<?php elseif ( 'woo' === $current ) : ?>
+
+				<?php
+				$checkbox( 'woo_notify', __( 'Order notifications', 'moksa-line-login' ), __( 'Message the customer in LINE when their order status changes', 'moksa-line-login' ) );
+				?>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Notify on', 'moksa-line-login' ); ?></th>
+					<td>
+						<?php
+						$selected_statuses = (array) Options::get( 'woo_notify_statuses' );
+
+						foreach ( \Moksa\Line\Woo\WooModule::statuses() as $slug => $label ) :
+							?>
+							<label class="moksa-inline-check">
+								<input type="checkbox" name="moksa_line_woo_statuses[]" value="<?php echo esc_attr( $slug ); ?>"
+									<?php checked( in_array( $slug, $selected_statuses, true ) ); ?> />
+								<?php echo esc_html( $label ); ?>
+							</label>
+						<?php endforeach; ?>
+						<p class="description">
+							<?php esc_html_e( 'Each notification is a push message and is billed. The customer only hears about a given order and status once, however many times the status is set.', 'moksa-line-login' ); ?>
+						</p>
+					</td>
+				</tr>
+				<?php
+				$checkbox( 'woo_account_tab', __( 'My Account tab', 'moksa-line-login' ), __( 'Add a LINE tab where customers can link and unlink their account', 'moksa-line-login' ) );
+				$checkbox( 'woo_login_buttons', __( 'Login buttons', 'moksa-line-login' ), __( 'Offer LINE sign-in on the account and checkout pages', 'moksa-line-login' ) );
+				?>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Payments', 'moksa-line-login' ); ?></th>
+					<td>
+						<p class="description">
+							<?php
+							printf(
+								/* translators: %s: LINE Pay settings tab URL. */
+								wp_kses_post( __( 'LINE Pay is configured on the <a href="%s">LINE Pay tab</a>, and the gateway is switched on under WooCommerce > Settings > Payments.', 'moksa-line-login' ) ),
+								esc_url( admin_url( 'admin.php?page=' . AdminModule::SLUG . '-settings&tab=pay' ) )
+							);
+							?>
+						</p>
 					</td>
 				</tr>
 

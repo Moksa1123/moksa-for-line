@@ -425,3 +425,9 @@
 	font-size: 12px;
 	color: var(--moksa-muted);
 }
+
+.moksa-inline-check {
+	display: inline-block;
+	margin: 0 16px 6px 0;
+	font-weight: 400;
+}

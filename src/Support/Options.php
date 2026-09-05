@@ -80,6 +80,14 @@ class Options {
 			'pay_currency'         => array( 'type' => 'enum', 'default' => 'TWD', 'enum' => array( 'TWD', 'JPY', 'USD', 'THB' ) ),
 			'pay_capture'          => array( 'type' => 'bool', 'default' => true ),
 
+			// --- WooCommerce ----------------------------------------------------------
+			'woo_notify'           => array( 'type' => 'bool', 'default' => false ),
+			// Which order statuses trigger a LINE message, as a JSON array of
+			// status slugs without the wc- prefix.
+			'woo_notify_statuses'  => array( 'type' => 'json', 'default' => array( 'processing', 'completed' ) ),
+			'woo_login_buttons'    => array( 'type' => 'bool', 'default' => true ),
+			'woo_account_tab'      => array( 'type' => 'bool', 'default' => true ),
+
 			// --- Inbox ---------------------------------------------------------------
 			'inbox_enabled'        => array( 'type' => 'bool', 'default' => true ),
 			'inbox_retention_days' => array( 'type' => 'int', 'default' => 180 ),
