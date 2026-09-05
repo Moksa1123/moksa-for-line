@@ -107,6 +107,33 @@ classes, so it runs anywhere PHP does. It needs the `openssl` and `mbstring`
 extensions; without them the encryption checks fail even though the plugin
 itself degrades gracefully.
 
+```bash
+# Regenerate the translation template after changing any user-facing string
+php bin/make-pot.php
+
+# Build dist/moksa-line.zip, ready to upload
+bash bin/build.sh
+```
+
+`bin/make-pot.php` walks the source with PHP's tokenizer rather than a regular
+expression, so a string containing brackets or a nested call cannot throw the
+extraction off. It picks up `translators:` comments and skips anything that is
+not a plain literal, which is what keeps concatenated strings out of the
+catalogue.
+
+`bin/build.sh` refuses to build when the plugin header version and the
+readme's `Stable tag` disagree, syntax-checks the staged copy rather than the
+working tree, and always names the zip's root folder `moksa-line` regardless of
+what the checkout directory is called.
+
+### Translations
+
+`languages/moksa-line.pot` is the current template (580 strings). No
+translations ship with the plugin: the ones inherited from 1.3.2 covered four
+of those 580 strings, so keeping them would have produced a mostly-English
+interface with a few stray translated words in it. Traditional Chinese
+(`zh_TW`) is the obvious first locale to produce.
+
 ## Licence
 
 GPL v2 or later.

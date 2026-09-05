@@ -1,0 +1,11 @@
+# Shell scripts must keep LF endings or they will not run on Linux.
+*.sh text eol=lf
+
+# Normalise text files in the repository, checkout native.
+*.php text
+*.js text
+*.css text
+*.md text
+*.txt text
+*.po text
+*.pot text
