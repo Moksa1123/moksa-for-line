@@ -137,20 +137,20 @@ class InboxModule {
 		check_ajax_referer( 'moksa_line_admin', 'nonce' );
 
 		if ( ! self::can_manage() ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot reply to conversations.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot reply to conversations.', 'moksa-line' ) ), 403 );
 		}
 
 		$conversation_id = isset( $_POST['conversation_id'] ) ? (int) $_POST['conversation_id'] : 0;
 		$text            = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
 
 		if ( '' === trim( $text ) ) {
-			wp_send_json_error( array( 'message' => __( 'Write something first.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Write something first.', 'moksa-line' ) ) );
 		}
 
 		$conversation = Conversations::find_by_id( $conversation_id );
 
 		if ( ! $conversation ) {
-			wp_send_json_error( array( 'message' => __( 'That conversation no longer exists.', 'moksa-line-login' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That conversation no longer exists.', 'moksa-line' ) ), 404 );
 		}
 
 		$line_user_id = (string) $conversation->line_user_id;
@@ -182,7 +182,7 @@ class InboxModule {
 				array(
 					'message' => sprintf(
 						/* translators: %s: error detail from LINE. */
-						__( 'LINE would not deliver that message: %s', 'moksa-line-login' ),
+						__( 'LINE would not deliver that message: %s', 'moksa-line' ),
 						$result->get_error_message()
 					),
 				)
@@ -200,7 +200,7 @@ class InboxModule {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Sent.', 'moksa-line-login' ),
+				'message' => __( 'Sent.', 'moksa-line' ),
 				'thread'  => $this->render_thread( $conversation_id ),
 			)
 		);
@@ -213,14 +213,14 @@ class InboxModule {
 		check_ajax_referer( 'moksa_line_admin', 'nonce' );
 
 		if ( ! self::can_manage() ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot read conversations.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot read conversations.', 'moksa-line' ) ), 403 );
 		}
 
 		$conversation_id = isset( $_POST['conversation_id'] ) ? (int) $_POST['conversation_id'] : 0;
 		$conversation    = Conversations::find_by_id( $conversation_id );
 
 		if ( ! $conversation ) {
-			wp_send_json_error( array( 'message' => __( 'That conversation no longer exists.', 'moksa-line-login' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That conversation no longer exists.', 'moksa-line' ) ), 404 );
 		}
 
 		Conversations::mark_read( $conversation_id );
@@ -242,7 +242,7 @@ class InboxModule {
 		check_ajax_referer( 'moksa_line_admin', 'nonce' );
 
 		if ( ! self::can_manage() ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot change conversations.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot change conversations.', 'moksa-line' ) ), 403 );
 		}
 
 		$conversation_id = isset( $_POST['conversation_id'] ) ? (int) $_POST['conversation_id'] : 0;
@@ -251,7 +251,7 @@ class InboxModule {
 		$conversation = Conversations::find_by_id( $conversation_id );
 
 		if ( ! $conversation || ! in_array( $status, Conversations::STATUSES, true ) ) {
-			wp_send_json_error( array( 'message' => __( 'That change is not valid.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That change is not valid.', 'moksa-line' ) ) );
 		}
 
 		Conversations::set_status(
@@ -274,7 +274,7 @@ class InboxModule {
 		ob_start();
 
 		if ( empty( $rows ) ) {
-			echo '<p class="moksa-inbox-empty">' . esc_html__( 'No messages yet. Only messages received after this plugin was installed appear here -- LINE does not provide access to earlier chat history.', 'moksa-line-login' ) . '</p>';
+			echo '<p class="moksa-inbox-empty">' . esc_html__( 'No messages yet. Only messages received after this plugin was installed appear here -- LINE does not provide access to earlier chat history.', 'moksa-line' ) . '</p>';
 		}
 
 		foreach ( $rows as $row ) {
@@ -284,14 +284,14 @@ class InboxModule {
 				$classes .= ' moksa-msg--failed';
 			}
 
-			$who = __( 'Visitor', 'moksa-line-login' );
+			$who = __( 'Visitor', 'moksa-line' );
 
 			if ( 'out' === $row->direction ) {
 				if ( 'agent' === $row->sender_kind ) {
 					$user = get_userdata( (int) $row->sender_wp_user_id );
-					$who  = $user ? $user->display_name : __( 'Agent', 'moksa-line-login' );
+					$who  = $user ? $user->display_name : __( 'Agent', 'moksa-line' );
 				} else {
-					$who = __( 'Bot', 'moksa-line-login' );
+					$who = __( 'Bot', 'moksa-line' );
 				}
 			}
 

@@ -6,7 +6,7 @@
  * Version: 2.0.0
  * Author: Moksa
  * Author URI: https://moksaweb.com/
- * Text Domain: moksa-line-login
+ * Text Domain: moksa-line
  * Domain Path: /languages
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html

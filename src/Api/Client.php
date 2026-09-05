@@ -161,10 +161,10 @@ class Client {
 			$code = 'moksa_line_unauthorized';
 		} elseif ( 429 === $status ) {
 			$code    = 'moksa_line_rate_limited';
-			$message = __( 'LINE is rate limiting this channel. Try again shortly.', 'moksa-line-login' );
+			$message = __( 'LINE is rate limiting this channel. Try again shortly.', 'moksa-line' );
 		} elseif ( 403 === $status ) {
 			$code    = 'moksa_line_forbidden';
-			$message = $message . ' ' . __( '(Check the channel plan and that the feature is enabled for this channel.)', 'moksa-line-login' );
+			$message = $message . ' ' . __( '(Check the channel plan and that the feature is enabled for this channel.)', 'moksa-line' );
 		}
 
 		Logger::error(
@@ -242,7 +242,7 @@ class Client {
 				'moksa_line_content_failed',
 				sprintf(
 					/* translators: %d: HTTP status code. */
-					__( 'Could not download the message content (HTTP %d).', 'moksa-line-login' ),
+					__( 'Could not download the message content (HTTP %d).', 'moksa-line' ),
 					$status
 				)
 			);

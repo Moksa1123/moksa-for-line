@@ -138,13 +138,13 @@ class LoginModule {
 		$link     = ! empty( $_GET['link'] ) && is_user_logged_in();
 
 		if ( $link && ! wp_verify_nonce( isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '', 'moksa_line_link' ) ) {
-			wp_die( esc_html__( 'This link expired. Please go back and try again.', 'moksa-line-login' ), 403 );
+			wp_die( esc_html__( 'This link expired. Please go back and try again.', 'moksa-line' ), 403 );
 		}
 
 		$url = self::authorize_url( $redirect, array( 'link' => $link ) );
 
 		if ( '#' === $url ) {
-			wp_die( esc_html__( 'LINE Login is not configured on this site yet.', 'moksa-line-login' ) );
+			wp_die( esc_html__( 'LINE Login is not configured on this site yet.', 'moksa-line' ) );
 		}
 
 		wp_redirect( $url );
@@ -160,7 +160,7 @@ class LoginModule {
 		$state = isset( $_GET['state'] ) ? sanitize_text_field( wp_unslash( $_GET['state'] ) ) : '';
 
 		if ( '' === $state ) {
-			$this->fail( __( 'This login request is missing its state. Please start again.', 'moksa-line-login' ) );
+			$this->fail( __( 'This login request is missing its state. Please start again.', 'moksa-line' ) );
 		}
 
 		$stored = get_transient( self::state_key( $state ) );
@@ -170,7 +170,7 @@ class LoginModule {
 		delete_transient( self::state_key( $state ) );
 
 		if ( ! is_array( $stored ) ) {
-			$this->fail( __( 'This login link has expired. Please try again.', 'moksa-line-login' ) );
+			$this->fail( __( 'This login link has expired. Please try again.', 'moksa-line' ) );
 		}
 
 		// LINE reports user-side cancellation as an error parameter.
@@ -188,7 +188,7 @@ class LoginModule {
 		$code = isset( $_GET['code'] ) ? sanitize_text_field( wp_unslash( $_GET['code'] ) ) : '';
 
 		if ( '' === $code ) {
-			$this->fail( __( 'LINE did not return an authorization code.', 'moksa-line-login' ) );
+			$this->fail( __( 'LINE did not return an authorization code.', 'moksa-line' ) );
 		}
 
 		$tokens = $this->exchange_code( $code, (string) ( $stored['code_verifier'] ?? '' ) );
@@ -298,7 +298,7 @@ class LoginModule {
 
 			return new WP_Error(
 				'moksa_line_token_unreachable',
-				__( 'Could not reach LINE to complete the login. Please try again.', 'moksa-line-login' )
+				__( 'Could not reach LINE to complete the login. Please try again.', 'moksa-line' )
 			);
 		}
 
@@ -314,7 +314,7 @@ class LoginModule {
 
 			return new WP_Error(
 				'moksa_line_token_rejected',
-				__( 'LINE rejected this login. Check the Channel ID, Channel Secret and Callback URL.', 'moksa-line-login' )
+				__( 'LINE rejected this login. Check the Channel ID, Channel Secret and Callback URL.', 'moksa-line' )
 			);
 		}
 
@@ -415,7 +415,7 @@ class LoginModule {
 		if ( ! Options::get( 'auto_register' ) ) {
 			return new WP_Error(
 				'moksa_line_registration_closed',
-				__( 'This site is not accepting new registrations through LINE. Please sign in with your existing account first, then link LINE from your profile.', 'moksa-line-login' )
+				__( 'This site is not accepting new registrations through LINE. Please sign in with your existing account first, then link LINE from your profile.', 'moksa-line' )
 			);
 		}
 
@@ -492,7 +492,7 @@ class LoginModule {
 		if ( ! get_userdata( $wp_user_id ) ) {
 			return new WP_Error(
 				'moksa_line_link_target_missing',
-				__( 'The account to link to no longer exists.', 'moksa-line-login' )
+				__( 'The account to link to no longer exists.', 'moksa-line' )
 			);
 		}
 
@@ -501,7 +501,7 @@ class LoginModule {
 		if ( $record && (int) $record->wp_user_id > 0 && (int) $record->wp_user_id !== $wp_user_id ) {
 			return new WP_Error(
 				'moksa_line_already_linked',
-				__( 'This LINE account is already linked to another user on this site.', 'moksa-line-login' )
+				__( 'This LINE account is already linked to another user on this site.', 'moksa-line' )
 			);
 		}
 
@@ -564,18 +564,18 @@ class LoginModule {
 		$user_id = get_current_user_id();
 
 		if ( ! $user_id ) {
-			wp_send_json_error( array( 'message' => __( 'You are not signed in.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You are not signed in.', 'moksa-line' ) ), 403 );
 		}
 
 		$target = isset( $_POST['user_id'] ) ? (int) $_POST['user_id'] : $user_id;
 
 		if ( $target !== $user_id && ! current_user_can( 'edit_users' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot unlink another user.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot unlink another user.', 'moksa-line' ) ), 403 );
 		}
 
 		Users::unlink( $target );
 
-		wp_send_json_success( array( 'message' => __( 'LINE account unlinked.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'message' => __( 'LINE account unlinked.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -672,7 +672,7 @@ class LoginModule {
 	private function fail( string $message ): void {
 		wp_die(
 			esc_html( $message ),
-			esc_html__( 'LINE Login', 'moksa-line-login' ),
+			esc_html__( 'LINE Login', 'moksa-line' ),
 			array(
 				'response'  => 400,
 				'back_link' => true,

@@ -22,8 +22,8 @@ class WooGateway extends WC_Payment_Gateway {
 
 	public function __construct() {
 		$this->id                 = 'moksa_line_pay';
-		$this->method_title       = __( 'LINE Pay', 'moksa-line-login' );
-		$this->method_description = __( 'Take payments through LINE Pay. Credentials are configured under LINE > Settings > LINE Pay.', 'moksa-line-login' );
+		$this->method_title       = __( 'LINE Pay', 'moksa-line' );
+		$this->method_description = __( 'Take payments through LINE Pay. Credentials are configured under LINE > Settings > LINE Pay.', 'moksa-line' );
 		$this->has_fields         = false;
 		$this->supports           = array( 'products', 'refunds' );
 
@@ -32,8 +32,8 @@ class WooGateway extends WC_Payment_Gateway {
 		$this->init_form_fields();
 		$this->init_settings();
 
-		$this->title       = $this->get_option( 'title', __( 'LINE Pay', 'moksa-line-login' ) );
-		$this->description = $this->get_option( 'description', __( 'Pay with LINE Pay, LINE Points or a registered card.', 'moksa-line-login' ) );
+		$this->title       = $this->get_option( 'title', __( 'LINE Pay', 'moksa-line' ) );
+		$this->description = $this->get_option( 'description', __( 'Pay with LINE Pay, LINE Points or a registered card.', 'moksa-line' ) );
 		$this->enabled     = $this->get_option( 'enabled', 'no' );
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -42,29 +42,29 @@ class WooGateway extends WC_Payment_Gateway {
 	public function init_form_fields(): void {
 		$this->form_fields = array(
 			'enabled'     => array(
-				'title'   => __( 'Enable', 'moksa-line-login' ),
+				'title'   => __( 'Enable', 'moksa-line' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Offer LINE Pay at checkout', 'moksa-line-login' ),
+				'label'   => __( 'Offer LINE Pay at checkout', 'moksa-line' ),
 				'default' => 'no',
 			),
 			'title'       => array(
-				'title'       => __( 'Title', 'moksa-line-login' ),
+				'title'       => __( 'Title', 'moksa-line' ),
 				'type'        => 'text',
-				'description' => __( 'What the customer sees at checkout.', 'moksa-line-login' ),
-				'default'     => __( 'LINE Pay', 'moksa-line-login' ),
+				'description' => __( 'What the customer sees at checkout.', 'moksa-line' ),
+				'default'     => __( 'LINE Pay', 'moksa-line' ),
 				'desc_tip'    => true,
 			),
 			'description' => array(
-				'title'   => __( 'Description', 'moksa-line-login' ),
+				'title'   => __( 'Description', 'moksa-line' ),
 				'type'    => 'textarea',
-				'default' => __( 'Pay with LINE Pay, LINE Points or a registered card.', 'moksa-line-login' ),
+				'default' => __( 'Pay with LINE Pay, LINE Points or a registered card.', 'moksa-line' ),
 			),
 			'credentials' => array(
-				'title'       => __( 'Credentials', 'moksa-line-login' ),
+				'title'       => __( 'Credentials', 'moksa-line' ),
 				'type'        => 'title',
 				'description' => sprintf(
 					/* translators: %s: settings page URL. */
-					__( 'The Channel ID, Channel Secret and sandbox switch live on the <a href="%s">LINE Pay settings screen</a>, so they are stored encrypted and shared with payment links.', 'moksa-line-login' ),
+					__( 'The Channel ID, Channel Secret and sandbox switch live on the <a href="%s">LINE Pay settings screen</a>, so they are stored encrypted and shared with payment links.', 'moksa-line' ),
 					esc_url( admin_url( 'admin.php?page=moksa-line-settings&tab=pay' ) )
 				),
 			),
@@ -104,7 +104,7 @@ class WooGateway extends WC_Payment_Gateway {
 		$order = wc_get_order( $order_id );
 
 		if ( ! $order ) {
-			wc_add_notice( __( 'That order could not be found.', 'moksa-line-login' ), 'error' );
+			wc_add_notice( __( 'That order could not be found.', 'moksa-line' ), 'error' );
 
 			return array( 'result' => 'failure' );
 		}
@@ -113,7 +113,7 @@ class WooGateway extends WC_Payment_Gateway {
 		$amount   = LinePayClient::format_amount( (float) $order->get_total(), $currency );
 
 		if ( $amount <= 0 ) {
-			wc_add_notice( __( 'This order has nothing to pay.', 'moksa-line-login' ), 'error' );
+			wc_add_notice( __( 'This order has nothing to pay.', 'moksa-line' ), 'error' );
 
 			return array( 'result' => 'failure' );
 		}
@@ -143,7 +143,7 @@ class WooGateway extends WC_Payment_Gateway {
 		);
 
 		if ( ! $payment_id ) {
-			wc_add_notice( __( 'The payment could not be started. Please try again.', 'moksa-line-login' ), 'error' );
+			wc_add_notice( __( 'The payment could not be started. Please try again.', 'moksa-line' ), 'error' );
 
 			return array( 'result' => 'failure' );
 		}
@@ -193,11 +193,11 @@ class WooGateway extends WC_Payment_Gateway {
 
 		$order->update_meta_data( '_moksa_line_pay_order_ref', $order_ref );
 		$order->update_meta_data( '_moksa_line_pay_transaction_id', $transaction_id );
-		$order->update_status( 'pending', __( 'Waiting for the customer to complete payment on LINE Pay.', 'moksa-line-login' ) );
+		$order->update_status( 'pending', __( 'Waiting for the customer to complete payment on LINE Pay.', 'moksa-line' ) );
 		$order->save();
 
 		if ( '' === $redirect ) {
-			wc_add_notice( __( 'LINE Pay did not return a payment URL. Please try again.', 'moksa-line-login' ), 'error' );
+			wc_add_notice( __( 'LINE Pay did not return a payment URL. Please try again.', 'moksa-line' ), 'error' );
 
 			return array( 'result' => 'failure' );
 		}
@@ -222,14 +222,14 @@ class WooGateway extends WC_Payment_Gateway {
 		if ( ! $payment || '' === (string) $payment->transaction_id ) {
 			return new \WP_Error(
 				'moksa_line_pay_no_transaction',
-				__( 'This order has no LINE Pay transaction to refund.', 'moksa-line-login' )
+				__( 'This order has no LINE Pay transaction to refund.', 'moksa-line' )
 			);
 		}
 
 		if ( ! in_array( $payment->status, array( 'captured', 'partially_refunded' ), true ) ) {
 			return new \WP_Error(
 				'moksa_line_pay_not_captured',
-				__( 'Only a captured payment can be refunded.', 'moksa-line-login' )
+				__( 'Only a captured payment can be refunded.', 'moksa-line' )
 			);
 		}
 
@@ -243,7 +243,7 @@ class WooGateway extends WC_Payment_Gateway {
 				'moksa_line_pay_refund_too_large',
 				sprintf(
 					/* translators: %s: remaining refundable amount. */
-					__( 'Only %s remains refundable on this payment.', 'moksa-line-login' ),
+					__( 'Only %s remains refundable on this payment.', 'moksa-line' ),
 					number_format_i18n( $remaining, in_array( $currency, array( 'TWD', 'JPY', 'KRW' ), true ) ? 0 : 2 )
 				)
 			);
@@ -272,7 +272,7 @@ class WooGateway extends WC_Payment_Gateway {
 			$order->add_order_note(
 				sprintf(
 					/* translators: 1: refunded amount, 2: reason. */
-					__( 'LINE Pay refunded %1$s. %2$s', 'moksa-line-login' ),
+					__( 'LINE Pay refunded %1$s. %2$s', 'moksa-line' ),
 					number_format_i18n( $refund, in_array( $currency, array( 'TWD', 'JPY', 'KRW' ), true ) ? 0 : 2 ),
 					$reason
 				)
@@ -328,8 +328,8 @@ class WooGateway extends WC_Payment_Gateway {
 		if ( abs( $difference ) > 0.001 ) {
 			$products[] = array(
 				'name'     => $difference > 0
-					? __( 'Shipping, fees and tax', 'moksa-line-login' )
-					: __( 'Discount', 'moksa-line-login' ),
+					? __( 'Shipping, fees and tax', 'moksa-line' )
+					: __( 'Discount', 'moksa-line' ),
 				'quantity' => 1,
 				'price'    => LinePayClient::format_amount( (float) $difference, $currency ),
 			);
@@ -339,7 +339,7 @@ class WooGateway extends WC_Payment_Gateway {
 			$products[] = array(
 				'name'     => sprintf(
 					/* translators: %s: order number. */
-					__( 'Order %s', 'moksa-line-login' ),
+					__( 'Order %s', 'moksa-line' ),
 					(string) $order->get_order_number()
 				),
 				'quantity' => 1,

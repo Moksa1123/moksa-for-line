@@ -95,7 +95,7 @@ class AiResponder {
 
 			return array(
 				MessagingClient::text(
-					__( 'Sure -- I have passed this to a member of our team. They will reply here shortly.', 'moksa-line-login' )
+					__( 'Sure -- I have passed this to a member of our team. They will reply here shortly.', 'moksa-line' )
 				),
 			);
 		}

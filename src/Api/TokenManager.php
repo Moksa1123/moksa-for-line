@@ -38,7 +38,7 @@ class TokenManager {
 			if ( '' === $token ) {
 				return new WP_Error(
 					'moksa_line_no_token',
-					__( 'No channel access token is configured. Add one under LINE > Settings > Messaging API.', 'moksa-line-login' )
+					__( 'No channel access token is configured. Add one under LINE > Settings > Messaging API.', 'moksa-line' )
 				);
 			}
 
@@ -66,7 +66,7 @@ class TokenManager {
 		if ( '' === $channel_id || '' === $secret ) {
 			return new WP_Error(
 				'moksa_line_no_credentials',
-				__( 'Messaging API Channel ID and Channel Secret are required to issue a token.', 'moksa-line-login' )
+				__( 'Messaging API Channel ID and Channel Secret are required to issue a token.', 'moksa-line' )
 			);
 		}
 

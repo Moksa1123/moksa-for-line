@@ -104,7 +104,7 @@ class PayModule {
 		$payment = Payments::by_order_ref( $order_ref );
 
 		if ( ! $payment ) {
-			return $this->redirect( home_url(), __( 'That payment could not be found.', 'moksa-line-login' ) );
+			return $this->redirect( home_url(), __( 'That payment could not be found.', 'moksa-line' ) );
 		}
 
 		$result = self::complete( (int) $payment->id, $transaction_id );
@@ -134,12 +134,12 @@ class PayModule {
 				$order = wc_get_order( (int) $payment->wc_order_id );
 
 				if ( $order ) {
-					$order->add_order_note( __( 'The customer cancelled the LINE Pay payment.', 'moksa-line-login' ) );
+					$order->add_order_note( __( 'The customer cancelled the LINE Pay payment.', 'moksa-line' ) );
 				}
 			}
 		}
 
-		return $this->redirect( self::failure_url( $payment ), __( 'The payment was cancelled.', 'moksa-line-login' ) );
+		return $this->redirect( self::failure_url( $payment ), __( 'The payment was cancelled.', 'moksa-line' ) );
 	}
 
 	// --- Completion ---------------------------------------------------------------
@@ -163,7 +163,7 @@ class PayModule {
 		$payment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $payment_id ) );
 
 		if ( ! $payment ) {
-			return new WP_Error( 'moksa_line_pay_missing', __( 'That payment could not be found.', 'moksa-line-login' ) );
+			return new WP_Error( 'moksa_line_pay_missing', __( 'That payment could not be found.', 'moksa-line' ) );
 		}
 
 		if ( in_array( $payment->status, array( 'captured', 'authorized' ), true ) ) {
@@ -177,7 +177,7 @@ class PayModule {
 		if ( '' === $transaction_id ) {
 			return new WP_Error(
 				'moksa_line_pay_no_transaction',
-				__( 'LINE Pay did not identify this transaction.', 'moksa-line-login' )
+				__( 'LINE Pay did not identify this transaction.', 'moksa-line' )
 			);
 		}
 
@@ -192,7 +192,7 @@ class PayModule {
 
 			return new WP_Error(
 				'moksa_line_pay_in_progress',
-				__( 'This payment is already being confirmed. Please wait a moment and refresh.', 'moksa-line-login' )
+				__( 'This payment is already being confirmed. Please wait a moment and refresh.', 'moksa-line' )
 			);
 		}
 
@@ -253,7 +253,7 @@ class PayModule {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: LINE Pay transaction id. */
-						__( 'LINE Pay confirmed. Transaction %s.', 'moksa-line-login' ),
+						__( 'LINE Pay confirmed. Transaction %s.', 'moksa-line' ),
 						(string) $payment->transaction_id
 					)
 				);
@@ -265,7 +265,7 @@ class PayModule {
 			$receipt = MessagingClient::text(
 				sprintf(
 					/* translators: 1: amount, 2: currency, 3: order reference. */
-					__( 'Payment received: %1$s %2$s (order %3$s). Thank you!', 'moksa-line-login' ),
+					__( 'Payment received: %1$s %2$s (order %3$s). Thank you!', 'moksa-line' ),
 					number_format_i18n( (float) $payment->amount, in_array( $payment->currency, array( 'TWD', 'JPY', 'KRW' ), true ) ? 0 : 2 ),
 					(string) $payment->currency,
 					(string) $payment->order_ref
@@ -397,7 +397,7 @@ class PayModule {
 		$amount_i = LinePayClient::format_amount( $amount, $currency );
 
 		if ( $amount_i <= 0 ) {
-			return new WP_Error( 'moksa_line_pay_bad_amount', __( 'Enter an amount greater than zero.', 'moksa-line-login' ) );
+			return new WP_Error( 'moksa_line_pay_bad_amount', __( 'Enter an amount greater than zero.', 'moksa-line' ) );
 		}
 
 		$order_ref  = Payments::new_reference( 'LINK' );
@@ -412,7 +412,7 @@ class PayModule {
 		);
 
 		if ( ! $payment_id ) {
-			return new WP_Error( 'moksa_line_pay_store_failed', __( 'The payment could not be recorded.', 'moksa-line-login' ) );
+			return new WP_Error( 'moksa_line_pay_store_failed', __( 'The payment could not be recorded.', 'moksa-line' ) );
 		}
 
 		$title = '' !== trim( $title ) ? $title : get_bloginfo( 'name' );
@@ -462,7 +462,7 @@ class PayModule {
 		);
 
 		if ( '' === $url ) {
-			return new WP_Error( 'moksa_line_pay_no_url', __( 'LINE Pay did not return a payment URL.', 'moksa-line-login' ) );
+			return new WP_Error( 'moksa_line_pay_no_url', __( 'LINE Pay did not return a payment URL.', 'moksa-line' ) );
 		}
 
 		return array( 'url' => $url, 'order_ref' => $order_ref );
@@ -476,7 +476,7 @@ class PayModule {
 		check_ajax_referer( 'moksa_line_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_woocommerce' ) && ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot create payment links.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot create payment links.', 'moksa-line' ) ), 403 );
 		}
 
 		$amount  = isset( $_POST['amount'] ) ? (float) $_POST['amount'] : 0;
@@ -498,7 +498,7 @@ class PayModule {
 						'url'     => $link['url'],
 						'message' => sprintf(
 							/* translators: %s: error detail. */
-							__( 'The link was created, but LINE would not deliver it: %s', 'moksa-line-login' ),
+							__( 'The link was created, but LINE would not deliver it: %s', 'moksa-line' ),
 							$sent->get_error_message()
 						),
 					)
@@ -509,7 +509,7 @@ class PayModule {
 		wp_send_json_success(
 			array(
 				'url'     => $link['url'],
-				'message' => __( 'Payment link created.', 'moksa-line-login' ),
+				'message' => __( 'Payment link created.', 'moksa-line' ),
 			)
 		);
 	}
@@ -533,7 +533,7 @@ class PayModule {
 		return MessagingClient::flex(
 			sprintf(
 				/* translators: 1: item title, 2: formatted amount. */
-				__( 'Payment request: %1$s %2$s', 'moksa-line-login' ),
+				__( 'Payment request: %1$s %2$s', 'moksa-line' ),
 				$title,
 				$display
 			),
@@ -546,7 +546,7 @@ class PayModule {
 					'contents' => array(
 						array(
 							'type'   => 'text',
-							'text'   => __( 'Payment request', 'moksa-line-login' ),
+							'text'   => __( 'Payment request', 'moksa-line' ),
 							'size'   => 'sm',
 							'color'  => '#888888',
 						),
@@ -575,7 +575,7 @@ class PayModule {
 							'color'  => '#06C755',
 							'action' => array(
 								'type'  => 'uri',
-								'label' => __( 'Pay with LINE Pay', 'moksa-line-login' ),
+								'label' => __( 'Pay with LINE Pay', 'moksa-line' ),
 								'uri'   => $url,
 							),
 						),

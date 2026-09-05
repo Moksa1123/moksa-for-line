@@ -39,7 +39,7 @@ class IdToken {
 		if ( '' === $id_token ) {
 			return new WP_Error(
 				'moksa_line_no_id_token',
-				__( 'LINE did not return an ID token. Make sure the openid scope is enabled for this channel.', 'moksa-line-login' )
+				__( 'LINE did not return an ID token. Make sure the openid scope is enabled for this channel.', 'moksa-line' )
 			);
 		}
 
@@ -61,7 +61,7 @@ class IdToken {
 
 			return new WP_Error(
 				'moksa_line_verify_unreachable',
-				__( 'Could not reach LINE to verify the login. Please try again.', 'moksa-line-login' )
+				__( 'Could not reach LINE to verify the login. Please try again.', 'moksa-line' )
 			);
 		}
 
@@ -77,7 +77,7 @@ class IdToken {
 
 			return new WP_Error(
 				'moksa_line_invalid_id_token',
-				__( 'This login could not be verified. Please try again.', 'moksa-line-login' )
+				__( 'This login could not be verified. Please try again.', 'moksa-line' )
 			);
 		}
 
@@ -104,21 +104,21 @@ class IdToken {
 	 */
 	private static function check_claims( array $claims, string $channel_id, string $nonce ): string {
 		if ( empty( $claims['sub'] ) ) {
-			return __( 'The login response did not identify a user.', 'moksa-line-login' );
+			return __( 'The login response did not identify a user.', 'moksa-line' );
 		}
 
 		if ( ! isset( $claims['iss'] ) || self::ISSUER !== $claims['iss'] ) {
-			return __( 'The login response came from an unexpected issuer.', 'moksa-line-login' );
+			return __( 'The login response came from an unexpected issuer.', 'moksa-line' );
 		}
 
 		$audience = isset( $claims['aud'] ) ? (array) $claims['aud'] : array();
 
 		if ( '' !== $channel_id && ! in_array( $channel_id, $audience, true ) ) {
-			return __( 'The login response was issued for a different channel.', 'moksa-line-login' );
+			return __( 'The login response was issued for a different channel.', 'moksa-line' );
 		}
 
 		if ( isset( $claims['exp'] ) && ( (int) $claims['exp'] + self::LEEWAY ) < time() ) {
-			return __( 'The login response has expired. Please try again.', 'moksa-line-login' );
+			return __( 'The login response has expired. Please try again.', 'moksa-line' );
 		}
 
 		// A missing nonce in the response when one was requested means the
@@ -127,7 +127,7 @@ class IdToken {
 			$returned = isset( $claims['nonce'] ) ? (string) $claims['nonce'] : '';
 
 			if ( ! hash_equals( $nonce, $returned ) ) {
-				return __( 'The login response did not match this login attempt.', 'moksa-line-login' );
+				return __( 'The login response did not match this login attempt.', 'moksa-line' );
 			}
 		}
 

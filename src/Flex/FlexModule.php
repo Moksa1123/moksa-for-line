@@ -41,7 +41,7 @@ class FlexModule {
 				array(
 					'message' => sprintf(
 						/* translators: %s: JSON parser message. */
-						__( 'That is not valid JSON: %s', 'moksa-line-login' ),
+						__( 'That is not valid JSON: %s', 'moksa-line' ),
 						json_last_error_msg()
 					),
 				)
@@ -54,7 +54,7 @@ class FlexModule {
 		if ( ! empty( $problems ) ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'This template will not send as it stands.', 'moksa-line-login' ),
+					'message'  => __( 'This template will not send as it stands.', 'moksa-line' ),
 					'problems' => $problems,
 				)
 			);
@@ -73,13 +73,13 @@ class FlexModule {
 		);
 
 		if ( ! $id ) {
-			wp_send_json_error( array( 'message' => __( 'The template could not be saved.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The template could not be saved.', 'moksa-line' ) ) );
 		}
 
 		wp_send_json_success(
 			array(
 				'id'      => $id,
-				'message' => __( 'Template saved.', 'moksa-line-login' ),
+				'message' => __( 'Template saved.', 'moksa-line' ),
 			)
 		);
 	}
@@ -93,10 +93,10 @@ class FlexModule {
 		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
 
 		if ( ! Flex::delete( $id ) ) {
-			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-line-login' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-line' ) ), 404 );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Template deleted.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Template deleted.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -111,7 +111,7 @@ class FlexModule {
 		if ( ! is_array( $decoded ) ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'That is not valid JSON.', 'moksa-line-login' ),
+					'message'  => __( 'That is not valid JSON.', 'moksa-line' ),
 					'problems' => array( json_last_error_msg() ),
 				)
 			);
@@ -124,7 +124,7 @@ class FlexModule {
 		if ( ! empty( $problems ) ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'Found problems before contacting LINE.', 'moksa-line-login' ),
+					'message'  => __( 'Found problems before contacting LINE.', 'moksa-line' ),
 					'problems' => $problems,
 					'source'   => 'local',
 				)
@@ -134,7 +134,7 @@ class FlexModule {
 		if ( ! TokenManager::is_configured() ) {
 			wp_send_json_success(
 				array(
-					'message' => __( 'Passed the local checks. Connect the Messaging API channel to also validate against LINE.', 'moksa-line-login' ),
+					'message' => __( 'Passed the local checks. Connect the Messaging API channel to also validate against LINE.', 'moksa-line' ),
 					'source'  => 'local',
 				)
 			);
@@ -145,7 +145,7 @@ class FlexModule {
 		if ( is_wp_error( $remote ) ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'LINE rejected this template.', 'moksa-line-login' ),
+					'message'  => __( 'LINE rejected this template.', 'moksa-line' ),
 					'problems' => array( $remote->get_error_message() ),
 					'source'   => 'line',
 				)
@@ -154,7 +154,7 @@ class FlexModule {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'LINE accepted this template.', 'moksa-line-login' ),
+				'message' => __( 'LINE accepted this template.', 'moksa-line' ),
 				'source'  => 'line',
 			)
 		);
@@ -169,13 +169,13 @@ class FlexModule {
 		$line_user_id = isset( $_POST['line_user_id'] ) ? sanitize_text_field( wp_unslash( $_POST['line_user_id'] ) ) : '';
 
 		if ( '' === $line_user_id ) {
-			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line' ) ) );
 		}
 
 		$decoded = json_decode( (string) wp_unslash( $_POST['contents'] ?? '' ), true );
 
 		if ( ! is_array( $decoded ) ) {
-			wp_send_json_error( array( 'message' => __( 'That is not valid JSON.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That is not valid JSON.', 'moksa-line' ) ) );
 		}
 
 		$alt_text = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : 'Preview';
@@ -186,7 +186,7 @@ class FlexModule {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -197,7 +197,7 @@ class FlexModule {
 	public static function starters(): array {
 		return array(
 			'card'    => array(
-				'label'    => __( 'Image card with a button', 'moksa-line-login' ),
+				'label'    => __( 'Image card with a button', 'moksa-line' ),
 				'contents' => array(
 					'type' => 'bubble',
 					'hero' => array(
@@ -214,14 +214,14 @@ class FlexModule {
 						'contents' => array(
 							array(
 								'type'   => 'text',
-								'text'   => __( 'Headline', 'moksa-line-login' ),
+								'text'   => __( 'Headline', 'moksa-line' ),
 								'weight' => 'bold',
 								'size'   => 'xl',
 								'wrap'   => true,
 							),
 							array(
 								'type'  => 'text',
-								'text'  => __( 'A sentence or two about what this is.', 'moksa-line-login' ),
+								'text'  => __( 'A sentence or two about what this is.', 'moksa-line' ),
 								'size'  => 'sm',
 								'color' => '#666666',
 								'wrap'  => true,
@@ -238,7 +238,7 @@ class FlexModule {
 								'color'  => '#06C755',
 								'action' => array(
 									'type'  => 'uri',
-									'label' => __( 'Find out more', 'moksa-line-login' ),
+									'label' => __( 'Find out more', 'moksa-line' ),
 									'uri'   => home_url(),
 								),
 							),
@@ -247,7 +247,7 @@ class FlexModule {
 				),
 			),
 			'receipt' => array(
-				'label'    => __( 'Order summary', 'moksa-line-login' ),
+				'label'    => __( 'Order summary', 'moksa-line' ),
 				'contents' => array(
 					'type' => 'bubble',
 					'body' => array(
@@ -257,7 +257,7 @@ class FlexModule {
 						'contents' => array(
 							array(
 								'type'   => 'text',
-								'text'   => __( 'Order confirmed', 'moksa-line-login' ),
+								'text'   => __( 'Order confirmed', 'moksa-line' ),
 								'weight' => 'bold',
 								'size'   => 'lg',
 							),
@@ -266,7 +266,7 @@ class FlexModule {
 								'type'     => 'box',
 								'layout'   => 'horizontal',
 								'contents' => array(
-									array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line-login' ), 'size' => 'sm', 'color' => '#888888' ),
+									array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line' ), 'size' => 'sm', 'color' => '#888888' ),
 									array( 'type' => 'text', 'text' => 'NT$0', 'size' => 'sm', 'align' => 'end' ),
 								),
 							),
@@ -284,7 +284,7 @@ class FlexModule {
 		check_ajax_referer( 'moksa_line_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage templates.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage templates.', 'moksa-line' ) ), 403 );
 		}
 	}
 }

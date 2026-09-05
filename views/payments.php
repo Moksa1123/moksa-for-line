@@ -14,8 +14,8 @@ defined( 'ABSPATH' ) || exit;
 if ( ! Options::get( 'pay_enabled' ) ) {
 	printf(
 		'<div class="wrap"><h1>%s</h1><p>%s</p></div>',
-		esc_html__( 'Payments', 'moksa-line-login' ),
-		esc_html__( 'LINE Pay is switched off under LINE > Settings > LINE Pay.', 'moksa-line-login' )
+		esc_html__( 'Payments', 'moksa-line' ),
+		esc_html__( 'LINE Pay is switched off under LINE > Settings > LINE Pay.', 'moksa-line' )
 	);
 
 	return;
@@ -24,38 +24,38 @@ if ( ! Options::get( 'pay_enabled' ) ) {
 $rows = Payments::recent( 100 );
 ?>
 <div class="wrap moksa-line-wrap">
-	<h1><?php esc_html_e( 'Payments', 'moksa-line-login' ); ?></h1>
+	<h1><?php esc_html_e( 'Payments', 'moksa-line' ); ?></h1>
 
 	<?php if ( Options::get( 'pay_sandbox' ) ) : ?>
 		<div class="notice notice-warning">
-			<p><?php esc_html_e( 'LINE Pay is in sandbox mode. No real money moves.', 'moksa-line-login' ); ?></p>
+			<p><?php esc_html_e( 'LINE Pay is in sandbox mode. No real money moves.', 'moksa-line' ); ?></p>
 		</div>
 	<?php endif; ?>
 
 	<?php if ( ! LinePayClient::is_configured() ) : ?>
 		<div class="notice notice-error">
-			<p><?php esc_html_e( 'LINE Pay credentials are missing, so nothing can be charged yet.', 'moksa-line-login' ); ?></p>
+			<p><?php esc_html_e( 'LINE Pay credentials are missing, so nothing can be charged yet.', 'moksa-line' ); ?></p>
 		</div>
 	<?php endif; ?>
 
 	<div class="moksa-panel">
-		<h2><?php esc_html_e( 'Create a payment link', 'moksa-line-login' ); ?></h2>
+		<h2><?php esc_html_e( 'Create a payment link', 'moksa-line' ); ?></h2>
 		<form data-moksa-pay-link>
 			<p>
-				<label for="moksa-pay-title"><?php esc_html_e( 'What is this for', 'moksa-line-login' ); ?></label>
+				<label for="moksa-pay-title"><?php esc_html_e( 'What is this for', 'moksa-line' ); ?></label>
 				<input type="text" id="moksa-pay-title" name="title" class="regular-text" required />
 			</p>
 			<p>
-				<label for="moksa-pay-amount"><?php esc_html_e( 'Amount', 'moksa-line-login' ); ?></label>
+				<label for="moksa-pay-amount"><?php esc_html_e( 'Amount', 'moksa-line' ); ?></label>
 				<input type="number" id="moksa-pay-amount" name="amount" step="1" min="1" class="small-text" required />
 				<?php echo esc_html( (string) Options::get( 'pay_currency' ) ); ?>
 			</p>
 			<p>
-				<label for="moksa-pay-user"><?php esc_html_e( 'Send it to (optional)', 'moksa-line-login' ); ?></label>
+				<label for="moksa-pay-user"><?php esc_html_e( 'Send it to (optional)', 'moksa-line' ); ?></label>
 				<input type="text" id="moksa-pay-user" name="line_user_id" class="regular-text" placeholder="U1234..." />
-				<span class="description"><?php esc_html_e( 'A LINE user id. Leave blank to just get a link you can share yourself.', 'moksa-line-login' ); ?></span>
+				<span class="description"><?php esc_html_e( 'A LINE user id. Leave blank to just get a link you can share yourself.', 'moksa-line' ); ?></span>
 			</p>
-			<p><button type="submit" class="button button-primary"><?php esc_html_e( 'Create link', 'moksa-line-login' ); ?></button></p>
+			<p><button type="submit" class="button button-primary"><?php esc_html_e( 'Create link', 'moksa-line' ); ?></button></p>
 			<div class="moksa-feedback" data-moksa-feedback></div>
 		</form>
 	</div>
@@ -63,17 +63,17 @@ $rows = Payments::recent( 100 );
 	<table class="widefat striped">
 		<thead>
 			<tr>
-				<th><?php esc_html_e( 'Reference', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Source', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Amount', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Status', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Transaction', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Created', 'moksa-line-login' ); ?></th>
+				<th><?php esc_html_e( 'Reference', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Source', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Amount', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Status', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Transaction', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Created', 'moksa-line' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php if ( empty( $rows ) ) : ?>
-				<tr><td colspan="6"><?php esc_html_e( 'No payments yet.', 'moksa-line-login' ); ?></td></tr>
+				<tr><td colspan="6"><?php esc_html_e( 'No payments yet.', 'moksa-line' ); ?></td></tr>
 			<?php endif; ?>
 			<?php foreach ( $rows as $row ) : ?>
 				<?php
@@ -93,7 +93,7 @@ $rows = Payments::recent( 100 );
 								<?php
 								printf(
 									/* translators: %d: WooCommerce order id. */
-									esc_html__( 'Order #%d', 'moksa-line-login' ),
+									esc_html__( 'Order #%d', 'moksa-line' ),
 									(int) $row->wc_order_id
 								);
 								?>
@@ -119,7 +119,7 @@ $rows = Payments::recent( 100 );
 								<?php
 								printf(
 									/* translators: %s: refunded amount. */
-									esc_html__( 'refunded %s', 'moksa-line-login' ),
+									esc_html__( 'refunded %s', 'moksa-line' ),
 									esc_html( number_format_i18n( (float) $row->refunded, 0 ) )
 								);
 								?>

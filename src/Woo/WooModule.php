@@ -106,7 +106,7 @@ class WooModule {
 		$order->add_order_note(
 			sprintf(
 				/* translators: %s: order status label. */
-				__( 'LINE notification sent for status: %s', 'moksa-line-login' ),
+				__( 'LINE notification sent for status: %s', 'moksa-line' ),
 				wc_get_order_status_name( $new_status )
 			)
 		);
@@ -165,7 +165,7 @@ class WooModule {
 				'type'   => 'text',
 				'text'   => sprintf(
 					/* translators: %s: order number. */
-					__( 'Order %s', 'moksa-line-login' ),
+					__( 'Order %s', 'moksa-line' ),
 					(string) $order->get_order_number()
 				),
 				'weight' => 'bold',
@@ -190,7 +190,7 @@ class WooModule {
 			'layout'   => 'horizontal',
 			'margin'   => 'md',
 			'contents' => array(
-				array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line-login' ), 'size' => 'sm', 'color' => '#888888' ),
+				array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line' ), 'size' => 'sm', 'color' => '#888888' ),
 				array(
 					'type'   => 'text',
 					'text'   => wp_strip_all_tags( (string) $order->get_formatted_order_total() ),
@@ -219,7 +219,7 @@ class WooModule {
 						'height' => 'sm',
 						'action' => array(
 							'type'  => 'uri',
-							'label' => __( 'View order', 'moksa-line-login' ),
+							'label' => __( 'View order', 'moksa-line' ),
 							'uri'   => $order->get_view_order_url(),
 						),
 					),
@@ -230,7 +230,7 @@ class WooModule {
 		return MessagingClient::flex(
 			sprintf(
 				/* translators: 1: order number, 2: status label. */
-				__( 'Order %1$s: %2$s', 'moksa-line-login' ),
+				__( 'Order %1$s: %2$s', 'moksa-line' ),
 				(string) $order->get_order_number(),
 				$status_label
 			),
@@ -310,7 +310,7 @@ class WooModule {
 
 		printf(
 			'<p><strong>%s:</strong><br />%s<br /><code>%s</code></p>',
-			esc_html__( 'LINE account', 'moksa-line-login' ),
+			esc_html__( 'LINE account', 'moksa-line' ),
 			esc_html( $record ? (string) $record->display_name : '' ),
 			esc_html( $line_user_id )
 		);
@@ -348,7 +348,7 @@ class WooModule {
 
 		unset( $items['customer-logout'] );
 
-		$items[ self::ENDPOINT ] = __( 'LINE', 'moksa-line-login' );
+		$items[ self::ENDPOINT ] = __( 'LINE', 'moksa-line' );
 
 		if ( null !== $logout ) {
 			$items['customer-logout'] = $logout;
@@ -379,10 +379,10 @@ class WooModule {
 
 			printf(
 				'<p>%s</p><p><button type="button" class="button" data-moksa-line-unlink="%d" data-nonce="%s">%s</button></p>',
-				esc_html__( 'Your LINE account is linked. Order updates will be sent to you on LINE.', 'moksa-line-login' ),
+				esc_html__( 'Your LINE account is linked. Order updates will be sent to you on LINE.', 'moksa-line' ),
 				(int) get_current_user_id(),
 				esc_attr( wp_create_nonce( 'moksa_line_link' ) ),
-				esc_html__( 'Unlink', 'moksa-line-login' )
+				esc_html__( 'Unlink', 'moksa-line' )
 			);
 
 			// The unlink control needs the admin script's handler.
@@ -393,7 +393,7 @@ class WooModule {
 				array(
 					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 					'nonce'   => wp_create_nonce( 'moksa_line_admin' ),
-					'strings' => array( 'confirmDelete' => __( 'Unlink your LINE account?', 'moksa-line-login' ) ),
+					'strings' => array( 'confirmDelete' => __( 'Unlink your LINE account?', 'moksa-line' ) ),
 				)
 			);
 
@@ -402,7 +402,7 @@ class WooModule {
 
 		printf(
 			'<p>%s</p><p><a class="moksa-line-button" href="%s">%s</a></p>',
-			esc_html__( 'Link your LINE account to get order updates in LINE and to sign in with one tap.', 'moksa-line-login' ),
+			esc_html__( 'Link your LINE account to get order updates in LINE and to sign in with one tap.', 'moksa-line' ),
 			esc_url(
 				add_query_arg(
 					array(
@@ -414,7 +414,7 @@ class WooModule {
 					admin_url( 'admin-ajax.php' )
 				)
 			),
-			esc_html__( 'Link my LINE account', 'moksa-line-login' )
+			esc_html__( 'Link my LINE account', 'moksa-line' )
 		);
 	}
 
@@ -441,7 +441,7 @@ class WooModule {
 					admin_url( 'admin-ajax.php' )
 				)
 			),
-			esc_html__( 'Continue with LINE', 'moksa-line-login' )
+			esc_html__( 'Continue with LINE', 'moksa-line' )
 		);
 	}
 
@@ -458,7 +458,7 @@ class WooModule {
 
 		printf(
 			'<div class="woocommerce-info moksa-line-checkout-prompt">%s <a class="moksa-line-button moksa-line-button--small" href="%s">%s</a></div>',
-			esc_html__( 'Already shopped with us?', 'moksa-line-login' ),
+			esc_html__( 'Already shopped with us?', 'moksa-line' ),
 			esc_url(
 				add_query_arg(
 					array(
@@ -468,7 +468,7 @@ class WooModule {
 					admin_url( 'admin-ajax.php' )
 				)
 			),
-			esc_html__( 'Sign in with LINE', 'moksa-line-login' )
+			esc_html__( 'Sign in with LINE', 'moksa-line' )
 		);
 	}
 

@@ -48,14 +48,14 @@ class RichMenuClient {
 		if ( ! in_array( $content_type, array( 'image/jpeg', 'image/png' ), true ) ) {
 			return new WP_Error(
 				'moksa_line_bad_image_type',
-				__( 'Rich menu images must be JPEG or PNG.', 'moksa-line-login' )
+				__( 'Rich menu images must be JPEG or PNG.', 'moksa-line' )
 			);
 		}
 
 		if ( strlen( $bytes ) > self::MAX_IMAGE_BYTES ) {
 			return new WP_Error(
 				'moksa_line_image_too_large',
-				__( 'Rich menu images must be 1 MB or smaller.', 'moksa-line-login' )
+				__( 'Rich menu images must be 1 MB or smaller.', 'moksa-line' )
 			);
 		}
 

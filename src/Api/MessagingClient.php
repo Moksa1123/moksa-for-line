@@ -299,7 +299,7 @@ class MessagingClient {
 		if ( ! is_array( $messages ) || empty( $messages ) ) {
 			return new WP_Error(
 				'moksa_line_empty_message',
-				__( 'There is nothing to send.', 'moksa-line-login' )
+				__( 'There is nothing to send.', 'moksa-line' )
 			);
 		}
 
@@ -310,7 +310,7 @@ class MessagingClient {
 				'moksa_line_too_many_messages',
 				sprintf(
 					/* translators: %d: maximum number of messages. */
-					__( 'LINE accepts at most %d messages per send.', 'moksa-line-login' ),
+					__( 'LINE accepts at most %d messages per send.', 'moksa-line' ),
 					self::MAX_MESSAGES
 				)
 			);
@@ -322,7 +322,7 @@ class MessagingClient {
 					'moksa_line_invalid_message',
 					sprintf(
 						/* translators: %d: zero-based message index. */
-						__( 'Message %d is missing its type.', 'moksa-line-login' ),
+						__( 'Message %d is missing its type.', 'moksa-line' ),
 						$index
 					)
 				);

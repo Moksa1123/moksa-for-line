@@ -116,7 +116,7 @@ class LiffModule {
 		if ( ! Options::get( 'inbox_enabled' ) ) {
 			return new WP_Error(
 				'moksa_line_inbox_off',
-				__( 'Messaging is not available right now.', 'moksa-line-login' ),
+				__( 'Messaging is not available right now.', 'moksa-line' ),
 				array( 'status' => 503 )
 			);
 		}
@@ -133,7 +133,7 @@ class LiffModule {
 		if ( '' === $text ) {
 			return new WP_Error(
 				'moksa_line_empty_message',
-				__( 'Write something first.', 'moksa-line-login' ),
+				__( 'Write something first.', 'moksa-line' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -143,7 +143,7 @@ class LiffModule {
 		if ( ! self::within_rate_limit( $line_user_id ) ) {
 			return new WP_Error(
 				'moksa_line_too_fast',
-				__( 'That is a lot of messages at once. Please wait a moment.', 'moksa-line-login' ),
+				__( 'That is a lot of messages at once. Please wait a moment.', 'moksa-line' ),
 				array( 'status' => 429 )
 			);
 		}
@@ -189,7 +189,7 @@ class LiffModule {
 		if ( '' === $id_token ) {
 			return new WP_Error(
 				'moksa_line_liff_no_token',
-				__( 'This page could not identify you. Reopen it from LINE.', 'moksa-line-login' ),
+				__( 'This page could not identify you. Reopen it from LINE.', 'moksa-line' ),
 				array( 'status' => 401 )
 			);
 		}
@@ -215,7 +215,7 @@ class LiffModule {
 
 			return new WP_Error(
 				'moksa_line_liff_unreachable',
-				__( 'Could not reach LINE to verify this session.', 'moksa-line-login' ),
+				__( 'Could not reach LINE to verify this session.', 'moksa-line' ),
 				array( 'status' => 503 )
 			);
 		}
@@ -225,7 +225,7 @@ class LiffModule {
 		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) || empty( $claims['sub'] ) ) {
 			return new WP_Error(
 				'moksa_line_liff_invalid',
-				__( 'This session could not be verified. Reopen the page from LINE.', 'moksa-line-login' ),
+				__( 'This session could not be verified. Reopen the page from LINE.', 'moksa-line' ),
 				array( 'status' => 401 )
 			);
 		}
@@ -236,7 +236,7 @@ class LiffModule {
 			if ( ! in_array( $channel_id, $audience, true ) ) {
 				return new WP_Error(
 					'moksa_line_liff_wrong_channel',
-					__( 'This session belongs to a different channel.', 'moksa-line-login' ),
+					__( 'This session belongs to a different channel.', 'moksa-line' ),
 					array( 'status' => 401 )
 				);
 			}
@@ -280,13 +280,13 @@ class LiffModule {
 		);
 
 		if ( '' === $atts['liff_id'] ) {
-			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-line-login' ) );
+			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-line' ) );
 		}
 
 		$this->enqueue( $atts['liff_id'] );
 
 		return '<div class="moksa-liff moksa-liff--profile" data-moksa-liff-profile>'
-			. '<p class="moksa-liff__status">' . esc_html__( 'Connecting to LINE...', 'moksa-line-login' ) . '</p>'
+			. '<p class="moksa-liff__status">' . esc_html__( 'Connecting to LINE...', 'moksa-line' ) . '</p>'
 			. '</div>';
 	}
 
@@ -299,8 +299,8 @@ class LiffModule {
 		$atts = shortcode_atts(
 			array(
 				'liff_id'     => (string) Options::get( 'liff_chat_id' ),
-				'placeholder' => __( 'Type your message', 'moksa-line-login' ),
-				'intro'       => __( 'Send us a message and we will reply in your LINE chat.', 'moksa-line-login' ),
+				'placeholder' => __( 'Type your message', 'moksa-line' ),
+				'intro'       => __( 'Send us a message and we will reply in your LINE chat.', 'moksa-line' ),
 			),
 			(array) $atts,
 			'moksa_line_chat'
@@ -311,7 +311,7 @@ class LiffModule {
 		}
 
 		if ( '' === $atts['liff_id'] ) {
-			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-line-login' ) );
+			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-line' ) );
 		}
 
 		$this->enqueue( $atts['liff_id'] );
@@ -320,12 +320,12 @@ class LiffModule {
 		?>
 		<div class="moksa-liff moksa-liff--chat" data-moksa-liff-chat>
 			<p class="moksa-liff__intro"><?php echo esc_html( $atts['intro'] ); ?></p>
-			<p class="moksa-liff__status" data-moksa-chat-status><?php esc_html_e( 'Connecting to LINE...', 'moksa-line-login' ); ?></p>
+			<p class="moksa-liff__status" data-moksa-chat-status><?php esc_html_e( 'Connecting to LINE...', 'moksa-line' ); ?></p>
 			<form class="moksa-liff__form" data-moksa-chat-form hidden>
-				<label class="screen-reader-text" for="moksa-chat-message"><?php esc_html_e( 'Your message', 'moksa-line-login' ); ?></label>
+				<label class="screen-reader-text" for="moksa-chat-message"><?php esc_html_e( 'Your message', 'moksa-line' ); ?></label>
 				<textarea id="moksa-chat-message" name="message" rows="3" required
 					placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"></textarea>
-				<button type="submit" class="moksa-liff__send"><?php esc_html_e( 'Send', 'moksa-line-login' ); ?></button>
+				<button type="submit" class="moksa-liff__send"><?php esc_html_e( 'Send', 'moksa-line' ); ?></button>
 			</form>
 		</div>
 		<?php
@@ -339,7 +339,11 @@ class LiffModule {
 	 * @param string $liff_id LIFF app id.
 	 */
 	private function enqueue( string $liff_id ): void {
-		wp_enqueue_script( 'moksa-line-liff-sdk', self::SDK_URL, array(), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- LINE serves an unversioned edge SDK.
+		// The LIFF SDK must come from LINE's own CDN -- a bundled copy is not
+		// supported and would break whenever LINE changes the runtime. The
+		// version is the plugin's rather than the SDK's, since LINE serves an
+		// unversioned edge build; it exists only to make the URL cacheable.
+		wp_enqueue_script( 'moksa-line-liff-sdk', self::SDK_URL, array(), MOKSA_LINE_VERSION, true );
 
 		wp_enqueue_script(
 			'moksa-line-liff',
@@ -364,11 +368,11 @@ class LiffModule {
 				'sessionUrl' => rest_url( self::NAMESPACE_V1 . '/liff/session' ),
 				'messageUrl' => rest_url( self::NAMESPACE_V1 . '/liff/message' ),
 				'strings'    => array(
-					'greeting'  => __( 'Hello, %s', 'moksa-line-login' ),
-					'sending'   => __( 'Sending...', 'moksa-line-login' ),
-					'sent'      => __( 'Sent. We will reply in your LINE chat.', 'moksa-line-login' ),
-					'failed'    => __( 'That did not send. Please try again.', 'moksa-line-login' ),
-					'notInLine' => __( 'Open this page from LINE to continue.', 'moksa-line-login' ),
+					'greeting'  => __( 'Hello, %s', 'moksa-line' ),
+					'sending'   => __( 'Sending...', 'moksa-line' ),
+					'sent'      => __( 'Sent. We will reply in your LINE chat.', 'moksa-line' ),
+					'failed'    => __( 'That did not send. Please try again.', 'moksa-line' ),
+					'notInLine' => __( 'Open this page from LINE to continue.', 'moksa-line' ),
 				),
 			)
 		);

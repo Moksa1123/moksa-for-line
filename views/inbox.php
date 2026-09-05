@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) || exit;
 if ( ! Options::get( 'inbox_enabled' ) ) {
 	printf(
 		'<div class="wrap"><h1>%s</h1><p>%s</p></div>',
-		esc_html__( 'Inbox', 'moksa-line-login' ),
-		esc_html__( 'The inbox is switched off under LINE > Settings > Messaging API.', 'moksa-line-login' )
+		esc_html__( 'Inbox', 'moksa-line' ),
+		esc_html__( 'The inbox is switched off under LINE > Settings > Messaging API.', 'moksa-line' )
 	);
 
 	return;
@@ -32,29 +32,29 @@ $list = Conversations::paginate(
 );
 ?>
 <div class="wrap moksa-line-wrap">
-	<h1><?php esc_html_e( 'Inbox', 'moksa-line-login' ); ?></h1>
+	<h1><?php esc_html_e( 'Inbox', 'moksa-line' ); ?></h1>
 
 	<p class="description">
-		<?php esc_html_e( 'Only messages received after this plugin was installed appear here. LINE provides no way to read earlier chat history.', 'moksa-line-login' ); ?>
-		<?php esc_html_e( 'Replies are sent as push messages, which are billed against your channel quota.', 'moksa-line-login' ); ?>
+		<?php esc_html_e( 'Only messages received after this plugin was installed appear here. LINE provides no way to read earlier chat history.', 'moksa-line' ); ?>
+		<?php esc_html_e( 'Replies are sent as push messages, which are billed against your channel quota.', 'moksa-line' ); ?>
 	</p>
 
 	<form method="get" class="moksa-inbox__filters">
 		<input type="hidden" name="page" value="moksa-line-inbox" />
 		<select name="status">
-			<option value=""><?php esc_html_e( 'All conversations', 'moksa-line-login' ); ?></option>
-			<option value="bot" <?php selected( $status, 'bot' ); ?>><?php esc_html_e( 'Handled by the bot', 'moksa-line-login' ); ?></option>
-			<option value="human" <?php selected( $status, 'human' ); ?>><?php esc_html_e( 'Taken over by a person', 'moksa-line-login' ); ?></option>
-			<option value="closed" <?php selected( $status, 'closed' ); ?>><?php esc_html_e( 'Closed', 'moksa-line-login' ); ?></option>
+			<option value=""><?php esc_html_e( 'All conversations', 'moksa-line' ); ?></option>
+			<option value="bot" <?php selected( $status, 'bot' ); ?>><?php esc_html_e( 'Handled by the bot', 'moksa-line' ); ?></option>
+			<option value="human" <?php selected( $status, 'human' ); ?>><?php esc_html_e( 'Taken over by a person', 'moksa-line' ); ?></option>
+			<option value="closed" <?php selected( $status, 'closed' ); ?>><?php esc_html_e( 'Closed', 'moksa-line' ); ?></option>
 		</select>
-		<input type="search" name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'Search name or message', 'moksa-line-login' ); ?>" />
-		<?php submit_button( __( 'Filter', 'moksa-line-login' ), 'secondary', '', false ); ?>
+		<input type="search" name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'Search name or message', 'moksa-line' ); ?>" />
+		<?php submit_button( __( 'Filter', 'moksa-line' ), 'secondary', '', false ); ?>
 	</form>
 
 	<div class="moksa-inbox">
 		<div class="moksa-inbox__list">
 			<?php if ( empty( $list['rows'] ) ) : ?>
-				<p class="moksa-inbox__empty"><?php esc_html_e( 'No conversations yet.', 'moksa-line-login' ); ?></p>
+				<p class="moksa-inbox__empty"><?php esc_html_e( 'No conversations yet.', 'moksa-line' ); ?></p>
 			<?php endif; ?>
 
 			<?php foreach ( $list['rows'] as $conversation ) : ?>
@@ -85,20 +85,20 @@ $list = Conversations::paginate(
 
 		<div class="moksa-inbox__thread">
 			<div class="moksa-inbox__header">
-				<strong data-moksa-thread-name><?php esc_html_e( 'Choose a conversation', 'moksa-line-login' ); ?></strong>
+				<strong data-moksa-thread-name><?php esc_html_e( 'Choose a conversation', 'moksa-line' ); ?></strong>
 				<span class="moksa-inbox__actions" hidden data-moksa-thread-actions>
-					<button type="button" class="button" data-moksa-status="human"><?php esc_html_e( 'Take over', 'moksa-line-login' ); ?></button>
-					<button type="button" class="button" data-moksa-status="bot"><?php esc_html_e( 'Give back to the bot', 'moksa-line-login' ); ?></button>
-					<button type="button" class="button" data-moksa-status="closed"><?php esc_html_e( 'Close', 'moksa-line-login' ); ?></button>
+					<button type="button" class="button" data-moksa-status="human"><?php esc_html_e( 'Take over', 'moksa-line' ); ?></button>
+					<button type="button" class="button" data-moksa-status="bot"><?php esc_html_e( 'Give back to the bot', 'moksa-line' ); ?></button>
+					<button type="button" class="button" data-moksa-status="closed"><?php esc_html_e( 'Close', 'moksa-line' ); ?></button>
 				</span>
 			</div>
 
 			<div class="moksa-inbox__messages" data-moksa-thread></div>
 
 			<form class="moksa-inbox__reply" data-moksa-reply hidden>
-				<label class="screen-reader-text" for="moksa-reply-text"><?php esc_html_e( 'Reply', 'moksa-line-login' ); ?></label>
-				<textarea id="moksa-reply-text" rows="3" required placeholder="<?php esc_attr_e( 'Write a reply', 'moksa-line-login' ); ?>"></textarea>
-				<button type="submit" class="button button-primary"><?php esc_html_e( 'Send', 'moksa-line-login' ); ?></button>
+				<label class="screen-reader-text" for="moksa-reply-text"><?php esc_html_e( 'Reply', 'moksa-line' ); ?></label>
+				<textarea id="moksa-reply-text" rows="3" required placeholder="<?php esc_attr_e( 'Write a reply', 'moksa-line' ); ?>"></textarea>
+				<button type="submit" class="button button-primary"><?php esc_html_e( 'Send', 'moksa-line' ); ?></button>
 			</form>
 		</div>
 	</div>

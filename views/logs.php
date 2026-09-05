@@ -19,24 +19,24 @@ $logs = (array) $wpdb->get_results( "SELECT * FROM {$log_table} ORDER BY id DESC
 $events = EventQueue::recent( 50 );
 ?>
 <div class="wrap moksa-line-wrap">
-	<h1><?php esc_html_e( 'Logs', 'moksa-line-login' ); ?></h1>
+	<h1><?php esc_html_e( 'Logs', 'moksa-line' ); ?></h1>
 
-	<h2><?php esc_html_e( 'Recent webhook events', 'moksa-line-login' ); ?></h2>
+	<h2><?php esc_html_e( 'Recent webhook events', 'moksa-line' ); ?></h2>
 	<table class="widefat striped">
 		<thead>
 			<tr>
-				<th><?php esc_html_e( 'Received', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Type', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'From', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Status', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Detail', 'moksa-line-login' ); ?></th>
+				<th><?php esc_html_e( 'Received', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Type', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'From', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Status', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Detail', 'moksa-line' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php if ( empty( $events ) ) : ?>
 				<tr>
 					<td colspan="5">
-						<?php esc_html_e( 'Nothing yet. If you have already pressed Verify in the LINE Console and this is still empty, the signature check is rejecting deliveries, which almost always means the Messaging API channel secret is wrong.', 'moksa-line-login' ); ?>
+						<?php esc_html_e( 'Nothing yet. If you have already pressed Verify in the LINE Console and this is still empty, the signature check is rejecting deliveries, which almost always means the Messaging API channel secret is wrong.', 'moksa-line' ); ?>
 					</td>
 				</tr>
 			<?php endif; ?>
@@ -56,20 +56,20 @@ $events = EventQueue::recent( 50 );
 		</tbody>
 	</table>
 
-	<h2><?php esc_html_e( 'Plugin log', 'moksa-line-login' ); ?></h2>
+	<h2><?php esc_html_e( 'Plugin log', 'moksa-line' ); ?></h2>
 	<table class="widefat striped">
 		<thead>
 			<tr>
-				<th><?php esc_html_e( 'Time', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Level', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Area', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Message', 'moksa-line-login' ); ?></th>
-				<th><?php esc_html_e( 'Context', 'moksa-line-login' ); ?></th>
+				<th><?php esc_html_e( 'Time', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Level', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Area', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Message', 'moksa-line' ); ?></th>
+				<th><?php esc_html_e( 'Context', 'moksa-line' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php if ( empty( $logs ) ) : ?>
-				<tr><td colspan="5"><?php esc_html_e( 'Nothing logged.', 'moksa-line-login' ); ?></td></tr>
+				<tr><td colspan="5"><?php esc_html_e( 'Nothing logged.', 'moksa-line' ); ?></td></tr>
 			<?php endif; ?>
 			<?php foreach ( $logs as $log ) : ?>
 				<tr>

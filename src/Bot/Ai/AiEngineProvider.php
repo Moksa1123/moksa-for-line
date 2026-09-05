@@ -57,7 +57,7 @@ class AiEngineProvider implements ProviderInterface {
 		if ( ! is_object( $api ) ) {
 			return new WP_Error(
 				'moksa_line_ai_unavailable',
-				__( 'AI Engine is not active on this site.', 'moksa-line-login' )
+				__( 'AI Engine is not active on this site.', 'moksa-line' )
 			);
 		}
 
@@ -114,7 +114,7 @@ class AiEngineProvider implements ProviderInterface {
 		if ( '' === $reply ) {
 			return new WP_Error(
 				'moksa_line_ai_empty',
-				__( 'The AI returned an empty answer.', 'moksa-line-login' )
+				__( 'The AI returned an empty answer.', 'moksa-line' )
 			);
 		}
 
@@ -153,7 +153,7 @@ class AiEngineProvider implements ProviderInterface {
 		}
 
 		if ( empty( $bots ) ) {
-			$bots['default'] = __( 'Default chatbot', 'moksa-line-login' );
+			$bots['default'] = __( 'Default chatbot', 'moksa-line' );
 		}
 
 		return $bots;

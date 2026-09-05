@@ -151,7 +151,7 @@ class LinePayClient {
 		if ( empty( $query ) ) {
 			return new WP_Error(
 				'moksa_line_pay_no_reference',
-				__( 'A transaction id or order id is required.', 'moksa-line-login' )
+				__( 'A transaction id or order id is required.', 'moksa-line' )
 			);
 		}
 
@@ -181,7 +181,7 @@ class LinePayClient {
 		if ( ! self::is_configured() ) {
 			return new WP_Error(
 				'moksa_line_pay_unconfigured',
-				__( 'LINE Pay is not configured. Add the Channel ID and Channel Secret first.', 'moksa-line-login' )
+				__( 'LINE Pay is not configured. Add the Channel ID and Channel Secret first.', 'moksa-line' )
 			);
 		}
 
@@ -192,7 +192,7 @@ class LinePayClient {
 		$json = wp_json_encode( $body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 
 		if ( false === $json ) {
-			return new WP_Error( 'moksa_line_pay_encode_failed', __( 'The payment request could not be encoded.', 'moksa-line-login' ) );
+			return new WP_Error( 'moksa_line_pay_encode_failed', __( 'The payment request could not be encoded.', 'moksa-line' ) );
 		}
 
 		$signature = base64_encode( hash_hmac( 'sha256', $secret . $path . $json . $nonce, $secret, true ) );
@@ -220,7 +220,7 @@ class LinePayClient {
 		if ( ! self::is_configured() ) {
 			return new WP_Error(
 				'moksa_line_pay_unconfigured',
-				__( 'LINE Pay is not configured. Add the Channel ID and Channel Secret first.', 'moksa-line-login' )
+				__( 'LINE Pay is not configured. Add the Channel ID and Channel Secret first.', 'moksa-line' )
 			);
 		}
 
@@ -276,7 +276,7 @@ class LinePayClient {
 
 			return new WP_Error(
 				'moksa_line_pay_unreachable',
-				__( 'Could not reach LINE Pay. Please try again.', 'moksa-line-login' )
+				__( 'Could not reach LINE Pay. Please try again.', 'moksa-line' )
 			);
 		}
 
@@ -288,7 +288,7 @@ class LinePayClient {
 
 			return new WP_Error(
 				'moksa_line_pay_bad_response',
-				__( 'LINE Pay returned a response this site could not read.', 'moksa-line-login' )
+				__( 'LINE Pay returned a response this site could not read.', 'moksa-line' )
 			);
 		}
 
@@ -321,21 +321,21 @@ class LinePayClient {
 	 */
 	private static function explain( string $code, string $message ): string {
 		$known = array(
-			'1104' => __( 'This merchant is not registered with LINE Pay. Check the Channel ID and whether you are pointed at sandbox or production.', 'moksa-line-login' ),
-			'1105' => __( 'This merchant cannot use LINE Pay right now. Contact LINE Pay support.', 'moksa-line-login' ),
-			'1106' => __( 'The request headers were not accepted. Check the Channel Secret.', 'moksa-line-login' ),
-			'1124' => __( 'The amount is not valid for this currency.', 'moksa-line-login' ),
-			'1141' => __( 'The payment account status does not allow this operation.', 'moksa-line-login' ),
-			'1145' => __( 'This payment is already being processed.', 'moksa-line-login' ),
-			'1150' => __( 'No such transaction exists.', 'moksa-line-login' ),
-			'1155' => __( 'That transaction id does not belong to this merchant.', 'moksa-line-login' ),
-			'1163' => __( 'This payment has already been refunded, or the refund window has closed.', 'moksa-line-login' ),
-			'1165' => __( 'This payment has already been captured.', 'moksa-line-login' ),
-			'1170' => __( 'The customer has insufficient balance.', 'moksa-line-login' ),
-			'1172' => __( 'A payment for this order id already exists.', 'moksa-line-login' ),
-			'1177' => __( 'The customer has not completed authentication.', 'moksa-line-login' ),
-			'1198' => __( 'LINE Pay is processing a duplicate request. Try again shortly.', 'moksa-line-login' ),
-			'9000' => __( 'LINE Pay had an internal error. Try again shortly.', 'moksa-line-login' ),
+			'1104' => __( 'This merchant is not registered with LINE Pay. Check the Channel ID and whether you are pointed at sandbox or production.', 'moksa-line' ),
+			'1105' => __( 'This merchant cannot use LINE Pay right now. Contact LINE Pay support.', 'moksa-line' ),
+			'1106' => __( 'The request headers were not accepted. Check the Channel Secret.', 'moksa-line' ),
+			'1124' => __( 'The amount is not valid for this currency.', 'moksa-line' ),
+			'1141' => __( 'The payment account status does not allow this operation.', 'moksa-line' ),
+			'1145' => __( 'This payment is already being processed.', 'moksa-line' ),
+			'1150' => __( 'No such transaction exists.', 'moksa-line' ),
+			'1155' => __( 'That transaction id does not belong to this merchant.', 'moksa-line' ),
+			'1163' => __( 'This payment has already been refunded, or the refund window has closed.', 'moksa-line' ),
+			'1165' => __( 'This payment has already been captured.', 'moksa-line' ),
+			'1170' => __( 'The customer has insufficient balance.', 'moksa-line' ),
+			'1172' => __( 'A payment for this order id already exists.', 'moksa-line' ),
+			'1177' => __( 'The customer has not completed authentication.', 'moksa-line' ),
+			'1198' => __( 'LINE Pay is processing a duplicate request. Try again shortly.', 'moksa-line' ),
+			'9000' => __( 'LINE Pay had an internal error. Try again shortly.', 'moksa-line' ),
 		);
 
 		if ( isset( $known[ $code ] ) ) {
@@ -344,9 +344,9 @@ class LinePayClient {
 
 		return sprintf(
 			/* translators: 1: LINE Pay return code, 2: LINE Pay message. */
-			__( 'LINE Pay returned %1$s: %2$s', 'moksa-line-login' ),
+			__( 'LINE Pay returned %1$s: %2$s', 'moksa-line' ),
 			'' !== $code ? $code : '?',
-			'' !== $message ? $message : __( 'no detail given', 'moksa-line-login' )
+			'' !== $message ? $message : __( 'no detail given', 'moksa-line' )
 		);
 	}
 

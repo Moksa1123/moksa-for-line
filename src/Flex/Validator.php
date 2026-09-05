@@ -76,13 +76,13 @@ class Validator {
 		$problems = array();
 
 		if ( empty( $message['altText'] ) || ! is_string( $message['altText'] ) ) {
-			$problems[] = __( 'A Flex message needs altText (shown in the chat list and push notification).', 'moksa-line-login' );
+			$problems[] = __( 'A Flex message needs altText (shown in the chat list and push notification).', 'moksa-line' );
 		} elseif ( mb_strlen( $message['altText'] ) > 400 ) {
-			$problems[] = __( 'altText is limited to 400 characters.', 'moksa-line-login' );
+			$problems[] = __( 'altText is limited to 400 characters.', 'moksa-line' );
 		}
 
 		if ( empty( $message['contents'] ) || ! is_array( $message['contents'] ) ) {
-			$problems[] = __( 'A Flex message needs a contents container.', 'moksa-line-login' );
+			$problems[] = __( 'A Flex message needs a contents container.', 'moksa-line' );
 
 			return $problems;
 		}
@@ -102,7 +102,7 @@ class Validator {
 
 		if ( 'carousel' === $type ) {
 			if ( empty( $container['contents'] ) || ! is_array( $container['contents'] ) ) {
-				$problems[] = __( 'A carousel needs at least one bubble in contents.', 'moksa-line-login' );
+				$problems[] = __( 'A carousel needs at least one bubble in contents.', 'moksa-line' );
 
 				return $problems;
 			}
@@ -110,20 +110,20 @@ class Validator {
 			if ( count( $container['contents'] ) > self::CAROUSEL_MAX_BUBBLES ) {
 				$problems[] = sprintf(
 					/* translators: %d: maximum number of bubbles. */
-					__( 'A carousel holds at most %d bubbles.', 'moksa-line-login' ),
+					__( 'A carousel holds at most %d bubbles.', 'moksa-line' ),
 					self::CAROUSEL_MAX_BUBBLES
 				);
 			}
 
 			if ( self::byte_size( $container ) > self::CAROUSEL_MAX_BYTES ) {
-				$problems[] = __( 'This carousel exceeds the 50 KB limit. Remove bubbles or shorten the content.', 'moksa-line-login' );
+				$problems[] = __( 'This carousel exceeds the 50 KB limit. Remove bubbles or shorten the content.', 'moksa-line' );
 			}
 
 			foreach ( $container['contents'] as $index => $bubble ) {
 				foreach ( self::check_bubble( (array) $bubble ) as $problem ) {
 					$problems[] = sprintf(
 						/* translators: 1: bubble number, 2: the problem. */
-						__( 'Bubble %1$d: %2$s', 'moksa-line-login' ),
+						__( 'Bubble %1$d: %2$s', 'moksa-line' ),
 						(int) $index + 1,
 						$problem
 					);
@@ -137,7 +137,7 @@ class Validator {
 			return self::check_bubble( $container );
 		}
 
-		$problems[] = __( 'contents must be a bubble or a carousel.', 'moksa-line-login' );
+		$problems[] = __( 'contents must be a bubble or a carousel.', 'moksa-line' );
 
 		return $problems;
 	}
@@ -152,7 +152,7 @@ class Validator {
 		$problems = array();
 
 		if ( ! isset( $bubble['type'] ) || 'bubble' !== $bubble['type'] ) {
-			$problems[] = __( 'Expected a bubble here.', 'moksa-line-login' );
+			$problems[] = __( 'Expected a bubble here.', 'moksa-line' );
 
 			return $problems;
 		}
@@ -171,7 +171,7 @@ class Validator {
 			if ( ! in_array( $child_type, $allowed, true ) ) {
 				$problems[] = sprintf(
 					/* translators: 1: section name, 2: allowed types. */
-					__( 'The %1$s section must contain one of: %2$s.', 'moksa-line-login' ),
+					__( 'The %1$s section must contain one of: %2$s.', 'moksa-line' ),
 					$section,
 					implode( ', ', $allowed )
 				);
@@ -183,11 +183,11 @@ class Validator {
 		}
 
 		if ( ! $has_section ) {
-			$problems[] = __( 'A bubble needs at least one of header, hero, body or footer.', 'moksa-line-login' );
+			$problems[] = __( 'A bubble needs at least one of header, hero, body or footer.', 'moksa-line' );
 		}
 
 		if ( self::byte_size( $bubble ) > self::BUBBLE_MAX_BYTES ) {
-			$problems[] = __( 'This bubble exceeds the 30 KB limit.', 'moksa-line-login' );
+			$problems[] = __( 'This bubble exceeds the 30 KB limit.', 'moksa-line' );
 		}
 
 		return $problems;
@@ -205,7 +205,7 @@ class Validator {
 		$problems = array();
 
 		if ( $depth > 12 ) {
-			$problems[] = __( 'This layout nests too deeply.', 'moksa-line-login' );
+			$problems[] = __( 'This layout nests too deeply.', 'moksa-line' );
 
 			return $problems;
 		}
@@ -215,7 +215,7 @@ class Validator {
 		if ( '' === $type ) {
 			$problems[] = sprintf(
 				/* translators: %s: location in the message. */
-				__( 'A component at %s is missing its type.', 'moksa-line-login' ),
+				__( 'A component at %s is missing its type.', 'moksa-line' ),
 				$path ? $path : 'root'
 			);
 
@@ -223,7 +223,7 @@ class Validator {
 		}
 
 		if ( 'filler' === $type ) {
-			$problems[] = __( 'The filler component was removed by LINE. Use a box with margin, padding or offset instead.', 'moksa-line-login' );
+			$problems[] = __( 'The filler component was removed by LINE. Use a box with margin, padding or offset instead.', 'moksa-line' );
 		}
 
 		// Per-type required properties.
@@ -232,7 +232,7 @@ class Validator {
 				if ( empty( $component['layout'] ) ) {
 					$problems[] = sprintf(
 						/* translators: %s: location in the message. */
-						__( 'The box at %s needs a layout.', 'moksa-line-login' ),
+						__( 'The box at %s needs a layout.', 'moksa-line' ),
 						$path ? $path : 'root'
 					);
 				}
@@ -240,7 +240,7 @@ class Validator {
 				if ( ! isset( $component['contents'] ) || ! is_array( $component['contents'] ) ) {
 					$problems[] = sprintf(
 						/* translators: %s: location in the message. */
-						__( 'The box at %s needs a contents array.', 'moksa-line-login' ),
+						__( 'The box at %s needs a contents array.', 'moksa-line' ),
 						$path ? $path : 'root'
 					);
 				}
@@ -248,7 +248,7 @@ class Validator {
 
 			case 'text':
 				if ( ! isset( $component['text'] ) && empty( $component['contents'] ) ) {
-					$problems[] = __( 'A text component needs either text or a contents array of spans.', 'moksa-line-login' );
+					$problems[] = __( 'A text component needs either text or a contents array of spans.', 'moksa-line' );
 				}
 				break;
 
@@ -257,23 +257,23 @@ class Validator {
 				if ( empty( $component['url'] ) ) {
 					$problems[] = sprintf(
 						/* translators: %s: component type. */
-						__( 'A %s component needs a url.', 'moksa-line-login' ),
+						__( 'A %s component needs a url.', 'moksa-line' ),
 						$type
 					);
 				} elseif ( 0 !== strpos( (string) $component['url'], 'https://' ) ) {
-					$problems[] = __( 'Media URLs must use HTTPS.', 'moksa-line-login' );
+					$problems[] = __( 'Media URLs must use HTTPS.', 'moksa-line' );
 				}
 				break;
 
 			case 'icon':
 				if ( empty( $component['url'] ) ) {
-					$problems[] = __( 'An icon component needs a url.', 'moksa-line-login' );
+					$problems[] = __( 'An icon component needs a url.', 'moksa-line' );
 				}
 				break;
 
 			case 'button':
 				if ( empty( $component['action'] ) || ! is_array( $component['action'] ) ) {
-					$problems[] = __( 'A button needs an action.', 'moksa-line-login' );
+					$problems[] = __( 'A button needs an action.', 'moksa-line' );
 				} else {
 					$problems = array_merge( $problems, self::check_action( $component['action'] ) );
 				}
@@ -299,7 +299,7 @@ class Validator {
 			if ( ! in_array( $component[ $property ], $allowed, true ) ) {
 				$problems[] = sprintf(
 					/* translators: 1: property, 2: supplied value, 3: allowed values. */
-					__( '%1$s cannot be "%2$s". Allowed: %3$s.', 'moksa-line-login' ),
+					__( '%1$s cannot be "%2$s". Allowed: %3$s.', 'moksa-line' ),
 					$property,
 					$component[ $property ],
 					implode( ', ', $allowed )
@@ -320,7 +320,7 @@ class Validator {
 				if ( 'box' === $type && isset( $child['type'] ) && ! in_array( $child['type'], self::$box_children, true ) ) {
 					$problems[] = sprintf(
 						/* translators: %s: component type. */
-						__( '"%s" cannot be placed inside a box.', 'moksa-line-login' ),
+						__( '"%s" cannot be placed inside a box.', 'moksa-line' ),
 						$child['type']
 					);
 				}
@@ -360,7 +360,7 @@ class Validator {
 		if ( ! isset( $required[ $type ] ) ) {
 			$problems[] = sprintf(
 				/* translators: %s: action type. */
-				__( '"%s" is not a valid action type.', 'moksa-line-login' ),
+				__( '"%s" is not a valid action type.', 'moksa-line' ),
 				$type
 			);
 
@@ -371,7 +371,7 @@ class Validator {
 			if ( empty( $action[ $field ] ) ) {
 				$problems[] = sprintf(
 					/* translators: 1: action type, 2: missing field. */
-					__( 'A %1$s action needs %2$s.', 'moksa-line-login' ),
+					__( 'A %1$s action needs %2$s.', 'moksa-line' ),
 					$type,
 					$field
 				);
@@ -379,14 +379,14 @@ class Validator {
 		}
 
 		if ( isset( $action['label'] ) && mb_strlen( (string) $action['label'] ) > 20 ) {
-			$problems[] = __( 'Action labels are limited to 20 characters.', 'moksa-line-login' );
+			$problems[] = __( 'Action labels are limited to 20 characters.', 'moksa-line' );
 		}
 
 		if ( 'uri' === $type && ! empty( $action['uri'] ) ) {
 			$scheme = wp_parse_url( (string) $action['uri'], PHP_URL_SCHEME );
 
 			if ( ! in_array( $scheme, array( 'https', 'tel', 'line' ), true ) ) {
-				$problems[] = __( 'A uri action must point at https://, tel: or a LINE URL scheme.', 'moksa-line-login' );
+				$problems[] = __( 'A uri action must point at https://, tel: or a LINE URL scheme.', 'moksa-line' );
 			}
 		}
 

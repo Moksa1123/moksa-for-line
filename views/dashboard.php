@@ -31,29 +31,29 @@ if ( TokenManager::is_configured() ) {
 }
 ?>
 <div class="wrap moksa-line-wrap">
-	<h1><?php esc_html_e( 'LINE', 'moksa-line-login' ); ?></h1>
+	<h1><?php esc_html_e( 'LINE', 'moksa-line' ); ?></h1>
 
 	<div class="moksa-cards">
 		<div class="moksa-card">
 			<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( $stats['total'] ) ); ?></span>
-			<span class="moksa-card__label"><?php esc_html_e( 'LINE users known', 'moksa-line-login' ); ?></span>
+			<span class="moksa-card__label"><?php esc_html_e( 'LINE users known', 'moksa-line' ); ?></span>
 		</div>
 		<div class="moksa-card">
 			<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( $stats['friends'] ) ); ?></span>
-			<span class="moksa-card__label"><?php esc_html_e( 'Friends of the account', 'moksa-line-login' ); ?></span>
+			<span class="moksa-card__label"><?php esc_html_e( 'Friends of the account', 'moksa-line' ); ?></span>
 		</div>
 		<div class="moksa-card">
 			<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( $stats['linked'] ) ); ?></span>
-			<span class="moksa-card__label"><?php esc_html_e( 'Linked WordPress accounts', 'moksa-line-login' ); ?></span>
+			<span class="moksa-card__label"><?php esc_html_e( 'Linked WordPress accounts', 'moksa-line' ); ?></span>
 		</div>
 		<div class="moksa-card">
 			<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( Conversations::unread_total() ) ); ?></span>
-			<span class="moksa-card__label"><?php esc_html_e( 'Conversations waiting', 'moksa-line-login' ); ?></span>
+			<span class="moksa-card__label"><?php esc_html_e( 'Conversations waiting', 'moksa-line' ); ?></span>
 		</div>
 	</div>
 
 	<div class="moksa-panel">
-		<h2><?php esc_html_e( 'Setup', 'moksa-line-login' ); ?></h2>
+		<h2><?php esc_html_e( 'Setup', 'moksa-line' ); ?></h2>
 		<ul class="moksa-checklist">
 			<?php foreach ( $checklist as $item ) : ?>
 				<li class="moksa-checklist__item moksa-checklist__item--<?php echo $item['done'] ? 'done' : 'todo'; ?>">
@@ -66,20 +66,20 @@ if ( TokenManager::is_configured() ) {
 		</ul>
 		<p>
 			<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=' . AdminModule::SLUG . '-settings' ) ); ?>">
-				<?php esc_html_e( 'Open settings', 'moksa-line-login' ); ?>
+				<?php esc_html_e( 'Open settings', 'moksa-line' ); ?>
 			</a>
 		</p>
 	</div>
 
 	<?php if ( $quota ) : ?>
 		<div class="moksa-panel">
-			<h2><?php esc_html_e( 'Message quota this month', 'moksa-line-login' ); ?></h2>
+			<h2><?php esc_html_e( 'Message quota this month', 'moksa-line' ); ?></h2>
 			<?php if ( 'limited' === $quota['type'] && $quota['limit'] > 0 ) : ?>
 				<p>
 					<?php
 					printf(
 						/* translators: 1: messages used, 2: monthly allowance. */
-						esc_html__( '%1$s of %2$s push messages used.', 'moksa-line-login' ),
+						esc_html__( '%1$s of %2$s push messages used.', 'moksa-line' ),
 						esc_html( number_format_i18n( $quota['used'] ) ),
 						esc_html( number_format_i18n( $quota['limit'] ) )
 					);
@@ -93,13 +93,13 @@ if ( TokenManager::is_configured() ) {
 					<?php
 					printf(
 						/* translators: %s: messages used. */
-						esc_html__( '%s push messages sent this month. This plan has no monthly cap.', 'moksa-line-login' ),
+						esc_html__( '%s push messages sent this month. This plan has no monthly cap.', 'moksa-line' ),
 						esc_html( number_format_i18n( $quota['used'] ) )
 					);
 					?>
 				</p>
 			<?php endif; ?>
-			<p class="description"><?php esc_html_e( 'Replies to an inbound message are free. Push, multicast and broadcast are billed.', 'moksa-line-login' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Replies to an inbound message are free. Push, multicast and broadcast are billed.', 'moksa-line' ); ?></p>
 		</div>
 	<?php endif; ?>
 </div>

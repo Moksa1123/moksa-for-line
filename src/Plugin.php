@@ -46,19 +46,24 @@ final class Plugin {
 	 * Wire the plugin into WordPress.
 	 */
 	public function boot(): void {
-		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 1 );
 		add_action( 'plugins_loaded', array( $this, 'load_modules' ), 5 );
+		add_action( 'init', array( $this, 'load_textdomain' ), 0 );
 		add_action( 'init', array( Migrator::class, 'maybe_upgrade' ), 1 );
 
 		add_action( 'moksa_line_daily_maintenance', array( $this, 'run_maintenance' ) );
 	}
 
 	/**
-	 * Load translations.
+	 * Load translations bundled with the plugin.
+	 *
+	 * On `init`, not `plugins_loaded`: WordPress 6.7 warns when a translation
+	 * is requested before init, and loading the domain early is what invites
+	 * that. Translations from wordpress.org load automatically regardless;
+	 * this call only covers the .mo files shipped in /languages.
 	 */
 	public function load_textdomain(): void {
 		load_plugin_textdomain(
-			'moksa-line-login',
+			'moksa-line',
 			false,
 			dirname( MOKSA_LINE_BASENAME ) . '/languages'
 		);

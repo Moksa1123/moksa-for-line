@@ -34,7 +34,7 @@ class AdminModule {
 		$capability = 'manage_options';
 		$unread     = Options::get( 'inbox_enabled' ) ? Conversations::unread_total() : 0;
 
-		$inbox_label = __( 'Inbox', 'moksa-line-login' );
+		$inbox_label = __( 'Inbox', 'moksa-line' );
 
 		if ( $unread > 0 ) {
 			$inbox_label .= sprintf(
@@ -44,8 +44,8 @@ class AdminModule {
 		}
 
 		add_menu_page(
-			__( 'LINE', 'moksa-line-login' ),
-			__( 'LINE', 'moksa-line-login' ),
+			__( 'LINE', 'moksa-line' ),
+			__( 'LINE', 'moksa-line' ),
 			$capability,
 			self::SLUG,
 			array( $this, 'render_dashboard' ),
@@ -54,17 +54,17 @@ class AdminModule {
 		);
 
 		$pages = array(
-			array( self::SLUG, __( 'Dashboard', 'moksa-line-login' ), 'render_dashboard' ),
+			array( self::SLUG, __( 'Dashboard', 'moksa-line' ), 'render_dashboard' ),
 			array( self::SLUG . '-inbox', $inbox_label, 'render_inbox' ),
-			array( self::SLUG . '-replies', __( 'Auto replies', 'moksa-line-login' ), 'render_replies' ),
-			array( self::SLUG . '-flows', __( 'Conversation flows', 'moksa-line-login' ), 'render_flows' ),
-			array( self::SLUG . '-flex', __( 'Flex messages', 'moksa-line-login' ), 'render_flex' ),
-			array( self::SLUG . '-richmenus', __( 'Rich menus', 'moksa-line-login' ), 'render_richmenus' ),
-			array( self::SLUG . '-broadcast', __( 'Broadcast', 'moksa-line-login' ), 'render_broadcast' ),
-			array( self::SLUG . '-users', __( 'LINE users', 'moksa-line-login' ), 'render_users' ),
-			array( self::SLUG . '-payments', __( 'Payments', 'moksa-line-login' ), 'render_payments' ),
-			array( self::SLUG . '-logs', __( 'Logs', 'moksa-line-login' ), 'render_logs' ),
-			array( self::SLUG . '-settings', __( 'Settings', 'moksa-line-login' ), 'render_settings' ),
+			array( self::SLUG . '-replies', __( 'Auto replies', 'moksa-line' ), 'render_replies' ),
+			array( self::SLUG . '-flows', __( 'Conversation flows', 'moksa-line' ), 'render_flows' ),
+			array( self::SLUG . '-flex', __( 'Flex messages', 'moksa-line' ), 'render_flex' ),
+			array( self::SLUG . '-richmenus', __( 'Rich menus', 'moksa-line' ), 'render_richmenus' ),
+			array( self::SLUG . '-broadcast', __( 'Broadcast', 'moksa-line' ), 'render_broadcast' ),
+			array( self::SLUG . '-users', __( 'LINE users', 'moksa-line' ), 'render_users' ),
+			array( self::SLUG . '-payments', __( 'Payments', 'moksa-line' ), 'render_payments' ),
+			array( self::SLUG . '-logs', __( 'Logs', 'moksa-line' ), 'render_logs' ),
+			array( self::SLUG . '-settings', __( 'Settings', 'moksa-line' ), 'render_settings' ),
 		);
 
 		foreach ( $pages as $page ) {
@@ -126,11 +126,11 @@ class AdminModule {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'moksa_line_admin' ),
 				'strings' => array(
-					'saved'        => __( 'Saved.', 'moksa-line-login' ),
-					'failed'       => __( 'That did not work.', 'moksa-line-login' ),
-					'confirmDelete' => __( 'Delete this permanently?', 'moksa-line-login' ),
-					'publishing'   => __( 'Publishing to LINE...', 'moksa-line-login' ),
-					'working'      => __( 'Working...', 'moksa-line-login' ),
+					'saved'        => __( 'Saved.', 'moksa-line' ),
+					'failed'       => __( 'That did not work.', 'moksa-line' ),
+					'confirmDelete' => __( 'Delete this permanently?', 'moksa-line' ),
+					'publishing'   => __( 'Publishing to LINE...', 'moksa-line' ),
+					'working'      => __( 'Working...', 'moksa-line' ),
 				),
 			)
 		);
@@ -148,7 +148,7 @@ class AdminModule {
 			sprintf(
 				'<a href="%s">%s</a>',
 				esc_url( admin_url( 'admin.php?page=' . self::SLUG . '-settings' ) ),
-				esc_html__( 'Settings', 'moksa-line-login' )
+				esc_html__( 'Settings', 'moksa-line' )
 			)
 		);
 
@@ -167,26 +167,26 @@ class AdminModule {
 
 		$items[] = array(
 			'done'  => '' !== (string) Options::get( 'channel_id' ) && '' !== (string) Options::get( 'channel_secret' ),
-			'label' => __( 'LINE Login channel connected', 'moksa-line-login' ),
-			'hint'  => __( 'Add the Channel ID and Channel Secret from the LINE Developers Console.', 'moksa-line-login' ),
+			'label' => __( 'LINE Login channel connected', 'moksa-line' ),
+			'hint'  => __( 'Add the Channel ID and Channel Secret from the LINE Developers Console.', 'moksa-line' ),
 		);
 
 		$items[] = array(
 			'done'  => \Moksa\Line\Api\TokenManager::is_configured(),
-			'label' => __( 'Messaging API channel connected', 'moksa-line-login' ),
-			'hint'  => __( 'The bot cannot send or receive anything until this is set.', 'moksa-line-login' ),
+			'label' => __( 'Messaging API channel connected', 'moksa-line' ),
+			'hint'  => __( 'The bot cannot send or receive anything until this is set.', 'moksa-line' ),
 		);
 
 		$items[] = array(
 			'done'  => ! \Moksa\Line\Api\Signature::using_fallback_secret(),
-			'label' => __( 'Webhook signing secret is the Messaging API one', 'moksa-line-login' ),
-			'hint'  => __( 'Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual.', 'moksa-line-login' ),
+			'label' => __( 'Webhook signing secret is the Messaging API one', 'moksa-line' ),
+			'hint'  => __( 'Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual.', 'moksa-line' ),
 		);
 
 		$items[] = array(
 			'done'  => \Moksa\Line\Webhook\EventQueue::has_any(),
-			'label' => __( 'Webhook has received an event', 'moksa-line-login' ),
-			'hint'  => __( 'Paste the webhook URL into the Console, enable "Use webhook", then press Verify.', 'moksa-line-login' ),
+			'label' => __( 'Webhook has received an event', 'moksa-line' ),
+			'hint'  => __( 'Paste the webhook URL into the Console, enable "Use webhook", then press Verify.', 'moksa-line' ),
 		);
 
 		if ( Options::get( 'ai_enabled' ) ) {
@@ -194,30 +194,30 @@ class AdminModule {
 
 			$items[] = array(
 				'done'  => $provider->is_available(),
-				'label' => __( 'AI provider available', 'moksa-line-login' ),
-				'hint'  => __( 'AI replies are switched on, but AI Engine is not active on this site.', 'moksa-line-login' ),
+				'label' => __( 'AI provider available', 'moksa-line' ),
+				'hint'  => __( 'AI replies are switched on, but AI Engine is not active on this site.', 'moksa-line' ),
 			);
 		}
 
 		if ( Options::get( 'pay_enabled' ) ) {
 			$items[] = array(
 				'done'  => \Moksa\Line\Pay\LinePayClient::is_configured(),
-				'label' => __( 'LINE Pay credentials present', 'moksa-line-login' ),
-				'hint'  => __( 'Add the LINE Pay Channel ID and Channel Secret.', 'moksa-line-login' ),
+				'label' => __( 'LINE Pay credentials present', 'moksa-line' ),
+				'hint'  => __( 'Add the LINE Pay Channel ID and Channel Secret.', 'moksa-line' ),
 			);
 
 			$items[] = array(
 				'done'  => ! Options::get( 'pay_sandbox' ),
-				'label' => __( 'LINE Pay is in production mode', 'moksa-line-login' ),
-				'hint'  => __( 'Sandbox mode is on, so no real money moves. Turn it off when you go live.', 'moksa-line-login' ),
+				'label' => __( 'LINE Pay is in production mode', 'moksa-line' ),
+				'hint'  => __( 'Sandbox mode is on, so no real money moves. Turn it off when you go live.', 'moksa-line' ),
 			);
 		}
 
 		if ( ! \Moksa\Line\Support\Crypto::available() ) {
 			$items[] = array(
 				'done'  => false,
-				'label' => __( 'Credentials are encrypted at rest', 'moksa-line-login' ),
-				'hint'  => __( 'OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text.', 'moksa-line-login' ),
+				'label' => __( 'Credentials are encrypted at rest', 'moksa-line' ),
+				'hint'  => __( 'OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text.', 'moksa-line' ),
 			);
 		}
 
@@ -248,9 +248,9 @@ class AdminModule {
 
 		printf(
 			'<div class="notice notice-info is-dismissible"><p>%s <a href="%s">%s</a></p></div>',
-			esc_html__( 'Moksa LINE Suite is installed but not connected to a LINE channel yet.', 'moksa-line-login' ),
+			esc_html__( 'Moksa LINE Suite is installed but not connected to a LINE channel yet.', 'moksa-line' ),
 			esc_url( admin_url( 'admin.php?page=' . self::SLUG . '-settings' ) ),
-			esc_html__( 'Finish setup', 'moksa-line-login' )
+			esc_html__( 'Finish setup', 'moksa-line' )
 		);
 	}
 
@@ -261,7 +261,7 @@ class AdminModule {
 	 */
 	public function save_settings(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to change these settings.', 'moksa-line-login' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to change these settings.', 'moksa-line' ), 403 );
 		}
 
 		check_admin_referer( 'moksa_line_settings' );
@@ -341,7 +341,7 @@ class AdminModule {
 		check_ajax_referer( 'moksa_line_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot send broadcasts.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot send broadcasts.', 'moksa-line' ) ), 403 );
 		}
 
 		$mode     = isset( $_POST['mode'] ) ? sanitize_key( wp_unslash( $_POST['mode'] ) ) : 'test';
@@ -356,7 +356,7 @@ class AdminModule {
 			$contents = \Moksa\Line\Data\Flex::contents( $flex_id );
 
 			if ( ! $template || ! $contents ) {
-				wp_send_json_error( array( 'message' => __( 'That template could not be loaded.', 'moksa-line-login' ) ) );
+				wp_send_json_error( array( 'message' => __( 'That template could not be loaded.', 'moksa-line' ) ) );
 			}
 
 			$messages[] = \Moksa\Line\Api\MessagingClient::flex( (string) $template->alt_text, $contents );
@@ -367,12 +367,12 @@ class AdminModule {
 		}
 
 		if ( empty( $messages ) ) {
-			wp_send_json_error( array( 'message' => __( 'Write a message or choose a template first.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Write a message or choose a template first.', 'moksa-line' ) ) );
 		}
 
 		if ( 'test' === $mode ) {
 			if ( '' === $target ) {
-				wp_send_json_error( array( 'message' => __( 'Enter a LINE user id to send the test to.', 'moksa-line-login' ) ) );
+				wp_send_json_error( array( 'message' => __( 'Enter a LINE user id to send the test to.', 'moksa-line' ) ) );
 			}
 
 			$result = \Moksa\Line\Api\MessagingClient::push( $target, $messages );
@@ -381,7 +381,7 @@ class AdminModule {
 				wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 			}
 
-			wp_send_json_success( array( 'message' => __( 'Test sent.', 'moksa-line-login' ) ) );
+			wp_send_json_success( array( 'message' => __( 'Test sent.', 'moksa-line' ) ) );
 		}
 
 		// Sending to everyone needs the operator to type the confirmation word,
@@ -389,7 +389,7 @@ class AdminModule {
 		$confirmation = isset( $_POST['confirm'] ) ? sanitize_text_field( wp_unslash( $_POST['confirm'] ) ) : '';
 
 		if ( 'SEND' !== strtoupper( $confirmation ) ) {
-			wp_send_json_error( array( 'message' => __( 'Type SEND in the confirmation box to go ahead.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Type SEND in the confirmation box to go ahead.', 'moksa-line' ) ) );
 		}
 
 		if ( 'all' === $mode ) {
@@ -399,7 +399,7 @@ class AdminModule {
 				wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 			}
 
-			wp_send_json_success( array( 'message' => __( 'Broadcast sent to every friend of the account.', 'moksa-line-login' ) ) );
+			wp_send_json_success( array( 'message' => __( 'Broadcast sent to every friend of the account.', 'moksa-line' ) ) );
 		}
 
 		// 'known' sends only to the friends this site has actually recorded,
@@ -407,7 +407,7 @@ class AdminModule {
 		$recipients = \Moksa\Line\Data\Users::friend_ids();
 
 		if ( empty( $recipients ) ) {
-			wp_send_json_error( array( 'message' => __( 'No friends have been recorded on this site yet.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No friends have been recorded on this site yet.', 'moksa-line' ) ) );
 		}
 
 		$report = \Moksa\Line\Api\MessagingClient::multicast( $recipients, $messages );
@@ -417,7 +417,7 @@ class AdminModule {
 				array(
 					'message' => sprintf(
 						/* translators: 1: delivered count, 2: failed count, 3: first error. */
-						__( 'Delivered to %1$d, failed for %2$d. %3$s', 'moksa-line-login' ),
+						__( 'Delivered to %1$d, failed for %2$d. %3$s', 'moksa-line' ),
 						$report['sent'],
 						$report['failed'],
 						isset( $report['errors'][0] ) ? $report['errors'][0] : ''
@@ -430,7 +430,7 @@ class AdminModule {
 			array(
 				'message' => sprintf(
 					/* translators: %d: number of recipients. */
-					__( 'Sent to %d people.', 'moksa-line-login' ),
+					__( 'Sent to %d people.', 'moksa-line' ),
 					$report['sent']
 				),
 			)
@@ -490,13 +490,13 @@ class AdminModule {
 	 */
 	private function view( string $name ): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to view this page.', 'moksa-line-login' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to view this page.', 'moksa-line' ), 403 );
 		}
 
 		$path = MOKSA_LINE_DIR . 'views/' . $name . '.php';
 
 		if ( ! is_readable( $path ) ) {
-			printf( '<div class="wrap"><p>%s</p></div>', esc_html__( 'This screen is missing.', 'moksa-line-login' ) );
+			printf( '<div class="wrap"><p>%s</p></div>', esc_html__( 'This screen is missing.', 'moksa-line' ) );
 
 			return;
 		}

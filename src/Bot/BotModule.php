@@ -72,7 +72,7 @@ class BotModule {
 					array(
 						'message' => sprintf(
 							/* translators: %s: JSON parser message. */
-							__( 'That is not valid JSON: %s', 'moksa-line-login' ),
+							__( 'That is not valid JSON: %s', 'moksa-line' ),
 							json_last_error_msg()
 						),
 					)
@@ -90,12 +90,12 @@ class BotModule {
 		$match_type = isset( $_POST['match_type'] ) ? sanitize_key( wp_unslash( $_POST['match_type'] ) ) : 'exact';
 
 		if ( 'any' !== $match_type && '' === trim( $keyword ) ) {
-			wp_send_json_error( array( 'message' => __( 'Give the rule something to match on.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Give the rule something to match on.', 'moksa-line' ) ) );
 		}
 
 		// A broken pattern would otherwise silently match nothing forever.
 		if ( 'regex' === $match_type && false === @preg_match( '/' . str_replace( '/', '\\/', $keyword ) . '/iu', '' ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors -- the point is to detect the failure.
-			wp_send_json_error( array( 'message' => __( 'That pattern is not valid.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That pattern is not valid.', 'moksa-line' ) ) );
 		}
 
 		$id = AutoReply::save(
@@ -111,7 +111,7 @@ class BotModule {
 			)
 		);
 
-		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Rule saved.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Rule saved.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -122,7 +122,7 @@ class BotModule {
 
 		AutoReply::delete( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
 
-		wp_send_json_success( array( 'message' => __( 'Rule deleted.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Rule deleted.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -134,11 +134,11 @@ class BotModule {
 		$definition = json_decode( (string) wp_unslash( $_POST['definition'] ?? '' ), true );
 
 		if ( ! is_array( $definition ) ) {
-			wp_send_json_error( array( 'message' => __( 'The flow definition is not valid JSON.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The flow definition is not valid JSON.', 'moksa-line' ) ) );
 		}
 
 		if ( empty( $definition['steps'] ) || ! is_array( $definition['steps'] ) ) {
-			wp_send_json_error( array( 'message' => __( 'A flow needs at least one step.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'A flow needs at least one step.', 'moksa-line' ) ) );
 		}
 
 		foreach ( $definition['steps'] as $index => $step ) {
@@ -147,7 +147,7 @@ class BotModule {
 					array(
 						'message' => sprintf(
 							/* translators: %d: step number. */
-							__( 'Step %d has no question to ask.', 'moksa-line-login' ),
+							__( 'Step %d has no question to ask.', 'moksa-line' ),
 							(int) $index + 1
 						),
 					)
@@ -158,7 +158,7 @@ class BotModule {
 		$email = isset( $_POST['notify_email'] ) ? sanitize_email( wp_unslash( $_POST['notify_email'] ) ) : '';
 
 		if ( '' !== $email && ! is_email( $email ) ) {
-			wp_send_json_error( array( 'message' => __( 'That notification address is not valid.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That notification address is not valid.', 'moksa-line' ) ) );
 		}
 
 		$id = Flow::save(
@@ -173,7 +173,7 @@ class BotModule {
 			)
 		);
 
-		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Flow saved.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Flow saved.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -184,7 +184,7 @@ class BotModule {
 
 		Flow::delete( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
 
-		wp_send_json_success( array( 'message' => __( 'Flow deleted.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Flow deleted.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -196,11 +196,11 @@ class BotModule {
 		$items = json_decode( (string) wp_unslash( $_POST['items'] ?? '' ), true );
 
 		if ( ! is_array( $items ) || empty( $items ) ) {
-			wp_send_json_error( array( 'message' => __( 'Add at least one quick reply button.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Add at least one quick reply button.', 'moksa-line' ) ) );
 		}
 
 		if ( count( $items ) > 13 ) {
-			wp_send_json_error( array( 'message' => __( 'LINE allows at most 13 quick reply buttons.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'LINE allows at most 13 quick reply buttons.', 'moksa-line' ) ) );
 		}
 
 		$id = QuickReplies::save(
@@ -212,7 +212,7 @@ class BotModule {
 			)
 		);
 
-		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Quick reply set saved.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Quick reply set saved.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -223,7 +223,7 @@ class BotModule {
 
 		QuickReplies::delete( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
 
-		wp_send_json_success( array( 'message' => __( 'Quick reply set deleted.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Quick reply set deleted.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -233,7 +233,7 @@ class BotModule {
 		check_ajax_referer( 'moksa_line_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to change bot settings.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to change bot settings.', 'moksa-line' ) ), 403 );
 		}
 	}
 
@@ -381,7 +381,7 @@ class BotModule {
 
 			return array(
 				MessagingClient::text(
-					__( 'A member of our team will reply here shortly.', 'moksa-line-login' )
+					__( 'A member of our team will reply here shortly.', 'moksa-line' )
 				),
 			);
 		}

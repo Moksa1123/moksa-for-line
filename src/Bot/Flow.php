@@ -144,7 +144,7 @@ class Flow extends Repository {
 		if ( self::is_cancel( $text ) ) {
 			self::end( $line_user_id );
 
-			return array( MessagingClient::text( __( 'No problem, that has been cancelled.', 'moksa-line-login' ) ) );
+			return array( MessagingClient::text( __( 'No problem, that has been cancelled.', 'moksa-line' ) ) );
 		}
 
 		$index = (int) $session->step_index;
@@ -226,7 +226,7 @@ class Flow extends Repository {
 		$definition = self::definition( $flow );
 		$message    = isset( $definition['complete_message'] ) && '' !== trim( (string) $definition['complete_message'] )
 			? (string) $definition['complete_message']
-			: __( 'Thank you, we have received your details.', 'moksa-line-login' );
+			: __( 'Thank you, we have received your details.', 'moksa-line' );
 
 		return array( MessagingClient::text( AutoReply::expand( $message, $line_user_id ) ) );
 	}
@@ -249,12 +249,12 @@ class Flow extends Repository {
 		$lines = array(
 			sprintf(
 				/* translators: %s: flow name. */
-				__( 'A visitor completed "%s" on LINE.', 'moksa-line-login' ),
+				__( 'A visitor completed "%s" on LINE.', 'moksa-line' ),
 				(string) $flow->name
 			),
 			'',
-			sprintf( '%s: %s', __( 'Display name', 'moksa-line-login' ), $display ),
-			sprintf( '%s: %s', __( 'LINE user id', 'moksa-line-login' ), $line_user_id ),
+			sprintf( '%s: %s', __( 'Display name', 'moksa-line' ), $display ),
+			sprintf( '%s: %s', __( 'LINE user id', 'moksa-line' ), $line_user_id ),
 			'',
 		);
 
@@ -266,7 +266,7 @@ class Flow extends Repository {
 			$to,
 			sprintf(
 				/* translators: 1: site name, 2: flow name. */
-				__( '[%1$s] New LINE submission: %2$s', 'moksa-line-login' ),
+				__( '[%1$s] New LINE submission: %2$s', 'moksa-line' ),
 				get_bloginfo( 'name' ),
 				(string) $flow->name
 			),
@@ -323,7 +323,7 @@ class Flow extends Repository {
 		$prompt = isset( $step['prompt'] ) ? (string) $step['prompt'] : '';
 
 		if ( '' === $prompt ) {
-			$prompt = __( 'Please reply with your answer.', 'moksa-line-login' );
+			$prompt = __( 'Please reply with your answer.', 'moksa-line' );
 		}
 
 		$quick = array();
@@ -349,8 +349,8 @@ class Flow extends Repository {
 			'type'   => 'action',
 			'action' => array(
 				'type'  => 'message',
-				'label' => __( 'Cancel', 'moksa-line-login' ),
-				'text'  => __( 'Cancel', 'moksa-line-login' ),
+				'label' => __( 'Cancel', 'moksa-line' ),
+				'text'  => __( 'Cancel', 'moksa-line' ),
 			),
 		);
 
@@ -368,33 +368,33 @@ class Flow extends Repository {
 		$type = isset( $step['type'] ) ? (string) $step['type'] : 'text';
 
 		if ( '' === $text ) {
-			return __( 'That looked empty. Please try again.', 'moksa-line-login' );
+			return __( 'That looked empty. Please try again.', 'moksa-line' );
 		}
 
 		switch ( $type ) {
 			case 'email':
 				return is_email( $text )
 					? sanitize_email( $text )
-					: __( 'That does not look like an email address. Please try again.', 'moksa-line-login' );
+					: __( 'That does not look like an email address. Please try again.', 'moksa-line' );
 
 			case 'phone':
 				$digits = preg_replace( '/[^0-9+]/', '', $text );
 
 				return strlen( (string) $digits ) >= 8
 					? $digits
-					: __( 'That does not look like a phone number. Please try again.', 'moksa-line-login' );
+					: __( 'That does not look like a phone number. Please try again.', 'moksa-line' );
 
 			case 'number':
 				return is_numeric( $text )
 					? $text + 0
-					: __( 'Please reply with a number.', 'moksa-line-login' );
+					: __( 'Please reply with a number.', 'moksa-line' );
 
 			case 'date':
 				$timestamp = strtotime( $text );
 
 				return false !== $timestamp
 					? gmdate( 'Y-m-d', $timestamp )
-					: __( 'Please reply with a date, for example 2026-03-15.', 'moksa-line-login' );
+					: __( 'Please reply with a date, for example 2026-03-15.', 'moksa-line' );
 
 			case 'choice':
 				$choices = isset( $step['choices'] ) ? array_map( 'strval', (array) $step['choices'] ) : array();
@@ -407,7 +407,7 @@ class Flow extends Repository {
 
 				return sprintf(
 					/* translators: %s: comma-separated list of choices. */
-					__( 'Please choose one of: %s', 'moksa-line-login' ),
+					__( 'Please choose one of: %s', 'moksa-line' ),
 					implode( ', ', $choices )
 				);
 
@@ -436,7 +436,7 @@ class Flow extends Repository {
 
 		// The translated "Cancel" label is always accepted, since it is what
 		// the quick reply button sends.
-		$words[] = __( 'Cancel', 'moksa-line-login' );
+		$words[] = __( 'Cancel', 'moksa-line' );
 
 		foreach ( $words as $word ) {
 			if ( 0 === strcasecmp( trim( $text ), trim( (string) $word ) ) ) {

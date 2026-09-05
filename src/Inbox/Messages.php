@@ -90,30 +90,30 @@ class Messages {
 				return isset( $message['text'] ) ? (string) $message['text'] : '';
 
 			case 'image':
-				return __( '[Image]', 'moksa-line-login' );
+				return __( '[Image]', 'moksa-line' );
 
 			case 'video':
-				return __( '[Video]', 'moksa-line-login' );
+				return __( '[Video]', 'moksa-line' );
 
 			case 'audio':
-				return __( '[Audio]', 'moksa-line-login' );
+				return __( '[Audio]', 'moksa-line' );
 
 			case 'file':
 				return isset( $message['fileName'] )
-					? sprintf( '[%s] %s', __( 'File', 'moksa-line-login' ), (string) $message['fileName'] )
-					: __( '[File]', 'moksa-line-login' );
+					? sprintf( '[%s] %s', __( 'File', 'moksa-line' ), (string) $message['fileName'] )
+					: __( '[File]', 'moksa-line' );
 
 			case 'location':
 				$title = isset( $message['title'] ) ? (string) $message['title'] : '';
 				$addr  = isset( $message['address'] ) ? (string) $message['address'] : '';
 
-				return trim( sprintf( '[%s] %s %s', __( 'Location', 'moksa-line-login' ), $title, $addr ) );
+				return trim( sprintf( '[%s] %s %s', __( 'Location', 'moksa-line' ), $title, $addr ) );
 
 			case 'sticker':
-				return __( '[Sticker]', 'moksa-line-login' );
+				return __( '[Sticker]', 'moksa-line' );
 
 			default:
-				return sprintf( '[%s]', $type ? $type : __( 'Message', 'moksa-line-login' ) );
+				return sprintf( '[%s]', $type ? $type : __( 'Message', 'moksa-line' ) );
 		}
 	}
 
@@ -133,8 +133,8 @@ class Messages {
 
 			if ( isset( $message['type'] ) && 'flex' === $message['type'] ) {
 				$parts[] = isset( $message['altText'] )
-					? sprintf( '[%s] %s', __( 'Flex', 'moksa-line-login' ), (string) $message['altText'] )
-					: __( '[Flex]', 'moksa-line-login' );
+					? sprintf( '[%s] %s', __( 'Flex', 'moksa-line' ), (string) $message['altText'] )
+					: __( '[Flex]', 'moksa-line' );
 				continue;
 			}
 

@@ -303,7 +303,7 @@ class AutoReply {
 		}
 
 		if ( '' === $prompt ) {
-			$prompt = __( 'Please choose an option:', 'moksa-line-login' );
+			$prompt = __( 'Please choose an option:', 'moksa-line' );
 		}
 
 		return array( MessagingClient::text( self::expand( $prompt, $line_user_id ), $items ) );

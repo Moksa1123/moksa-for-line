@@ -49,7 +49,7 @@ class ShortcodeModule {
 	public function login_button( $atts ): string {
 		$atts = shortcode_atts(
 			array(
-				'label'         => __( 'Log in with LINE', 'moksa-line-login' ),
+				'label'         => __( 'Log in with LINE', 'moksa-line' ),
 				'logged_in'     => '',
 				'redirect'      => '',
 				'class'         => '',
@@ -63,7 +63,7 @@ class ShortcodeModule {
 
 		if ( '' === (string) Options::get( 'channel_id' ) ) {
 			return current_user_can( 'manage_options' )
-				? '<p class="moksa-line-notice">' . esc_html__( 'LINE Login is not configured yet.', 'moksa-line-login' ) . '</p>'
+				? '<p class="moksa-line-notice">' . esc_html__( 'LINE Login is not configured yet.', 'moksa-line' ) . '</p>'
 				: '';
 		}
 
@@ -103,7 +103,7 @@ class ShortcodeModule {
 	public function add_friend( $atts ): string {
 		$atts = shortcode_atts(
 			array(
-				'label'    => __( 'Add us on LINE', 'moksa-line-login' ),
+				'label'    => __( 'Add us on LINE', 'moksa-line' ),
 				'basic_id' => (string) Options::get( 'bot_basic_id' ),
 				'class'    => '',
 			),
@@ -115,7 +115,7 @@ class ShortcodeModule {
 
 		if ( '' === $basic_id ) {
 			return current_user_can( 'manage_options' )
-				? '<p class="moksa-line-notice">' . esc_html__( 'Set the official account basic ID in the LINE settings first.', 'moksa-line-login' ) . '</p>'
+				? '<p class="moksa-line-notice">' . esc_html__( 'Set the official account basic ID in the LINE settings first.', 'moksa-line' ) . '</p>'
 				: '';
 		}
 
@@ -183,24 +183,24 @@ class ShortcodeModule {
 		$record   = Users::by_wp_id( (int) $user->ID );
 		$is_self  = get_current_user_id() === (int) $user->ID;
 		?>
-		<h2><?php esc_html_e( 'LINE account', 'moksa-line-login' ); ?></h2>
+		<h2><?php esc_html_e( 'LINE account', 'moksa-line' ); ?></h2>
 		<table class="form-table" role="presentation">
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Status', 'moksa-line-login' ); ?></th>
+				<th scope="row"><?php esc_html_e( 'Status', 'moksa-line' ); ?></th>
 				<td>
 					<?php if ( $record && '' !== (string) $record->line_user_id ) : ?>
 						<p>
 							<?php
 							printf(
 								/* translators: %s: LINE display name. */
-								esc_html__( 'Linked to %s.', 'moksa-line-login' ),
+								esc_html__( 'Linked to %s.', 'moksa-line' ),
 								'<strong>' . esc_html( (string) $record->display_name ) . '</strong>'
 							);
 							?>
 						</p>
 						<button type="button" class="button" data-moksa-line-unlink="<?php echo esc_attr( (string) $user->ID ); ?>"
 							data-nonce="<?php echo esc_attr( wp_create_nonce( 'moksa_line_link' ) ); ?>">
-							<?php esc_html_e( 'Unlink LINE account', 'moksa-line-login' ); ?>
+							<?php esc_html_e( 'Unlink LINE account', 'moksa-line' ); ?>
 						</button>
 					<?php elseif ( $is_self ) : ?>
 						<a class="button button-primary" href="
@@ -216,9 +216,9 @@ class ShortcodeModule {
 							)
 						);
 						?>
-						"><?php esc_html_e( 'Link my LINE account', 'moksa-line-login' ); ?></a>
+						"><?php esc_html_e( 'Link my LINE account', 'moksa-line' ); ?></a>
 					<?php else : ?>
-						<p><?php esc_html_e( 'No LINE account is linked. Only this user can link their own.', 'moksa-line-login' ); ?></p>
+						<p><?php esc_html_e( 'No LINE account is linked. Only this user can link their own.', 'moksa-line' ); ?></p>
 					<?php endif; ?>
 				</td>
 			</tr>

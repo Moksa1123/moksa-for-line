@@ -74,7 +74,7 @@ class RichMenuModule extends Repository {
 		$row = self::find( $id );
 
 		if ( ! $row ) {
-			return new WP_Error( 'moksa_line_menu_missing', __( 'That rich menu no longer exists.', 'moksa-line-login' ) );
+			return new WP_Error( 'moksa_line_menu_missing', __( 'That rich menu no longer exists.', 'moksa-line' ) );
 		}
 
 		$image = self::image_bytes( (int) $row->image_attachment_id );
@@ -88,7 +88,7 @@ class RichMenuModule extends Repository {
 		if ( ! is_array( $areas ) || empty( $areas ) ) {
 			return new WP_Error(
 				'moksa_line_menu_no_areas',
-				__( 'This rich menu has no tappable areas yet.', 'moksa-line-login' )
+				__( 'This rich menu has no tappable areas yet.', 'moksa-line' )
 			);
 		}
 
@@ -96,7 +96,7 @@ class RichMenuModule extends Repository {
 			'size'        => RichMenuClient::size( (string) $row->size ),
 			'selected'    => (bool) $row->selected,
 			'name'        => mb_substr( (string) $row->name, 0, 300 ),
-			'chatBarText' => mb_substr( '' !== $row->chat_bar_text ? (string) $row->chat_bar_text : __( 'Menu', 'moksa-line-login' ), 0, 14 ),
+			'chatBarText' => mb_substr( '' !== $row->chat_bar_text ? (string) $row->chat_bar_text : __( 'Menu', 'moksa-line' ), 0, 14 ),
 			'areas'       => self::normalize_areas( $areas, (string) $row->size ),
 		);
 
@@ -109,7 +109,7 @@ class RichMenuModule extends Repository {
 		$new_id = isset( $created['richMenuId'] ) ? (string) $created['richMenuId'] : '';
 
 		if ( '' === $new_id ) {
-			return new WP_Error( 'moksa_line_menu_no_id', __( 'LINE accepted the menu but did not return an id.', 'moksa-line-login' ) );
+			return new WP_Error( 'moksa_line_menu_no_id', __( 'LINE accepted the menu but did not return an id.', 'moksa-line' ) );
 		}
 
 		$uploaded = RichMenuClient::upload_image( $new_id, $image['bytes'], $image['mime'] );
@@ -346,7 +346,7 @@ class RichMenuModule extends Repository {
 		if ( $attachment_id <= 0 ) {
 			return new WP_Error(
 				'moksa_line_menu_no_image',
-				__( 'Choose a menu image first. LINE requires one, 2500px wide and either 1686px or 843px tall.', 'moksa-line-login' )
+				__( 'Choose a menu image first. LINE requires one, 2500px wide and either 1686px or 843px tall.', 'moksa-line' )
 			);
 		}
 
@@ -355,7 +355,7 @@ class RichMenuModule extends Repository {
 		if ( ! $path || ! is_readable( $path ) ) {
 			return new WP_Error(
 				'moksa_line_menu_image_unreadable',
-				__( 'The selected image could not be read from the media library.', 'moksa-line-login' )
+				__( 'The selected image could not be read from the media library.', 'moksa-line' )
 			);
 		}
 
@@ -370,7 +370,7 @@ class RichMenuModule extends Repository {
 		if ( false === $bytes ) {
 			return new WP_Error(
 				'moksa_line_menu_image_unreadable',
-				__( 'The selected image could not be read from disk.', 'moksa-line-login' )
+				__( 'The selected image could not be read from disk.', 'moksa-line' )
 			);
 		}
 
@@ -390,13 +390,13 @@ class RichMenuModule extends Repository {
 		$expected = RichMenuClient::size( $size );
 
 		if ( ! is_array( $meta ) || empty( $meta['width'] ) ) {
-			return array( __( 'Could not read the image dimensions.', 'moksa-line-login' ) );
+			return array( __( 'Could not read the image dimensions.', 'moksa-line' ) );
 		}
 
 		if ( (int) $meta['width'] !== $expected['width'] || (int) $meta['height'] !== $expected['height'] ) {
 			$problems[] = sprintf(
 				/* translators: 1: required width, 2: required height, 3: actual width, 4: actual height. */
-				__( 'LINE expects %1$d x %2$d pixels for this menu size; this image is %3$d x %4$d.', 'moksa-line-login' ),
+				__( 'LINE expects %1$d x %2$d pixels for this menu size; this image is %3$d x %4$d.', 'moksa-line' ),
 				$expected['width'],
 				$expected['height'],
 				(int) $meta['width'],
@@ -407,13 +407,13 @@ class RichMenuModule extends Repository {
 		$path = get_attached_file( $attachment_id );
 
 		if ( $path && file_exists( $path ) && filesize( $path ) > RichMenuClient::MAX_IMAGE_BYTES ) {
-			$problems[] = __( 'The image is larger than 1 MB, which LINE will reject.', 'moksa-line-login' );
+			$problems[] = __( 'The image is larger than 1 MB, which LINE will reject.', 'moksa-line' );
 		}
 
 		$mime = (string) get_post_mime_type( $attachment_id );
 
 		if ( ! in_array( $mime, array( 'image/jpeg', 'image/jpg', 'image/png' ), true ) ) {
-			$problems[] = __( 'Rich menu images must be JPEG or PNG.', 'moksa-line-login' );
+			$problems[] = __( 'Rich menu images must be JPEG or PNG.', 'moksa-line' );
 		}
 
 		return $problems;
@@ -431,7 +431,7 @@ class RichMenuModule extends Repository {
 		$areas     = json_decode( (string) $areas_raw, true );
 
 		if ( ! is_array( $areas ) ) {
-			wp_send_json_error( array( 'message' => __( 'The tappable areas could not be read.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The tappable areas could not be read.', 'moksa-line' ) ) );
 		}
 
 		$size  = isset( $_POST['size'] ) && 'half' === $_POST['size'] ? 'half' : 'full';
@@ -456,7 +456,7 @@ class RichMenuModule extends Repository {
 		);
 
 		if ( ! $id ) {
-			wp_send_json_error( array( 'message' => __( 'The rich menu could not be saved.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The rich menu could not be saved.', 'moksa-line' ) ) );
 		}
 
 		// Only one menu can be the channel default.
@@ -477,7 +477,7 @@ class RichMenuModule extends Repository {
 		wp_send_json_success(
 			array(
 				'id'       => $id,
-				'message'  => __( 'Saved. Publish it to push the change to LINE.', 'moksa-line-login' ),
+				'message'  => __( 'Saved. Publish it to push the change to LINE.', 'moksa-line' ),
 				'warnings' => $warnings,
 			)
 		);
@@ -493,7 +493,7 @@ class RichMenuModule extends Repository {
 		$row = self::find( $id );
 
 		if ( ! $row ) {
-			wp_send_json_error( array( 'message' => __( 'That rich menu no longer exists.', 'moksa-line-login' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That rich menu no longer exists.', 'moksa-line' ) ), 404 );
 		}
 
 		if ( '' !== (string) $row->alias_id ) {
@@ -508,7 +508,7 @@ class RichMenuModule extends Repository {
 
 		self::delete( $id );
 
-		wp_send_json_success( array( 'message' => __( 'Rich menu deleted.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Rich menu deleted.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -535,7 +535,7 @@ class RichMenuModule extends Repository {
 				array(
 					'message' => sprintf(
 						/* translators: %d: number of menus published. */
-						_n( 'Published %d menu to LINE.', 'Published %d menus to LINE.', $report['published'], 'moksa-line-login' ),
+						_n( 'Published %d menu to LINE.', 'Published %d menus to LINE.', $report['published'], 'moksa-line' ),
 						$report['published']
 					),
 				)
@@ -548,7 +548,7 @@ class RichMenuModule extends Repository {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Published to LINE.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Published to LINE.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -561,7 +561,7 @@ class RichMenuModule extends Repository {
 		$row = self::find( $id );
 
 		if ( ! $row || '' === (string) $row->richmenu_id ) {
-			wp_send_json_error( array( 'message' => __( 'Publish this menu to LINE before making it the default.', 'moksa-line-login' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Publish this menu to LINE before making it the default.', 'moksa-line' ) ) );
 		}
 
 		$result = RichMenuClient::set_default( (string) $row->richmenu_id );
@@ -578,7 +578,7 @@ class RichMenuModule extends Repository {
 
 		self::save( array( 'id' => $id, 'is_default' => 1 ) );
 
-		wp_send_json_success( array( 'message' => __( 'This menu is now the default for everyone.', 'moksa-line-login' ) ) );
+		wp_send_json_success( array( 'message' => __( 'This menu is now the default for everyone.', 'moksa-line' ) ) );
 	}
 
 	/**
@@ -632,7 +632,7 @@ class RichMenuModule extends Repository {
 		check_ajax_referer( 'moksa_line_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage rich menus.', 'moksa-line-login' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage rich menus.', 'moksa-line' ) ), 403 );
 		}
 	}
 }
