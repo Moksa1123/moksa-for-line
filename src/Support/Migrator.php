@@ -424,11 +424,30 @@ class Migrator {
 			}
 		}
 
-		// 2. 1.x wrote the forwarding URL under an n8n-specific name.
-		$legacy_forward = get_option( 'moksa_line_n8n_webhook_url', '' );
+		// 2. Settings the old plugin kept under different names. Copied only
+		//    when the new key is still at its default, so a deliberate choice
+		//    made here is never overwritten by an old one.
+		$renamed = array(
+			'moksa_line_n8n_webhook_url'             => 'webhook_forward_url',
+			'moksa_line_order_delay'                 => 'woo_notify_delay',
+			'moksa_line_order_processing_delay'      => 'woo_tracking_delay',
+			'moksa_line_order_processing_max_retries' => 'woo_tracking_retries',
+		);
 
-		if ( $legacy_forward && ! Options::get( 'webhook_forward_url' ) ) {
-			Options::set( 'webhook_forward_url', $legacy_forward );
+		$schema = Options::schema();
+
+		foreach ( $renamed as $legacy_key => $new_key ) {
+			$legacy_value = get_option( $legacy_key, null );
+
+			if ( null === $legacy_value || '' === $legacy_value ) {
+				continue;
+			}
+
+			$default = isset( $schema[ $new_key ] ) ? $schema[ $new_key ]['default'] : '';
+
+			if ( Options::get( $new_key ) === $default ) {
+				Options::set( $new_key, $legacy_value );
+			}
 		}
 
 		// 3. The old auto-reply table used reply_content; the code wrote

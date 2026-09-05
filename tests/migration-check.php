@@ -88,6 +88,15 @@ update_option( 'moksa_line_channel_secret', 'PLAINTEXT-login-secret' );
 update_option( 'moksa_line_messaging_secret', 'PLAINTEXT-messaging-secret' );
 update_option( 'moksa_line_messaging_token', 'PLAINTEXT-long-lived-token' );
 update_option( 'moksa_line_n8n_webhook_url', 'https://n8n.example.com/webhook/line' );
+// Clear the new-format keys so this exercises the import path rather than
+// the guard that refuses to overwrite a deliberate setting.
+foreach ( array( 'webhook_forward_url', 'woo_notify_delay', 'woo_tracking_delay', 'woo_tracking_retries' ) as $reset ) {
+	Moksa\Line\Support\Options::delete( $reset );
+}
+
+update_option( 'moksa_line_order_delay', '30' );
+update_option( 'moksa_line_order_processing_delay', '90' );
+update_option( 'moksa_line_order_processing_max_retries', '5' );
 delete_option( 'moksa_line_db_version' );
 delete_option( 'moksa_line_webhook_forward_url' );
 
@@ -172,6 +181,13 @@ check(
 	'n8n url carried into webhook_forward_url',
 	(string) Moksa\Line\Support\Options::get( 'webhook_forward_url' )
 );
+
+echo "
+== Renamed settings carried over ==
+";
+check( 30 === Moksa\Line\Support\Options::get( 'woo_notify_delay' ), 'order delay carried over', (string) Moksa\Line\Support\Options::get( 'woo_notify_delay' ) );
+check( 90 === Moksa\Line\Support\Options::get( 'woo_tracking_delay' ), 'processing delay carried over', (string) Moksa\Line\Support\Options::get( 'woo_tracking_delay' ) );
+check( 5 === Moksa\Line\Support\Options::get( 'woo_tracking_retries' ), 'retry budget carried over', (string) Moksa\Line\Support\Options::get( 'woo_tracking_retries' ) );
 
 echo "\n== Users preserved and inbox seeded ==\n";
 $users = $wpdb->get_results( "SELECT * FROM {$prefix}users ORDER BY id" );
