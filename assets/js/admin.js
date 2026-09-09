@@ -129,6 +129,7 @@
 		$form.on('click', '[data-moksa-reset-rule]', function () {
 			$form[0].reset();
 			$form.find('input[name=id]').val('0');
+			$form.removeClass('is-editing');
 			showReplyField();
 		});
 
@@ -145,6 +146,7 @@
 			$form.find('[name=reply_data_' + rule.reply_type + ']').val(rule.reply_data);
 
 			showReplyField();
+			$form.addClass('is-editing');
 			$('html, body').animate({ scrollTop: $form.offset().top - 40 }, 200);
 		});
 
@@ -182,11 +184,13 @@
 		$form.on('click', '[data-moksa-reset-flow]', function () {
 			$form[0].reset();
 			$form.find('input[name=id]').val('0');
+			$form.removeClass('is-editing');
 		});
 
 		$('[data-moksa-load-flow]').on('click', function () {
 			var flow = $(this).closest('li').data('flow');
 
+			$form.addClass('is-editing');
 			$form.find('input[name=id]').val(flow.id);
 			$form.find('input[name=name]').val(flow.name);
 			$form.find('select[name=trigger_type]').val(flow.trigger_type);
@@ -297,12 +301,14 @@
 		$form.on('click', '[data-moksa-flex-reset]', function () {
 			$form[0].reset();
 			$form.find('input[name=id]').val('0');
+			$form.removeClass('is-editing');
 			renderPreview();
 		});
 
 		$('[data-moksa-load-flex]').on('click', function () {
 			var template = $(this).closest('li').data('template');
 
+			$form.addClass('is-editing');
 			$form.find('input[name=id]').val(template.id);
 			$form.find('input[name=name]').val(template.name);
 			$form.find('input[name=alt_text]').val(template.alt_text);
@@ -343,7 +349,7 @@
 
 			if (!frame) {
 				frame = wp.media({
-					title: 'Rich menu image',
+					title: strings.chooseImage || 'Rich menu image',
 					library: { type: 'image' },
 					multiple: false
 				});
@@ -381,6 +387,7 @@
 		$form.on('click', '[data-moksa-reset-menu]', function () {
 			$form[0].reset();
 			$form.find('input[name=id]').val('0');
+			$form.removeClass('is-editing');
 			$form.find('[data-moksa-image-preview]').empty();
 		});
 
@@ -406,6 +413,7 @@
 		$('[data-moksa-edit-menu]').on('click', function () {
 			var menu = $(this).closest('tr').data('menu');
 
+			$form.addClass('is-editing');
 			$form.find('input[name=id]').val(menu.id);
 			$form.find('input[name=name]').val(menu.name);
 			$form.find('input[name=chat_bar_text]').val(menu.chat_bar_text);

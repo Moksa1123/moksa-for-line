@@ -15,18 +15,22 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST="${ROOT}/dist"
 STAGE="${DIST}/${SLUG}"
 
-# Everything that has no business in an install.
-EXCLUDES=(
-	".git"
-	".github"
-	".gitignore"
-	"bin"
-	"dist"
-	"tests"
-	"node_modules"
-	"vendor"
-	"CHANGELOG.md"
-	"README.md"
+# Only what belongs in an install. An allowlist, not a denylist: excluding
+# known rubbish means anything new that appears in the working tree ships by
+# accident -- which is exactly how a set of screenshots and a browser
+# automation log once ended up inside the package.
+INCLUDE_FILES=(
+	"moksa-line.php"
+	"uninstall.php"
+	"readme.txt"
+	"LICENSE"
+)
+
+INCLUDE_DIRS=(
+	"src"
+	"views"
+	"assets"
+	"languages"
 )
 
 version_from_header() {
@@ -54,27 +58,45 @@ main() {
 	rm -rf "${DIST}"
 	mkdir -p "${STAGE}"
 
-	local rsync_args=(-a)
 	local item
-	for item in "${EXCLUDES[@]}"; do
-		rsync_args+=(--exclude "${item}")
+	for item in "${INCLUDE_FILES[@]}"; do
+		if [[ ! -f "${ROOT}/${item}" ]]; then
+			echo "Missing required file: ${item}" >&2
+			exit 1
+		fi
+
+		cp "${ROOT}/${item}" "${STAGE}/"
 	done
 
-	if command -v rsync >/dev/null 2>&1; then
-		rsync "${rsync_args[@]}" "${ROOT}/" "${STAGE}/"
-	else
-		# Windows Git Bash often has no rsync; fall back to tar.
-		local tar_excludes=()
-		for item in "${EXCLUDES[@]}"; do
-			tar_excludes+=(--exclude="./${item}")
-		done
-		tar -C "${ROOT}" "${tar_excludes[@]}" -cf - . | tar -C "${STAGE}" -xf -
-	fi
+	for item in "${INCLUDE_DIRS[@]}"; do
+		if [[ ! -d "${ROOT}/${item}" ]]; then
+			echo "Missing required directory: ${item}" >&2
+			exit 1
+		fi
+
+		mkdir -p "${STAGE}/${item}"
+		# Copy the tree, then drop anything that is not a shipped asset type.
+		tar -C "${ROOT}/${item}" -cf - . | tar -C "${STAGE}/${item}" -xf -
+	done
+
+	# Belt and braces: nothing hidden, and no development leftovers.
+	find "${STAGE}" -name '.*' -not -name '.' -prune -exec rm -rf {} + 2>/dev/null || true
+	find "${STAGE}" \( -name '*.log' -o -name '*.yml' -o -name '*.map' -o -name '*.zip' \) -delete 2>/dev/null || true
 
 	# Syntax check what is actually going out, not what is in the working copy.
+	if ! command -v php >/dev/null 2>&1; then
+		echo "php is not on PATH, so the package cannot be syntax checked." >&2
+		echo "Refusing to build unverified code. Add php to PATH and try again." >&2
+		exit 1
+	fi
+
 	local file
 	while IFS= read -r file; do
-		php -l "${file}" >/dev/null || { echo "Syntax error in ${file}" >&2; exit 1; }
+		if ! php -l "${file}" >/dev/null 2>&1; then
+			echo "Syntax error in ${file}:" >&2
+			php -l "${file}" >&2 || true
+			exit 1
+		fi
 	done < <(find "${STAGE}" -name '*.php')
 
 	if command -v zip >/dev/null 2>&1; then

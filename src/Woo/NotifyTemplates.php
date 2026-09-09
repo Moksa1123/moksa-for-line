@@ -50,7 +50,11 @@ class NotifyTemplates {
 				),
 				'public'          => false,
 				'show_ui'         => true,
-				'show_in_menu'    => 'moksa-line',
+				// Not attached to the LINE menu here: WordPress would insert it
+				// wherever registration happens to land, which put it above the
+				// dashboard and produced a second entry with the same name as
+				// the history screen. AdminModule places it explicitly instead.
+				'show_in_menu'    => false,
 				'capability_type' => 'post',
 				'capabilities'    => array( 'create_posts' => 'manage_woocommerce' ),
 				'map_meta_cap'    => true,

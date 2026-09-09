@@ -62,22 +62,18 @@
 	font-weight: 400;
 }
 
+/* auto-fit against the container, not a viewport media query: the admin
+   content area is ~180px narrower than the window, so a viewport breakpoint
+   collapsed these to one column on screens wide enough to show two. */
 .moksa-split {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) 360px;
+	grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
 	gap: 20px;
 	align-items: start;
 }
 
 .moksa-split--wide {
-	grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-}
-
-@media (max-width: 1100px) {
-	.moksa-split,
-	.moksa-split--wide {
-		grid-template-columns: minmax(0, 1fr);
-	}
+	grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
 }
 
 /* Checklist -------------------------------------------------------------- */
@@ -240,7 +236,7 @@
 
 .moksa-inbox {
 	display: grid;
-	grid-template-columns: 320px minmax(0, 1fr);
+	grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
 	gap: 16px;
 	background: #fff;
 	border: 1px solid var(--moksa-border);
@@ -445,4 +441,59 @@
 
 .moksa-params li {
 	margin-bottom: 8px;
+}
+
+/* Row actions ran together as "EditDelete" with nothing between them. */
+.widefat td .button-link + .button-link {
+	margin-left: 10px;
+}
+
+.widefat td .button-link + .button-link::before {
+	content: "|";
+	color: #c3c4c7;
+	margin-right: 10px;
+}
+
+/* The test-send help text wrapped around the button instead of sitting under
+   it, because it is an inline span following inline controls. */
+.moksa-panel p > .description {
+	display: block;
+	margin-top: 6px;
+}
+
+/* Colour inputs are invisible when the chosen colour is white. */
+input[type="color"] {
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	height: 34px;
+	padding: 2px;
+}
+
+/* A URL long enough to overflow should wrap at any character, not push the
+   layout wide or clip. */
+.moksa-copyable {
+	display: inline-block;
+	max-width: 100%;
+	overflow-wrap: anywhere;
+}
+
+/* Make it obvious when the form is editing something rather than creating. */
+.moksa-panel.is-editing {
+	border-left: 4px solid #2271b1;
+}
+
+.moksa-editing-badge {
+	display: none;
+	background: #2271b1;
+	color: #fff;
+	border-radius: 10px;
+	padding: 1px 10px;
+	font-size: 11px;
+	font-weight: 600;
+	margin-left: 8px;
+	vertical-align: middle;
+}
+
+.moksa-panel.is-editing .moksa-editing-badge {
+	display: inline-block;
 }

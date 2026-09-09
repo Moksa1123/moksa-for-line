@@ -52,7 +52,10 @@ $field = function ( $key, $label, $help = '', $type = 'text' ) {
 				name="moksa_line[<?php echo esc_attr( $key ); ?>]"
 				value="<?php echo esc_attr( $value ); ?>"
 				class="regular-text"
-				autocomplete="off"
+				<?php // A text field followed by a password field is what browsers
+				// autofill as a login form, which put an email address into the
+				// Channel ID. new-password is the token they actually honour. ?>
+				autocomplete="<?php echo $secret ? 'new-password' : 'off'; ?>"
 				<?php echo $secret ? 'placeholder="' . esc_attr__( 'Leave unchanged to keep the stored value', 'moksa-line' ) . '"' : ''; ?> />
 			<?php if ( '' !== $help ) : ?>
 				<p class="description"><?php echo wp_kses_post( $help ); ?></p>
@@ -121,6 +124,38 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 		<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings saved.', 'moksa-line' ); ?></p></div>
 	<?php endif; ?>
 
+	<?php
+	$warnings = get_transient( 'moksa_line_settings_warning' );
+
+	if ( is_array( $warnings ) && $warnings ) :
+		$names = array(
+			'channel_id'           => __( 'LINE Login Channel ID', 'moksa-line' ),
+			'messaging_channel_id' => __( 'Messaging API Channel ID', 'moksa-line' ),
+			'pay_channel_id'       => __( 'LINE Pay Channel ID', 'moksa-line' ),
+		);
+
+		$labels = array();
+
+		foreach ( $warnings as $warning_key ) {
+			$labels[] = isset( $names[ $warning_key ] ) ? $names[ $warning_key ] : $warning_key;
+		}
+		?>
+		<div class="notice notice-warning">
+			<p>
+				<?php
+				printf(
+					/* translators: %s: comma-separated list of field names. */
+					esc_html__( 'This does not look like a channel ID: %s. A LINE channel ID is a number, usually ten digits. If your browser filled this in for you, clear it and paste the value from the LINE Developers Console.', 'moksa-line' ),
+					esc_html( implode( ', ', $labels ) )
+				);
+				?>
+			</p>
+		</div>
+		<?php
+		delete_transient( 'moksa_line_settings_warning' );
+	endif;
+	?>
+
 	<nav class="nav-tab-wrapper">
 		<?php foreach ( $tabs as $slug => $label ) : ?>
 			<a class="nav-tab <?php echo $slug === $current ? 'nav-tab-active' : ''; ?>"
@@ -130,7 +165,7 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 		<?php endforeach; ?>
 	</nav>
 
-	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" autocomplete="off">
 		<?php wp_nonce_field( 'moksa_line_settings' ); ?>
 		<input type="hidden" name="action" value="moksa_line_save_settings" />
 		<input type="hidden" name="tab" value="<?php echo esc_attr( $current ); ?>" />

@@ -202,7 +202,11 @@ class FlexModule {
 					'type' => 'bubble',
 					'hero' => array(
 						'type'        => 'image',
-						'url'         => 'https://via.placeholder.com/1024x682.png',
+						// The site's own icon, not a third-party placeholder
+						// service: the one this used has since shut down, so
+						// every new template started with a broken image, and
+						// it added an undeclared external dependency.
+						'url'         => self::placeholder_image(),
 						'size'        => 'full',
 						'aspectRatio' => '20:13',
 						'aspectMode'  => 'cover',
@@ -275,6 +279,32 @@ class FlexModule {
 				),
 			),
 		);
+	}
+
+	/**
+	 * An image URL to start a template with.
+	 *
+	 * LINE requires https for image URLs, so a site that is not on https gets
+	 * no hero image rather than one the message will be rejected for.
+	 */
+	public static function placeholder_image(): string {
+		$candidates = array(
+			(string) get_site_icon_url( 1024 ),
+			(string) get_header_image(),
+		);
+
+		foreach ( $candidates as $url ) {
+			if ( '' !== $url && 0 === strpos( $url, 'https://' ) ) {
+				return $url;
+			}
+		}
+
+		// Nothing usable on this site: point at the plugin's own asset, which
+		// is served from the same origin and therefore https wherever the
+		// admin is reachable at all.
+		$fallback = MOKSA_LINE_URL . 'assets/img/flex-placeholder.png';
+
+		return 0 === strpos( $fallback, 'https://' ) ? $fallback : '';
 	}
 
 	/**

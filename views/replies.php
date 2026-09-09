@@ -32,7 +32,7 @@ $rules = AutoReply::all();
 						<th><?php esc_html_e( 'Reply', 'moksa-line' ); ?></th>
 						<th><?php esc_html_e( 'Priority', 'moksa-line' ); ?></th>
 						<th><?php esc_html_e( 'Hits', 'moksa-line' ); ?></th>
-						<th></th>
+						<th><?php esc_html_e( 'Actions', 'moksa-line' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -64,7 +64,10 @@ $rules = AutoReply::all();
 
 		<div class="moksa-split__side">
 			<form class="moksa-panel" data-moksa-rule-form>
-				<h2><?php esc_html_e( 'Add or edit a rule', 'moksa-line' ); ?></h2>
+				<h2>
+					<?php esc_html_e( 'Add or edit a rule', 'moksa-line' ); ?>
+					<span class="moksa-editing-badge"><?php esc_html_e( 'Editing', 'moksa-line' ); ?></span>
+				</h2>
 				<input type="hidden" name="id" value="0" />
 
 				<p>

@@ -21,3 +21,7 @@ composer.lock
 
 # Build output
 dist/
+
+# Browser automation output
+.playwright-mcp/
+*.png

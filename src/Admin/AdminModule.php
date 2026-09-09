@@ -24,6 +24,8 @@ class AdminModule {
 		add_action( 'admin_post_moksa_line_save_settings', array( $this, 'save_settings' ) );
 		add_action( 'admin_notices', array( $this, 'setup_notice' ) );
 		add_action( 'wp_ajax_moksa_line_broadcast', array( $this, 'ajax_broadcast' ) );
+
+		add_filter( 'parent_file', array( $this, 'keep_menu_open' ) );
 		add_filter( 'plugin_action_links_' . MOKSA_LINE_BASENAME, array( $this, 'action_links' ) );
 	}
 
@@ -80,6 +82,38 @@ class AdminModule {
 				array( $this, $callback )
 			);
 		}
+
+		// The notification template list is a post type screen, placed by hand
+		// so it sits next to the history screen rather than wherever the post
+		// type happened to be registered, and named distinctly from it.
+		if ( class_exists( 'WooCommerce' ) ) {
+			add_submenu_page(
+				self::SLUG,
+				__( 'Notification templates', 'moksa-line' ),
+				__( 'Notification templates', 'moksa-line' ),
+				'manage_woocommerce',
+				'edit.php?post_type=' . \Moksa\Line\Woo\NotifyTemplates::POST_TYPE
+			);
+		}
+	}
+
+	/**
+	 * Keep the LINE menu highlighted while editing a notification template.
+	 *
+	 * Without this, editing a template collapses the LINE menu and highlights
+	 * Posts, because the screen is technically a post type editor.
+	 *
+	 * @param string $parent Current parent menu slug.
+	 * @return string
+	 */
+	public function keep_menu_open( $parent ) {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+		if ( $screen && \Moksa\Line\Woo\NotifyTemplates::POST_TYPE === $screen->post_type ) {
+			return self::SLUG;
+		}
+
+		return $parent;
 	}
 
 	/**
@@ -110,6 +144,19 @@ class AdminModule {
 			MOKSA_LINE_VERSION
 		);
 
+		// The front-end sheet is registered on wp_enqueue_scripts, which never
+		// fires in admin, so enqueuing it by handle here silently did nothing
+		// and the login button preview rendered as unstyled text. Register it
+		// again for admin rather than relying on a handle from another context.
+		if ( ! wp_style_is( 'moksa-line-front', 'registered' ) ) {
+			wp_register_style(
+				'moksa-line-front',
+				MOKSA_LINE_URL . 'assets/css/front.css',
+				array(),
+				MOKSA_LINE_VERSION
+			);
+		}
+
 		wp_enqueue_script(
 			'moksa-line-flex-renderer',
 			MOKSA_LINE_URL . 'assets/js/moksa-flex-renderer.js',
@@ -138,6 +185,8 @@ class AdminModule {
 					'confirmDelete' => __( 'Delete this permanently?', 'moksa-line' ),
 					'publishing'   => __( 'Publishing to LINE...', 'moksa-line' ),
 					'working'      => __( 'Working...', 'moksa-line' ),
+					'chooseImage'  => __( 'Rich menu image', 'moksa-line' ),
+					'editing'      => __( 'Editing', 'moksa-line' ),
 				),
 			)
 		);
@@ -314,6 +363,26 @@ class AdminModule {
 				: array();
 
 			Options::set( 'woo_notify_statuses', array_values( $statuses ) );
+		}
+
+		// A LINE channel id is a ten digit number. Anything else is a mistake --
+		// most often a browser autofilling an email address into the field
+		// because it sits next to a password input. Storing it would produce a
+		// login failure whose message points nowhere near the cause.
+		$warnings = array();
+
+		foreach ( array( 'channel_id', 'messaging_channel_id', 'pay_channel_id' ) as $id_key ) {
+			$value = (string) Options::get( $id_key );
+
+			if ( '' !== $value && ! preg_match( '/^\d{7,15}$/', $value ) ) {
+				$warnings[] = $id_key;
+			}
+		}
+
+		if ( $warnings ) {
+			set_transient( 'moksa_line_settings_warning', $warnings, 60 );
+		} else {
+			delete_transient( 'moksa_line_settings_warning' );
 		}
 
 		Options::flush_cache();
