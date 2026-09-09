@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-09 17:01+0000\n"
+"POT-Creation-Date: 2026-09-09 17:31+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,6 +37,10 @@ msgstr ""
 #. translators: 1: messages used, 2: monthly allowance.
 #: views/dashboard.php:82
 msgid "%1$s of %2$s push messages used."
+msgstr ""
+
+#: src/Admin/AdminModule.php:220
+msgid "%d area(s) have no destination set yet."
 msgstr ""
 
 #. translators: %d: number of conditions.
@@ -83,10 +87,6 @@ msgstr ""
 
 #: views/replies.php:98
 msgid "A Flex template"
-msgstr ""
-
-#: views/richmenus.php:151
-msgid "A JSON array of areas. Each has bounds (x, y, width, height in image pixels) and an action. For a tab button use an action of type richmenuswitch with the sibling menu's alias ID."
 msgstr ""
 
 #: views/flex.php:67
@@ -180,7 +180,7 @@ msgstr ""
 msgid "AI Engine is not active on this site."
 msgstr ""
 
-#: src/Admin/AdminModule.php:253
+#: src/Admin/AdminModule.php:302
 msgid "AI provider available"
 msgstr ""
 
@@ -189,7 +189,7 @@ msgstr ""
 msgid "AI replies"
 msgstr ""
 
-#: src/Admin/AdminModule.php:254
+#: src/Admin/AdminModule.php:303
 msgid "AI replies are switched on, but AI Engine is not active on this site."
 msgstr ""
 
@@ -243,11 +243,11 @@ msgstr ""
 msgid "Add order notification"
 msgstr ""
 
-#: src/Admin/AdminModule.php:227
+#: src/Admin/AdminModule.php:276
 msgid "Add the Channel ID and Channel Secret from the LINE Developers Console."
 msgstr ""
 
-#: src/Admin/AdminModule.php:262
+#: src/Admin/AdminModule.php:311
 msgid "Add the LINE Pay Channel ID and Channel Secret."
 msgstr ""
 
@@ -267,7 +267,7 @@ msgstr ""
 msgid "Alias"
 msgstr ""
 
-#: views/richmenus.php:135
+#: views/richmenus.php:146
 msgid "Alias ID"
 msgstr ""
 
@@ -312,11 +312,20 @@ msgstr ""
 msgid "Anything (catch-all)"
 msgstr ""
 
+#: src/Admin/AdminModule.php:199
 #: views/logs.php:65
 msgid "Area"
 msgstr ""
 
-#: views/richmenus.php:107
+#: src/Admin/AdminModule.php:216
+msgid "Areas %s overlap. LINE uses whichever comes first, which is rarely what you want."
+msgstr ""
+
+#: src/Admin/AdminModule.php:213
+msgid "Arrow keys nudge by 1 pixel, with Shift by 10."
+msgstr ""
+
+#: views/richmenus.php:118
 msgid "At most 14 characters, shown at the bottom of the chat."
 msgstr ""
 
@@ -362,7 +371,7 @@ msgstr ""
 msgid "Broadcast"
 msgstr ""
 
-#: src/Admin/AdminModule.php:478
+#: src/Admin/AdminModule.php:527
 msgid "Broadcast sent to every friend of the account."
 msgstr ""
 
@@ -415,7 +424,7 @@ msgstr ""
 msgid "Chat LIFF ID"
 msgstr ""
 
-#: views/richmenus.php:105
+#: views/richmenus.php:116
 msgid "Chat bar label"
 msgstr ""
 
@@ -439,8 +448,16 @@ msgstr ""
 msgid "Choose a menu image first. LINE requires one, 2500px wide and either 1686px or 843px tall."
 msgstr ""
 
-#: views/richmenus.php:143
+#: views/richmenus.php:185
+msgid "Choose a menu image to start drawing areas."
+msgstr ""
+
+#: views/richmenus.php:156
 msgid "Choose image"
+msgstr ""
+
+#: views/richmenus.php:173
+msgid "Clear"
 msgstr ""
 
 #: src/Woo/NotifyTemplates.php:230
@@ -455,7 +472,7 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
-#: views/richmenus.php:172
+#: views/richmenus.php:230
 msgid "Compare with LINE"
 msgstr ""
 
@@ -534,7 +551,7 @@ msgstr ""
 msgid "Credentials"
 msgstr ""
 
-#: src/Admin/AdminModule.php:275
+#: src/Admin/AdminModule.php:324
 #: views/settings.php:483
 msgid "Credentials are encrypted at rest"
 msgstr ""
@@ -598,11 +615,15 @@ msgstr ""
 #: views/flex.php:89
 #: views/flows.php:94
 #: views/replies.php:57
-#: views/richmenus.php:68
+#: views/richmenus.php:74
 msgid "Delete"
 msgstr ""
 
-#: src/Admin/AdminModule.php:185
+#: src/Admin/AdminModule.php:212
+msgid "Delete this area"
+msgstr ""
+
+#: src/Admin/AdminModule.php:193
 msgid "Delete this permanently?"
 msgstr ""
 
@@ -615,7 +636,7 @@ msgid "Delivered in the last 30 days"
 msgstr ""
 
 #. translators: 1: delivered count, 2: failed count, 3: first error.
-#: src/Admin/AdminModule.php:496
+#: src/Admin/AdminModule.php:545
 msgid "Delivered to %1$d, failed for %2$d. %3$s"
 msgstr ""
 
@@ -639,6 +660,14 @@ msgstr ""
 msgid "Do not invite"
 msgstr ""
 
+#: src/Admin/AdminModule.php:200
+msgid "Drag on the image to add an area, or click one to edit it."
+msgstr ""
+
+#: views/richmenus.php:163
+msgid "Drag on the image to draw an area. Click one to move, resize or set what it does. Edges snap to each other, because a one-pixel gap is invisible here and dead to the customer."
+msgstr ""
+
 #: views/settings.php:364
 msgid "Each notification is a push message and is billed. The customer only hears about a given order and status once, however many times the status is set."
 msgstr ""
@@ -648,7 +677,7 @@ msgid "Each step needs a prompt. Types: text, number, phone, email, date, choice
 msgstr ""
 
 #: views/replies.php:56
-#: views/richmenus.php:65
+#: views/richmenus.php:71
 msgid "Edit"
 msgstr ""
 
@@ -656,8 +685,13 @@ msgstr ""
 msgid "Edit order notification"
 msgstr ""
 
-#: src/Admin/AdminModule.php:189
+#: views/richmenus.php:210
+msgid "Edit the JSON directly"
+msgstr ""
+
+#: src/Admin/AdminModule.php:197
 #: views/replies.php:69
+#: views/richmenus.php:104
 msgid "Editing"
 msgstr ""
 
@@ -681,7 +715,7 @@ msgstr ""
 msgid "Encryption"
 msgstr ""
 
-#: src/Admin/AdminModule.php:451
+#: src/Admin/AdminModule.php:500
 #: src/Woo/NotifyTemplates.php:506
 msgid "Enter a LINE user id to send the test to."
 msgstr ""
@@ -739,7 +773,7 @@ msgstr ""
 msgid "Find out more"
 msgstr ""
 
-#: src/Admin/AdminModule.php:309
+#: src/Admin/AdminModule.php:358
 msgid "Finish setup"
 msgstr ""
 
@@ -809,7 +843,7 @@ msgstr ""
 msgid "From the Messaging API channel."
 msgstr ""
 
-#: views/richmenus.php:113
+#: views/richmenus.php:124
 msgid "Full (2500 x 1686)"
 msgstr ""
 
@@ -825,7 +859,7 @@ msgstr ""
 msgid "Greeting message"
 msgstr ""
 
-#: views/richmenus.php:114
+#: views/richmenus.php:125
 msgid "Half (2500 x 843)"
 msgstr ""
 
@@ -853,7 +887,7 @@ msgstr ""
 msgid "Hold the shipping notification until the tracking number appears"
 msgstr ""
 
-#: views/richmenus.php:141
+#: views/richmenus.php:154
 msgid "Image"
 msgstr ""
 
@@ -932,7 +966,7 @@ msgstr ""
 msgid "LINE Login Channel ID"
 msgstr ""
 
-#: src/Admin/AdminModule.php:226
+#: src/Admin/AdminModule.php:275
 msgid "LINE Login channel connected"
 msgstr ""
 
@@ -965,7 +999,7 @@ msgstr ""
 msgid "LINE Pay credentials are missing, so nothing can be charged yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:261
+#: src/Admin/AdminModule.php:310
 msgid "LINE Pay credentials present"
 msgstr ""
 
@@ -989,7 +1023,7 @@ msgstr ""
 msgid "LINE Pay is configured on the <a href=\"%s\">LINE Pay tab</a>, and the gateway is switched on under WooCommerce > Settings > Payments."
 msgstr ""
 
-#: src/Admin/AdminModule.php:267
+#: src/Admin/AdminModule.php:316
 msgid "LINE Pay is in production mode"
 msgstr ""
 
@@ -1046,6 +1080,10 @@ msgstr ""
 msgid "LINE account unlinked."
 msgstr ""
 
+#: src/Admin/AdminModule.php:218
+msgid "LINE allows at most %d areas; the extra ones will be dropped."
+msgstr ""
+
 #: src/Bot/BotModule.php:203
 msgid "LINE allows at most 13 quick reply buttons."
 msgstr ""
@@ -1099,11 +1137,15 @@ msgstr ""
 msgid "LINE would not deliver that message: %s"
 msgstr ""
 
+#: src/Admin/AdminModule.php:202
+msgid "Label"
+msgstr ""
+
 #: views/users.php:42
 msgid "Last seen"
 msgstr ""
 
-#: views/richmenus.php:126
+#: views/richmenus.php:137
 msgid "Leave blank for a standalone menu."
 msgstr ""
 
@@ -1121,6 +1163,10 @@ msgstr ""
 
 #: views/logs.php:64
 msgid "Level"
+msgstr ""
+
+#: src/Admin/AdminModule.php:207
+msgid "Link"
 msgstr ""
 
 #: src/Frontend/ShortcodeModule.php:268
@@ -1183,11 +1229,11 @@ msgstr ""
 msgid "Long-lived token"
 msgstr ""
 
-#: views/richmenus.php:137
+#: views/richmenus.php:148
 msgid "Lowercase letters, digits, hyphen and underscore. Other tabs point at this. Generated automatically if left blank."
 msgstr ""
 
-#: views/richmenus.php:67
+#: views/richmenus.php:73
 msgid "Make default"
 msgstr ""
 
@@ -1216,8 +1262,10 @@ msgstr ""
 msgid "Media URLs must use HTTPS."
 msgstr ""
 
+#: src/Admin/AdminModule.php:198
 #: src/RichMenu/RichMenuModule.php:99
-#: views/richmenus.php:96
+#: views/richmenus.php:103
+#: views/richmenus.php:201
 msgid "Menu"
 msgstr ""
 
@@ -1251,6 +1299,10 @@ msgstr ""
 msgid "Message the customer in LINE when their order status changes"
 msgstr ""
 
+#: src/Admin/AdminModule.php:208
+msgid "Message the customer sends"
+msgstr ""
+
 #: views/settings.php:18
 msgid "Messaging API"
 msgstr ""
@@ -1263,7 +1315,7 @@ msgstr ""
 msgid "Messaging API Channel ID and Channel Secret are required to issue a token."
 msgstr ""
 
-#: src/Admin/AdminModule.php:232
+#: src/Admin/AdminModule.php:281
 msgid "Messaging API channel connected"
 msgstr ""
 
@@ -1275,7 +1327,7 @@ msgstr ""
 msgid "Minimum height"
 msgstr ""
 
-#: src/Admin/AdminModule.php:307
+#: src/Admin/AdminModule.php:356
 msgid "Moksa LINE Suite is installed but not connected to a LINE channel yet."
 msgstr ""
 
@@ -1295,7 +1347,7 @@ msgstr ""
 #: views/replies.php:29
 #: views/replies.php:74
 #: views/richmenus.php:36
-#: views/richmenus.php:100
+#: views/richmenus.php:111
 #: views/users.php:38
 msgid "Name"
 msgstr ""
@@ -1312,7 +1364,7 @@ msgstr ""
 msgid "New flow"
 msgstr ""
 
-#: views/richmenus.php:171
+#: views/richmenus.php:229
 msgid "New menu"
 msgstr ""
 
@@ -1349,7 +1401,7 @@ msgstr ""
 msgid "No conversations yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:486
+#: src/Admin/AdminModule.php:535
 msgid "No friends have been recorded on this site yet."
 msgstr ""
 
@@ -1359,6 +1411,10 @@ msgstr ""
 
 #: src/Woo/NotifyTemplates.php:49
 msgid "No notification templates yet."
+msgstr ""
+
+#: src/Admin/AdminModule.php:211
+msgid "No other menus in this tab group yet"
 msgstr ""
 
 #: views/payments.php:76
@@ -1451,6 +1507,10 @@ msgstr ""
 msgid "Official account ID"
 msgstr ""
 
+#: views/richmenus.php:195
+msgid "On a phone"
+msgstr ""
+
 #: views/settings.php:391
 msgid "On status"
 msgstr ""
@@ -1476,11 +1536,15 @@ msgstr ""
 msgid "Only when"
 msgstr ""
 
+#: src/Admin/AdminModule.php:204
+msgid "Open a link"
+msgstr ""
+
 #: views/dashboard.php:69
 msgid "Open settings"
 msgstr ""
 
-#: views/richmenus.php:158
+#: views/richmenus.php:216
 msgid "Open the menu by default when the chat opens"
 msgstr ""
 
@@ -1492,7 +1556,7 @@ msgstr ""
 msgid "OpenSSL with AES-256-GCM is missing, so credentials are stored as plain text."
 msgstr ""
 
-#: src/Admin/AdminModule.php:276
+#: src/Admin/AdminModule.php:325
 msgid "OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text."
 msgstr ""
 
@@ -1581,7 +1645,7 @@ msgstr ""
 msgid "Passed the local checks. Connect the Messaging API channel to also validate against LINE."
 msgstr ""
 
-#: src/Admin/AdminModule.php:245
+#: src/Admin/AdminModule.php:294
 msgid "Paste the webhook URL into the Console, enable \"Use webhook\", then press Verify."
 msgstr ""
 
@@ -1685,6 +1749,14 @@ msgstr ""
 msgid "Plugin log"
 msgstr ""
 
+#: src/Admin/AdminModule.php:205
+msgid "Postback"
+msgstr ""
+
+#: src/Admin/AdminModule.php:210
+msgid "Postback data"
+msgstr ""
+
 #: views/flex.php:76
 #: views/settings.php:235
 msgid "Preview"
@@ -1703,16 +1775,16 @@ msgstr ""
 msgid "Provider status"
 msgstr ""
 
-#: views/richmenus.php:66
+#: views/richmenus.php:72
 msgid "Publish"
 msgstr ""
 
 #. translators: %s: tab group name.
-#: views/richmenus.php:84
+#: views/richmenus.php:90
 msgid "Publish \"%s\""
 msgstr ""
 
-#: views/richmenus.php:77
+#: views/richmenus.php:83
 msgid "Publish a whole tab group"
 msgstr ""
 
@@ -1735,11 +1807,11 @@ msgstr[1] ""
 msgid "Published to LINE."
 msgstr ""
 
-#: views/richmenus.php:78
+#: views/richmenus.php:84
 msgid "Publishes every menu in the group in order and repoints their aliases, so the tabs stay consistent with each other."
 msgstr ""
 
-#: src/Admin/AdminModule.php:186
+#: src/Admin/AdminModule.php:194
 msgid "Publishing to LINE..."
 msgstr ""
 
@@ -1783,6 +1855,10 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
+#: src/Admin/AdminModule.php:214
+msgid "Replace the current areas with this layout?"
+msgstr ""
+
 #: views/inbox.php:39
 msgid "Replies are sent as push messages, which are billed against your channel quota."
 msgstr ""
@@ -1812,7 +1888,7 @@ msgstr ""
 msgid "Rich menu deleted."
 msgstr ""
 
-#: src/Admin/AdminModule.php:188
+#: src/Admin/AdminModule.php:196
 msgid "Rich menu image"
 msgstr ""
 
@@ -1850,11 +1926,11 @@ msgstr ""
 msgid "Sandbox"
 msgstr ""
 
-#: src/Admin/AdminModule.php:268
+#: src/Admin/AdminModule.php:317
 msgid "Sandbox mode is on, so no real money moves. Turn it off when you go live."
 msgstr ""
 
-#: views/richmenus.php:170
+#: views/richmenus.php:228
 msgid "Save"
 msgstr ""
 
@@ -1882,7 +1958,7 @@ msgstr ""
 msgid "Saved templates"
 msgstr ""
 
-#: src/Admin/AdminModule.php:183
+#: src/Admin/AdminModule.php:191
 msgid "Saved."
 msgstr ""
 
@@ -1910,6 +1986,10 @@ msgstr ""
 #: views/broadcast.php:91
 #: views/inbox.php:101
 msgid "Send"
+msgstr ""
+
+#: src/Admin/AdminModule.php:203
+msgid "Send a message"
 msgstr ""
 
 #: src/Woo/NotifyTemplates.php:214
@@ -1943,7 +2023,7 @@ msgid "Sent (30 days)"
 msgstr ""
 
 #. translators: %d: number of recipients.
-#: src/Admin/AdminModule.php:509
+#: src/Admin/AdminModule.php:558
 msgid "Sent to %d people."
 msgstr ""
 
@@ -1973,7 +2053,7 @@ msgid "Set the official account basic ID in the LINE settings first."
 msgstr ""
 
 #: src/Admin/AdminModule.php:70
-#: src/Admin/AdminModule.php:207
+#: src/Admin/AdminModule.php:256
 msgid "Settings"
 msgstr ""
 
@@ -2030,7 +2110,7 @@ msgstr ""
 msgid "Sign in with LINE"
 msgstr ""
 
-#: views/richmenus.php:111
+#: views/richmenus.php:122
 msgid "Size"
 msgstr ""
 
@@ -2044,6 +2124,10 @@ msgstr ""
 
 #: views/flex.php:40
 msgid "Start from"
+msgstr ""
+
+#: views/richmenus.php:167
+msgid "Start from a layout:"
 msgstr ""
 
 #: views/flows.php:42
@@ -2099,13 +2183,21 @@ msgstr ""
 msgid "Sure -- I have passed this to a member of our team. They will reply here shortly."
 msgstr ""
 
+#: src/Admin/AdminModule.php:206
+msgid "Switch to another tab"
+msgstr ""
+
 #: views/richmenus.php:37
-#: views/richmenus.php:119
+#: views/richmenus.php:130
 msgid "Tab group"
 msgstr ""
 
-#: views/richmenus.php:130
+#: views/richmenus.php:141
 msgid "Tab order"
+msgstr ""
+
+#: src/Admin/AdminModule.php:209
+msgid "Tab to switch to"
 msgstr ""
 
 #: views/inbox.php:90
@@ -2124,7 +2216,7 @@ msgstr ""
 msgid "Taken over by a person"
 msgstr ""
 
-#: views/richmenus.php:148
+#: views/richmenus.php:161
 msgid "Tappable areas"
 msgstr ""
 
@@ -2149,7 +2241,7 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: src/Admin/AdminModule.php:460
+#: src/Admin/AdminModule.php:509
 msgid "Test sent."
 msgstr ""
 
@@ -2178,7 +2270,7 @@ msgstr ""
 msgid "That did not send. Please try again."
 msgstr ""
 
-#: src/Admin/AdminModule.php:184
+#: src/Admin/AdminModule.php:192
 msgid "That did not work."
 msgstr ""
 
@@ -2231,7 +2323,7 @@ msgstr ""
 msgid "That rich menu no longer exists."
 msgstr ""
 
-#: src/Admin/AdminModule.php:435
+#: src/Admin/AdminModule.php:484
 msgid "That template could not be loaded."
 msgstr ""
 
@@ -2265,7 +2357,7 @@ msgstr ""
 msgid "The amount is not valid for this currency."
 msgstr ""
 
-#: src/Admin/AdminModule.php:233
+#: src/Admin/AdminModule.php:282
 msgid "The bot cannot send or receive anything until this is set."
 msgstr ""
 
@@ -2281,6 +2373,10 @@ msgstr ""
 #. translators: %s: location in the message.
 #: src/Flex/Validator.php:235
 msgid "The box at %s needs a layout."
+msgstr ""
+
+#: views/richmenus.php:204
+msgid "The chat bar text is drawn by LINE below the menu, not on your image. This preview shows layout only, not exact fonts or corners."
 msgstr ""
 
 #: src/Pay/PayModule.php:137
@@ -2506,7 +2602,7 @@ msgstr ""
 msgid "This rich menu has no tappable areas yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:579
+#: src/Admin/AdminModule.php:628
 msgid "This screen is missing."
 msgstr ""
 
@@ -2580,7 +2676,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: src/Admin/AdminModule.php:468
+#: src/Admin/AdminModule.php:517
 msgid "Type SEND in the confirmation box to go ahead."
 msgstr ""
 
@@ -2608,7 +2704,7 @@ msgstr ""
 msgid "Use a long-lived token I paste below"
 msgstr ""
 
-#: views/richmenus.php:165
+#: views/richmenus.php:223
 msgid "Use as the default menu for everyone"
 msgstr ""
 
@@ -2648,7 +2744,7 @@ msgstr ""
 msgid "Webhook URL"
 msgstr ""
 
-#: src/Admin/AdminModule.php:244
+#: src/Admin/AdminModule.php:293
 msgid "Webhook has received an event"
 msgstr ""
 
@@ -2656,11 +2752,11 @@ msgstr ""
 msgid "Webhook signatures are verified with this. Without it, nothing the bot receives can be trusted."
 msgstr ""
 
-#: src/Admin/AdminModule.php:238
+#: src/Admin/AdminModule.php:287
 msgid "Webhook signing secret is the Messaging API one"
 msgstr ""
 
-#: src/Admin/AdminModule.php:239
+#: src/Admin/AdminModule.php:288
 msgid "Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual."
 msgstr ""
 
@@ -2679,6 +2775,10 @@ msgstr ""
 
 #: views/settings.php:324
 msgid "When a message contains this, the bot stops answering and the conversation is flagged for a human."
+msgstr ""
+
+#: src/Admin/AdminModule.php:201
+msgid "When tapped"
 msgstr ""
 
 #: src/Woo/NotifyTemplates.php:74
@@ -2721,11 +2821,11 @@ msgstr ""
 msgid "WordPress account"
 msgstr ""
 
-#: src/Admin/AdminModule.php:187
+#: src/Admin/AdminModule.php:195
 msgid "Working..."
 msgstr ""
 
-#: src/Admin/AdminModule.php:446
+#: src/Admin/AdminModule.php:495
 msgid "Write a message or choose a template first."
 msgstr ""
 
@@ -2762,7 +2862,7 @@ msgstr ""
 msgid "You cannot reply to conversations."
 msgstr ""
 
-#: src/Admin/AdminModule.php:420
+#: src/Admin/AdminModule.php:469
 msgid "You cannot send broadcasts."
 msgstr ""
 
@@ -2778,7 +2878,7 @@ msgstr ""
 msgid "You do not have permission to change bot settings."
 msgstr ""
 
-#: src/Admin/AdminModule.php:320
+#: src/Admin/AdminModule.php:369
 msgid "You do not have permission to change these settings."
 msgstr ""
 
@@ -2790,7 +2890,7 @@ msgstr ""
 msgid "You do not have permission to manage templates."
 msgstr ""
 
-#: src/Admin/AdminModule.php:573
+#: src/Admin/AdminModule.php:622
 msgid "You do not have permission to view this page."
 msgstr ""
 
@@ -2855,7 +2955,7 @@ msgstr ""
 msgid "contents must be a bubble or a carousel."
 msgstr ""
 
-#: views/richmenus.php:52
+#: views/richmenus.php:58
 msgid "default"
 msgstr ""
 
@@ -2913,7 +3013,7 @@ msgstr ""
 msgid "no detail given"
 msgstr ""
 
-#: views/richmenus.php:61
+#: views/richmenus.php:67
 msgid "not published"
 msgstr ""
 

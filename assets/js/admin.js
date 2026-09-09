@@ -343,6 +343,74 @@
 		}
 
 		var frame = null;
+		var $editorRoot = $('[data-moksa-area-editor]');
+
+		/** The editor instance, once its own script has booted. */
+		function editor() {
+			return $editorRoot.data('moksaAreaEditor');
+		}
+
+		/** Point both the canvas and the phone preview at the same image. */
+		function setEditorImage(url) {
+			$editorRoot.find('[data-moksa-canvas-image], [data-moksa-phone-image]').attr('src', url || '');
+			$editorRoot.toggleClass('has-image', !!url);
+
+			var instance = editor();
+
+			if (instance) {
+				instance.render();
+			}
+		}
+
+		/** A full menu is 2500x1686; a half menu is 2500x843. */
+		function syncSize() {
+			var instance = editor();
+
+			if (instance) {
+				instance.setSize(2500, 'half' === $form.find('select[name=size]').val() ? 843 : 1686);
+			}
+		}
+
+		/** Tab switch targets come from the group the menu belongs to. */
+		function syncSwitchTargets() {
+			var group = $form.find('input[name=tab_group]').val();
+			var targets = {};
+
+            $('[data-menu]').each(function () {
+                var menu = $(this).data('menu');
+
+                if (menu && menu.tab_group === group && menu.alias_id
+                    && String(menu.id) !== String($form.find('input[name=id]').val())) {
+                    targets[menu.alias_id] = menu.name;
+                }
+            });
+
+			$editorRoot.data('switch-targets', targets);
+
+			var instance = editor();
+
+			if (instance) {
+				instance.render();
+			}
+		}
+
+		$form.on('change', 'select[name=size]', syncSize);
+		$form.on('change', 'input[name=tab_group]', syncSwitchTargets);
+
+		$form.on('input change', 'input[name=chat_bar_text]', function () {
+			var text = $(this).val();
+
+			$editorRoot.find('[data-moksa-phone-chatbar]').text(text || (strings.menu || 'Menu'));
+		});
+
+		$form.on('click', '[data-moksa-toggle-json]', function () {
+			var $json = $form.find('[data-moksa-menu-areas]');
+
+			$json.prop('hidden', !$json.prop('hidden'));
+		});
+
+		syncSize();
+		syncSwitchTargets();
 
 		$form.on('click', '[data-moksa-pick-image]', function (event) {
 			event.preventDefault();
@@ -359,9 +427,10 @@
 
 					$form.find('input[name=image_attachment_id]').val(attachment.id);
 					$form.find('[data-moksa-image-preview]').html(
-						'<img src="' + attachment.url + '" alt="" />'
-						+ '<span>' + attachment.width + ' x ' + attachment.height + '</span>'
+						'<span>' + attachment.width + ' x ' + attachment.height + '</span>'
 					);
+
+					setEditorImage(attachment.url);
 				});
 			}
 
@@ -389,6 +458,15 @@
 			$form.find('input[name=id]').val('0');
 			$form.removeClass('is-editing');
 			$form.find('[data-moksa-image-preview]').empty();
+			setEditorImage('');
+
+			var fresh = editor();
+
+			if (fresh) {
+				fresh.load();
+				fresh.selected = null;
+				fresh.render();
+			}
 		});
 
 		$form.on('click', '[data-moksa-sync-menus]', function () {
@@ -429,6 +507,19 @@
 				$form.find('[data-moksa-menu-areas]').val(JSON.stringify(JSON.parse(menu.areas), null, 2));
 			} catch (e) {
 				$form.find('[data-moksa-menu-areas]').val(menu.areas);
+			}
+
+			setEditorImage(menu.image_url || '');
+			$form.find('input[name=chat_bar_text]').trigger('change');
+			syncSize();
+			syncSwitchTargets();
+
+			var instance = editor();
+
+			if (instance) {
+				instance.load();
+				instance.selected = null;
+				instance.render();
 			}
 
 			$('html, body').animate({ scrollTop: $form.offset().top - 40 }, 200);

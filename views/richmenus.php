@@ -28,8 +28,8 @@ $groups = RichMenuModule::groups();
 		<?php esc_html_e( 'To build tabs, give several menus the same tab group and point their tab buttons at each other with a "switch tab" action.', 'moksa-line' ); ?>
 	</p>
 
-	<div class="moksa-split moksa-split--wide">
-		<div class="moksa-split__main">
+	<div class="moksa-stack">
+		<div>
 			<table class="widefat striped">
 				<thead>
 					<tr>
@@ -45,7 +45,13 @@ $groups = RichMenuModule::groups();
 						<tr><td colspan="5"><?php esc_html_e( 'No rich menus yet.', 'moksa-line' ); ?></td></tr>
 					<?php endif; ?>
 					<?php foreach ( $menus as $menu ) : ?>
-						<tr data-menu='<?php echo esc_attr( (string) wp_json_encode( $menu ) ); ?>'>
+						<?php
+						$menu_data = (array) $menu;
+						$menu_data['image_url'] = (int) $menu->image_attachment_id
+							? (string) wp_get_attachment_url( (int) $menu->image_attachment_id )
+							: '';
+						?>
+						<tr data-menu='<?php echo esc_attr( (string) wp_json_encode( $menu_data ) ); ?>'>
 							<td>
 								<strong><?php echo esc_html( (string) $menu->name ); ?></strong>
 								<?php if ( (int) $menu->is_default ) : ?>
@@ -91,10 +97,15 @@ $groups = RichMenuModule::groups();
 			<?php endif; ?>
 		</div>
 
-		<div class="moksa-split__side">
-			<form class="moksa-panel" data-moksa-menu-form>
-				<h2><?php esc_html_e( 'Menu', 'moksa-line' ); ?></h2>
+		<div>
+			<form class="moksa-panel moksa-menu-form" data-moksa-menu-form>
+				<h2>
+					<?php esc_html_e( 'Menu', 'moksa-line' ); ?>
+					<span class="moksa-editing-badge"><?php esc_html_e( 'Editing', 'moksa-line' ); ?></span>
+				</h2>
 				<input type="hidden" name="id" value="0" />
+
+				<div class="moksa-field-row">
 
 				<p>
 					<label for="moksa-menu-name"><?php esc_html_e( 'Name', 'moksa-line' ); ?></label>
@@ -137,6 +148,8 @@ $groups = RichMenuModule::groups();
 					<span class="description"><?php esc_html_e( 'Lowercase letters, digits, hyphen and underscore. Other tabs point at this. Generated automatically if left blank.', 'moksa-line' ); ?></span>
 				</p>
 
+				</div>
+
 				<p>
 					<label><?php esc_html_e( 'Image', 'moksa-line' ); ?></label>
 					<input type="hidden" name="image_attachment_id" value="0" />
@@ -146,10 +159,55 @@ $groups = RichMenuModule::groups();
 
 				<p>
 					<label><?php esc_html_e( 'Tappable areas', 'moksa-line' ); ?></label>
-					<textarea name="areas" rows="12" class="widefat code" spellcheck="false" data-moksa-menu-areas></textarea>
 					<span class="description">
-						<?php esc_html_e( 'A JSON array of areas. Each has bounds (x, y, width, height in image pixels) and an action. For a tab button use an action of type richmenuswitch with the sibling menu\'s alias ID.', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Drag on the image to draw an area. Click one to move, resize or set what it does. Edges snap to each other, because a one-pixel gap is invisible here and dead to the customer.', 'moksa-line' ); ?>
 					</span>
+
+					<span class="moksa-area-toolbar">
+						<?php esc_html_e( 'Start from a layout:', 'moksa-line' ); ?>
+						<?php foreach ( array( '1x1', '2x1', '3x1', '4x1', '2x2', '3x2' ) as $preset ) : ?>
+							<button type="button" class="button button-small" data-moksa-grid="<?php echo esc_attr( $preset ); ?>">
+								<?php echo esc_html( str_replace( 'x', ' × ', $preset ) ); ?>
+							</button>
+						<?php endforeach; ?>
+						<button type="button" class="button button-small" data-moksa-clear-areas><?php esc_html_e( 'Clear', 'moksa-line' ); ?></button>
+					</span>
+
+					<span class="moksa-area-editor" tabindex="0"
+						data-moksa-area-editor="[data-moksa-menu-areas]"
+						data-switch-targets="<?php echo esc_attr( (string) wp_json_encode( array() ) ); ?>">
+
+						<span class="moksa-area-editor__canvas">
+							<span class="moksa-canvas" data-moksa-canvas>
+								<img alt="" data-moksa-canvas-image />
+								<span class="moksa-canvas__layer" data-moksa-canvas-layer></span>
+								<span class="moksa-canvas__empty">
+									<?php esc_html_e( 'Choose a menu image to start drawing areas.', 'moksa-line' ); ?>
+								</span>
+							</span>
+							<span class="moksa-area-warnings" data-moksa-area-warnings></span>
+						</span>
+
+						<span class="moksa-area-editor__side">
+							<span class="moksa-inspector" data-moksa-inspector></span>
+
+							<span class="moksa-phone">
+								<span class="moksa-phone__bar"><?php esc_html_e( 'On a phone', 'moksa-line' ); ?></span>
+								<span class="moksa-phone__chat"></span>
+								<span class="moksa-phone__menu">
+									<img alt="" data-moksa-phone-image />
+									<span class="moksa-phone__areas" data-moksa-phone-areas></span>
+								</span>
+								<span class="moksa-phone__chatbar" data-moksa-phone-chatbar><?php esc_html_e( 'Menu', 'moksa-line' ); ?></span>
+							</span>
+							<span class="description">
+								<?php esc_html_e( 'The chat bar text is drawn by LINE below the menu, not on your image. This preview shows layout only, not exact fonts or corners.', 'moksa-line' ); ?>
+							</span>
+						</span>
+					</span>
+
+					<textarea name="areas" rows="6" class="widefat code moksa-area-json" spellcheck="false" data-moksa-menu-areas hidden></textarea>
+					<button type="button" class="button-link" data-moksa-toggle-json><?php esc_html_e( 'Edit the JSON directly', 'moksa-line' ); ?></button>
 				</p>
 
 				<p>

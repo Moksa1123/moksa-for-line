@@ -37,7 +37,7 @@ class ShortcodeModule {
 			'moksa-line-front',
 			MOKSA_LINE_URL . 'assets/css/front.css',
 			array(),
-			MOKSA_LINE_VERSION
+			\Moksa\Line\Admin\AdminModule::asset_version( 'assets/css/front.css' )
 		);
 	}
 

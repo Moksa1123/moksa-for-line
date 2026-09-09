@@ -141,7 +141,7 @@ class AdminModule {
 			'moksa-line-admin',
 			MOKSA_LINE_URL . 'assets/css/admin.css',
 			array(),
-			MOKSA_LINE_VERSION
+			self::asset_version( 'assets/css/admin.css' )
 		);
 
 		// The front-end sheet is registered on wp_enqueue_scripts, which never
@@ -153,7 +153,7 @@ class AdminModule {
 				'moksa-line-front',
 				MOKSA_LINE_URL . 'assets/css/front.css',
 				array(),
-				MOKSA_LINE_VERSION
+				self::asset_version( 'assets/css/front.css' )
 			);
 		}
 
@@ -161,15 +161,23 @@ class AdminModule {
 			'moksa-line-flex-renderer',
 			MOKSA_LINE_URL . 'assets/js/moksa-flex-renderer.js',
 			array( 'jquery' ),
-			MOKSA_LINE_VERSION,
+			self::asset_version( 'assets/js/moksa-flex-renderer.js' ),
+			true
+		);
+
+		wp_enqueue_script(
+			'moksa-line-richmenu-editor',
+			MOKSA_LINE_URL . 'assets/js/richmenu-editor.js',
+			array( 'jquery' ),
+			self::asset_version( 'assets/js/richmenu-editor.js' ),
 			true
 		);
 
 		wp_enqueue_script(
 			'moksa-line-admin',
 			MOKSA_LINE_URL . 'assets/js/admin.js',
-			array( 'jquery', 'moksa-line-flex-renderer' ),
-			MOKSA_LINE_VERSION,
+			array( 'jquery', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor' ),
+			self::asset_version( 'assets/js/admin.js' ),
 			true
 		);
 
@@ -187,9 +195,50 @@ class AdminModule {
 					'working'      => __( 'Working...', 'moksa-line' ),
 					'chooseImage'  => __( 'Rich menu image', 'moksa-line' ),
 					'editing'      => __( 'Editing', 'moksa-line' ),
+					'menu'         => __( 'Menu', 'moksa-line' ),
+					'area'         => __( 'Area', 'moksa-line' ),
+					'pickAnArea'   => __( 'Drag on the image to add an area, or click one to edit it.', 'moksa-line' ),
+					'actionType'   => __( 'When tapped', 'moksa-line' ),
+					'actionLabel'  => __( 'Label', 'moksa-line' ),
+					'actionMessage' => __( 'Send a message', 'moksa-line' ),
+					'actionUri'    => __( 'Open a link', 'moksa-line' ),
+					'actionPostback' => __( 'Postback', 'moksa-line' ),
+					'actionSwitch' => __( 'Switch to another tab', 'moksa-line' ),
+					'actionUriValue' => __( 'Link', 'moksa-line' ),
+					'actionText'   => __( 'Message the customer sends', 'moksa-line' ),
+					'actionAlias'  => __( 'Tab to switch to', 'moksa-line' ),
+					'actionData'   => __( 'Postback data', 'moksa-line' ),
+					'noTabs'       => __( 'No other menus in this tab group yet', 'moksa-line' ),
+					'deleteArea'   => __( 'Delete this area', 'moksa-line' ),
+					'nudgeHint'    => __( 'Arrow keys nudge by 1 pixel, with Shift by 10.', 'moksa-line' ),
+					'replaceAreas' => __( 'Replace the current areas with this layout?', 'moksa-line' ),
+					/* translators: %s: list of overlapping area numbers. */
+					'areasOverlap' => __( 'Areas %s overlap. LINE uses whichever comes first, which is rarely what you want.', 'moksa-line' ),
+					/* translators: %d: maximum number of areas. */
+					'tooManyAreas' => __( 'LINE allows at most %d areas; the extra ones will be dropped.', 'moksa-line' ),
+					/* translators: %d: number of areas without a destination. */
+					'areasIncomplete' => __( '%d area(s) have no destination set yet.', 'moksa-line' ),
 				),
 			)
 		);
+	}
+
+	/**
+	 * Cache-busting version for a bundled asset.
+	 *
+	 * The plugin version alone is not enough: a file edited without a release
+	 * -- during development, or by a site that patched a stylesheet over SFTP --
+	 * keeps the old query string, so browsers and page caches keep serving the
+	 * old copy and the change appears not to have happened. The file's own
+	 * modification time changes exactly when its contents do.
+	 *
+	 * @param string $relative Path below the plugin directory.
+	 */
+	public static function asset_version( string $relative ): string {
+		$path = MOKSA_LINE_DIR . $relative;
+		$time = is_readable( $path ) ? filemtime( $path ) : false;
+
+		return false === $time ? MOKSA_LINE_VERSION : MOKSA_LINE_VERSION . '.' . $time;
 	}
 
 	/**
