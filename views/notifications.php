@@ -84,14 +84,16 @@ $pages = (int) ceil( $list['total'] / 30 );
 
 	<form method="get" class="moksa-inbox__filters">
 		<input type="hidden" name="page" value="moksa-line-notifications" />
-		<select name="status">
+		<label for="moksa-notify-status" class="screen-reader-text"><?php esc_html_e( 'Which results to show', 'moksa-line' ); ?></label>
+		<select id="moksa-notify-status" name="status">
 			<option value=""><?php esc_html_e( 'All results', 'moksa-line' ); ?></option>
 			<option value="sent" <?php selected( $status, 'sent' ); ?>><?php esc_html_e( 'Delivered', 'moksa-line' ); ?></option>
 			<option value="failed" <?php selected( $status, 'failed' ); ?>><?php esc_html_e( 'Failed', 'moksa-line' ); ?></option>
 			<option value="pending" <?php selected( $status, 'pending' ); ?>><?php esc_html_e( 'Never settled', 'moksa-line' ); ?></option>
 			<option value="unknown" <?php selected( $status, 'unknown' ); ?>><?php esc_html_e( 'Imported, result unknown', 'moksa-line' ); ?></option>
 		</select>
-		<input type="number" name="order_id" value="<?php echo esc_attr( $order_id ? (string) $order_id : '' ); ?>"
+		<label for="moksa-notify-order" class="screen-reader-text"><?php esc_html_e( 'Order number', 'moksa-line' ); ?></label>
+		<input type="number" id="moksa-notify-order" name="order_id" value="<?php echo esc_attr( $order_id ? (string) $order_id : '' ); ?>"
 			placeholder="<?php esc_attr_e( 'Order id', 'moksa-line' ); ?>" class="small-text" />
 		<?php submit_button( __( 'Filter', 'moksa-line' ), 'secondary', '', false ); ?>
 	</form>
@@ -157,6 +159,14 @@ $pages = (int) ceil( $list['total'] / 30 );
 						<span class="moksa-pill moksa-pill--<?php echo esc_attr( $pill ); ?>"><?php echo esc_html( (string) $row->status ); ?></span>
 						<?php if ( '' !== (string) $row->error ) : ?>
 							<br /><span class="description"><?php echo esc_html( (string) $row->error ); ?></span>
+						<?php endif; ?>
+						<?php if ( 'sent' !== $row->status && (int) $row->order_id > 0 && '' !== (string) $row->order_status ) : ?>
+							<br />
+							<button type="button" class="button button-small" data-moksa-resend-notification
+								data-order="<?php echo esc_attr( (string) (int) $row->order_id ); ?>"
+								data-status="<?php echo esc_attr( (string) $row->order_status ); ?>">
+								<?php esc_html_e( 'Send again', 'moksa-line' ); ?>
+							</button>
 						<?php endif; ?>
 					</td>
 				</tr>

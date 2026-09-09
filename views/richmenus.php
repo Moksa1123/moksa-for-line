@@ -206,7 +206,8 @@ $groups = RichMenuModule::groups();
 						</span>
 					</span>
 
-					<textarea name="areas" rows="6" class="widefat code moksa-area-json" spellcheck="false" data-moksa-menu-areas hidden></textarea>
+					<label for="moksa-menu-areas" class="screen-reader-text"><?php esc_html_e( 'Tappable areas as JSON', 'moksa-line' ); ?></label>
+					<textarea id="moksa-menu-areas" name="areas" rows="6" class="widefat code moksa-area-json" spellcheck="false" data-moksa-menu-areas hidden></textarea>
 					<button type="button" class="button-link" data-moksa-toggle-json><?php esc_html_e( 'Edit the JSON directly', 'moksa-line' ); ?></button>
 				</p>
 

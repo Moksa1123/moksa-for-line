@@ -2,10 +2,16 @@
 /**
  * Logs and recent webhook events.
  *
+ * The log is the first place anyone looks when LINE misbehaves, so it has to
+ * answer "what went wrong" without scrolling. Unfiltered, the errors that
+ * matter sit buried among debug lines that do not, which is why the level
+ * filter starts at warnings and above rather than at everything.
+ *
  * @package Moksa\Line
  */
 
 use Moksa\Line\Support\Logger;
+use Moksa\Line\Support\Options;
 use Moksa\Line\Webhook\EventQueue;
 
 defined( 'ABSPATH' ) || exit;
@@ -13,10 +19,70 @@ defined( 'ABSPATH' ) || exit;
 global $wpdb;
 
 $log_table = Logger::table();
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-$logs = (array) $wpdb->get_results( "SELECT * FROM {$log_table} ORDER BY id DESC LIMIT 100" );
+$per_page  = 100;
 
-$events = EventQueue::recent( 50 );
+$levels = array(
+	'problems' => __( 'Warnings and errors', 'moksa-line' ),
+	'error'    => __( 'Errors only', 'moksa-line' ),
+	'warning'  => __( 'Warnings only', 'moksa-line' ),
+	'info'     => __( 'Info only', 'moksa-line' ),
+	'debug'    => __( 'Debug only', 'moksa-line' ),
+	'all'      => __( 'Everything', 'moksa-line' ),
+);
+
+// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only filters.
+$level   = isset( $_GET['level'] ) ? sanitize_key( wp_unslash( $_GET['level'] ) ) : 'problems';
+$level   = isset( $levels[ $level ] ) ? $level : 'problems';
+$channel = isset( $_GET['channel'] ) ? sanitize_key( wp_unslash( $_GET['channel'] ) ) : '';
+$paged   = isset( $_GET['paged'] ) ? max( 1, (int) $_GET['paged'] ) : 1;
+// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+$channels = (array) $wpdb->get_col( "SELECT DISTINCT channel FROM {$log_table} ORDER BY channel ASC" );
+
+$where  = array( '1=1' );
+$params = array();
+
+if ( 'problems' === $level ) {
+	$where[]  = 'level IN (%s, %s)';
+	$params[] = Logger::WARNING;
+	$params[] = Logger::ERROR;
+} elseif ( 'all' !== $level ) {
+	$where[]  = 'level = %s';
+	$params[] = $level;
+}
+
+if ( '' !== $channel && in_array( $channel, $channels, true ) ) {
+	$where[]  = 'channel = %s';
+	$params[] = $channel;
+}
+
+$clause = implode( ' AND ', $where );
+
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+$grand_total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$log_table}" );
+
+if ( $params ) {
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+	$total = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$log_table} WHERE {$clause}", $params ) );
+} else {
+	$total = $grand_total;
+}
+
+$pages  = max( 1, (int) ceil( $total / $per_page ) );
+$paged  = min( $paged, $pages );
+$offset = ( $paged - 1 ) * $per_page;
+
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+$logs = (array) $wpdb->get_results(
+	$wpdb->prepare(
+		"SELECT * FROM {$log_table} WHERE {$clause} ORDER BY id DESC LIMIT %d OFFSET %d",
+		array_merge( $params, array( $per_page, $offset ) )
+	)
+);
+
+$events    = EventQueue::recent( 50 );
+$retention = max( 1, (int) Options::get( 'log_retention_days' ) );
 ?>
 <div class="wrap moksa-line-wrap">
 	<h1><?php esc_html_e( 'Logs', 'moksa-line' ); ?></h1>
@@ -44,7 +110,12 @@ $events = EventQueue::recent( 50 );
 				<tr>
 					<td><?php echo esc_html( mysql2date( 'Y-m-d H:i:s', get_date_from_gmt( (string) $event->received_at ) ) ); ?></td>
 					<td><code><?php echo esc_html( (string) $event->event_type ); ?></code></td>
-					<td><code><?php echo esc_html( substr( (string) $event->source_id, 0, 12 ) ); ?></code></td>
+					<td>
+						<?php // The whole id, not a prefix: it is only useful if it can be pasted into a broadcast test or a Flex send. ?>
+						<button type="button" class="moksa-copyable" data-moksa-copy="<?php echo esc_attr( (string) $event->source_id ); ?>">
+							<code><?php echo esc_html( (string) $event->source_id ); ?></code>
+						</button>
+					</td>
 					<td>
 						<span class="moksa-pill moksa-pill--<?php echo esc_attr( 'done' === $event->status ? 'ok' : ( 'failed' === $event->status ? 'bad' : 'warn' ) ); ?>">
 							<?php echo esc_html( (string) $event->status ); ?>
@@ -57,33 +128,131 @@ $events = EventQueue::recent( 50 );
 	</table>
 
 	<h2><?php esc_html_e( 'Plugin log', 'moksa-line' ); ?></h2>
-	<table class="widefat striped">
+
+	<form method="get" class="moksa-filters">
+		<input type="hidden" name="page" value="moksa-line-logs" />
+
+		<label for="moksa-log-level" class="screen-reader-text"><?php esc_html_e( 'Show which entries', 'moksa-line' ); ?></label>
+		<select id="moksa-log-level" name="level">
+			<?php foreach ( $levels as $key => $label ) : ?>
+				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $level, $key ); ?>><?php echo esc_html( $label ); ?></option>
+			<?php endforeach; ?>
+		</select>
+
+		<label for="moksa-log-channel" class="screen-reader-text"><?php esc_html_e( 'Which area of the plugin', 'moksa-line' ); ?></label>
+		<select id="moksa-log-channel" name="channel">
+			<option value=""><?php esc_html_e( 'All areas', 'moksa-line' ); ?></option>
+			<?php foreach ( $channels as $name ) : ?>
+				<option value="<?php echo esc_attr( $name ); ?>" <?php selected( $channel, $name ); ?>><?php echo esc_html( $name ); ?></option>
+			<?php endforeach; ?>
+		</select>
+
+		<button type="submit" class="button"><?php esc_html_e( 'Filter', 'moksa-line' ); ?></button>
+
+		<span class="moksa-filters__count">
+			<?php
+			printf(
+				/* translators: 1: rows matching the filter, 2: rows kept in total. */
+				esc_html__( '%1$s of %2$s entries', 'moksa-line' ),
+				esc_html( number_format_i18n( $total ) ),
+				esc_html( number_format_i18n( $grand_total ) )
+			);
+			?>
+		</span>
+
+		<?php if ( $grand_total > 0 ) : ?>
+			<button type="button" class="button moksa-button-danger" data-moksa-clear-logs>
+				<?php esc_html_e( 'Clear the log', 'moksa-line' ); ?>
+			</button>
+		<?php endif; ?>
+	</form>
+
+	<p class="description">
+		<?php
+		printf(
+			/* translators: %s: number of days. */
+			esc_html__( 'Entries are deleted automatically after %s days, which you can change under Settings > Advanced.', 'moksa-line' ),
+			esc_html( number_format_i18n( $retention ) )
+		);
+		?>
+	</p>
+
+	<table class="widefat striped moksa-log-table">
 		<thead>
 			<tr>
 				<th><?php esc_html_e( 'Time', 'moksa-line' ); ?></th>
 				<th><?php esc_html_e( 'Level', 'moksa-line' ); ?></th>
 				<th><?php esc_html_e( 'Area', 'moksa-line' ); ?></th>
 				<th><?php esc_html_e( 'Message', 'moksa-line' ); ?></th>
-				<th><?php esc_html_e( 'Context', 'moksa-line' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php if ( empty( $logs ) ) : ?>
-				<tr><td colspan="5"><?php esc_html_e( 'Nothing logged.', 'moksa-line' ); ?></td></tr>
+				<tr>
+					<td colspan="4">
+						<?php if ( $grand_total > 0 ) : ?>
+							<?php esc_html_e( 'Nothing matches this filter. Set it to Everything to see the rest.', 'moksa-line' ); ?>
+						<?php else : ?>
+							<?php esc_html_e( 'Nothing logged.', 'moksa-line' ); ?>
+						<?php endif; ?>
+					</td>
+				</tr>
 			<?php endif; ?>
 			<?php foreach ( $logs as $log ) : ?>
+				<?php
+				$context = trim( (string) $log->context );
+				$decoded = '' !== $context ? json_decode( $context, true ) : null;
+				$pretty  = is_array( $decoded )
+					? (string) wp_json_encode( $decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES )
+					: $context;
+				?>
 				<tr>
-					<td><?php echo esc_html( mysql2date( 'Y-m-d H:i:s', get_date_from_gmt( (string) $log->created_at ) ) ); ?></td>
+					<td class="moksa-log-time"><?php echo esc_html( mysql2date( 'Y-m-d H:i:s', get_date_from_gmt( (string) $log->created_at ) ) ); ?></td>
 					<td>
 						<span class="moksa-pill moksa-pill--<?php echo esc_attr( 'error' === $log->level ? 'bad' : ( 'warning' === $log->level ? 'warn' : 'ok' ) ); ?>">
 							<?php echo esc_html( (string) $log->level ); ?>
 						</span>
 					</td>
 					<td><?php echo esc_html( (string) $log->channel ); ?></td>
-					<td><?php echo esc_html( (string) $log->message ); ?></td>
-					<td><code class="moksa-context"><?php echo esc_html( (string) $log->context ); ?></code></td>
+					<td>
+						<?php echo esc_html( (string) $log->message ); ?>
+						<?php if ( '' !== $context && '[]' !== $context && '{}' !== $context ) : ?>
+							<?php // Folded away: context is the widest and least readable column, and it is only wanted once a particular line is already under suspicion. ?>
+							<details class="moksa-log-context">
+								<summary><?php esc_html_e( 'Context', 'moksa-line' ); ?></summary>
+								<pre><?php echo esc_html( $pretty ); ?></pre>
+							</details>
+						<?php endif; ?>
+					</td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
+
+	<?php if ( $pages > 1 ) : ?>
+		<div class="tablenav"><div class="tablenav-pages">
+			<?php
+			echo wp_kses_post(
+				paginate_links(
+					array(
+						'base'      => add_query_arg(
+							array(
+								'page'    => 'moksa-line-logs',
+								'level'   => $level,
+								'channel' => $channel,
+								'paged'   => '%#%',
+							),
+							admin_url( 'admin.php' )
+						),
+						'format'    => '',
+						'current'   => $paged,
+						'total'     => $pages,
+						'prev_text' => '&laquo;',
+						'next_text' => '&raquo;',
+					)
+				)
+			);
+			?>
+		</div></div>
+	<?php endif; ?>
 </div>

@@ -985,19 +985,114 @@
 
 	// --- Copy to clipboard ----------------------------------------------------------------
 
+	// Copying used to be a bare cursor:pointer on a <code>, which meant the
+	// affordance existed but nothing announced it -- no icon, no label, and no
+	// way to reach it from the keyboard. These are the values people need most
+	// often (the webhook URL, a LINE user id), so the control says what it does.
 	function bindCopy() {
-		$('.moksa-copyable').on('click', function () {
-			var text = $(this).text();
+		$(document).on('click', '.moksa-copyable', function () {
+			var $el = $(this);
+			var text = $el.data('moksa-copy');
 
-			if (navigator.clipboard) {
-				navigator.clipboard.writeText(text);
+			if (undefined === text || '' === text) {
+				text = $.trim($el.text());
 			}
 
-			$(this).addClass('is-copied');
+			function done(ok) {
+				$('.moksa-copyable').removeClass('is-copied is-copy-failed');
+				$el.addClass(ok ? 'is-copied' : 'is-copy-failed');
+				$el.attr('aria-label', ok ? moksaLine.strings.copied : moksaLine.strings.copyFailed);
 
-			window.setTimeout(function () {
-				$('.moksa-copyable').removeClass('is-copied');
-			}, 1200);
+				window.setTimeout(function () {
+					$el.removeClass('is-copied is-copy-failed').removeAttr('aria-label');
+				}, 1600);
+			}
+
+			// The clipboard API is unavailable over plain http and can be
+			// refused even over https, so the failure has to be visible rather
+			// than looking like a successful copy of nothing.
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				navigator.clipboard.writeText(String(text)).then(function () {
+					done(true);
+				}, function () {
+					done(false);
+				});
+				return;
+			}
+
+			done(false);
+		});
+	}
+
+	// A LINE profile URL can 404 long after it was stored. Without this the
+	// browser paints its broken-image glyph on top of the initial that was put
+	// there precisely to cover that case.
+	function bindAvatarFallback() {
+		$('.moksa-avatar img').each(function () {
+			var img = this;
+
+			function hide() {
+				$(img).css('display', 'none');
+			}
+
+			$(img).on('error', hide);
+
+			// A cached failure can land before this handler is attached.
+			if (img.complete && 0 === img.naturalWidth) {
+				hide();
+			}
+		});
+	}
+
+	function bindResendNotification() {
+		$(document).on('click', '[data-moksa-resend-notification]', function () {
+			var $button = $(this);
+
+			if (!window.confirm(moksaLine.strings.confirmResend)) {
+				return;
+			}
+
+			$button.prop('disabled', true).text(moksaLine.strings.working);
+
+			$.post(moksaLine.ajaxUrl, {
+				action: 'moksa_line_resend_notification',
+				nonce: moksaLine.nonce,
+				order_id: $button.data('order'),
+				status: $button.data('status')
+			}).done(function (response) {
+				if (response && response.success) {
+					// The new attempt is a new row, so the list has to be
+					// re-read rather than patched in place.
+					window.location.reload();
+					return;
+				}
+
+				$button.prop('disabled', false).text(moksaLine.strings.sendAgain);
+				window.alert((response && response.data && response.data.message) || moksaLine.strings.failed);
+			}).fail(function () {
+				$button.prop('disabled', false).text(moksaLine.strings.sendAgain);
+				window.alert(moksaLine.strings.failed);
+			});
+		});
+	}
+
+	function bindClearLogs() {
+		$(document).on('click', '[data-moksa-clear-logs]', function () {
+			if (!window.confirm(moksaLine.strings.confirmClearLogs)) {
+				return;
+			}
+
+			var $button = $(this).prop('disabled', true);
+
+			$.post(moksaLine.ajaxUrl, {
+				action: 'moksa_line_clear_logs',
+				nonce: moksaLine.nonce
+			}).done(function () {
+				window.location.reload();
+			}).fail(function () {
+				$button.prop('disabled', false);
+				window.alert(moksaLine.strings.failed);
+			});
 		});
 	}
 
@@ -1012,5 +1107,8 @@
 		bindNotifyTemplates();
 		bindUnlink();
 		bindCopy();
+		bindClearLogs();
+		bindResendNotification();
+		bindAvatarFallback();
 	});
 }(jQuery));

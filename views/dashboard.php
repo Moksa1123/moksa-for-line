@@ -33,23 +33,40 @@ if ( TokenManager::is_configured() ) {
 <div class="wrap moksa-line-wrap">
 	<h1><?php esc_html_e( 'LINE', 'moksa-line' ); ?></h1>
 
+	<?php
+	// Each number is a question -- "which three people?" -- so each card is the
+	// link to its own answer rather than a figure you then have to go and find.
+	$users_url = admin_url( 'admin.php?page=' . AdminModule::SLUG . '-users' );
+	$cards     = array(
+		array(
+			'number' => $stats['total'],
+			'label'  => __( 'LINE users known', 'moksa-line' ),
+			'url'    => $users_url,
+		),
+		array(
+			'number' => $stats['friends'],
+			'label'  => __( 'Friends of the account', 'moksa-line' ),
+			'url'    => $users_url,
+		),
+		array(
+			'number' => $stats['linked'],
+			'label'  => __( 'Linked WordPress accounts', 'moksa-line' ),
+			'url'    => $users_url,
+		),
+		array(
+			'number' => Conversations::unread_total(),
+			'label'  => __( 'Conversations waiting', 'moksa-line' ),
+			'url'    => admin_url( 'admin.php?page=' . AdminModule::SLUG . '-inbox' ),
+		),
+	);
+	?>
 	<div class="moksa-cards">
-		<div class="moksa-card">
-			<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( $stats['total'] ) ); ?></span>
-			<span class="moksa-card__label"><?php esc_html_e( 'LINE users known', 'moksa-line' ); ?></span>
-		</div>
-		<div class="moksa-card">
-			<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( $stats['friends'] ) ); ?></span>
-			<span class="moksa-card__label"><?php esc_html_e( 'Friends of the account', 'moksa-line' ); ?></span>
-		</div>
-		<div class="moksa-card">
-			<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( $stats['linked'] ) ); ?></span>
-			<span class="moksa-card__label"><?php esc_html_e( 'Linked WordPress accounts', 'moksa-line' ); ?></span>
-		</div>
-		<div class="moksa-card">
-			<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( Conversations::unread_total() ) ); ?></span>
-			<span class="moksa-card__label"><?php esc_html_e( 'Conversations waiting', 'moksa-line' ); ?></span>
-		</div>
+		<?php foreach ( $cards as $card ) : ?>
+			<a class="moksa-card" href="<?php echo esc_url( $card['url'] ); ?>">
+				<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( $card['number'] ) ); ?></span>
+				<span class="moksa-card__label"><?php echo esc_html( $card['label'] ); ?></span>
+			</a>
+		<?php endforeach; ?>
 	</div>
 
 	<div class="moksa-panel">
@@ -60,6 +77,11 @@ if ( TokenManager::is_configured() ) {
 					<strong><?php echo esc_html( $item['label'] ); ?></strong>
 					<?php if ( ! $item['done'] ) : ?>
 						<span class="moksa-checklist__hint"><?php echo esc_html( $item['hint'] ); ?></span>
+						<?php if ( ! empty( $item['fix'] ) ) : ?>
+							<a class="moksa-checklist__fix" href="<?php echo esc_url( (string) $item['fix'] ); ?>">
+								<?php esc_html_e( 'Fix this', 'moksa-line' ); ?> <span aria-hidden="true">&rarr;</span>
+							</a>
+						<?php endif; ?>
 					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>

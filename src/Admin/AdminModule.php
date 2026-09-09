@@ -24,6 +24,8 @@ class AdminModule {
 		add_action( 'admin_post_moksa_line_save_settings', array( $this, 'save_settings' ) );
 		add_action( 'admin_notices', array( $this, 'setup_notice' ) );
 		add_action( 'wp_ajax_moksa_line_broadcast', array( $this, 'ajax_broadcast' ) );
+		add_action( 'wp_ajax_moksa_line_clear_logs', array( $this, 'ajax_clear_logs' ) );
+		add_action( 'wp_ajax_moksa_line_resend_notification', array( $this, 'ajax_resend_notification' ) );
 
 		add_filter( 'parent_file', array( $this, 'keep_menu_open' ) );
 		add_filter( 'plugin_action_links_' . MOKSA_LINE_BASENAME, array( $this, 'action_links' ) );
@@ -189,6 +191,11 @@ class AdminModule {
 				'nonce'   => wp_create_nonce( 'moksa_line_admin' ),
 				'strings' => array(
 					'saved'        => __( 'Saved.', 'moksa-line' ),
+					'copied'       => __( 'Copied', 'moksa-line' ),
+					'sendAgain'    => __( 'Send again', 'moksa-line' ),
+					'confirmResend' => __( 'Send this notification to the customer again?', 'moksa-line' ),
+					'copyFailed'   => __( 'Could not copy -- select it and copy by hand', 'moksa-line' ),
+					'confirmClearLogs' => __( 'Delete every entry in the plugin log? The log is only used for diagnosis, so nothing else is lost.', 'moksa-line' ),
 					'altTextEmpty' => __( '(no fallback text -- the notification would be blank)', 'moksa-line' ),
 					'altTextMissing' => __( 'Fallback text is empty. The chat list and the push notification would show nothing.', 'moksa-line' ),
 					/* translators: %d: character count. */
@@ -276,28 +283,47 @@ class AdminModule {
 	public static function checklist(): array {
 		$items = array();
 
+		/**
+		 * The settings screen for one tab.
+		 *
+		 * Every failing check carries where it is fixed. A single "Open
+		 * settings" button at the bottom of the list leaves the reader to work
+		 * out which of seven tabs the failure lives on, which is the part they
+		 * did not know in the first place.
+		 *
+		 * @param string $tab Settings tab slug.
+		 * @return string
+		 */
+		$tab = static function ( string $tab ): string {
+			return admin_url( 'admin.php?page=' . self::SLUG . '-settings&tab=' . $tab );
+		};
+
 		$items[] = array(
 			'done'  => '' !== (string) Options::get( 'channel_id' ) && '' !== (string) Options::get( 'channel_secret' ),
 			'label' => __( 'LINE Login channel connected', 'moksa-line' ),
 			'hint'  => __( 'Add the Channel ID and Channel Secret from the LINE Developers Console.', 'moksa-line' ),
+			'fix'   => $tab( 'general' ),
 		);
 
 		$items[] = array(
 			'done'  => \Moksa\Line\Api\TokenManager::is_configured(),
 			'label' => __( 'Messaging API channel connected', 'moksa-line' ),
 			'hint'  => __( 'The bot cannot send or receive anything until this is set.', 'moksa-line' ),
+			'fix'   => $tab( 'messaging' ),
 		);
 
 		$items[] = array(
 			'done'  => ! \Moksa\Line\Api\Signature::using_fallback_secret(),
 			'label' => __( 'Webhook signing secret is the Messaging API one', 'moksa-line' ),
 			'hint'  => __( 'Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual.', 'moksa-line' ),
+			'fix'   => $tab( 'messaging' ),
 		);
 
 		$items[] = array(
 			'done'  => \Moksa\Line\Webhook\EventQueue::has_any(),
 			'label' => __( 'Webhook has received an event', 'moksa-line' ),
 			'hint'  => __( 'Paste the webhook URL into the Console, enable "Use webhook", then press Verify.', 'moksa-line' ),
+			'fix'   => $tab( 'messaging' ),
 		);
 
 		if ( Options::get( 'ai_enabled' ) ) {
@@ -307,6 +333,7 @@ class AdminModule {
 				'done'  => $provider->is_available(),
 				'label' => __( 'AI provider available', 'moksa-line' ),
 				'hint'  => __( 'AI replies are switched on, but AI Engine is not active on this site.', 'moksa-line' ),
+			'fix'   => $tab( 'ai' ),
 			);
 		}
 
@@ -315,12 +342,14 @@ class AdminModule {
 				'done'  => \Moksa\Line\Pay\LinePayClient::is_configured(),
 				'label' => __( 'LINE Pay credentials present', 'moksa-line' ),
 				'hint'  => __( 'Add the LINE Pay Channel ID and Channel Secret.', 'moksa-line' ),
+			'fix'   => $tab( 'pay' ),
 			);
 
 			$items[] = array(
 				'done'  => ! Options::get( 'pay_sandbox' ),
 				'label' => __( 'LINE Pay is in production mode', 'moksa-line' ),
 				'hint'  => __( 'Sandbox mode is on, so no real money moves. Turn it off when you go live.', 'moksa-line' ),
+			'fix'   => $tab( 'pay' ),
 			);
 		}
 
@@ -468,6 +497,82 @@ class AdminModule {
 	 * Broadcasting is billed per recipient and cannot be recalled, so the
 	 * only unguarded path here is the test send.
 	 */
+	/**
+	 * Empty the plugin log.
+	 *
+	 * The log is diagnostic only -- nothing reads it back -- so clearing it
+	 * loses no state. It is offered because the retention window is measured in
+	 * days, and someone who has just fixed a misconfiguration wants to watch a
+	 * clean log rather than hunt for new lines among the old failures.
+	 */
+	public function ajax_clear_logs(): void {
+		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You cannot clear the log.', 'moksa-line' ) ), 403 );
+		}
+
+		global $wpdb;
+		$table = \Moksa\Line\Support\Logger::table();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+		$removed = (int) $wpdb->query( "DELETE FROM {$table}" );
+
+		wp_send_json_success(
+			array(
+				'removed' => $removed,
+				'message' => sprintf(
+					/* translators: %s: number of entries removed. */
+					__( 'Cleared %s entries.', 'moksa-line' ),
+					number_format_i18n( $removed )
+				),
+			)
+		);
+	}
+
+	/**
+	 * Send an order notification again.
+	 *
+	 * Almost every failure in that history is one cause -- credentials that were
+	 * not filled in yet -- affecting every order that passed through in the
+	 * meantime. Without this the history is a read-only list of customers who
+	 * never heard anything, and the only remedy is to nudge each order's status
+	 * back and forth in WooCommerce.
+	 */
+	public function ajax_resend_notification(): void {
+		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You cannot resend notifications.', 'moksa-line' ) ), 403 );
+		}
+
+		$order_id = isset( $_POST['order_id'] ) ? (int) $_POST['order_id'] : 0;
+		$status   = isset( $_POST['status'] ) ? sanitize_key( wp_unslash( $_POST['status'] ) ) : '';
+
+		if ( $order_id <= 0 || '' === $status ) {
+			wp_send_json_error( array( 'message' => __( 'That row does not name an order and a status to resend.', 'moksa-line' ) ) );
+		}
+
+		if ( ! function_exists( 'wc_get_order' ) ) {
+			wp_send_json_error( array( 'message' => __( 'WooCommerce is not active.', 'moksa-line' ) ) );
+		}
+
+		$order = wc_get_order( $order_id );
+
+		if ( ! $order ) {
+			wp_send_json_error( array( 'message' => __( 'That order no longer exists.', 'moksa-line' ) ) );
+		}
+
+		// The duplicate guard is what stops a second send, so it has to be
+		// cleared for this status before dispatch will do anything at all.
+		\Moksa\Line\Woo\WooModule::reset_notified( $order, $status );
+
+		$module = new \Moksa\Line\Woo\WooModule();
+		$module->dispatch( $order_id, $status );
+
+		wp_send_json_success( array( 'message' => __( 'Sent again. The result is in the list below.', 'moksa-line' ) ) );
+	}
+
 	public function ajax_broadcast(): void {
 		check_ajax_referer( 'moksa_line_admin', 'nonce' );
 

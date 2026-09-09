@@ -41,13 +41,15 @@ $list = Conversations::paginate(
 
 	<form method="get" class="moksa-inbox__filters">
 		<input type="hidden" name="page" value="moksa-line-inbox" />
-		<select name="status">
+		<label for="moksa-inbox-status" class="screen-reader-text"><?php esc_html_e( 'Which conversations to show', 'moksa-line' ); ?></label>
+		<select id="moksa-inbox-status" name="status">
 			<option value=""><?php esc_html_e( 'All conversations', 'moksa-line' ); ?></option>
 			<option value="bot" <?php selected( $status, 'bot' ); ?>><?php esc_html_e( 'Handled by the bot', 'moksa-line' ); ?></option>
 			<option value="human" <?php selected( $status, 'human' ); ?>><?php esc_html_e( 'Taken over by a person', 'moksa-line' ); ?></option>
 			<option value="closed" <?php selected( $status, 'closed' ); ?>><?php esc_html_e( 'Closed', 'moksa-line' ); ?></option>
 		</select>
-		<input type="search" name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'Search name or message', 'moksa-line' ); ?>" />
+		<label for="moksa-inbox-search" class="screen-reader-text"><?php esc_html_e( 'Search conversations', 'moksa-line' ); ?></label>
+		<input type="search" id="moksa-inbox-search" class="moksa-search" name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'Search name or message', 'moksa-line' ); ?>" />
 		<?php submit_button( __( 'Filter', 'moksa-line' ), 'secondary', '', false ); ?>
 	</form>
 
@@ -59,9 +61,16 @@ $list = Conversations::paginate(
 
 			<?php foreach ( $list['rows'] as $conversation ) : ?>
 				<button type="button" class="moksa-conv" data-conversation="<?php echo esc_attr( (string) $conversation->id ); ?>">
-					<?php if ( '' !== (string) $conversation->picture_url ) : ?>
-						<img class="moksa-conv__avatar" src="<?php echo esc_url( (string) $conversation->picture_url ); ?>" alt="" width="36" height="36" loading="lazy" />
-					<?php endif; ?>
+						<?php
+					$conv_name    = '' !== $conversation->display_name ? (string) $conversation->display_name : (string) $conversation->line_user_id;
+					$conv_initial = '' !== trim( $conv_name ) ? mb_substr( trim( $conv_name ), 0, 1 ) : '?';
+					?>
+					<span class="moksa-conv__avatar moksa-avatar" aria-hidden="true">
+						<?php if ( '' !== (string) $conversation->picture_url ) : ?>
+							<img src="<?php echo esc_url( (string) $conversation->picture_url ); ?>" alt="" width="36" height="36" loading="lazy" />
+						<?php endif; ?>
+						<span class="moksa-avatar__initial"><?php echo esc_html( $conv_initial ); ?></span>
+					</span>
 					<span class="moksa-conv__body">
 						<span class="moksa-conv__name">
 							<?php echo esc_html( '' !== $conversation->display_name ? (string) $conversation->display_name : (string) $conversation->line_user_id ); ?>

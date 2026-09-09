@@ -176,7 +176,7 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Callback URL', 'moksa-line' ); ?></th>
 					<td>
-						<code class="moksa-copyable"><?php echo esc_html( LoginModule::callback_url() ); ?></code>
+						<button type="button" class="moksa-copyable" data-moksa-copy="<?php echo esc_attr( LoginModule::callback_url() ); ?>"><code><?php echo esc_html( LoginModule::callback_url() ); ?></code></button>
 						<p class="description">
 							<?php esc_html_e( 'Paste this into the LINE Login channel as a Callback URL. It must match exactly, including https and any trailing path.', 'moksa-line' ); ?>
 						</p>
@@ -258,7 +258,7 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Webhook URL', 'moksa-line' ); ?></th>
 					<td>
-						<code class="moksa-copyable"><?php echo esc_html( WebhookModule::endpoint_url() ); ?></code>
+						<button type="button" class="moksa-copyable" data-moksa-copy="<?php echo esc_attr( WebhookModule::endpoint_url() ); ?>"><code><?php echo esc_html( WebhookModule::endpoint_url() ); ?></code></button>
 						<p class="description">
 							<?php esc_html_e( 'Paste this into the Messaging API channel, turn on "Use webhook", then press Verify.', 'moksa-line' ); ?>
 						</p>

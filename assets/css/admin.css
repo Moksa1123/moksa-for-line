@@ -8,6 +8,17 @@
 	--moksa-muted: #646970;
 }
 
+/*
+ * The hidden attribute only sets display:none at the same specificity as any
+ * class rule, so the author stylesheet wins on source order and the element
+ * stays on screen. That is how the inbox shipped a reply box you could type
+ * into and send before choosing a conversation. Nine controls across these
+ * screens rely on hidden, so it is settled once, here.
+ */
+.moksa-line-wrap [hidden] {
+	display: none !important;
+}
+
 /* Cards ------------------------------------------------------------------ */
 
 .moksa-cards {
@@ -25,6 +36,22 @@
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
+	/* The cards are links now, so the admin's link colour and underline have to
+	   be undone -- a 30px underlined blue number does not read as a figure. */
+	color: inherit;
+	text-decoration: none;
+}
+
+.moksa-card:hover,
+.moksa-card:focus-visible {
+	border-color: #2271b1;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+	color: inherit;
+}
+
+.moksa-card:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 1px;
 }
 
 .moksa-card__number {
@@ -207,19 +234,179 @@
 	border-bottom: 1px solid #f0f0f1;
 }
 
+/*
+ * The avatar slot is always drawn, with the initial underneath the image. A
+ * LINE profile URL expires and many records never had one, and without a
+ * reserved slot the names in a column stop lining up and a dead URL leaves the
+ * browser's broken-image glyph sitting in the table.
+ */
 .moksa-avatar {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 28px;
+	height: 28px;
 	border-radius: 50%;
+	overflow: hidden;
+	background: #dfe3e8;
 	vertical-align: middle;
-	margin-right: 6px;
 }
 
+.moksa-avatar__initial {
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1;
+	color: #50575e;
+	text-transform: uppercase;
+}
+
+/* The image covers the initial when it loads, and simply fails to when it
+   does not, leaving the letter visible rather than a broken icon. */
+.moksa-avatar img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.moksa-identity {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/*
+ * Copy-to-clipboard. This was previously a bare cursor:pointer on a <code>,
+ * which is invisible to anyone who does not happen to hover it and unreachable
+ * from the keyboard. It carries a visible icon and label instead, because the
+ * values behind it -- the webhook URL, a LINE user id -- are the ones people
+ * retype by hand all day when they cannot find the button.
+ */
 .moksa-copyable {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	max-width: 100%;
+	padding: 3px 8px;
+	border: 1px solid var(--moksa-border);
+	border-radius: 4px;
+	background: #f6f7f7;
+	color: inherit;
+	font: inherit;
 	cursor: pointer;
+	text-align: left;
 	word-break: break-all;
+}
+
+.moksa-copyable code {
+	background: none;
+	padding: 0;
+	font-size: 12px;
+}
+
+.moksa-copyable::after {
+	content: "105";
+	font-family: dashicons;
+	font-size: 15px;
+	line-height: 1;
+	flex: 0 0 auto;
+	color: var(--moksa-muted);
+}
+
+.moksa-copyable:hover,
+.moksa-copyable:focus-visible {
+	border-color: #2271b1;
+	background: #f0f6fc;
 }
 
 .moksa-copyable.is-copied {
 	background: #edfaef;
+	border-color: #00a32a;
+}
+
+.moksa-copyable.is-copied::after {
+	content: "147";
+	color: #00a32a;
+}
+
+.moksa-copyable.is-copy-failed {
+	background: #fcf0f1;
+	border-color: #d63638;
+}
+
+.moksa-copyable.is-copy-failed::after {
+	content: "534";
+	color: #d63638;
+}
+
+/* Filter bars sit above a table and read left to right: what to show, then
+   how many matched, then the destructive action, pushed away from the rest. */
+.moksa-filters {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 12px 0 4px;
+}
+
+.moksa-filters__count {
+	color: var(--moksa-muted);
+	font-size: 13px;
+}
+
+.moksa-filters .moksa-button-danger {
+	margin-left: auto;
+	color: #b32d2e;
+	border-color: #b32d2e;
+}
+
+.moksa-filters .moksa-button-danger:hover:not(:disabled) {
+	background: #b32d2e;
+	border-color: #b32d2e;
+	color: #fff;
+}
+
+/* A search box narrower than its own placeholder clips the hint that explains
+   what it searches, which is the only guidance the field has. */
+.moksa-search {
+	min-width: 280px;
+}
+
+.moksa-checklist__fix {
+	display: inline-block;
+	margin-top: 2px;
+	font-size: 13px;
+	text-decoration: none;
+}
+
+.moksa-log-time {
+	white-space: nowrap;
+	width: 1%;
+	font-variant-numeric: tabular-nums;
+}
+
+.moksa-log-context {
+	margin-top: 4px;
+}
+
+.moksa-log-context summary {
+	cursor: pointer;
+	color: var(--moksa-muted);
+	font-size: 12px;
+}
+
+.moksa-log-context pre {
+	margin: 6px 0 0;
+	padding: 8px 10px;
+	max-height: 260px;
+	overflow: auto;
+	background: #f6f7f7;
+	border-radius: 4px;
+	font-size: 12px;
+	line-height: 1.5;
 }
 
 .moksa-context {
@@ -283,8 +470,12 @@
 }
 
 .moksa-conv__avatar {
-	border-radius: 50%;
-	flex: 0 0 auto;
+	width: 36px;
+	height: 36px;
+}
+
+.moksa-conv__avatar .moksa-avatar__initial {
+	font-size: 15px;
 }
 
 .moksa-conv__body {
@@ -585,10 +776,9 @@ input[type="color"] {
 }
 
 /* A URL long enough to overflow should wrap at any character, not push the
-   layout wide or clip. */
+   layout wide or clip. The display is set with the rest of the button above;
+   re-declaring it here would flatten it back out of its flex layout. */
 .moksa-copyable {
-	display: inline-block;
-	max-width: 100%;
 	overflow-wrap: anywhere;
 }
 
