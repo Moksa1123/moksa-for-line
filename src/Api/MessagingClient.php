@@ -259,6 +259,39 @@ class MessagingClient {
 	}
 
 	/**
+	 * How many people a broadcast would actually reach.
+	 *
+	 * Reports targetedReaches rather than followers: the follower count is a
+	 * cumulative tally of first-time adds that never goes down, so it overstates
+	 * the audience of anything sent today, sometimes badly. LINE only computes
+	 * this up to the previous day, and answers "unready" for a date it has not
+	 * finished, so the caller has to cope with not knowing.
+	 *
+	 * The endpoint allows 60 requests an hour, hence the cache; a number that is
+	 * a day old anyway loses nothing by being an hour stale.
+	 *
+	 * @return int|null Reachable people, or null when LINE cannot say.
+	 */
+	public static function reachable(): ?int {
+		$cached = get_transient( 'moksa_line_reachable' );
+
+		if ( false !== $cached ) {
+			return '' === $cached ? null : (int) $cached;
+		}
+
+		$response = Client::request( 'GET', '/insight/followers?date=' . gmdate( 'Ymd', time() - DAY_IN_SECONDS ) );
+		$reach    = null;
+
+		if ( ! is_wp_error( $response ) && isset( $response['status'] ) && 'ready' === $response['status'] ) {
+			$reach = isset( $response['targetedReaches'] ) ? (int) $response['targetedReaches'] : null;
+		}
+
+		set_transient( 'moksa_line_reachable', null === $reach ? '' : (string) $reach, HOUR_IN_SECONDS );
+
+		return $reach;
+	}
+
+	/**
 	 * Bot metadata, used by the settings screen to confirm the token works.
 	 *
 	 * @return array|WP_Error

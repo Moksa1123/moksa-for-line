@@ -13,6 +13,9 @@ use Moksa\Line\Data\QuickReplies;
 defined( 'ABSPATH' ) || exit;
 
 $rules = AutoReply::all();
+
+$basic_id     = ltrim( trim( (string) \Moksa\Line\Support\Options::get( 'bot_basic_id' ) ), '@' );
+$account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account', 'moksa-line' );
 ?>
 <div class="wrap moksa-line-wrap">
 	<h1><?php esc_html_e( 'Auto replies', 'moksa-line' ); ?></h1>
@@ -172,6 +175,22 @@ $rules = AutoReply::all();
 
 				<div class="moksa-feedback" data-moksa-feedback></div>
 			</form>
+
+			<div class="moksa-panel">
+				<h2><?php esc_html_e( 'Preview', 'moksa-line' ); ?></h2>
+				<p class="description">
+					<?php esc_html_e( 'The customer sends the trigger, the bot answers. Placeholders are filled in with sample values so you can see the sentence they actually read.', 'moksa-line' ); ?>
+				</p>
+
+				<?php // data-line-preview marks a deliberate imitation of LINE's UI so accessibility scanners skip it. ?>
+				<div class="moksa-phone-chat" data-line-preview>
+					<div class="moksa-phone-chat__bar">
+						<span class="moksa-phone-chat__dot"></span>
+						<?php echo esc_html( $account_name ); ?>
+					</div>
+					<div class="moksa-phone-chat__body moksa-phone-chat__body--thread" data-moksa-reply-preview></div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -1076,6 +1076,191 @@
 		});
 	}
 
+	// Settings rows that only apply when another control is set a certain way.
+	// A field captioned "only needed when the mode above is X" while the mode is
+	// not X still reads as something to fill in, and a long-lived token typed
+	// into a site issuing short-lived ones is a credential stored for nothing.
+	function bindConditionalRows() {
+		var $rows = $('[data-moksa-visible-when]');
+
+		if (!$rows.length) {
+			return;
+		}
+
+		function apply() {
+			$rows.each(function () {
+				var parts = String($(this).data('moksa-visible-when')).split('=');
+				var $control = $('#moksa-' + parts[0] + ', [name="moksa_line[' + parts[0] + ']"]').first();
+
+				// An unknown control must not hide the row: better an extra
+				// field than a setting with no way to reach it.
+				$(this).prop('hidden', $control.length ? $control.val() !== parts[1] : false);
+			});
+		}
+
+		$(document).on('change', 'select, input', apply);
+		apply();
+	}
+
+	// Character counters. LINE's own limit is 5000 characters, counted as
+	// characters -- an emoji is one, not the two UTF-16 units String#length
+	// reports, which is what the server counts too.
+	function textLength(value) {
+		return window.Array && Array.from ? Array.from(value).length : value.length;
+	}
+
+	function bindCounters() {
+		$('[data-moksa-count-into]').each(function () {
+			var $field = $(this);
+			var $into = $($field.data('moksa-count-into'));
+			var max = parseInt($field.attr('maxlength'), 10) || 0;
+
+			if (!$into.length || !max) {
+				return;
+			}
+
+			function update() {
+				var used = textLength($field.val() || '');
+				$into
+					.text(moksaLine.strings.charactersUsed.replace('%1$s', used).replace('%2$s', max))
+					.toggleClass('is-near-limit', used > max * 0.9);
+			}
+
+			$field.on('input', update);
+			update();
+		});
+	}
+
+	// The broadcast preview. Deliberately not the Flex renderer's job: a
+	// broadcast is a plain text bubble, optionally alongside a Flex template,
+	// and the thing worth showing is what a recipient sees before they can do
+	// anything about it.
+	function bindBroadcastPreview() {
+		var $preview = $('[data-moksa-broadcast-preview]');
+
+		if (!$preview.length) {
+			return;
+		}
+
+		var $message = $('#moksa-broadcast-message');
+		var $flex = $('#moksa-broadcast-flex');
+
+		function render() {
+			$preview.empty();
+
+			var text = $.trim($message.val() || '');
+
+			if (text) {
+				$preview.append($('<div class="moksa-bubble"></div>').text(text));
+			}
+
+			var flexId = parseInt($flex.val(), 10) || 0;
+
+			if (flexId > 0) {
+				var name = $flex.find('option:selected').text();
+				$preview.append(
+					$('<div class="moksa-bubble moksa-bubble--card"></div>')
+						.text(moksaLine.strings.flexAttached.replace('%s', name))
+				);
+			}
+
+			if (!$preview.children().length) {
+				$preview.append($('<p class="moksa-bubble moksa-bubble--empty"></p>').text(moksaLine.strings.broadcastEmpty));
+			}
+		}
+
+		$message.on('input', render);
+		$flex.on('change', render);
+		render();
+	}
+
+	// The auto-reply preview. Shows the exchange rather than the reply alone,
+	// because a rule is a pair -- what the customer types and what comes back --
+	// and the trigger is half of what there is to get wrong.
+	function bindReplyPreview() {
+		var $preview = $('[data-moksa-reply-preview]');
+
+		if (!$preview.length) {
+			return;
+		}
+
+		var $form = $('[data-moksa-rule-form]').length ? $('[data-moksa-rule-form]') : $preview.closest('.moksa-split__side');
+		var $type = $('#moksa-rule-type');
+		var $trigger = $('#moksa-rule-keyword');
+
+		// Sample values, so the shop reads the sentence the customer reads
+		// rather than a line of braces.
+		var SAMPLE = {
+			'{display_name}': moksaLine.strings.sampleName,
+			'{site_name}': moksaLine.siteName,
+			'{site_url}': moksaLine.siteUrl
+		};
+
+		function fill(text) {
+			$.each(SAMPLE, function (token, value) {
+				text = text.split(token).join(value);
+			});
+
+			return text;
+		}
+
+		function bubble(text, extraClass) {
+			return $('<div class="moksa-bubble ' + (extraClass || '') + '"></div>').text(text);
+		}
+
+		function render() {
+			$preview.empty();
+
+			var trigger = $.trim($trigger.val() || '');
+
+			if (trigger) {
+				$preview.append(
+					$('<div class="moksa-bubble moksa-bubble--sent"></div>').text(trigger)
+				);
+			}
+
+			var type = $type.val();
+			var reply;
+
+			if ('text' === type) {
+				var text = $.trim($('#moksa-rule-text').val() || '');
+				reply = text ? bubble(fill(text)) : bubble(moksaLine.strings.replyEmpty, 'moksa-bubble--empty');
+			} else if ('image' === type) {
+				var url = $.trim($('#moksa-rule-image').val() || '');
+
+				if (url) {
+					reply = $('<div class="moksa-bubble moksa-bubble--media"></div>')
+						.append($('<img alt="" />').attr('src', url));
+				} else {
+					reply = bubble(moksaLine.strings.replyEmpty, 'moksa-bubble--empty');
+				}
+			} else {
+				// Everything else is a reference to something built elsewhere,
+				// so the preview names it rather than pretending to render it.
+				var label = $type.find('option:selected').text();
+				var chosen = $('[data-moksa-reply-field="' + type + '"]:not([hidden])').find('select, input').first();
+				var chosenLabel = chosen.length
+					? (chosen.is('select') ? chosen.find('option:selected').text() : $.trim(chosen.val()))
+					: '';
+
+				reply = bubble(
+					chosenLabel
+						? moksaLine.strings.replyReference.replace('%1$s', label).replace('%2$s', chosenLabel)
+						: label,
+					'moksa-bubble--card'
+				);
+			}
+
+			$preview.append($('<div class="moksa-bubble-row"></div>')
+				.append($('<span class="moksa-phone-chat__avatar" aria-hidden="true"></span>'))
+				.append(reply));
+		}
+
+		$form.on('input change', 'input, select, textarea', render);
+		$(document).on('moksa:rule-loaded', render);
+		render();
+	}
+
 	function bindClearLogs() {
 		$(document).on('click', '[data-moksa-clear-logs]', function () {
 			if (!window.confirm(moksaLine.strings.confirmClearLogs)) {
@@ -1108,6 +1293,10 @@
 		bindUnlink();
 		bindCopy();
 		bindClearLogs();
+		bindReplyPreview();
+		bindCounters();
+		bindBroadcastPreview();
+		bindConditionalRows();
 		bindResendNotification();
 		bindAvatarFallback();
 	});

@@ -33,6 +33,25 @@ function check( $condition, $label, $detail = '' ) {
 
 // --- Setup ------------------------------------------------------------------
 
+/*
+ * This script truncates the notification history and the log, and overwrites
+ * the site's own notification settings. The docblock has always said to run it
+ * only on a throwaway site, but a comment does not stop anyone: pasted into the
+ * wrong terminal it silently destroys a shop's delivery record and rewrites
+ * when their customers get notified. So it asks first.
+ */
+if ( 'production' === wp_get_environment_type() && ! defined( 'MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
+	echo "REFUSED: this site reports WP_ENVIRONMENT_TYPE=production.
+";
+	echo "It truncates the notification history and log and overwrites notification settings.
+";
+	echo "If this really is a throwaway site, set WP_ENVIRONMENT_TYPE, or define
+";
+	echo "MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.
+";
+	return;
+}
+
 $wpdb->query( 'TRUNCATE ' . NotifyHistory::table() );
 $wpdb->query( 'TRUNCATE ' . \Moksa\Line\Support\Logger::table() );
 

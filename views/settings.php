@@ -38,13 +38,17 @@ $current = isset( $tabs[ $current ] ) ? $current : 'general';
  * @param string $label Field label.
  * @param string $help  Help text.
  * @param string $type  Input type.
+ * @param string $when  Optional "otherkey=value" condition; the row is only
+ *                      shown while that other control holds that value, so a
+ *                      field nobody can act on yet is not offered as if they
+ *                      could.
  */
-$field = function ( $key, $label, $help = '', $type = 'text' ) {
+$field = function ( $key, $label, $help = '', $type = 'text', $when = '' ) {
 	$schema = Options::schema();
 	$secret = ! empty( $schema[ $key ]['secret'] );
 	$value  = $secret ? Options::mask( $key ) : (string) Options::get( $key );
 	?>
-	<tr>
+	<tr<?php echo '' !== $when ? ' data-moksa-visible-when="' . esc_attr( $when ) . '"' : ''; ?>>
 		<th scope="row"><label for="moksa-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></label></th>
 		<td>
 			<input type="<?php echo esc_attr( $type ); ?>"
@@ -224,8 +228,17 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 
 				<?php
 				$field( 'button_text', __( 'Button text', 'moksa-line' ), __( 'Leave blank to use the shortcode label, or the default wording.', 'moksa-line' ) );
-				$field( 'button_bg_color', __( 'Background', 'moksa-line' ), __( 'A hex colour, for example #06C755.', 'moksa-line' ), 'color' );
-				$field( 'button_text_color', __( 'Text colour', 'moksa-line' ), '', 'color' );
+				$field(
+					'button_bg_color',
+					__( 'Background', 'moksa-line' ),
+					// Worth stating plainly: LINE's login button guidelines
+					// name #06C755 with white text and list non-designated
+					// colours among the mistakes to avoid. A shop that restyles
+					// this to match their theme can fail LINE's channel review.
+					__( 'LINE requires #06C755 with white text on the login button. Changing it can fail channel review.', 'moksa-line' ),
+					'color'
+				);
+				$field( 'button_text_color', __( 'Text colour', 'moksa-line' ), __( 'LINE requires #FFFFFF.', 'moksa-line' ), 'color' );
 				$field( 'button_border_radius', __( 'Corner radius', 'moksa-line' ), __( 'Pixels. 0 gives square corners.', 'moksa-line' ), 'number' );
 				$field( 'button_width', __( 'Width', 'moksa-line' ), __( 'For example 100%, 240px, or blank to fit the text.', 'moksa-line' ) );
 				$field( 'button_height', __( 'Minimum height', 'moksa-line' ), __( 'Pixels. 0 lets the padding decide.', 'moksa-line' ), 'number' );
@@ -277,7 +290,13 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 					),
 					__( 'Short-lived tokens last 15 minutes, are unlimited in number, and never need storing. A long-lived token never expires, which means a leak is unrecoverable without rotating the channel.', 'moksa-line' )
 				);
-				$field( 'messaging_token', __( 'Long-lived token', 'moksa-line' ), __( 'Only needed when the mode above is set to long-lived.', 'moksa-line' ), 'password' );
+				$field(
+					'messaging_token',
+					__( 'Long-lived token', 'moksa-line' ),
+					__( 'Never expires, so treat it like a password. Rotate the channel if it leaks.', 'moksa-line' ),
+					'password',
+					'token_mode=long_lived'
+				);
 				$field( 'bot_basic_id', __( 'Official account ID', 'moksa-line' ), __( 'For example @moksa. Used by the add-friend shortcode.', 'moksa-line' ) );
 				?>
 				<tr>

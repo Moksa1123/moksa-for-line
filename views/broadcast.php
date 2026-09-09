@@ -15,6 +15,14 @@ defined( 'ABSPATH' ) || exit;
 $stats = Users::stats();
 $quota = null;
 
+// The size of the bill, when LINE will tell us. It only computes this up to
+// yesterday and answers "unready" otherwise, so a missing number is normal
+// rather than an error worth reporting.
+$reachable = TokenManager::is_configured() ? MessagingClient::reachable() : null;
+
+$basic_id     = ltrim( trim( (string) \Moksa\Line\Support\Options::get( 'bot_basic_id' ) ), '@' );
+$account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account', 'moksa-line' );
+
 if ( TokenManager::is_configured() ) {
 	$consumption = MessagingClient::quota_consumption();
 	$allowance   = MessagingClient::quota();
@@ -42,10 +50,16 @@ if ( TokenManager::is_configured() ) {
 		</p>
 	</div>
 
+	<div class="moksa-split moksa-split--wide">
+	<div class="moksa-split__main">
 	<form class="moksa-panel" data-moksa-broadcast>
 		<p>
 			<label for="moksa-broadcast-message"><?php esc_html_e( 'Message', 'moksa-line' ); ?></label>
-			<textarea id="moksa-broadcast-message" name="message" rows="5" class="widefat"></textarea>
+			<textarea id="moksa-broadcast-message" name="message" rows="5" class="widefat"
+				maxlength="5000" data-moksa-count-into="[data-moksa-broadcast-count]"></textarea>
+			<span class="description">
+				<span data-moksa-broadcast-count></span>
+			</span>
 		</p>
 
 		<p>
@@ -71,7 +85,19 @@ if ( TokenManager::is_configured() ) {
 					);
 					?>
 				</option>
-				<option value="all"><?php esc_html_e( 'Everyone who follows the account', 'moksa-line' ); ?></option>
+				<option value="all">
+					<?php
+					if ( null !== $reachable ) {
+						printf(
+							/* translators: %s: number of people a broadcast reaches. */
+							esc_html__( 'Everyone who follows the account (%s)', 'moksa-line' ),
+							esc_html( number_format_i18n( $reachable ) )
+						);
+					} else {
+						esc_html_e( 'Everyone who follows the account', 'moksa-line' );
+					}
+					?>
+				</option>
 			</select>
 			<span class="description">
 				<?php esc_html_e( 'The recorded list only includes people this site has seen since the webhook was switched on, so it is usually smaller than the real follower count.', 'moksa-line' ); ?>
@@ -92,4 +118,27 @@ if ( TokenManager::is_configured() ) {
 
 		<div class="moksa-feedback" data-moksa-feedback></div>
 	</form>
+	</div>
+
+	<div class="moksa-split__side">
+		<div class="moksa-panel">
+			<h2><?php esc_html_e( 'Preview', 'moksa-line' ); ?></h2>
+			<p class="description">
+				<?php esc_html_e( 'What every recipient gets. A broadcast is billed per person and cannot be recalled, so this is the last look you have.', 'moksa-line' ); ?>
+			</p>
+
+			<?php // data-line-preview marks a deliberate imitation of LINE's UI so accessibility scanners skip it. ?>
+			<div class="moksa-phone-chat" data-line-preview>
+				<div class="moksa-phone-chat__bar">
+					<span class="moksa-phone-chat__dot"></span>
+					<?php echo esc_html( $account_name ); ?>
+				</div>
+				<div class="moksa-phone-chat__body">
+					<span class="moksa-phone-chat__avatar" aria-hidden="true"></span>
+					<div class="moksa-broadcast-preview" data-moksa-broadcast-preview></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
 </div>

@@ -188,10 +188,21 @@ class AdminModule {
 			'moksaLine',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'siteName' => get_bloginfo( 'name' ),
+				'siteUrl'  => home_url(),
 				'nonce'   => wp_create_nonce( 'moksa_line_admin' ),
 				'strings' => array(
 					'saved'        => __( 'Saved.', 'moksa-line' ),
 					'copied'       => __( 'Copied', 'moksa-line' ),
+					'sampleName'   => _x( 'Ming', 'sample customer name shown in previews', 'moksa-line' ),
+					'replyEmpty'   => __( 'Nothing to reply with yet.', 'moksa-line' ),
+					/* translators: 1: reply type, 2: the chosen item. */
+					'replyReference' => __( '%1$s: %2$s', 'moksa-line' ),
+					/* translators: 1: characters used, 2: the limit. */
+					'charactersUsed' => __( '%1$s of %2$s characters', 'moksa-line' ),
+					/* translators: %s: Flex template name. */
+					'flexAttached' => __( 'Plus the Flex card "%s", drawn below this message.', 'moksa-line' ),
+					'broadcastEmpty' => __( 'Nothing to send yet.', 'moksa-line' ),
 					'sendAgain'    => __( 'Send again', 'moksa-line' ),
 					'confirmResend' => __( 'Send this notification to the customer again?', 'moksa-line' ),
 					'copyFailed'   => __( 'Could not copy -- select it and copy by hand', 'moksa-line' ),
