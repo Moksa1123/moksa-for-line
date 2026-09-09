@@ -375,7 +375,7 @@ class MessagingClient {
 	public static function flex( string $alt_text, array $contents ): array {
 		return array(
 			'type'     => 'flex',
-			'altText'  => mb_substr( '' !== $alt_text ? $alt_text : 'Message', 0, 400 ),
+			'altText'  => mb_substr( '' !== $alt_text ? $alt_text : 'Message', 0, 1500 ),
 			'contents' => $contents,
 		);
 	}

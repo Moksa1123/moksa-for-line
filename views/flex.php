@@ -12,6 +12,12 @@ defined( 'ABSPATH' ) || exit;
 
 $templates = Flex::all();
 $starters  = FlexModule::starters();
+
+// The basic ID is the closest thing to the account name the plugin stores. It is
+// not the display name the customer sees, but it is at least this account and
+// not a placeholder that makes the preview feel generic.
+$basic_id     = ltrim( trim( (string) \Moksa\Line\Support\Options::get( 'bot_basic_id' ) ), '@' );
+$account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account', 'moksa-line' );
 ?>
 <div class="wrap moksa-line-wrap">
 	<h1><?php esc_html_e( 'Flex messages', 'moksa-line' ); ?></h1>
@@ -32,7 +38,7 @@ $starters  = FlexModule::starters();
 
 				<p>
 					<label for="moksa-flex-alt"><?php esc_html_e( 'Fallback text', 'moksa-line' ); ?></label>
-					<input type="text" id="moksa-flex-alt" name="alt_text" class="widefat" maxlength="400" required />
+					<input type="text" id="moksa-flex-alt" name="alt_text" class="widefat" maxlength="1500" required />
 					<span class="description"><?php esc_html_e( 'Shown in the chat list and in push notifications, where the bubble cannot be drawn.', 'moksa-line' ); ?></span>
 				</p>
 
@@ -74,7 +80,35 @@ $starters  = FlexModule::starters();
 		<div class="moksa-split__side">
 			<div class="moksa-panel">
 				<h2><?php esc_html_e( 'Preview', 'moksa-line' ); ?></h2>
-				<div class="moksa-flex-preview" data-moksa-flex-preview></div>
+				<p class="description">
+					<?php esc_html_e( 'Drawn as the customer receives it, on a phone-width screen. A push cannot be recalled, so this and "Send test" are the only checks you get.', 'moksa-line' ); ?>
+				</p>
+
+				<?php // data-line-preview marks a deliberate imitation of another product's UI, so accessibility scanners skip it. ?>
+				<div class="moksa-phone-chat" data-line-preview>
+					<div class="moksa-phone-chat__bar">
+						<span class="moksa-phone-chat__dot"></span>
+						<?php echo esc_html( $account_name ); ?>
+					</div>
+					<div class="moksa-phone-chat__body">
+						<span class="moksa-phone-chat__avatar" aria-hidden="true"></span>
+						<div class="moksa-flex-preview" data-moksa-flex-preview></div>
+					</div>
+				</div>
+
+				<h3><?php esc_html_e( 'Chat list and lock screen', 'moksa-line' ); ?></h3>
+				<p class="description">
+					<?php esc_html_e( 'All the customer sees until they open the chat. This is the fallback text, not the bubble.', 'moksa-line' ); ?>
+				</p>
+				<div class="moksa-notif" data-line-preview>
+					<span class="moksa-notif__avatar" aria-hidden="true"></span>
+					<span class="moksa-notif__text">
+						<span class="moksa-notif__name"><?php echo esc_html( $account_name ); ?></span>
+						<span class="moksa-notif__body" data-moksa-notif-body></span>
+					</span>
+				</div>
+
+				<div class="moksa-preview-warnings" data-moksa-preview-warnings></div>
 			</div>
 
 			<div class="moksa-panel">

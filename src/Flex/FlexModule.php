@@ -239,7 +239,13 @@ class FlexModule {
 							array(
 								'type'   => 'button',
 								'style'  => 'primary',
-								'color'  => '#06C755',
+								// LINE's brand green is #06C755, but white text
+								// on it is 2.3:1 -- under half the 4.5:1 that
+								// makes small text readable. LINE gets away with
+								// it on its own chrome; a shop's only call to
+								// action should not start out that faint. This
+								// is the same hue two steps darker, at 4.8:1.
+								'color'  => '#06843A',
 								'action' => array(
 									'type'  => 'uri',
 									'label' => __( 'Find out more', 'moksa-line' ),
@@ -270,7 +276,7 @@ class FlexModule {
 								'type'     => 'box',
 								'layout'   => 'horizontal',
 								'contents' => array(
-									array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line' ), 'size' => 'sm', 'color' => '#888888' ),
+									array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line' ), 'size' => 'sm', 'color' => '#767676' ),
 									array( 'type' => 'text', 'text' => 'NT$0', 'size' => 'sm', 'align' => 'end' ),
 								),
 							),

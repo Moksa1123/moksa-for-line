@@ -77,8 +77,8 @@ class Validator {
 
 		if ( empty( $message['altText'] ) || ! is_string( $message['altText'] ) ) {
 			$problems[] = __( 'A Flex message needs altText (shown in the chat list and push notification).', 'moksa-line' );
-		} elseif ( mb_strlen( $message['altText'] ) > 400 ) {
-			$problems[] = __( 'altText is limited to 400 characters.', 'moksa-line' );
+		} elseif ( mb_strlen( $message['altText'] ) > 1500 ) {
+			$problems[] = __( 'altText is limited to 1500 characters.', 'moksa-line' );
 		}
 
 		if ( empty( $message['contents'] ) || ! is_array( $message['contents'] ) ) {

@@ -176,6 +176,16 @@ $no_alt = $good;
 unset( $no_alt['altText'] );
 check( count( Validator::check_message( $no_alt ) ) > 0, 'missing altText is caught' );
 
+// The limit was 400 here for a while, which rejected altText LINE would have
+// accepted and truncated the rest to a quarter of the notification.
+$alt_1500 = $good;
+$alt_1500['altText'] = str_repeat( 'a', 1500 );
+check( Validator::check_message( $alt_1500 ) === array(), 'altText of exactly 1500 characters is accepted' );
+
+$alt_1501 = $good;
+$alt_1501['altText'] = str_repeat( 'a', 1501 );
+check( count( Validator::check_message( $alt_1501 ) ) > 0, 'altText over 1500 characters is caught' );
+
 $bad_enum = $good;
 $bad_enum['contents']['body']['contents'][0]['weight'] = 'extra-bold';
 $problems = Validator::check_message( $bad_enum );

@@ -72,14 +72,28 @@
                 'position': 'relative'
             });
 
-            // Size
-            var width = '300px'; // Default (Mega)
-            if (bubble.size === 'giga') width = '100%';
-            else if (bubble.size === 'kilo') width = '260px';
-            else if (bubble.size === 'micro') width = '160px';
-            else if (bubble.size === 'nano') width = '120px';
-            el.css('width', width);
+            // Size. LINE publishes the seven names but not their pixel widths;
+            // these are the measured ladder, and what matters here is that giga
+            // is a fixed 386px rather than "as wide as the panel". Stretching it
+            // is how a preview flatters a layout that will look cramped in the
+            // app. deca and hecto fall back to kilo on LINE older than iOS/
+            // Android 13.6.0, which is why they sit either side of it here.
+            var widths = {
+                nano: 120,
+                micro: 160,
+                deca: 200,
+                hecto: 241,
+                kilo: 260,
+                mega: 300,
+                giga: 386
+            };
+            var width = widths[bubble.size] || widths.mega;
+            el.css('width', width + 'px');
+            // A giga bubble is wider than the narrow preview column. Capping it
+            // keeps the layout readable; the caption says the width is
+            // approximate so nobody reads the cap as a real LINE constraint.
             el.css('max-width', '100%');
+            el.data('moksa-width', width);
 
             // Direction
             el.css('direction', bubble.direction || 'ltr');

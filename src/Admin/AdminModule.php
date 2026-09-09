@@ -189,6 +189,12 @@ class AdminModule {
 				'nonce'   => wp_create_nonce( 'moksa_line_admin' ),
 				'strings' => array(
 					'saved'        => __( 'Saved.', 'moksa-line' ),
+					'altTextEmpty' => __( '(no fallback text -- the notification would be blank)', 'moksa-line' ),
+					'altTextMissing' => __( 'Fallback text is empty. The chat list and the push notification would show nothing.', 'moksa-line' ),
+					/* translators: %d: character count. */
+					'altTextTooLong' => __( 'Fallback text is %d characters. LINE allows 1500 and cuts the rest.', 'moksa-line' ),
+					/* translators: 1: the text, 2: measured contrast ratio, 3: required ratio. */
+					'contrastWarning' => __( '"%1$s" has a contrast ratio of %2$s against its background; %3$s is the readable minimum.', 'moksa-line' ),
 					'failed'       => __( 'That did not work.', 'moksa-line' ),
 					'confirmDelete' => __( 'Delete this permanently?', 'moksa-line' ),
 					'publishing'   => __( 'Publishing to LINE...', 'moksa-line' ),

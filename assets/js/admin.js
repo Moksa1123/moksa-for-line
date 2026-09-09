@@ -229,8 +229,174 @@
 
 		var $json = $form.find('[data-moksa-flex-json]');
 		var $preview = $('[data-moksa-flex-preview]');
+		var $alt = $form.find('input[name=alt_text]');
+		var $notifBody = $('[data-moksa-notif-body]');
+		var $warnings = $('[data-moksa-preview-warnings]');
+
+		// LINE's own maximum. It was 400 here once, which quietly cut three
+		// quarters off every notification without ever showing an error.
+		var MAX_ALT_TEXT = 1500;
+
+		function renderNotification() {
+			if (!$notifBody.length) {
+				return;
+			}
+
+			var text = $.trim($alt.val() || '');
+
+			$notifBody
+				.text(text || moksaLine.strings.altTextEmpty)
+				.toggleClass('is-empty', '' === text);
+		}
+
+		// Contrast is checked on what was actually drawn rather than on the JSON,
+		// because a colour can come from the component, the block style or the
+		// default, and only the rendered result knows which won. The bubble is
+		// white here on purpose: shops judge button contrast against the
+		// background they are looking at, and getting that background wrong is
+		// how unreadable buttons ship.
+		function luminance(rgb) {
+			var channels = rgb.map(function (value) {
+				var c = value / 255;
+				return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+			});
+
+			return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+		}
+
+		function parseColor(value) {
+			var match = /rgba?\(([^)]+)\)/.exec(value || '');
+
+			if (!match) {
+				return null;
+			}
+
+			var parts = match[1].split(',').map(function (part) {
+				return parseFloat(part);
+			});
+
+			// A transparent colour tells us nothing; the caller keeps walking up.
+			if (parts.length > 3 && 0 === parts[3]) {
+				return null;
+			}
+
+			return [parts[0], parts[1], parts[2]];
+		}
+
+		function backgroundBehind(el) {
+			var node = el;
+
+			while (node && node.nodeType === 1) {
+				var color = parseColor(window.getComputedStyle(node).backgroundColor);
+
+				if (color) {
+					return color;
+				}
+
+				node = node.parentNode;
+			}
+
+			return [255, 255, 255];
+		}
+
+		function contrast(a, b) {
+			var la = luminance(a);
+			var lb = luminance(b);
+
+			return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+		}
+
+		function checkContrast() {
+			var problems = [];
+			var seen = {};
+
+			$preview.find('*').each(function () {
+				if (problems.length >= 5) {
+					return false;
+				}
+
+				var el = this;
+
+				// Only leaf elements that carry their own visible text.
+				if (el.children.length || '' === $.trim(el.textContent || '')) {
+					return;
+				}
+
+				var style = window.getComputedStyle(el);
+				var fg = parseColor(style.color);
+
+				if (!fg) {
+					return;
+				}
+
+				var size = parseFloat(style.fontSize) || 16;
+				var weight = parseInt(style.fontWeight, 10) || 400;
+				var large = size >= 24 || (size >= 18.66 && weight >= 700);
+				var needed = large ? 3 : 4.5;
+				var ratio = contrast(fg, backgroundBehind(el));
+
+				if (ratio >= needed) {
+					return;
+				}
+
+				var label = $.trim(el.textContent).slice(0, 30);
+
+				if (seen[label]) {
+					return;
+				}
+
+				seen[label] = true;
+				problems.push(
+					moksaLine.strings.contrastWarning
+						.replace('%1$s', label)
+						.replace('%2$s', ratio.toFixed(1))
+						.replace('%3$s', needed.toFixed(1))
+				);
+			});
+
+			return problems;
+		}
+
+		function renderWarnings() {
+			if (!$warnings.length) {
+				return;
+			}
+
+			var problems = [];
+			var alt = $.trim($alt.val() || '');
+
+			// LINE counts characters, and PHP's mb_strlen agrees. A plain
+			// String#length counts UTF-16 units, so one emoji would read as two
+			// and the editor would disagree with the server that saves it.
+			var altLength = window.Array && Array.from ? Array.from(alt).length : alt.length;
+
+			if ('' === alt) {
+				problems.push(moksaLine.strings.altTextMissing);
+			} else if (altLength > MAX_ALT_TEXT) {
+				problems.push(
+					moksaLine.strings.altTextTooLong.replace('%d', String(altLength))
+				);
+			}
+
+			problems = problems.concat(checkContrast());
+
+			if (!problems.length) {
+				$warnings.empty();
+				return;
+			}
+
+			var $list = $('<ul class="moksa-preview-warnings__list"></ul>');
+
+			$.each(problems, function (i, problem) {
+				$list.append($('<li></li>').text(problem));
+			});
+
+			$warnings.empty().append($list);
+		}
 
 		function renderPreview() {
+			renderNotification();
+
 			if (!$preview.length || !window.MoksaFlexRenderer) {
 				return;
 			}
@@ -240,6 +406,8 @@
 			} catch (e) {
 				$preview.html('<p class="moksa-flex-preview__error">' + $('<div>').text(e.message).html() + '</p>');
 			}
+
+			renderWarnings();
 		}
 
 		var previewTimer = null;
@@ -247,6 +415,11 @@
 		$json.on('input', function () {
 			window.clearTimeout(previewTimer);
 			previewTimer = window.setTimeout(renderPreview, 400);
+		});
+
+		$alt.on('input', function () {
+			renderNotification();
+			renderWarnings();
 		});
 
 		renderPreview();
