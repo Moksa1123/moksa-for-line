@@ -213,8 +213,12 @@
 		this.$field = $(this.$root.data('moksa-area-editor'));
 		this.$phone = this.$root.find('[data-moksa-phone-areas]');
 
-		this.imageWidth = 2500;
-		this.imageHeight = 1686;
+		// The coordinate space the areas are stored in. A rich menu is always
+		// 2500 wide; an imagemap is always 1040 and any height. Everything else
+		// in here derives from these two numbers, so the same editor drives
+		// both once they stop being hardcoded.
+		this.imageWidth = parseInt(this.$root.data('image-width'), 10) || 2500;
+		this.imageHeight = parseInt(this.$root.data('image-height'), 10) || 1686;
 		this.areas = [];
 		this.selected = null;
 		this.drag = null;

@@ -25,7 +25,7 @@ class Migrator {
 	 * plugin can ship many releases without the tables changing, and this only
 	 * moves when they do.
 	 */
-	const DB_VERSION = '1.0.1';
+	const DB_VERSION = '1.0.2';
 
 	/**
 	 * Run dbDelta when the stored version is behind the code version.
@@ -351,6 +351,7 @@ class Migrator {
 				name varchar(191) NOT NULL DEFAULT '',
 				alt_text varchar(1500) NOT NULL DEFAULT '',
 				base_url varchar(512) NOT NULL DEFAULT '',
+				image_attachment_id bigint(20) unsigned NOT NULL DEFAULT 0,
 				base_width int(11) NOT NULL DEFAULT 1040,
 				base_height int(11) NOT NULL DEFAULT 1040,
 				actions longtext NULL,

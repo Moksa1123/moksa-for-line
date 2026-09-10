@@ -318,6 +318,9 @@ msgstr "方向鍵每次移動 1 像素，按住 Shift 為 10 像素。"
 msgid "Asked one at a time, in this order. Each answer is stored under its own key, which is the column you see in submissions."
 msgstr "依這個順序一題一題問。每個答案會存在自己的欄位名稱下，也就是你在回覆記錄裡看到的欄位。"
 
+msgid "At least 1040 pixels wide. Five copies are cut on save, because LINE asks for the image at five widths and refuses a URL with a file extension."
+msgstr "寬度至少 1040 像素。儲存時會切出五份，因為 LINE 會用五種寬度來要圖，而且拒絕帶副檔名的網址。"
+
 msgid "At most 14 characters, shown at the bottom of the chat."
 msgstr "最多 14 字，顯示在聊天室下方。"
 
@@ -335,6 +338,9 @@ msgstr "改回單張卡片"
 
 msgid "Background"
 msgstr "背景色"
+
+msgid "Banner image"
+msgstr "橫幅圖片"
 
 msgid "Billing address"
 msgstr "帳單地址"
@@ -429,6 +435,9 @@ msgstr "聊天機器人 ID"
 msgid "Check"
 msgstr "檢查"
 
+msgid "Choose a banner image to start drawing regions."
+msgstr "請先選擇橫幅圖片才能開始畫範圍。"
+
 msgid "Choose a conversation"
 msgstr "選擇一則對話"
 
@@ -443,6 +452,9 @@ msgstr "請至少選擇一項商品。"
 
 msgid "Choose image"
 msgstr "選擇圖片"
+
+msgid "Choose the banner image first."
+msgstr "請先選擇橫幅圖片。"
 
 msgid "Clear"
 msgstr "清除"
@@ -494,6 +506,9 @@ msgstr "圓角半徑"
 
 msgid "Could not copy -- select it and copy by hand"
 msgstr "無法複製，請自行選取後複製"
+
+msgid "Could not create the folder for the imagemap images."
+msgstr "無法建立存放圖片訊息圖檔的資料夾。"
 
 msgid "Could not download the message content (HTTP %d)."
 msgstr "無法下載訊息內容（HTTP %d）。"
@@ -615,6 +630,9 @@ msgstr "不邀請"
 msgid "Drag on the image to add an area, or click one to edit it."
 msgstr "在圖片上拖曳可新增區塊，點選既有區塊可編輯。"
 
+msgid "Drag on the image to draw a region. Click one to move, resize or set what it does. Coordinates are in the 1040-wide space LINE renders in."
+msgstr "在圖上拖曳畫出範圍。點選既有範圍可以移動、調整大小或設定它的動作。座標是以 LINE 實際算圖的 1040 寬度為基準。"
+
 msgid "Drag on the image to draw an area. Click one to move, resize or set what it does. Edges snap to each other, because a one-pixel gap is invisible here and dead to the customer."
 msgstr "在圖片上拖曳來畫出區塊。點選區塊可以移動、調整大小或設定它的動作。邊緣會互相吸附，因為一像素的縫隙在這裡看不出來，對客人來說卻是點不到的死角。"
 
@@ -699,6 +717,9 @@ msgstr "備援文字有 %d 字。LINE 上限是 1500 字，超過的會被截斷
 msgid "Fallback text is empty. The chat list and the push notification would show nothing."
 msgstr "備援文字是空的。聊天列表和推播通知會什麼都不顯示。"
 
+msgid "Fallback text is required: it is all the customer sees in the chat list."
+msgstr "備援文字是必填的：客人在聊天列表裡只看得到它。"
+
 msgid "File"
 msgstr "檔案"
 
@@ -777,6 +798,9 @@ msgstr "交還給機器人"
 msgid "Give the rule something to match on."
 msgstr "請填入這條規則要比對的內容。"
 
+msgid "Give this imagemap a name."
+msgstr "請幫這則圖片訊息取個名稱。"
+
 msgid "Greeting message"
 msgstr "歡迎訊息"
 
@@ -801,6 +825,9 @@ msgstr "命中次數"
 msgid "Hold the shipping notification until the tracking number appears"
 msgstr "先壓著出貨通知，等到物流單號出現再送"
 
+msgid "How LINE fetches the image"
+msgstr "LINE 是怎麼取圖的"
+
 msgid "If you do not know something, say so and offer to pass it to a person. Never invent prices, stock or delivery dates."
 msgstr "不知道的事就直說，並提議轉給真人處理。絕對不要自行編造價格、庫存或到貨日期。"
 
@@ -812,6 +839,15 @@ msgstr "圖片網址"
 
 msgid "Image card with a button"
 msgstr "含按鈕的圖片卡片"
+
+msgid "Imagemap"
+msgstr "圖片訊息"
+
+msgid "Imagemap deleted."
+msgstr "圖片訊息已刪除。"
+
+msgid "Imagemaps"
+msgstr "圖片訊息"
 
 msgid "Imported, result unknown"
 msgstr "匯入資料，結果不明"
@@ -960,6 +996,9 @@ msgstr "這個選單尺寸 LINE 要求 %1$d x %2$d 像素，但這張圖是 %3$d
 msgid "LINE is rate limiting this channel. Try again shortly."
 msgstr "LINE 正在限制這個頻道的請求頻率，請稍後再試。"
 
+msgid "LINE only accepts an imagemap image over HTTPS, and this site is served over plain HTTP."
+msgstr "LINE 只接受用 HTTPS 提供的圖片訊息圖檔，而這個站台是純 HTTP。"
+
 msgid "LINE rejected this login. Check the Channel ID, Channel Secret and Callback URL."
 msgstr "LINE 拒絕了這次登入。請檢查 Channel ID、Channel Secret 與 Callback URL。"
 
@@ -974,6 +1013,9 @@ msgstr "LINE 規定必須是 #FFFFFF。"
 
 msgid "LINE settings"
 msgstr "LINE 設定"
+
+msgid "LINE treats the base URL as a prefix and appends the width it wants, with no file extension. This is why the image is served from the plugin rather than straight from the media library."
+msgstr "LINE 會把 base URL 當成前綴，直接在後面接上它要的寬度，而且不帶副檔名。這就是為什麼圖片是由外掛提供，而不是直接給媒體庫的網址。"
 
 msgid "LINE user id"
 msgstr "LINE 使用者 ID"
@@ -1164,6 +1206,9 @@ msgstr "新卡片"
 msgid "New flow"
 msgstr "新增流程"
 
+msgid "New imagemap"
+msgstr "新增圖片訊息"
+
 msgid "New menu"
 msgstr "新增選單"
 
@@ -1301,6 +1346,9 @@ msgstr "在手機上"
 
 msgid "On status"
 msgstr "在狀態"
+
+msgid "One banner image the customer taps. The regions are invisible to them, so draw them on the image rather than guessing coordinates."
+msgstr "一張讓客人點擊的橫幅圖片。可點擊的範圍客人是看不到的，所以直接在圖上畫出來，不要用猜座標的方式。"
 
 msgid "One card, or up to %d side by side that the customer swipes through."
 msgstr "一張卡片，或最多 %d 張並排讓客人左右滑動。"
@@ -1632,6 +1680,9 @@ msgstr "目前是沙盒模式，不會有實際金流。正式上線前請關閉
 msgid "Save"
 msgstr "儲存"
 
+msgid "Save first. Push messages are billed."
+msgstr "請先儲存。推播訊息會計費。"
+
 msgid "Save flow"
 msgstr "儲存流程"
 
@@ -1646,6 +1697,9 @@ msgstr "儲存後預覽才會更新。"
 
 msgid "Saved flows"
 msgstr "已儲存的流程"
+
+msgid "Saved imagemaps"
+msgstr "已儲存的圖片訊息"
 
 msgid "Saved templates"
 msgstr "已儲存的範本"
@@ -1779,6 +1833,9 @@ msgstr "要顯示哪些項目"
 msgid "Shown in the chat list and in push notifications, where the bubble cannot be drawn."
 msgstr "顯示在聊天列表和推播通知，那些地方畫不出卡片。"
 
+msgid "Shown in the chat list and in push notifications, where the image cannot be drawn."
+msgstr "顯示在聊天列表和推播通知，那些地方畫不出圖片。"
+
 msgid "Sign in with LINE"
 msgstr "用 LINE 登入"
 
@@ -1863,6 +1920,12 @@ msgstr "可點擊區塊"
 msgid "Tappable areas as JSON"
 msgstr "可點擊區塊的 JSON"
 
+msgid "Tappable regions"
+msgstr "可點擊範圍"
+
+msgid "Tappable regions as JSON"
+msgstr "可點擊範圍的 JSON"
+
 msgid "Template"
 msgstr "範本"
 
@@ -1917,6 +1980,12 @@ msgstr "這看起來不像電話號碼，請再回覆一次。"
 msgid "That does not look like an email address. Please try again."
 msgstr "這看起來不像 Email，請再回覆一次。"
 
+msgid "That image could not be read from the media library."
+msgstr "無法從媒體庫讀取這張圖片。"
+
+msgid "That imagemap no longer exists."
+msgstr "這則圖片訊息已經不存在了。"
+
 msgid "That is a lot of messages at once. Please wait a moment."
 msgstr "一次送出的訊息太多了，請稍等一下。"
 
@@ -1958,6 +2027,9 @@ msgstr "這個範本已經不存在了。"
 
 msgid "That transaction id does not belong to this merchant."
 msgstr "這個交易 ID 不屬於這個商店。"
+
+msgid "The %1$dpx copy came out at %2$s, over the 1 MB LINE allows. Use a simpler or smaller image."
+msgstr "切出來的 %1$dpx 版本是 %2$s，超過 LINE 允許的 1 MB。請改用更單純或更小的圖片。"
 
 msgid "The %1$s section must contain one of: %2$s."
 msgstr "%1$s 區段必須包含下列其中之一：%2$s。"
@@ -2024,6 +2096,15 @@ msgstr "流程定義不是有效的 JSON。"
 
 msgid "The image is larger than 1 MB, which LINE will reject."
 msgstr "圖片超過 1 MB，LINE 會拒絕。"
+
+msgid "The image is only %d pixels wide. An imagemap needs at least 1040, because LINE renders it at that width."
+msgstr "這張圖只有 %d 像素寬。圖片訊息至少需要 1040，因為 LINE 就是以那個寬度算圖的。"
+
+msgid "The image sizes for this imagemap are missing. Choose the image again and save."
+msgstr "這則圖片訊息的圖檔不見了。請重新選擇圖片並儲存。"
+
+msgid "The imagemap could not be saved."
+msgstr "圖片訊息儲存失敗。"
 
 msgid "The inbox is switched off under LINE > Settings > Messaging API."
 msgstr "收件匣在 LINE > 設定 > Messaging API 裡被關閉了。"
@@ -2142,6 +2223,9 @@ msgstr "這組輪播超過 50 KB 上限，請減少 bubble 或縮短內容。"
 msgid "This does not look like a channel ID: %s. A LINE channel ID is a number, usually ten digits. If your browser filled this in for you, clear it and paste the value from the LINE Developers Console."
 msgstr "這看起來不像 Channel ID：%s。LINE 的 Channel ID 是數字，通常十位數。如果是瀏覽器自動填入的，請清空後從 LINE Developers Console 貼上正確的值。"
 
+msgid "This imagemap has no tappable areas yet."
+msgstr "這則圖片訊息還沒有設定任何可點擊範圍。"
+
 msgid "This layout nests too deeply."
 msgstr "這個版面巢狀層數過深。"
 
@@ -2205,6 +2289,9 @@ msgstr "這次的連線無法驗證，請從 LINE 重新開啟頁面。"
 msgid "This site is not accepting new registrations through LINE. Please sign in with your existing account first, then link LINE from your profile."
 msgstr "這個站台沒有開放用 LINE 註冊新帳號。請先用既有帳號登入，再從個人資料頁連結 LINE。"
 
+msgid "This site is served over plain HTTP. LINE only fetches imagemap images over HTTPS, so an imagemap from this site would arrive blank."
+msgstr "這個站台是用純 HTTP 提供的。LINE 只會用 HTTPS 抓取圖片訊息的圖，所以從這個站台送出的圖片訊息會是一片空白。"
+
 msgid "This template did not produce a valid message. Check the JSON and the placeholders."
 msgstr "這個範本沒有產生有效的訊息，請檢查 JSON 和變數。"
 
@@ -2264,6 +2351,9 @@ msgstr "解除 LINE 帳號連結"
 
 msgid "Unlink your LINE account?"
 msgstr "要解除 LINE 帳號連結嗎？"
+
+msgid "Up to %d regions. The image must be at least 1040 pixels wide; LINE is served five sizes of it from this site."
+msgstr "最多 %d 個範圍。圖片寬度至少要 1040 像素；本站會提供五種尺寸給 LINE 取用。"
 
 msgid "Use a long-lived token I paste below"
 msgstr "使用我在下方貼上的長效 Token"
@@ -2457,6 +2547,9 @@ msgstr "你沒有權限變更機器人設定。"
 msgid "You do not have permission to change these settings."
 msgstr "你沒有權限變更這些設定。"
 
+msgid "You do not have permission to manage imagemaps."
+msgstr "你沒有權限管理圖片訊息。"
+
 msgid "You do not have permission to manage rich menus."
 msgstr "你沒有權限管理圖文選單。"
 
@@ -2525,6 +2618,9 @@ msgstr "等於"
 
 msgid "greets the visitor by their LINE name"
 msgstr "用訪客的 LINE 名稱打招呼"
+
+msgid "images missing"
+msgstr "缺少圖片檔"
 
 msgid "is"
 msgstr "等於"

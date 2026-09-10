@@ -1325,6 +1325,158 @@
 		render();
 	}
 
+	// Imagemaps. The area editor is the rich menu's, told a different
+	// coordinate space, so all this has to do is the form around it.
+	function bindImagemaps() {
+		var $form = $('[data-moksa-imagemap-form]');
+
+		if (!$form.length) {
+			return;
+		}
+
+		var $areas = $form.find('[data-moksa-imagemap-areas]');
+		var $image = $form.find('input[name=image_attachment_id]');
+		var $preview = $form.find('[data-moksa-imagemap-image-preview]');
+		var frame = null;
+
+		var $editorRoot = $form.find('[data-moksa-area-editor]');
+
+		function editor() {
+			return $editorRoot.data('moksaAreaEditor');
+		}
+
+		function showImage(url) {
+			$preview.empty();
+
+			if (url) {
+				$preview.append($('<img alt="" />').attr('src', url));
+			}
+
+			$editorRoot.find('[data-moksa-canvas-image]').attr('src', url || '');
+			$editorRoot.toggleClass('has-image', !!url);
+
+			var instance = editor();
+
+			if (!instance) {
+				return;
+			}
+
+			if (!url) {
+				instance.render();
+				return;
+			}
+
+			// An imagemap is always 1040 wide, and its height is whatever that
+			// makes it. The editor has to be told, or regions drawn on a tall
+			// banner land in the wrong place -- the coordinate space it clamps
+			// to would not match the one LINE renders in.
+			var probe = new window.Image();
+
+			probe.onload = function () {
+				var height = probe.naturalWidth
+					? Math.round(probe.naturalHeight * (1040 / probe.naturalWidth))
+					: 1040;
+
+				instance.setSize(1040, height);
+			};
+
+			probe.onerror = function () {
+				instance.render();
+			};
+
+			probe.src = url;
+		}
+
+		$form.on('click', '[data-moksa-pick-imagemap-image]', function () {
+			if (!frame) {
+				frame = wp.media({
+					title: strings.chooseImage,
+					library: { type: 'image' },
+					multiple: false
+				});
+
+				frame.on('select', function () {
+					var attachment = frame.state().get('selection').first().toJSON();
+					$image.val(attachment.id);
+					showImage(attachment.url);
+				});
+			}
+
+			frame.open();
+		});
+
+		$form.on('click', '[data-moksa-toggle-imagemap-json]', function () {
+			$areas.prop('hidden', !$areas.prop('hidden'));
+		});
+
+		$form.on('submit', function (event) {
+			event.preventDefault();
+
+			post('imagemap_save', formData($form)).then(function (result) {
+				feedback($form, result.message, 'ok');
+				window.setTimeout(function () { window.location.reload(); }, 600);
+			}, function (error) {
+				feedback($form, error.message, 'bad');
+			});
+		});
+
+		$form.on('click', '[data-moksa-reset-imagemap]', function () {
+			$form[0].reset();
+			$form.find('input[name=id]').val('0');
+			$form.find('input[name=image_attachment_id]').val('0');
+			reloadAreas('[]');
+			showImage('');
+			$form.removeClass('is-editing');
+		});
+
+		$form.on('click', '[data-moksa-imagemap-test]', function () {
+			post('imagemap_send_test', {
+				id: $form.find('input[name=id]').val(),
+				line_user_id: $form.find('[data-moksa-imagemap-test-target]').val()
+			}).then(function (result) {
+				feedback($form, result.message, 'ok');
+			}, function (error) {
+				feedback($form, error.message, 'bad');
+			});
+		});
+
+		// The editor ignores a programmatic change on its own field on purpose:
+		// it writes there itself, and would otherwise reload on its own output.
+		// So filling that field from outside has to tell it directly.
+		function reloadAreas(json) {
+			$areas.val(json || '[]');
+
+			var instance = editor();
+
+			if (instance) {
+				instance.load();
+				instance.render();
+			}
+		}
+
+		$('[data-moksa-load-imagemap]').on('click', function () {
+			var row = $(this).closest('li').data('imagemap');
+
+			$form.addClass('is-editing');
+			$form.find('input[name=id]').val(row.id);
+			$form.find('input[name=name]').val(row.name);
+			$form.find('input[name=alt_text]').val(row.alt_text);
+			$image.val(row.image_attachment_id || 0);
+			reloadAreas(row.actions);
+			showImage(row.image_url || '');
+		});
+
+		$('[data-moksa-delete-imagemap]').on('click', function () {
+			if (!window.confirm(strings.confirmDelete)) {
+				return;
+			}
+
+			post('imagemap_delete', { id: $(this).data('moksa-delete-imagemap') }).then(function () {
+				window.location.reload();
+			});
+		});
+	}
+
 	function bindClearLogs() {
 		$(document).on('click', '[data-moksa-clear-logs]', function () {
 			if (!window.confirm(moksaLine.strings.confirmClearLogs)) {
@@ -1356,6 +1508,7 @@
 		bindNotifyTemplates();
 		bindUnlink();
 		bindCopy();
+		bindImagemaps();
 		bindClearLogs();
 		bindReplyPreview();
 		bindCounters();

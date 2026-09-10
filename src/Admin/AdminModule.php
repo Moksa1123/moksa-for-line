@@ -64,6 +64,7 @@ class AdminModule {
 			array( self::SLUG . '-flows', __( 'Conversation flows', 'moksa-line' ), 'render_flows' ),
 			array( self::SLUG . '-flex', __( 'Flex messages', 'moksa-line' ), 'render_flex' ),
 			array( self::SLUG . '-richmenus', __( 'Rich menus', 'moksa-line' ), 'render_richmenus' ),
+			array( self::SLUG . '-imagemaps', __( 'Imagemaps', 'moksa-line' ), 'render_imagemaps' ),
 			array( self::SLUG . '-broadcast', __( 'Broadcast', 'moksa-line' ), 'render_broadcast' ),
 			array( self::SLUG . '-users', __( 'LINE users', 'moksa-line' ), 'render_users' ),
 			array( self::SLUG . '-notifications', __( 'Order notifications', 'moksa-line' ), 'render_notifications' ),
@@ -784,6 +785,10 @@ class AdminModule {
 
 	public function render_richmenus(): void {
 		$this->view( 'richmenus' );
+	}
+
+	public function render_imagemaps(): void {
+		$this->view( 'imagemaps' );
 	}
 
 	public function render_broadcast(): void {

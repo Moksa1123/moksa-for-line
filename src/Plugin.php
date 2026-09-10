@@ -80,6 +80,7 @@ final class Plugin {
 			'inbox'    => Inbox\InboxModule::class,
 			'richmenu' => RichMenu\RichMenuModule::class,
 			'flex'     => Flex\FlexModule::class,
+			'imagemap' => Imagemap\ImagemapModule::class,
 			'liff'     => Liff\LiffModule::class,
 			'shortcode' => Frontend\ShortcodeModule::class,
 			'admin'    => Admin\AdminModule::class,
