@@ -447,6 +447,123 @@
 	border-radius: 10px;
 }
 
+/* Flex card and carousel editor -------------------------------------------- */
+
+/* The strip mirrors what the customer does: cards sit side by side and are
+   swiped through, so they are laid out that way rather than stacked. */
+.moksa-cards-strip {
+	display: flex;
+	gap: 8px;
+	overflow-x: auto;
+	padding: 8px 2px;
+	margin: 8px 0 4px;
+}
+
+.moksa-card-chip {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	max-width: 260px;
+	padding: 8px 10px;
+	border: 1px solid var(--moksa-border);
+	border-radius: 6px;
+	background: #fff;
+	cursor: pointer;
+}
+
+.moksa-card-chip.is-selected {
+	border-color: #2271b1;
+	box-shadow: inset 0 0 0 1px #2271b1;
+}
+
+.moksa-card-chip__number {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #f0f0f1;
+	color: var(--moksa-muted);
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.moksa-card-chip.is-selected .moksa-card-chip__number {
+	background: #2271b1;
+	color: #fff;
+}
+
+.moksa-card-chip__title {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: 13px;
+}
+
+.moksa-card-chip__actions {
+	display: flex;
+	gap: 1px;
+	flex: 0 0 auto;
+}
+
+.moksa-card-chip__actions .button-link {
+	width: 22px;
+	height: 22px;
+	line-height: 1;
+	border-radius: 3px;
+	color: var(--moksa-muted);
+	text-decoration: none;
+	text-align: center;
+}
+
+.moksa-card-chip__actions .button-link:hover:not(:disabled) {
+	background: #f0f0f1;
+	color: #1d2327;
+}
+
+.moksa-card-chip__actions .button-link:disabled {
+	opacity: 0.3;
+	cursor: default;
+}
+
+.moksa-cards-actions {
+	margin: 4px 0 10px;
+}
+
+.moksa-cards-note {
+	margin: 0;
+	padding: 12px 14px;
+	border: 1px dashed var(--moksa-border);
+	border-radius: 6px;
+	color: var(--moksa-muted);
+	font-size: 13px;
+}
+
+.moksa-card-fields__grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+}
+
+.moksa-card-fields__label {
+	display: block;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--moksa-muted);
+}
+
+.moksa-card-fields__label input,
+.moksa-card-fields__label textarea {
+	margin-top: 3px;
+	font-weight: 400;
+	color: #1d2327;
+}
+
 /* Conversation flow editor ------------------------------------------------ */
 
 .moksa-flow-steps {

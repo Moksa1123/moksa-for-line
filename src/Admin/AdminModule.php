@@ -176,6 +176,14 @@ class AdminModule {
 		);
 
 		wp_enqueue_script(
+			'moksa-line-card-editor',
+			MOKSA_LINE_URL . 'assets/js/card-editor.js',
+			array( 'jquery' ),
+			self::asset_version( 'assets/js/card-editor.js' ),
+			true
+		);
+
+		wp_enqueue_script(
 			'moksa-line-flow-editor',
 			MOKSA_LINE_URL . 'assets/js/flow-editor.js',
 			array( 'jquery' ),
@@ -186,7 +194,7 @@ class AdminModule {
 		wp_enqueue_script(
 			'moksa-line-admin',
 			MOKSA_LINE_URL . 'assets/js/admin.js',
-			array( 'jquery', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor', 'moksa-line-flow-editor' ),
+			array( 'jquery', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor', 'moksa-line-flow-editor', 'moksa-line-card-editor' ),
 			self::asset_version( 'assets/js/admin.js' ),
 			true
 		);
@@ -202,6 +210,27 @@ class AdminModule {
 				'strings' => array(
 					'saved'        => __( 'Saved.', 'moksa-line' ),
 					'copied'       => __( 'Copied', 'moksa-line' ),
+					/* translators: %d: number of cards in the carousel. */
+					'carouselCount' => __( '%d cards. The customer swipes sideways to reach the rest.', 'moksa-line' ),
+					'cardTitle'    => __( 'Headline', 'moksa-line' ),
+					'cardBody'     => __( 'Text under it', 'moksa-line' ),
+					'cardHero'     => __( 'Image URL', 'moksa-line' ),
+					'cardButtonLabel' => __( 'Button label', 'moksa-line' ),
+					'cardButtonUri' => __( 'Button link', 'moksa-line' ),
+					'cardButton'   => __( 'Find out more', 'moksa-line' ),
+					'cardNewTitle' => __( 'New card', 'moksa-line' ),
+					/* translators: %d: card position in the carousel. */
+					'cardUntitled' => __( 'Card %d', 'moksa-line' ),
+					'cardMoveLeft' => __( 'Move left', 'moksa-line' ),
+					'cardMoveRight' => __( 'Move right', 'moksa-line' ),
+					'cardDuplicate' => __( 'Duplicate', 'moksa-line' ),
+					'cardRemove'   => __( 'Remove this card?', 'moksa-line' ),
+					'cardTooMany'  => __( 'A carousel holds at most 12 cards.', 'moksa-line' ),
+					'cardDropOthers' => __( 'Keep only the card you are editing and remove the rest?', 'moksa-line' ),
+					'cardNone'     => __( 'No cards yet. Add the first one below.', 'moksa-line' ),
+					'cardUnreadable' => __( 'This message is not a card or a carousel, so it can only be edited as JSON.', 'moksa-line' ),
+					'cardCustom'   => __( 'This card has a layout these fields cannot describe, so it is edited as JSON below. Nothing here will change it.', 'moksa-line' ),
+					'cardFieldsNote' => __( 'These cover the common card. Anything else -- extra rows, colours, more buttons -- is edited in the JSON.', 'moksa-line' ),
 					'flowPrompt'   => __( 'What the bot asks', 'moksa-line' ),
 					'flowAnswerType' => __( 'Answer', 'moksa-line' ),
 					'flowKey'      => __( 'Stored as', 'moksa-line' ),

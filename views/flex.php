@@ -55,9 +55,32 @@ $account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account'
 					</select>
 				</p>
 
+				<div class="moksa-field" data-moksa-card-editor="[data-moksa-flex-json]">
+					<label><?php esc_html_e( 'Cards', 'moksa-line' ); ?></label>
+					<span class="description">
+						<?php
+						printf(
+							/* translators: %d: the carousel bubble limit. */
+							esc_html__( 'One card, or up to %d side by side that the customer swipes through.', 'moksa-line' ),
+							(int) \Moksa\Line\Flex\Validator::CAROUSEL_MAX_BUBBLES
+						);
+						?>
+					</span>
+
+					<div class="moksa-cards-strip" data-moksa-card-list></div>
+
+					<p class="moksa-cards-actions">
+						<button type="button" class="button" data-moksa-add-card><?php esc_html_e( '+ Add a card', 'moksa-line' ); ?></button>
+						<button type="button" class="button" data-moksa-single-card hidden><?php esc_html_e( 'Back to a single card', 'moksa-line' ); ?></button>
+					</p>
+
+					<div class="moksa-card-fields" data-moksa-card-fields></div>
+				</div>
+
 				<p>
 					<label for="moksa-flex-contents"><?php esc_html_e( 'Bubble or carousel JSON', 'moksa-line' ); ?></label>
-					<textarea id="moksa-flex-contents" name="contents" rows="20" class="widefat code" spellcheck="false" data-moksa-flex-json></textarea>
+					<textarea id="moksa-flex-contents" name="contents" rows="20" class="widefat code moksa-area-json" spellcheck="false" data-moksa-flex-json hidden></textarea>
+					<button type="button" class="button-link" data-moksa-toggle-flex-json><?php esc_html_e( 'Edit the JSON directly', 'moksa-line' ); ?></button>
 				</p>
 
 				<p>
@@ -95,6 +118,8 @@ $account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account'
 						<div class="moksa-flex-preview" data-moksa-flex-preview></div>
 					</div>
 				</div>
+
+				<p class="description moksa-carousel-note" data-moksa-carousel-note hidden></p>
 
 				<h3><?php esc_html_e( 'Chat list and lock screen', 'moksa-line' ); ?></h3>
 				<p class="description">

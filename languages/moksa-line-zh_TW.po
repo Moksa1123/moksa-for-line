@@ -12,44 +12,1382 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Domain: moksa-line\n"
 
+msgid "\"%1$s\" has a contrast ratio of %2$s against its background; %3$s is the readable minimum."
+msgstr "「%1$s」與背景的對比只有 %2$s，可讀的最低標準是 %3$s。"
+
+msgid "\"%s\" cannot be placed inside a box."
+msgstr "「%s」不能放在 box 裡面。"
+
+msgid "\"%s\" is not a valid action type."
+msgstr "「%s」不是有效的 action 類型。"
+
+msgid "%1$d LINE notification sent for status: %2$s"
+msgstr "狀態 %2$s 已送出 %1$d 則 LINE 通知"
+
+msgid "%1$s cannot be \"%2$s\". Allowed: %3$s."
+msgstr "%1$s 不能是「%2$s」。可用值：%3$s。"
+
+msgid "%1$s of %2$s characters"
+msgstr "已用 %1$s／%2$s 字"
+
+msgid "%1$s of %2$s entries"
+msgstr "%2$s 筆中的 %1$s 筆"
+
+msgid "%1$s of %2$s push messages used."
+msgstr "已使用 %1$s／%2$s 則推播訊息。"
+
+msgid "%1$s: %2$s"
+msgstr "%1$s：%2$s"
+
+msgid "%d area(s) have no destination set yet."
+msgstr "有 %d 個區塊還沒設定點擊後要做什麼。"
+
+msgid "%d cards. The customer swipes sideways to reach the rest."
+msgstr "共 %d 張卡片，客人要左右滑動才看得到其他張。"
+
+msgid "%d condition"
+msgstr "%d 個條件"
+
+msgid "%s push messages sent this month. This plan has no monthly cap."
+msgstr "本月已送出 %s 則推播訊息。這個方案沒有月上限。"
+
+msgid "(Check the channel plan and that the feature is enabled for this channel.)"
+msgstr "（請確認頻道方案，以及這個功能是否已為該頻道開啟。）"
+
+msgid "(no fallback text -- the notification would be blank)"
+msgstr "（沒有備援文字，通知會是空白的）"
+
+msgid "(no question yet)"
+msgstr "（還沒填問題）"
+
+msgid "+ Add a card"
+msgstr "+ 新增卡片"
+
+msgid "+ Add a question"
+msgstr "+ 新增問題"
+
+msgid "-- choose --"
+msgstr "-- 請選擇 --"
+
+msgid "A %1$s action needs %2$s."
+msgstr "%1$s action 必須有 %2$s。"
+
+msgid "A %s component needs a url."
+msgstr "%s 元件必須有 url。"
+
+msgid "A Flex Message bubble or carousel, as JSON. Values in braces are replaced with the order's details before sending."
+msgstr "Flex 訊息的 bubble 或 carousel，以 JSON 表示。大括號裡的變數會在送出前換成該筆訂單的資料。"
+
+msgid "A Flex message needs a contents container."
+msgstr "Flex 訊息必須有 contents 容器。"
+
+msgid "A Flex message needs altText (shown in the chat list and push notification)."
+msgstr "Flex 訊息必須有 altText（顯示在聊天列表和推播通知上）。"
+
+msgid "A Flex template"
+msgstr "Flex 範本"
+
+msgid "A LINE user id, which you can copy from the LINE users screen. Push messages are billed."
+msgstr "LINE 使用者 ID，可以從「LINE 使用者」頁面複製。推播訊息會計費。"
+
+msgid "A LINE user id. Leave blank to just get a link you can share yourself."
+msgstr "LINE 使用者 ID。留空就只會產生連結，由你自己分享。"
+
+msgid "A bubble needs at least one of header, hero, body or footer."
+msgstr "bubble 至少要有 header、hero、body 或 footer 其中之一。"
+
+msgid "A button needs an action."
+msgstr "button 必須有 action。"
+
+msgid "A carousel holds at most %d bubbles."
+msgstr "一組輪播最多 %d 個 bubble。"
+
+msgid "A carousel holds at most 12 cards."
+msgstr "一組輪播最多 12 張卡片。"
+
+msgid "A carousel needs at least one bubble in contents."
+msgstr "輪播的 contents 至少要有一個 bubble。"
+
+msgid "A colour matching the status"
+msgstr "對應該狀態的顏色"
+
+msgid "A component at %s is missing its type."
+msgstr "%s 的元件缺少 type。"
+
+msgid "A date"
+msgstr "日期"
+
+msgid "A flow asks a series of questions and stores the answers. Only one flow runs per person at a time, it expires after 30 minutes of silence, and every question offers a way to cancel."
+msgstr "流程會依序問一串問題並記下答案。每個人同時只會進行一個流程，超過 30 分鐘沒有回應就會結束，而且每一題都提供取消的方式。"
+
+msgid "A flow needs at least one step."
+msgstr "流程至少要有一個步驟。"
+
+msgid "A member of our team will reply here shortly."
+msgstr "我們的同事很快會在這裡回覆你。"
+
+msgid "A number"
+msgstr "數字"
+
+msgid "A payment for this order id already exists."
+msgstr "這個訂單 ID 已經有一筆付款了。"
+
+msgid "A phone number"
+msgstr "電話號碼"
+
+msgid "A phone number we can reach you on?"
+msgstr "方便聯絡的電話號碼是？"
+
+msgid "A quick reply set"
+msgstr "快速回覆組合"
+
+msgid "A sentence or two about what this is."
+msgstr "用一兩句話說明這是什麼。"
+
+msgid "A sticker"
+msgstr "貼圖"
+
+msgid "A text component needs either text or a contents array of spans."
+msgstr "text 元件必須有 text，或是一個由 span 組成的 contents 陣列。"
+
+msgid "A transaction id or order id is required."
+msgstr "必須提供交易 ID 或訂單 ID。"
+
+msgid "A uri action must point at https://, tel: or a LINE URL scheme."
+msgstr "uri action 必須指向 https://、tel: 或 LINE 的 URL scheme。"
+
 msgid "A visitor completed \"%s\" on LINE."
 msgstr "有訪客在 LINE 上完成了「%s」。"
+
+msgid "AI Engine is not active"
+msgstr "AI Engine 沒有啟用"
+
+msgid "AI Engine is not active on this site."
+msgstr "這個站台沒有啟用 AI Engine。"
+
+msgid "AI provider available"
+msgstr "AI 服務可用"
+
+msgid "AI replies"
+msgstr "AI 回覆"
+
+msgid "AI replies are switched on, but AI Engine is not active on this site."
+msgstr "AI 回覆已開啟，但這個站台並沒有啟用 AI Engine。"
+
+msgid "About %s messages remain in this month allowance."
+msgstr "本月額度大約還剩 %s 則訊息。"
+
+msgid "Access token"
+msgstr "Access Token"
+
+msgid "Action labels are limited to 20 characters."
+msgstr "Action 的 label 上限為 20 字。"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Active"
+msgstr "啟用"
+
+msgid "Active templates"
+msgstr "啟用中的範本"
+
+msgid "Add a LINE tab where customers can link and unlink their account"
+msgstr "新增一個 LINE 分頁，讓客人可以連結或解除連結帳號"
+
+msgid "Add a notification template"
+msgstr "新增通知範本"
+
+msgid "Add at least one quick reply button."
+msgstr "請至少加入一個快速回覆按鈕。"
+
+msgid "Add condition"
+msgstr "新增條件"
+
+msgid "Add or edit a rule"
+msgstr "新增或編輯規則"
+
+msgid "Add order notification"
+msgstr "新增訂單通知"
+
+msgid "Add the Channel ID and Channel Secret from the LINE Developers Console."
+msgstr "請從 LINE Developers Console 填入 Channel ID 與 Channel Secret。"
+
+msgid "Add the LINE Pay Channel ID and Channel Secret."
+msgstr "請填入 LINE Pay 的 Channel ID 與 Channel Secret。"
 
 msgid "Add us on LINE"
 msgstr "加入 LINE 好友"
 
+msgid "Advanced"
+msgstr "進階"
+
+msgid "Agent"
+msgstr "客服"
+
+msgid "Alias"
+msgstr "別名"
+
+msgid "Alias ID"
+msgstr "別名 ID"
+
+msgid "All areas"
+msgstr "所有區塊"
+
+msgid "All conversations"
+msgstr "所有對話"
+
+msgid "All results"
+msgstr "所有結果"
+
+msgid "All the customer sees until they open the chat. This is the fallback text, not the bubble."
+msgstr "客人點開聊天室之前只會看到這些。這是備援文字，不是卡片。"
+
+msgid "Already shopped with us?"
+msgstr "已經是我們的顧客了嗎？"
+
+msgid "Amount"
+msgstr "金額"
+
+msgid "An email address"
+msgstr "Email 地址"
+
+msgid "An icon component needs a url."
+msgstr "icon 元件必須有 url。"
+
+msgid "An image"
+msgstr "圖片"
+
+msgid "Answer"
+msgstr "答案類型"
+
+msgid "Answers"
+msgstr "答案"
+
+msgid "Answers longer than this are truncated. LINE hard-limits a text message at 5000 characters."
+msgstr "超過這個長度的答案會被截斷。LINE 對文字訊息的硬上限是 5000 字。"
+
+msgid "Any order"
+msgstr "所有訂單"
+
+msgid "Anything (catch-all)"
+msgstr "任何訊息（萬用）"
+
+msgid "Anything they type"
+msgstr "客人輸入的任何內容"
+
+msgid "Area"
+msgstr "區塊"
+
+msgid "Areas %s overlap. LINE uses whichever comes first, which is rarely what you want."
+msgstr "區塊 %s 互相重疊。LINE 會採用排在前面的那一個，這通常不是你要的結果。"
+
+msgid "Arrow keys nudge by 1 pixel, with Shift by 10."
+msgstr "方向鍵每次移動 1 像素，按住 Shift 為 10 像素。"
+
+msgid "Asked one at a time, in this order. Each answer is stored under its own key, which is the column you see in submissions."
+msgstr "依這個順序一題一題問。每個答案會存在自己的欄位名稱下，也就是你在回覆記錄裡看到的欄位。"
+
+msgid "At most 14 characters, shown at the bottom of the chat."
+msgstr "最多 14 字，顯示在聊天室下方。"
+
+msgid "Attach a Flex template"
+msgstr "附加 Flex 範本"
+
+msgid "Auto replies"
+msgstr "自動回覆"
+
+msgid "Available values"
+msgstr "可用的變數"
+
+msgid "Back to a single card"
+msgstr "改回單張卡片"
+
+msgid "Background"
+msgstr "背景色"
+
+msgid "Billing address"
+msgstr "帳單地址"
+
+msgid "Billing name"
+msgstr "帳單姓名"
+
+msgid "Billing phone"
+msgstr "帳單電話"
+
+msgid "Blank"
+msgstr "空白"
+
+msgid "Bot"
+msgstr "機器人"
+
+msgid "Broadcast"
+msgstr "群發訊息"
+
+msgid "Broadcast sent to every friend of the account."
+msgstr "已群發給帳號的所有好友。"
+
+msgid "Broadcasts are billed per recipient and cannot be recalled. Send a test to yourself first."
+msgstr "群發訊息按人數計費，而且送出後無法收回。請先發一則測試給自己。"
+
+msgid "Bubble %1$d: %2$s"
+msgstr "第 %1$d 個 bubble：%2$s"
+
+msgid "Bubble or carousel JSON"
+msgstr "Bubble 或 carousel 的 JSON"
+
+msgid "Built-in card"
+msgstr "內建卡片"
+
+msgid "Button \"%1$s\" on question %2$d is longer than the %3$d characters LINE shows, and is cut."
+msgstr "第 %2$d 題的按鈕「%1$s」超過 LINE 顯示的 %3$d 字，會被截斷。"
+
+msgid "Button label"
+msgstr "按鈕文字"
+
+msgid "Button link"
+msgstr "按鈕連結"
+
+msgid "Button text"
+msgstr "按鈕文字"
+
+msgid "Buttons, one per line"
+msgstr "按鈕選項，一行一個"
+
+msgid "Callback URL"
+msgstr "Callback URL"
+
 msgid "Cancel"
 msgstr "取消"
+
+msgid "Capture immediately"
+msgstr "立即請款"
+
+msgid "Card %d"
+msgstr "卡片 %d"
+
+msgid "Cards"
+msgstr "卡片"
+
+msgid "Channel ID"
+msgstr "Channel ID"
+
+msgid "Channel secret"
+msgstr "Channel Secret"
+
+msgid "Chat LIFF ID"
+msgstr "聊天用 LIFF ID"
+
+msgid "Chat bar label"
+msgstr "聊天列文字"
+
+msgid "Chat list and lock screen"
+msgstr "聊天列表與鎖定畫面"
+
+msgid "Chatbot"
+msgstr "聊天機器人"
+
+msgid "Chatbot ID"
+msgstr "聊天機器人 ID"
+
+msgid "Check"
+msgstr "檢查"
+
+msgid "Choose a conversation"
+msgstr "選擇一則對話"
+
+msgid "Choose a menu image first. LINE requires one, 2500px wide and either 1686px or 843px tall."
+msgstr "請先選擇選單圖片。LINE 規定必須是寬 2500px、高 1686px 或 843px。"
+
+msgid "Choose a menu image to start drawing areas."
+msgstr "請先選擇選單圖片才能開始畫區塊。"
+
+msgid "Choose image"
+msgstr "選擇圖片"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid "Clear the log"
+msgstr "清除紀錄"
+
+msgid "Cleared %s entries."
+msgstr "已清除 %s 筆項目。"
+
+msgid "Click to copy."
+msgstr "點一下複製。"
+
+msgid "Close"
+msgstr "結束對話"
+
+msgid "Closed"
+msgstr "已結束"
+
+msgid "Compare with LINE"
+msgstr "與 LINE 比對"
+
+msgid "Conditions"
+msgstr "條件"
+
+msgid "Connecting to LINE..."
+msgstr "正在連線到 LINE…"
+
+msgid "Consultation"
+msgstr "諮詢"
+
+msgid "Context"
+msgstr "情境資料"
+
+msgid "Continue with LINE"
+msgstr "用 LINE 繼續"
+
+msgid "Conversation flows"
+msgstr "對話流程"
+
+msgid "Conversations waiting"
+msgstr "等待處理的對話"
+
+msgid "Copied"
+msgstr "已複製"
+
+msgid "Corner radius"
+msgstr "圓角半徑"
+
+msgid "Could not copy -- select it and copy by hand"
+msgstr "無法複製，請自行選取後複製"
+
+msgid "Could not download the message content (HTTP %d)."
+msgstr "無法下載訊息內容（HTTP %d）。"
+
+msgid "Could not reach LINE Pay. Please try again."
+msgstr "無法連上 LINE Pay，請再試一次。"
+
+msgid "Could not reach LINE to complete the login. Please try again."
+msgstr "無法連上 LINE 完成登入，請再試一次。"
+
+msgid "Could not reach LINE to verify the login. Please try again."
+msgstr "無法連上 LINE 驗證登入，請再試一次。"
+
+msgid "Could not reach LINE to verify this session."
+msgstr "無法連上 LINE 驗證這次的連線。"
+
+msgid "Could not read the image dimensions."
+msgstr "無法讀取圖片尺寸。"
+
+msgid "Create a WordPress account the first time someone logs in with LINE"
+msgstr "第一次用 LINE 登入時，自動建立 WordPress 帳號"
+
+msgid "Create a payment link"
+msgstr "建立收款連結"
+
+msgid "Create link"
+msgstr "建立連結"
+
+msgid "Created"
+msgstr "建立時間"
+
+msgid "Credentials"
+msgstr "憑證"
+
+msgid "Credentials are encrypted at rest"
+msgstr "憑證已加密儲存"
+
+msgid "Currency"
+msgstr "幣別"
+
+msgid "Customer email"
+msgstr "客人 Email"
+
+msgid "Customer name"
+msgstr "客人姓名"
+
+msgid "Customer note"
+msgstr "客人備註"
+
+msgid "Daily reply limit"
+msgstr "每日回覆上限"
+
+msgid "Dashboard"
+msgstr "總覽"
+
+msgid "Date the order was placed"
+msgstr "訂單成立日期"
+
+msgid "Days. Older rows are deleted daily."
+msgstr "天。更舊的資料每天會被刪除。"
+
+msgid "Days. Set to 0 to keep it indefinitely."
+msgstr "天。填 0 代表永久保留。"
+
+msgid "Days. Set to 0 to keep messages forever."
+msgstr "天。填 0 代表永久保留訊息。"
+
+msgid "Debug only"
+msgstr "只看除錯"
+
+msgid "Default LIFF ID"
+msgstr "預設 LIFF ID"
+
+msgid "Default chatbot"
+msgstr "預設聊天機器人"
+
+msgid "Default destination"
+msgstr "預設導向"
+
+msgid "Delay before sending"
+msgstr "送出前延遲"
+
+msgid "Delete"
+msgstr "刪除"
+
+msgid "Delete every entry in the plugin log? The log is only used for diagnosis, so nothing else is lost."
+msgstr "要刪除紀錄裡的所有項目嗎？紀錄只用於排查問題，刪掉不會影響其他資料。"
+
+msgid "Delete this area"
+msgstr "刪除這個區塊"
+
+msgid "Delete this permanently?"
+msgstr "要永久刪除嗎？"
+
+msgid "Delivered"
+msgstr "已送達"
+
+msgid "Delivered in the last 30 days"
+msgstr "近 30 天已送達"
+
+msgid "Delivered to %1$d, failed for %2$d. %3$s"
+msgstr "成功 %1$d 筆，失敗 %2$d 筆。%3$s"
+
+msgid "Description"
+msgstr "說明"
+
+msgid "Detail"
+msgstr "詳細"
+
+msgid "Discount"
+msgstr "折扣"
 
 msgid "Display name"
 msgstr "顯示名稱"
 
+msgid "Do not invite"
+msgstr "不邀請"
+
+msgid "Drag on the image to add an area, or click one to edit it."
+msgstr "在圖片上拖曳可新增區塊，點選既有區塊可編輯。"
+
+msgid "Drag on the image to draw an area. Click one to move, resize or set what it does. Edges snap to each other, because a one-pixel gap is invisible here and dead to the customer."
+msgstr "在圖片上拖曳來畫出區塊。點選區塊可以移動、調整大小或設定它的動作。邊緣會互相吸附，因為一像素的縫隙在這裡看不出來，對客人來說卻是點不到的死角。"
+
+msgid "Drawn as the customer receives it, on a phone-width screen. A push cannot be recalled, so this and \"Send test\" are the only checks you get."
+msgstr "以客人收到的樣子、在手機寬度的畫面上呈現。推播送出後無法收回，所以這裡和「發送測試」是你僅有的兩道確認。"
+
+msgid "Duplicate"
+msgstr "複製"
+
+msgid "Each notification is a push message and is billed. The customer only hears about a given order and status once, however many times the status is set."
+msgstr "每則通知都是推播訊息，都會計費。同一張訂單的同一個狀態，不論被設定幾次，客人都只會收到一次。"
+
+msgid "Edit"
+msgstr "編輯"
+
+msgid "Edit order notification"
+msgstr "編輯訂單通知"
+
+msgid "Edit the JSON directly"
+msgstr "直接編輯 JSON"
+
+msgid "Editing"
+msgstr "編輯中"
+
+msgid "Email address"
+msgstr "Email 地址"
+
+msgid "Email submissions to"
+msgstr "回覆寄送到"
+
+msgid "Enable"
+msgstr "啟用"
+
+msgid "Enable LINE Pay for WooCommerce and payment links"
+msgstr "為 WooCommerce 與收款連結啟用 LINE Pay"
+
+msgid "Encryption"
+msgstr "加密"
+
+msgid "Enter a LINE user id to send the test to."
+msgstr "請輸入要接收測試訊息的 LINE 使用者 ID。"
+
+msgid "Enter an amount greater than zero."
+msgstr "請輸入大於零的金額。"
+
+msgid "Enter the LINE user id to send the test to."
+msgstr "請輸入要接收測試訊息的 LINE 使用者 ID。"
+
+msgid "Entries are deleted automatically after %s days, which you can change under Settings > Advanced."
+msgstr "項目會在 %s 天後自動刪除，可以在「設定 > 進階」裡調整。"
+
+msgid "Errors only"
+msgstr "只看錯誤"
+
+msgid "Every condition must hold. Leave empty to send for every order that reaches those statuses."
+msgstr "所有條件都要成立才會發送。留空的話，只要進入上述狀態的訂單都會發送。"
+
+msgid "Everyone who follows the account"
+msgstr "所有追蹤這個帳號的人"
+
+msgid "Everyone who follows the account (%s)"
+msgstr "所有追蹤這個帳號的人（%s）"
+
+msgid "Everything"
+msgstr "全部"
+
+msgid "Expected a bubble here."
+msgstr "這裡應該要是一個 bubble。"
+
+msgid "Failed"
+msgstr "失敗"
+
+msgid "Failed in the last 30 days"
+msgstr "近 30 天失敗"
+
+msgid "Fallback text"
+msgstr "備援文字"
+
+msgid "Fallback text is %d characters. LINE allows 1500 and cuts the rest."
+msgstr "備援文字有 %d 字。LINE 上限是 1500 字，超過的會被截斷。"
+
+msgid "Fallback text is empty. The chat list and the push notification would show nothing."
+msgstr "備援文字是空的。聊天列表和推播通知會什麼都不顯示。"
+
+msgid "File"
+msgstr "檔案"
+
+msgid "Filter"
+msgstr "篩選"
+
+msgid "Find out more"
+msgstr "了解更多"
+
+msgid "Finish setup"
+msgstr "完成設定"
+
+msgid "Fix this"
+msgstr "去修正"
+
+msgid "Flex"
+msgstr "Flex"
+
+msgid "Flex messages"
+msgstr "Flex 訊息"
+
+msgid "Flow"
+msgstr "流程"
+
+msgid "Flow deleted."
+msgstr "流程已刪除。"
+
+msgid "Flow saved."
+msgstr "流程已儲存。"
+
+msgid "Follow-up"
+msgstr "回診"
+
+msgid "For example 100%, 240px, or blank to fit the text."
+msgstr "例如 100%、240px，或留空以配合文字寬度。"
+
+msgid "For example @moksa. Used by the add-friend shortcode."
+msgstr "例如 @moksa。加好友短代碼會用到。"
+
+msgid "Forward events to"
+msgstr "轉送事件到"
+
+msgid "Found problems before contacting LINE."
+msgstr "在送給 LINE 之前就發現問題。"
+
+msgid "Friend"
+msgstr "好友"
+
+msgid "Friends of the account"
+msgstr "帳號的好友"
+
+msgid "Friends recorded on this site (%s)"
+msgstr "本站記錄到的好友（%s）"
+
+msgid "From"
+msgstr "來自"
+
+msgid "From the LINE Login channel, not the Messaging API one."
+msgstr "取自 LINE Login 頻道，不是 Messaging API 那個。"
+
+msgid "From the LINE Pay merchant console, not the Developers Console."
+msgstr "取自 LINE Pay 商家後台，不是 Developers Console。"
+
+msgid "From the Messaging API channel."
+msgstr "取自 Messaging API 頻道。"
+
+msgid "Full (2500 x 1686)"
+msgstr "完整（2500 x 1686）"
+
+msgid "Give back to the bot"
+msgstr "交還給機器人"
+
+msgid "Give the rule something to match on."
+msgstr "請填入這條規則要比對的內容。"
+
+msgid "Greeting message"
+msgstr "歡迎訊息"
+
+msgid "Half (2500 x 843)"
+msgstr "一半（2500 x 843）"
+
+msgid "Hand-off keyword"
+msgstr "轉真人關鍵字"
+
+msgid "Handled by the bot"
+msgstr "由機器人處理"
+
+msgid "Headline"
+msgstr "標題"
+
 msgid "Hello, %s"
 msgstr "%s 您好"
+
+msgid "Hits"
+msgstr "命中次數"
+
+msgid "Hold the shipping notification until the tracking number appears"
+msgstr "先壓著出貨通知，等到物流單號出現再送"
+
+msgid "Image"
+msgstr "圖片"
+
+msgid "Image URL"
+msgstr "圖片網址"
+
+msgid "Image card with a button"
+msgstr "含按鈕的圖片卡片"
+
+msgid "Imported, result unknown"
+msgstr "匯入資料，結果不明"
+
+msgid "Inbox"
+msgstr "收件匣"
+
+msgid "Info only"
+msgstr "只看資訊"
+
+msgid "Install and activate AI Engine, then configure a chatbot in it. AI replies stay switched off until then."
+msgstr "請先安裝並啟用 AI Engine，再在裡面設定一個聊天機器人。在那之前 AI 回覆都不會運作。"
+
+msgid "Invite to add the bot"
+msgstr "邀請加入好友"
+
+msgid "Issue short-lived tokens automatically (recommended)"
+msgstr "自動簽發短效 Token（建議）"
+
+msgid "Just one person (a test)"
+msgstr "只發給一個人（測試）"
+
+msgid "Keep conversations for"
+msgstr "對話保留"
+
+msgid "Keep logs for"
+msgstr "紀錄保留"
+
+msgid "Keep notification history for"
+msgstr "通知記錄保留"
+
+msgid "Keep only the card you are editing and remove the rest?"
+msgstr "只保留目前編輯的這張，其餘全部移除？"
+
+msgid "Keep the WordPress display name in step with the LINE display name"
+msgstr "讓 WordPress 的顯示名稱跟著 LINE 的顯示名稱更新"
+
+msgid "Keys are derived from this site's WordPress salts, so a database dump alone cannot reveal them. Changing the salts in wp-config.php makes stored credentials unreadable and they will need re-entering."
+msgstr "金鑰是從這個站台的 WordPress salt 推導出來的，所以光是資料庫備份無法解出。更改 wp-config.php 裡的 salt 會使已儲存的憑證無法讀取，屆時必須重新輸入。"
+
+msgid "LIFF"
+msgstr "LIFF"
+
+msgid "LINE Login"
+msgstr "LINE Login"
+
+msgid "LINE Login Channel ID"
+msgstr "LINE Login Channel ID"
+
+msgid "LINE Login channel connected"
+msgstr "已連接 LINE Login 頻道"
+
+msgid "LINE Login is not configured on this site yet."
+msgstr "這個站台還沒有設定 LINE Login。"
+
+msgid "LINE Login is not configured yet."
+msgstr "LINE Login 還沒設定完成。"
+
+msgid "LINE Login, Messaging API bot, Flex Message builder, tabbed rich menus, customer-service inbox, AI replies and LINE Pay for WordPress and WooCommerce."
+msgstr "為 WordPress 與 WooCommerce 打造的 LINE Login、Messaging API 機器人、Flex 訊息編輯器、分頁圖文選單、客服收件匣、AI 回覆與 LINE Pay。"
+
+msgid "LINE Pay"
+msgstr "LINE Pay"
+
+msgid "LINE Pay Channel ID"
+msgstr "LINE Pay Channel ID"
+
+msgid "LINE Pay confirmed. Transaction %s."
+msgstr "LINE Pay 已確認，交易編號 %s。"
+
+msgid "LINE Pay credentials are missing, so nothing can be charged yet."
+msgstr "LINE Pay 憑證還沒填，目前無法收款。"
+
+msgid "LINE Pay credentials present"
+msgstr "已填入 LINE Pay 憑證"
+
+msgid "LINE Pay did not identify this transaction."
+msgstr "LINE Pay 無法辨識這筆交易。"
+
+msgid "LINE Pay did not return a payment URL."
+msgstr "LINE Pay 沒有回傳付款網址。"
+
+msgid "LINE Pay did not return a payment URL. Please try again."
+msgstr "LINE Pay 沒有回傳付款網址，請再試一次。"
+
+msgid "LINE Pay had an internal error. Try again shortly."
+msgstr "LINE Pay 發生內部錯誤，請稍後再試。"
+
+msgid "LINE Pay is configured on the <a href=\"%s\">LINE Pay tab</a>, and the gateway is switched on under WooCommerce > Settings > Payments."
+msgstr "LINE Pay 在 <a href=\"%s\">LINE Pay 分頁</a>設定，金流閘道則在 WooCommerce > 設定 > 付款 裡開啟。"
+
+msgid "LINE Pay is in production mode"
+msgstr "LINE Pay 已切換到正式環境"
+
+msgid "LINE Pay is in sandbox mode. No real money moves."
+msgstr "LINE Pay 目前是沙盒模式，不會有實際金流。"
+
+msgid "LINE Pay is not configured. Add the Channel ID and Channel Secret first."
+msgstr "LINE Pay 尚未設定，請先填入 Channel ID 與 Channel Secret。"
+
+msgid "LINE Pay is processing a duplicate request. Try again shortly."
+msgstr "LINE Pay 正在處理重複的請求，請稍後再試。"
+
+msgid "LINE Pay is switched off under LINE > Settings > LINE Pay."
+msgstr "LINE Pay 在 LINE > 設定 > LINE Pay 裡被關閉了。"
+
+msgid "LINE Pay refunded %1$s. %2$s"
+msgstr "LINE Pay 已退款 %1$s。%2$s"
+
+msgid "LINE Pay returned %1$s: %2$s"
+msgstr "LINE Pay 回傳 %1$s：%2$s"
+
+msgid "LINE Pay returned a response this site could not read."
+msgstr "LINE Pay 回傳了本站無法解析的內容。"
+
+msgid "LINE accepted the menu but did not return an id."
+msgstr "LINE 接受了這個選單，但沒有回傳 ID。"
+
+msgid "LINE accepted this template."
+msgstr "LINE 接受了這個範本。"
+
+msgid "LINE accepts at most %d messages per send."
+msgstr "LINE 每次最多只接受 %d 則訊息。"
 
 msgid "LINE account"
 msgstr "LINE 帳號"
 
+msgid "LINE account unlinked."
+msgstr "已解除 LINE 帳號連結。"
+
+msgid "LINE allows at most %d areas; the extra ones will be dropped."
+msgstr "LINE 最多允許 %d 個區塊，多出來的會被捨棄。"
+
+msgid "LINE allows at most 13 quick reply buttons."
+msgstr "LINE 最多允許 13 個快速回覆按鈕。"
+
+msgid "LINE did not return an ID token. Make sure the openid scope is enabled for this channel."
+msgstr "LINE 沒有回傳 ID token，請確認這個頻道已啟用 openid scope。"
+
+msgid "LINE did not return an authorization code."
+msgstr "LINE 沒有回傳授權碼。"
+
+msgid "LINE expects %1$d x %2$d pixels for this menu size; this image is %3$d x %4$d."
+msgstr "這個選單尺寸 LINE 要求 %1$d x %2$d 像素，但這張圖是 %3$d x %4$d。"
+
+msgid "LINE is rate limiting this channel. Try again shortly."
+msgstr "LINE 正在限制這個頻道的請求頻率，請稍後再試。"
+
+msgid "LINE rejected this login. Check the Channel ID, Channel Secret and Callback URL."
+msgstr "LINE 拒絕了這次登入。請檢查 Channel ID、Channel Secret 與 Callback URL。"
+
+msgid "LINE rejected this template."
+msgstr "LINE 拒絕了這個範本。"
+
+msgid "LINE requires #06C755 with white text on the login button. Changing it can fail channel review."
+msgstr "LINE 規定登入按鈕必須是 #06C755 配白色文字。改動可能導致頻道審核不通過。"
+
+msgid "LINE requires #FFFFFF."
+msgstr "LINE 規定必須是 #FFFFFF。"
+
+msgid "LINE settings"
+msgstr "LINE 設定"
+
 msgid "LINE user id"
 msgstr "LINE 使用者 ID"
+
+msgid "LINE users"
+msgstr "LINE 使用者"
+
+msgid "LINE users known"
+msgstr "已知的 LINE 使用者"
+
+msgid "LINE would not deliver that message: %s"
+msgstr "LINE 無法送出這則訊息：%s"
+
+msgid "Label"
+msgstr "標籤"
+
+msgid "Last seen"
+msgstr "最後出現"
+
+msgid "Leave blank for a standalone menu."
+msgstr "獨立選單請留空。"
+
+msgid "Leave blank to use the shortcode label, or the default wording."
+msgstr "留空就會使用短代碼的標籤，或預設的文字。"
+
+msgid "Leave unchanged to keep the stored value"
+msgstr "不修改就會沿用已儲存的值"
+
+msgid "Let the AI answer messages no rule or flow handled"
+msgstr "讓 AI 回覆那些沒有規則或流程處理到的訊息"
+
+msgid "Level"
+msgstr "等級"
+
+msgid "Link"
+msgstr "連結"
 
 msgid "Link my LINE account"
 msgstr "連結我的 LINE 帳號"
 
+msgid "Link to an existing account when the email matches"
+msgstr "Email 相符時連結到既有帳號"
+
+msgid "Link to the order (https sites only)"
+msgstr "訂單連結（僅 https 站台）"
+
+msgid "Link your LINE account to get order updates in LINE and to sign in with one tap."
+msgstr "連結 LINE 帳號，就能在 LINE 收到訂單更新，也能一鍵登入。"
+
+msgid "Linked WordPress accounts"
+msgstr "已連結的 WordPress 帳號"
+
+msgid "Linked to %s."
+msgstr "已連結到 %s。"
+
+msgid "List of items and quantities"
+msgstr "商品與數量清單"
+
+msgid "Location"
+msgstr "位置"
+
 msgid "Log in with LINE"
 msgstr "使用 LINE 登入"
+
+msgid "Log level"
+msgstr "紀錄等級"
+
+msgid "Login button"
+msgstr "登入按鈕"
+
+msgid "Login buttons"
+msgstr "登入按鈕"
+
+msgid "Logs"
+msgstr "紀錄"
+
+msgid "Long-lived token"
+msgstr "長效 Token"
+
+msgid "Lowercase letters, digits, hyphen and underscore. Other tabs point at this. Generated automatically if left blank."
+msgstr "小寫英文字母、數字、連字號與底線。其他分頁會指向這個別名。留空的話會自動產生。"
+
+msgid "Make default"
+msgstr "設為預設"
+
+msgid "Manage templates"
+msgstr "管理範本"
+
+msgid "Match"
+msgstr "比對方式"
+
+msgid "Match by email"
+msgstr "以 Email 比對"
+
+msgid "Matching by email means anyone who controls a LINE account with that address can sign in as the matching WordPress user. Leave it off unless you know every LINE email on your site is verified and trusted."
+msgstr "以 Email 比對代表任何人只要握有使用該信箱的 LINE 帳號，就能登入成對應的 WordPress 使用者。除非你確定站上每個 LINE Email 都已驗證且可信，否則請保持關閉。"
+
+msgid "Maximum reply length"
+msgstr "回覆長度上限"
+
+msgid "Media URLs must use HTTPS."
+msgstr "媒體網址必須使用 HTTPS。"
+
+msgid "Menu"
+msgstr "選單"
+
+msgid "Menu images must be %1$s or %2$s pixels, JPEG or PNG, and at most 1 MB."
+msgstr "選單圖片必須是 %1$s 或 %2$s 像素，JPEG 或 PNG，且不超過 1 MB。"
+
+msgid "Message"
+msgstr "訊息"
+
+msgid "Message %d is missing its type."
+msgstr "第 %d 則訊息沒有 type。"
+
+msgid "Message JSON"
+msgstr "訊息 JSON"
+
+msgid "Message quota this month"
+msgstr "本月訊息額度"
+
+msgid "Message the customer in LINE when their order status changes"
+msgstr "訂單狀態變更時，用 LINE 通知客人"
+
+msgid "Message the customer sends"
+msgstr "客人會送出的訊息"
+
+msgid "Messaging API"
+msgstr "Messaging API"
+
+msgid "Messaging API Channel ID"
+msgstr "Messaging API Channel ID"
+
+msgid "Messaging API Channel ID and Channel Secret are required to issue a token."
+msgstr "要簽發 Token 必須先填入 Messaging API 的 Channel ID 與 Channel Secret。"
+
+msgid "Messaging API channel connected"
+msgstr "已連接 Messaging API 頻道"
+
+msgid "Messaging is not available right now."
+msgstr "目前無法使用訊息功能。"
+
+msgid "Minimum height"
+msgstr "最小高度"
+
+msgid "Moksa LINE Suite is installed but not connected to a LINE channel yet."
+msgstr "Moksa LINE Suite 已安裝，但還沒連接任何 LINE 頻道。"
+
+msgid "Move down"
+msgstr "往下移"
+
+msgid "Move left"
+msgstr "往左移"
+
+msgid "Move right"
+msgstr "往右移"
+
+msgid "Move up"
+msgstr "往上移"
+
+msgid "Must be HTTPS, JPEG or PNG, and at most 10 MB."
+msgstr "必須是 HTTPS，JPEG 或 PNG，且不超過 10 MB。"
+
+msgid "Must match both your LINE Pay merchant currency and the WooCommerce store currency, or the gateway hides itself at checkout."
+msgstr "必須同時符合 LINE Pay 商家幣別和 WooCommerce 商店幣別，否則結帳頁不會顯示這個金流。"
+
+msgid "My Account tab"
+msgstr "我的帳戶分頁"
+
+msgid "Name"
+msgstr "名稱"
+
+msgid "Name, LINE id or email"
+msgstr "名稱、LINE ID 或 Email"
+
+msgid "Never expires, so treat it like a password. Rotate the channel if it leaks."
+msgstr "永不過期，請當成密碼看待。一旦外洩請更換頻道。"
+
+msgid "Never settled"
+msgstr "從未確認結果"
+
+msgid "New card"
+msgstr "新卡片"
+
+msgid "New flow"
+msgstr "新增流程"
+
+msgid "New menu"
+msgstr "新增選單"
+
+msgid "New rule"
+msgstr "新增規則"
+
+msgid "New template"
+msgstr "新增範本"
+
+msgid "New visitors"
+msgstr "新訪客"
+
+msgid "No LIFF ID has been configured yet."
+msgstr "還沒有設定 LIFF ID。"
+
+msgid "No LINE account is linked. Only this user can link their own."
+msgstr "沒有連結任何 LINE 帳號。只有這位使用者本人能連結自己的帳號。"
+
+msgid "No LINE users recorded yet."
+msgstr "還沒有記錄到任何 LINE 使用者。"
+
+msgid "No cards yet. Add the first one below."
+msgstr "還沒有卡片，請從下方新增第一張。"
+
+msgid "No channel access token is configured. Add one under LINE > Settings > Messaging API."
+msgstr "還沒有設定 Channel Access Token。請到 LINE > 設定 > Messaging API 填入。"
+
+msgid "No conversations yet."
+msgstr "還沒有對話。"
+
+msgid "No friends have been recorded on this site yet."
+msgstr "這個站台還沒有記錄到任何好友。"
+
+msgid "No messages yet. Only messages received after this plugin was installed appear here -- LINE does not provide access to earlier chat history."
+msgstr "還沒有訊息。這裡只會出現外掛安裝之後收到的訊息，LINE 並沒有提供更早的聊天記錄。"
+
+msgid "No notification templates yet."
+msgstr "還沒有任何通知範本。"
+
+msgid "No other menus in this tab group yet"
+msgstr "這個分頁群組還沒有其他選單"
+
+msgid "No payments yet."
+msgstr "還沒有任何收款。"
 
 msgid "No problem, that has been cancelled."
 msgstr "好的，已經幫您取消了。"
 
+msgid "No questions yet. Add the first one below."
+msgstr "還沒有問題，請從下方新增第一題。"
+
+msgid "No rich menus yet."
+msgstr "還沒有任何圖文選單。"
+
+msgid "No rules yet."
+msgstr "還沒有任何規則。"
+
+msgid "No such transaction exists."
+msgstr "找不到這筆交易。"
+
+msgid "None"
+msgstr "無"
+
+msgid "None yet."
+msgstr "還沒有。"
+
+msgid "Not available on this server"
+msgstr "這台主機不支援"
+
+msgid "Not linked"
+msgstr "未連結"
+
+msgid "Notable events"
+msgstr "值得注意的事件"
+
+msgid "Nothing logged."
+msgstr "沒有任何紀錄。"
+
+msgid "Nothing matches this filter. Set it to Everything to see the rest."
+msgstr "沒有符合這個篩選的項目。切換成「全部」就能看到其餘的。"
+
+msgid "Nothing sent yet."
+msgstr "還沒有送出任何訊息。"
+
+msgid "Nothing submitted yet."
+msgstr "還沒有任何回覆。"
+
+msgid "Nothing to reply with yet."
+msgstr "還沒有可以回覆的內容。"
+
+msgid "Nothing to send yet."
+msgstr "還沒有可以送出的內容。"
+
+msgid "Nothing yet. If you have already pressed Verify in the LINE Console and this is still empty, the signature check is rejecting deliveries, which almost always means the Messaging API channel secret is wrong."
+msgstr "還沒有任何事件。如果你已經在 LINE Console 按過 Verify 這裡還是空的，代表簽章檢查拒絕了送來的請求，幾乎都是 Messaging API 的 Channel Secret 填錯了。"
+
+msgid "Notification templates"
+msgstr "通知範本"
+
+msgid "Notify on"
+msgstr "通知時機"
+
+msgid "Number of items"
+msgstr "商品件數"
+
+msgid "Off"
+msgstr "關閉"
+
+msgid "Offer LINE Pay at checkout"
+msgstr "在結帳頁提供 LINE Pay"
+
+msgid "Offer LINE sign-in on the account and checkout pages"
+msgstr "在帳戶頁與結帳頁提供 LINE 登入"
+
+msgid "Offers the official account while the visitor is logging in."
+msgstr "在訪客登入的過程中順帶推薦官方帳號。"
+
+msgid "Official account ID"
+msgstr "官方帳號 ID"
+
+msgid "On a phone"
+msgstr "在手機上"
+
+msgid "On status"
+msgstr "在狀態"
+
+msgid "One card, or up to %d side by side that the customer swipes through."
+msgstr "一張卡片，或最多 %d 張並排讓客人左右滑動。"
+
+msgid "One of these buttons"
+msgstr "以下按鈕的其中一個"
+
+msgid "Only %s remains refundable on this payment."
+msgstr "這筆付款只剩 %s 可以退款。"
+
+msgid "Only a captured payment can be refunded."
+msgstr "只有已請款的付款才能退款。"
+
+msgid "Only messages received after this plugin was installed appear here. LINE provides no way to read earlier chat history."
+msgstr "這裡只會出現外掛安裝之後收到的訊息。LINE 並沒有提供讀取更早聊天記錄的方式。"
+
+msgid "Only when"
+msgstr "僅當"
+
+msgid "Open a link"
+msgstr "開啟連結"
+
+msgid "Open settings"
+msgstr "開啟設定"
+
+msgid "Open the menu by default when the chat opens"
+msgstr "開啟聊天室時預設展開選單"
+
 msgid "Open this page from LINE to continue."
 msgstr "請從 LINE 開啟這個頁面才能繼續。"
+
+msgid "OpenSSL with AES-256-GCM is missing, so credentials are stored as plain text."
+msgstr "缺少支援 AES-256-GCM 的 OpenSSL，因此憑證是以明文儲存。"
+
+msgid "OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text."
+msgstr "這台主機沒有支援 AES-256-GCM 的 OpenSSL，因此 Channel Secret 是以明文儲存。"
+
+msgid "Optional separate LIFF app for in-app payment pages."
+msgstr "選填，給 App 內付款頁面使用的另一個 LIFF 應用。"
+
+msgid "Optional separate LIFF app for the chat shortcode."
+msgstr "選填，給聊天短代碼使用的另一個 LIFF 應用。"
+
+msgid "Optional. Every webhook delivery is relayed here unchanged, with its signature header, for n8n, Make or your own service."
+msgstr "選填。每筆 Webhook 都會原封不動連同簽章標頭轉送到這裡，供 n8n、Make 或你自己的服務使用。"
+
+msgid "Order"
+msgstr "訂單"
+
+msgid "Order #%d"
+msgstr "訂單 #%d"
 
 msgid "Order %1$s: %2$s"
 msgstr "訂單 %1$s：%2$s"
 
 msgid "Order %s"
 msgstr "訂單 %s"
+
+msgid "Order confirmed"
+msgstr "訂單已確認"
+
+msgid "Order id"
+msgstr "訂單編號"
+
+msgid "Order notification"
+msgstr "訂單通知"
+
+msgid "Order notifications"
+msgstr "訂單通知"
+
+msgid "Order notifications are switched off, so nothing is being sent."
+msgstr "訂單通知已關閉，目前不會送出任何訊息。"
+
+msgid "Order number"
+msgstr "訂單編號"
+
+msgid "Order statuses"
+msgstr "訂單狀態"
+
+msgid "Order summary"
+msgstr "訂單摘要"
+
+msgid "Order total"
+msgstr "訂單總額"
+
+msgid "Order total, formatted"
+msgstr "訂單總額（已格式化）"
+
+msgid "Package and sticker ID"
+msgstr "貼圖包與貼圖 ID"
+
+msgid "Passed the local checks. Connect the Messaging API channel to also validate against LINE."
+msgstr "已通過本機檢查。連接 Messaging API 頻道後還可以再交給 LINE 驗證一次。"
+
+msgid "Paste the webhook URL into the Console, enable \"Use webhook\", then press Verify."
+msgstr "把 Webhook URL 貼到 Console，開啟「Use webhook」，然後按 Verify。"
+
+msgid "Paste this into the LINE Login channel as a Callback URL. It must match exactly, including https and any trailing path."
+msgstr "把這個貼到 LINE Login 頻道的 Callback URL。必須完全一致，包含 https 和後面的路徑。"
+
+msgid "Paste this into the Messaging API channel, turn on \"Use webhook\", then press Verify."
+msgstr "把這個貼到 Messaging API 頻道，開啟「Use webhook」，然後按 Verify。"
+
+msgid "Pay Channel ID"
+msgstr "Pay Channel ID"
+
+msgid "Pay Channel secret"
+msgstr "Pay Channel Secret"
+
+msgid "Pay with LINE Pay"
+msgstr "使用 LINE Pay 付款"
+
+msgid "Pay with LINE Pay, LINE Points or a registered card."
+msgstr "可使用 LINE Pay、LINE Points 或已綁定的信用卡付款。"
+
+msgid "Payment LIFF ID"
+msgstr "付款用 LIFF ID"
+
+msgid "Payment link created."
+msgstr "收款連結已建立。"
+
+msgid "Payment method"
+msgstr "付款方式"
+
+msgid "Payment received: %1$s %2$s (order %3$s). Thank you!"
+msgstr "已收到款項：%1$s %2$s（訂單 %3$s）。謝謝您！"
+
+msgid "Payment request"
+msgstr "收款請求"
+
+msgid "Payment request: %1$s %2$s"
+msgstr "收款請求：%1$s %2$s"
+
+msgid "Payments"
+msgstr "收款"
+
+msgid "Pickup store address"
+msgstr "取貨門市地址"
+
+msgid "Pickup store name"
+msgstr "取貨門市名稱"
+
+msgid "Pixels. 0 gives square corners."
+msgstr "像素。填 0 就是直角。"
+
+msgid "Pixels. 0 lets the padding decide."
+msgstr "像素。填 0 就交由內距決定。"
 
 msgid "Please choose an option:"
 msgstr "請選擇一個項目："
@@ -66,17 +1404,437 @@ msgstr "請回覆數字。"
 msgid "Please reply with your answer."
 msgstr "請直接回覆您的答案。"
 
+msgid "Plugin log"
+msgstr "外掛紀錄"
+
+msgid "Plus the Flex card \"%s\", drawn below this message."
+msgstr "另外還會附上 Flex 卡片「%s」，顯示在這則訊息下方。"
+
+msgid "Postback"
+msgstr "Postback"
+
+msgid "Postback data"
+msgstr "Postback 資料"
+
+msgid "Preview"
+msgstr "預覽"
+
+msgid "Priority"
+msgstr "優先順序"
+
+msgid "Profile sync"
+msgstr "個人資料同步"
+
+msgid "Provider status"
+msgstr "服務狀態"
+
+msgid "Publish"
+msgstr "發布"
+
+msgid "Publish \"%s\""
+msgstr "發布「%s」"
+
+msgid "Publish a whole tab group"
+msgstr "發布整個分頁群組"
+
+msgid "Publish this menu to LINE before making it the default."
+msgstr "請先把這個選單發布到 LINE，才能設為預設。"
+
+msgid "Published"
+msgstr "發布狀態"
+
+msgid "Published %d menu to LINE."
+msgstr "已發布 %d 個選單到 LINE。"
+
+msgid "Published to LINE."
+msgstr "已發布到 LINE。"
+
+msgid "Publishes every menu in the group in order and repoints their aliases, so the tabs stay consistent with each other."
+msgstr "會依序發布群組裡的每個選單並重新指向它們的別名，讓分頁彼此保持一致。"
+
+msgid "Publishing to LINE..."
+msgstr "正在發布到 LINE…"
+
+msgid "Question %1$d has %2$d buttons. LINE allows 13 including the Cancel button, so only the first %3$d are sent."
+msgstr "第 %1$d 題有 %2$d 個按鈕。LINE 上限是 13 個（含「取消」），所以只會送出前 %3$d 個。"
+
+msgid "Question %d has nothing to ask."
+msgstr "第 %d 題沒有填要問什麼。"
+
+msgid "Question %d offers buttons but none are listed."
+msgstr "第 %d 題設定成按鈕選項，但一個選項都沒填。"
+
+msgid "Questions"
+msgstr "問題"
+
+msgid "Questions %1$d and %2$d both store their answer as \"%3$s\", so the second overwrites the first."
+msgstr "第 %1$d 題和第 %2$d 題都存成「%3$s」，後面那題會覆蓋前面那題的答案。"
+
+msgid "Quick reply set"
+msgstr "快速回覆組合"
+
+msgid "Quick reply set deleted."
+msgstr "快速回覆組合已刪除。"
+
+msgid "Quick reply set saved."
+msgstr "快速回覆組合已儲存。"
+
+msgid "Raw message JSON"
+msgstr "原始訊息 JSON"
+
+msgid "Received"
+msgstr "收到時間"
+
+msgid "Recent webhook events"
+msgstr "最近的 Webhook 事件"
+
+msgid "Recipient"
+msgstr "收件者"
+
+msgid "Record conversations and allow replying from WordPress"
+msgstr "記錄對話，並允許從 WordPress 回覆"
+
+msgid "Reference"
+msgstr "參考編號"
+
+msgid "Remove"
+msgstr "移除"
+
+msgid "Remove this card?"
+msgstr "要移除這張卡片嗎？"
+
+msgid "Remove this question?"
+msgstr "要移除這個問題嗎？"
+
+msgid "Replace the current areas with this layout?"
+msgstr "要用這個版面取代目前的區塊嗎？"
+
+msgid "Replies are sent as push messages, which are billed against your channel quota."
+msgstr "回覆是以推播訊息送出的，會計入頻道額度。"
+
+msgid "Replies to an inbound message are free. Push, multicast and broadcast are billed."
+msgstr "回覆客人來訊是免費的；推播、群播與群發則會計費。"
+
+msgid "Reply"
+msgstr "回覆"
+
+msgid "Reply with"
+msgstr "回覆內容"
+
+msgid "Request the email scope (needs approval from LINE first)"
+msgstr "要求 email scope（需先取得 LINE 核准）"
+
+msgid "Result"
+msgstr "結果"
+
+msgid "Rich menu deleted."
+msgstr "圖文選單已刪除。"
+
+msgid "Rich menu image"
+msgstr "圖文選單圖片"
+
+msgid "Rich menu images must be 1 MB or smaller."
+msgstr "圖文選單圖片必須小於或等於 1 MB。"
+
+msgid "Rich menu images must be JPEG or PNG."
+msgstr "圖文選單圖片必須是 JPEG 或 PNG。"
+
+msgid "Rich menus"
+msgstr "圖文選單"
+
+msgid "Role for new accounts"
+msgstr "新帳號的角色"
+
+msgid "Rule deleted."
+msgstr "規則已刪除。"
+
+msgid "Rule saved."
+msgstr "規則已儲存。"
+
+msgid "Rules are checked in order of match strength first (exact, then prefix, then pattern, then partial, then catch-all) and priority second, so a lower priority number wins between rules of equal strength."
+msgstr "規則先比對強度（完全相符、開頭、比對式、包含、萬用），再比優先順序，所以強度相同時，數字較小的優先順序會勝出。"
+
+msgid "Sandbox"
+msgstr "沙盒"
+
+msgid "Sandbox mode is on, so no real money moves. Turn it off when you go live."
+msgstr "目前是沙盒模式，不會有實際金流。正式上線前請關閉。"
+
+msgid "Save"
+msgstr "儲存"
+
+msgid "Save flow"
+msgstr "儲存流程"
+
+msgid "Save rule"
+msgstr "儲存規則"
+
+msgid "Save template"
+msgstr "儲存範本"
+
+msgid "Save to update the preview."
+msgstr "儲存後預覽才會更新。"
+
+msgid "Saved flows"
+msgstr "已儲存的流程"
+
+msgid "Saved templates"
+msgstr "已儲存的範本"
+
+msgid "Saved."
+msgstr "已儲存。"
+
+msgid "Saved. Publish it to push the change to LINE."
+msgstr "已儲存。要把變更推送到 LINE，請按發布。"
+
+msgid "Search"
+msgstr "搜尋"
+
+msgid "Search LINE users"
+msgstr "搜尋 LINE 使用者"
+
+msgid "Search conversations"
+msgstr "搜尋對話"
+
+msgid "Search name or message"
+msgstr "搜尋名稱或訊息"
+
+msgid "Search notifications"
+msgstr "搜尋通知"
+
+msgid "Seconds. Useful when another plugin adjusts the order right after the status changes. 0 sends immediately."
+msgstr "秒。當有別的外掛會在狀態變更後立刻調整訂單時很有用。填 0 就立即送出。"
+
+msgid "Send"
+msgstr "送出"
+
+msgid "Send a message"
+msgstr "送出一則訊息"
+
+msgid "Send a test to"
+msgstr "發送測試給"
+
+msgid "Send again"
+msgstr "重新發送"
+
+msgid "Send it to (optional)"
+msgstr "傳送給（選填）"
+
+msgid "Send test"
+msgstr "發送測試"
+
+msgid "Send this notification to the customer again?"
+msgstr "要再發送一次這則通知給客人嗎？"
+
+msgid "Send to"
+msgstr "發送對象"
+
+msgid "Send us a message and we will reply in your LINE chat."
+msgstr "傳訊息給我們，我們會在你的 LINE 聊天室回覆。"
+
 msgid "Sending..."
 msgstr "傳送中…"
+
+msgid "Sent (30 days)"
+msgstr "近 30 天已送出"
+
+msgid "Sent again. The result is in the list below."
+msgstr "已重新發送，結果在下方列表。"
+
+msgid "Sent to %d people."
+msgstr "已送出給 %d 個人。"
+
+msgid "Sent when someone adds the account. You can use {display_name}, {site_name} and {site_url}."
+msgstr "有人加入好友時送出。可以使用 {display_name}、{site_name} 和 {site_url}。"
+
+msgid "Sent, using order %s for the values."
+msgstr "已送出，變數取自訂單 %s。"
+
+msgid "Sent."
+msgstr "已送出。"
+
+msgid "Sent. Check the chat on your phone."
+msgstr "已送出，請在手機的聊天室確認。"
 
 msgid "Sent. We will reply in your LINE chat."
 msgstr "已送出，我們會在 LINE 對話中回覆您。"
 
+msgid "Set the official account basic ID in the LINE settings first."
+msgstr "請先到 LINE 設定裡填入官方帳號的基本 ID。"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Settings saved."
+msgstr "設定已儲存。"
+
+msgid "Setup"
+msgstr "設定進度"
+
+msgid "Shipping address"
+msgstr "收件地址"
+
+msgid "Shipping city"
+msgstr "收件城市"
+
+msgid "Shipping method"
+msgstr "配送方式"
+
+msgid "Shipping name"
+msgstr "收件人姓名"
+
+msgid "Shipping, fees and tax"
+msgstr "運費、手續費與稅金"
+
+msgid "Short-lived tokens last 15 minutes, are unlimited in number, and never need storing. A long-lived token never expires, which means a leak is unrecoverable without rotating the channel."
+msgstr "短效 Token 有效 15 分鐘、數量不限、完全不需要儲存。長效 Token 永不過期，也就是說一旦外洩，除了更換頻道之外沒有補救辦法。"
+
+msgid "Shortcodes"
+msgstr "短代碼"
+
+msgid "Show an option to add as a friend"
+msgstr "顯示加入好友的選項"
+
+msgid "Show the add-friend step prominently"
+msgstr "明顯地顯示加入好友的步驟"
+
+msgid "Show which entries"
+msgstr "要顯示哪些項目"
+
+msgid "Shown in the chat list and in push notifications, where the bubble cannot be drawn."
+msgstr "顯示在聊天列表和推播通知，那些地方畫不出卡片。"
+
+msgid "Sign in with LINE"
+msgstr "用 LINE 登入"
+
+msgid "Size"
+msgstr "尺寸"
+
+msgid "Source"
+msgstr "來源"
+
+msgid "Start a conversation flow"
+msgstr "啟動對話流程"
+
+msgid "Start from"
+msgstr "從這個開始"
+
+msgid "Start from a layout:"
+msgstr "從版面開始："
+
+msgid "Start when a message"
+msgstr "當訊息符合以下條件時啟動"
+
+msgid "Status"
+msgstr "狀態"
+
+msgid "Status name, translated"
+msgstr "狀態名稱（已翻譯）"
+
+msgid "Status slug"
+msgstr "狀態代碼"
+
+msgid "Statuses"
+msgstr "狀態"
+
+msgid "Step %d has no question to ask."
+msgstr "第 %d 步沒有填要問什麼。"
+
+msgid "Stops the AI answering after this many replies in a day. Set to 0 for no limit -- but every reply costs money."
+msgstr "一天回覆達到這個數量後就停止。填 0 代表不限制，但每則回覆都是要付費的。"
+
+msgid "Stored as"
+msgstr "存成欄位"
+
+msgid "Stored encrypted. Only the last four characters are ever shown again."
+msgstr "加密儲存。之後只會再顯示最後四碼。"
+
+msgid "Submissions"
+msgstr "回覆記錄"
+
+msgid "Subtotal, formatted"
+msgstr "小計（已格式化）"
+
+msgid "Sure -- I have passed this to a member of our team. They will reply here shortly."
+msgstr "好的，我已經把訊息轉給同事，他們很快會在這裡回覆你。"
+
+msgid "Switch to another tab"
+msgstr "切換到其他分頁"
+
+msgid "Tab group"
+msgstr "分頁群組"
+
+msgid "Tab order"
+msgstr "分頁排序"
+
+msgid "Tab to switch to"
+msgstr "要切換到的分頁"
+
+msgid "Take over"
+msgstr "接手處理"
+
+msgid "Take payments through LINE Pay. Credentials are configured under LINE > Settings > LINE Pay."
+msgstr "透過 LINE Pay 收款。憑證請在 LINE > 設定 > LINE Pay 裡設定。"
+
+msgid "Take the money as soon as the customer confirms"
+msgstr "客人確認後立刻扣款"
+
+msgid "Taken over by a person"
+msgstr "已由真人接手"
+
+msgid "Tappable areas"
+msgstr "可點擊區塊"
+
+msgid "Tappable areas as JSON"
+msgstr "可點擊區塊的 JSON"
+
+msgid "Template"
+msgstr "範本"
+
+msgid "Template deleted."
+msgstr "範本已刪除。"
+
+msgid "Template name"
+msgstr "範本名稱"
+
+msgid "Template saved."
+msgstr "範本已儲存。"
+
+msgid "Templates"
+msgstr "範本"
+
+msgid "Test sent."
+msgstr "測試訊息已送出。"
+
+msgid "Text"
+msgstr "文字"
+
+msgid "Text colour"
+msgstr "文字顏色"
+
+msgid "Text under it"
+msgstr "標題下方的文字"
+
+msgid "Thank you {display_name}, we have your request and will confirm shortly."
+msgstr "謝謝你 {display_name}，我們已經收到你的需求，很快會跟你確認。"
+
 msgid "Thank you, we have received your details."
 msgstr "謝謝您，我們已經收到您的資料。"
 
+msgid "That JSON cannot be read, so the questions below are not showing it."
+msgstr "這段 JSON 讀不出來，下方的問題卡片沒有反映它。"
+
+msgid "That change is not valid."
+msgstr "這項變更無效。"
+
+msgid "That conversation no longer exists."
+msgstr "這則對話已經不存在了。"
+
 msgid "That did not send. Please try again."
 msgstr "沒有送出成功，請再試一次。"
+
+msgid "That did not work."
+msgstr "沒有成功。"
 
 msgid "That does not look like a phone number. Please try again."
 msgstr "這看起來不像電話號碼，請再回覆一次。"
@@ -84,21 +1842,634 @@ msgstr "這看起來不像電話號碼，請再回覆一次。"
 msgid "That does not look like an email address. Please try again."
 msgstr "這看起來不像 Email，請再回覆一次。"
 
+msgid "That is a lot of messages at once. Please wait a moment."
+msgstr "一次送出的訊息太多了，請稍等一下。"
+
+msgid "That is not valid JSON."
+msgstr "這不是有效的 JSON。"
+
+msgid "That is not valid JSON: %s"
+msgstr "這不是有效的 JSON：%s"
+
 msgid "That looked empty. Please try again."
 msgstr "內容是空的，請再回覆一次。"
+
+msgid "That notification address is not valid."
+msgstr "這個通知信箱格式不正確。"
+
+msgid "That order could not be found."
+msgstr "找不到這張訂單。"
+
+msgid "That order no longer exists."
+msgstr "這張訂單已經不存在了。"
+
+msgid "That pattern is not valid."
+msgstr "這個比對式無效。"
+
+msgid "That payment could not be found."
+msgstr "找不到這筆付款。"
+
+msgid "That rich menu no longer exists."
+msgstr "這個圖文選單已經不存在了。"
+
+msgid "That row does not name an order and a status to resend."
+msgstr "這一列沒有指明要重送哪張訂單、哪個狀態。"
+
+msgid "That template could not be loaded."
+msgstr "無法載入這個範本。"
+
+msgid "That template no longer exists."
+msgstr "這個範本已經不存在了。"
+
+msgid "That transaction id does not belong to this merchant."
+msgstr "這個交易 ID 不屬於這個商店。"
+
+msgid "The %1$s section must contain one of: %2$s."
+msgstr "%1$s 區段必須包含下列其中之一：%2$s。"
+
+msgid "The AI returned an empty answer."
+msgstr "AI 回傳了空白的答案。"
+
+msgid "The Channel ID, Channel Secret and sandbox switch live on the <a href=\"%s\">LINE Pay settings screen</a>, so they are stored encrypted and shared with payment links."
+msgstr "Channel ID、Channel Secret 與沙盒開關都在 <a href=\"%s\">LINE Pay 設定頁</a>，會加密儲存，並與收款連結共用。"
+
+msgid "The account to link to no longer exists."
+msgstr "要連結的帳號已經不存在了。"
+
+msgid "The amount is not valid for this currency."
+msgstr "這個金額不符合該幣別的規則。"
+
+msgid "The bot cannot send or receive anything until this is set."
+msgstr "沒有設定這個，機器人無法收發任何訊息。"
+
+msgid "The bot id from AI Engine."
+msgstr "AI Engine 裡的 bot id。"
+
+msgid "The box at %s needs a contents array."
+msgstr "%s 的 box 必須有 contents 陣列。"
+
+msgid "The box at %s needs a layout."
+msgstr "%s 的 box 必須設定 layout。"
+
+msgid "The chat bar text is drawn by LINE below the menu, not on your image. This preview shows layout only, not exact fonts or corners."
+msgstr "聊天列文字是 LINE 畫在選單下方的，不在你的圖片上。這個預覽只呈現版面，字體和圓角不會完全一樣。"
+
+msgid "The customer cancelled the LINE Pay payment."
+msgstr "客人取消了這筆 LINE Pay 付款。"
+
+msgid "The customer has insufficient balance."
+msgstr "客人的餘額不足。"
+
+msgid "The customer has not completed authentication."
+msgstr "客人尚未完成驗證。"
+
+msgid "The customer is messaged when the order enters any of these statuses. Each notification is billed as a push message."
+msgstr "訂單進入這些狀態的任何一個時，就會發訊息給客人。每則通知都會以推播訊息計費。"
+
+msgid "The customer sends the trigger, the bot answers. Placeholders are filled in with sample values so you can see the sentence they actually read."
+msgstr "客人送出觸發文字，機器人回覆。變數會帶入範例值，讓你看到客人實際讀到的句子。"
+
+msgid "The filler component was removed by LINE. Use a box with margin, padding or offset instead."
+msgstr "filler 元件已被 LINE 移除，請改用帶有 margin、padding 或 offset 的 box。"
+
+msgid "The flow definition is not valid JSON."
+msgstr "流程定義不是有效的 JSON。"
+
+msgid "The image is larger than 1 MB, which LINE will reject."
+msgstr "圖片超過 1 MB，LINE 會拒絕。"
+
+msgid "The inbox is switched off under LINE > Settings > Messaging API."
+msgstr "收件匣在 LINE > 設定 > Messaging API 裡被關閉了。"
+
+msgid "The link was created, but LINE would not deliver it: %s"
+msgstr "連結已建立，但 LINE 沒有把它送出：%s"
+
+msgid "The login response came from an unexpected issuer."
+msgstr "登入回應來自非預期的簽發者。"
+
+msgid "The login response did not identify a user."
+msgstr "登入回應中沒有識別到使用者。"
+
+msgid "The login response did not match this login attempt."
+msgstr "登入回應與這次的登入請求不符。"
+
+msgid "The login response has expired. Please try again."
+msgstr "登入回應已過期，請再試一次。"
+
+msgid "The login response was issued for a different channel."
+msgstr "登入回應是簽發給另一個頻道的。"
+
+msgid "The message contains this"
+msgstr "訊息包含這段文字"
+
+msgid "The message is not valid JSON, so this notification will not send: %s"
+msgstr "訊息不是有效的 JSON，這則通知不會送出：%s"
+
+msgid "The message matches this pattern"
+msgstr "訊息符合這個比對式"
+
+msgid "The message starts with this"
+msgstr "訊息以這段文字開頭"
+
+msgid "The payment account status does not allow this operation."
+msgstr "付款帳戶目前的狀態不允許這項操作。"
+
+msgid "The payment could not be recorded."
+msgstr "這筆付款無法記錄。"
+
+msgid "The payment could not be started. Please try again."
+msgstr "無法開始付款流程，請再試一次。"
+
+msgid "The payment request could not be encoded."
+msgstr "付款請求無法編碼。"
+
+msgid "The payment was cancelled."
+msgstr "付款已取消。"
+
+msgid "The preview is an approximation. Use \"Check\" to validate against LINE itself, and \"Send test\" to see the real thing in a chat."
+msgstr "預覽只是近似的樣子。用「檢查」交給 LINE 驗證，用「發送測試」在聊天室裡看真正的效果。"
+
+msgid "The questions as JSON"
+msgstr "問題的 JSON"
+
+msgid "The recorded list only includes people this site has seen since the webhook was switched on, so it is usually smaller than the real follower count."
+msgstr "本站記錄的名單只包含 Webhook 開啟之後出現過的人，所以通常會比實際好友數少。"
+
+msgid "The request headers were not accepted. Check the Channel Secret."
+msgstr "請求標頭未被接受，請檢查 Channel Secret。"
+
+msgid "The rich menu could not be saved."
+msgstr "圖文選單儲存失敗。"
+
+msgid "The selected image could not be read from disk."
+msgstr "無法從磁碟讀取所選的圖片。"
+
+msgid "The selected image could not be read from the media library."
+msgstr "無法從媒體庫讀取所選的圖片。"
+
+msgid "The statuses above use a built-in card. For full control -- your own Flex design, and conditions such as payment or shipping method -- create <a href=\"%s\">notification templates</a>. When a template matches, it replaces the built-in card."
+msgstr "上面的狀態使用內建卡片。若要完全掌控（自己的 Flex 設計，以及付款或配送方式之類的條件），請建立<a href=\"%s\">通知範本</a>。範本符合條件時，會取代內建卡片。"
+
+msgid "The tappable areas could not be read."
+msgstr "無法讀取可點擊區塊的設定。"
+
+msgid "The template could not be saved."
+msgstr "範本儲存失敗。"
+
+msgid "The whole conversation, from the trigger to the last answer. Buttons are drawn where LINE puts them, under the message."
+msgstr "從觸發到最後一個答案的完整對話。按鈕畫在 LINE 實際擺放的位置，也就是訊息下方。"
+
+msgid "The whole message is exactly this"
+msgstr "整則訊息剛好等於這段文字"
+
+msgid "Their answer"
+msgstr "客人的回答"
+
+msgid "There are no orders yet to build a preview from."
+msgstr "還沒有訂單可以用來產生預覽。"
+
+msgid "There is nothing to send."
+msgstr "沒有可以送出的內容。"
+
+msgid "These cover the common card. Anything else -- extra rows, colours, more buttons -- is edited in the JSON."
+msgstr "這幾欄涵蓋最常見的卡片。其他的（多幾列、顏色、更多按鈕）請在 JSON 裡編輯。"
+
+msgid "This LINE account is already linked to another user on this site."
+msgstr "這個 LINE 帳號已經連結到本站的另一位使用者。"
+
+msgid "This bubble exceeds the 30 KB limit."
+msgstr "這個 bubble 超過 30 KB 上限。"
+
+msgid "This card has a layout these fields cannot describe, so it is edited as JSON below. Nothing here will change it."
+msgstr "這張卡片的版面不是這幾個欄位能描述的，請用下方的 JSON 編輯。這裡的欄位不會更動它。"
+
+msgid "This carousel exceeds the 50 KB limit. Remove bubbles or shorten the content."
+msgstr "這組輪播超過 50 KB 上限，請減少 bubble 或縮短內容。"
+
+msgid "This does not look like a channel ID: %s. A LINE channel ID is a number, usually ten digits. If your browser filled this in for you, clear it and paste the value from the LINE Developers Console."
+msgstr "這看起來不像 Channel ID：%s。LINE 的 Channel ID 是數字，通常十位數。如果是瀏覽器自動填入的，請清空後從 LINE Developers Console 貼上正確的值。"
+
+msgid "This layout nests too deeply."
+msgstr "這個版面巢狀層數過深。"
+
+msgid "This link expired. Please go back and try again."
+msgstr "這個連結已過期，請返回後再試一次。"
+
+msgid "This login could not be verified. Please try again."
+msgstr "這次登入無法通過驗證，請再試一次。"
+
+msgid "This login link has expired. Please try again."
+msgstr "這個登入連結已過期，請再試一次。"
+
+msgid "This login request is missing its state. Please start again."
+msgstr "這次的登入請求缺少 state，請重新開始。"
+
+msgid "This menu is now the default for everyone."
+msgstr "這個選單現在是所有人的預設選單。"
+
+msgid "This merchant cannot use LINE Pay right now. Contact LINE Pay support."
+msgstr "這個商店目前無法使用 LINE Pay，請聯絡 LINE Pay 客服。"
+
+msgid "This merchant is not registered with LINE Pay. Check the Channel ID and whether you are pointed at sandbox or production."
+msgstr "這個商店代號沒有在 LINE Pay 註冊。請檢查 Channel ID，以及目前是指向沙盒還是正式環境。"
+
+msgid "This message is not a card or a carousel, so it can only be edited as JSON."
+msgstr "這則訊息不是卡片也不是輪播，只能用 JSON 編輯。"
+
+msgid "This order has no LINE Pay transaction to refund."
+msgstr "這張訂單沒有可退款的 LINE Pay 交易。"
+
+msgid "This order has nothing to pay."
+msgstr "這張訂單沒有需要付款的金額。"
+
+msgid "This page could not identify you. Reopen it from LINE."
+msgstr "這個頁面無法辨識你的身分，請從 LINE 重新開啟。"
+
+msgid "This payment has already been captured."
+msgstr "這筆付款已經請款完成。"
+
+msgid "This payment has already been refunded, or the refund window has closed."
+msgstr "這筆付款已經退款，或是已超過可退款期限。"
+
+msgid "This payment is already being confirmed. Please wait a moment and refresh."
+msgstr "這筆付款正在確認中，請稍候後重新整理。"
+
+msgid "This payment is already being processed."
+msgstr "這筆付款正在處理中。"
+
+msgid "This rich menu has no tappable areas yet."
+msgstr "這個圖文選單還沒有設定任何可點擊區塊。"
+
+msgid "This screen is missing."
+msgstr "找不到這個畫面。"
+
+msgid "This session belongs to a different channel."
+msgstr "這次的連線屬於另一個頻道。"
+
+msgid "This session could not be verified. Reopen the page from LINE."
+msgstr "這次的連線無法驗證，請從 LINE 重新開啟頁面。"
+
+msgid "This site is not accepting new registrations through LINE. Please sign in with your existing account first, then link LINE from your profile."
+msgstr "這個站台沒有開放用 LINE 註冊新帳號。請先用既有帳號登入，再從個人資料頁連結 LINE。"
+
+msgid "This template did not produce a valid message. Check the JSON and the placeholders."
+msgstr "這個範本沒有產生有效的訊息，請檢查 JSON 和變數。"
+
+msgid "This template will not send as it stands."
+msgstr "這個範本目前的狀態無法送出。"
+
+msgid "Time"
+msgstr "時間"
+
+msgid "Title"
+msgstr "標題"
+
+msgid "To build tabs, give several menus the same tab group and point their tab buttons at each other with a \"switch tab\" action."
+msgstr "要做分頁，把幾個選單設成同一個分頁群組，再用「切換分頁」動作讓它們的分頁按鈕互指。"
 
 msgid "Total"
 msgstr "合計"
 
+msgid "Tracking number, from ECPay, RY Tools, AST or Shipment Tracking"
+msgstr "物流單號，來自綠界、RY Tools、AST 或 Shipment Tracking"
+
+msgid "Tracking numbers are read from ECPay, RY Tools, Advanced Shipment Tracking and WooCommerce Shipment Tracking. After the last attempt the notification is sent anyway, without the number."
+msgstr "物流單號會從綠界、RY Tools、Advanced Shipment Tracking 和 WooCommerce Shipment Tracking 讀取。試到最後一次仍然沒有的話，通知還是會送出，只是不含單號。"
+
+msgid "Tracking wait"
+msgstr "等待設定"
+
+msgid "Transaction"
+msgstr "交易編號"
+
+msgid "Trigger"
+msgstr "觸發"
+
+msgid "Trigger text"
+msgstr "觸發文字"
+
+msgid "Turn them on"
+msgstr "開啟通知"
+
+msgid "Type"
+msgstr "類型"
+
+msgid "Type SEND in the confirmation box to go ahead."
+msgstr "請在確認欄位輸入 SEND 才會送出。"
+
+msgid "Type SEND to confirm"
+msgstr "輸入 SEND 以確認"
+
+msgid "Type your message"
+msgstr "輸入你的訊息"
+
+msgid "Unlink"
+msgstr "解除連結"
+
 msgid "Unlink LINE account"
 msgstr "解除 LINE 帳號連結"
+
+msgid "Unlink your LINE account?"
+msgstr "要解除 LINE 帳號連結嗎？"
+
+msgid "Use a long-lived token I paste below"
+msgstr "使用我在下方貼上的長效 Token"
+
+msgid "Use as the default menu for everyone"
+msgstr "設為所有人的預設選單"
+
+msgid "Use the sandbox environment (no real money moves)"
+msgstr "使用沙盒環境（不會有實際金流）"
+
+msgid "Used by the LIFF shortcodes unless one is given explicitly."
+msgstr "LIFF 短代碼在沒有另外指定時會使用這個。"
+
+msgid "Uses the most recent order to fill in the values. Save first."
+msgstr "會用最近一筆訂單的資料填入變數。請先儲存。"
 
 msgid "View order"
 msgstr "查看訂單"
 
+msgid "Visitor"
+msgstr "訪客"
+
+msgid "Wait for tracking"
+msgstr "等待物流單號"
+
+msgid "Waiting for the customer to complete payment on LINE Pay."
+msgstr "等待客人在 LINE Pay 完成付款。"
+
+msgid "Warnings and errors"
+msgstr "警告與錯誤"
+
+msgid "Warnings only"
+msgstr "只看警告"
+
+msgid "Webhook URL"
+msgstr "Webhook URL"
+
+msgid "Webhook has received an event"
+msgstr "Webhook 已收到過事件"
+
+msgid "Webhook signatures are verified with this. Without it, nothing the bot receives can be trusted."
+msgstr "Webhook 的簽章是用這個驗證的。沒有它，機器人收到的任何東西都不可信。"
+
+msgid "Webhook signing secret is the Messaging API one"
+msgstr "Webhook 簽章用的是 Messaging API 的密鑰"
+
+msgid "Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual."
+msgstr "Webhook 是用 Messaging API 的 Channel Secret 簽章的。退而使用 Login 頻道的密鑰只有在兩個頻道相同時才會成功，而那並不常見。"
+
+msgid "What every recipient gets. A broadcast is billed per person and cannot be recalled, so this is the last look you have."
+msgstr "每位收件者會看到的樣子。群發按人數計費且無法收回，這是你最後一次確認的機會。"
+
+msgid "What is this for"
+msgstr "這筆款項的名目"
+
+msgid "What name should we put this under?"
+msgstr "請問怎麼稱呼？"
+
+msgid "What the bot asks"
+msgstr "機器人問什麼"
+
+msgid "What the customer sees at checkout."
+msgstr "客人在結帳頁會看到的名稱。"
+
+msgid "When"
+msgstr "時間"
+
+msgid "When a message contains this, the bot stops answering and the conversation is flagged for a human."
+msgstr "訊息包含這個關鍵字時，機器人就停止回覆，並把對話標記為需要真人處理。"
+
+msgid "When tapped"
+msgstr "點擊時"
+
+msgid "When they finish, say"
+msgstr "完成後說"
+
+msgid "When to send"
+msgstr "什麼時候發送"
+
+msgid "Where to send people after login. Leave blank to return them to the page they came from."
+msgstr "登入後要把人導到哪裡。留空就會回到他們原本的頁面。"
+
+msgid "Which area of the plugin"
+msgstr "外掛的哪個區塊"
+
+msgid "Which conversations to show"
+msgstr "要顯示哪些對話"
+
+msgid "Which date would you like?"
+msgstr "想預約哪一天？"
+
+msgid "Which results to show"
+msgstr "要顯示哪些結果"
+
+msgid "Which service?"
+msgstr "想預約哪個服務？"
+
+msgid "Whichever chatbot you have set up in AI Engine, including its knowledge base."
+msgstr "你在 AI Engine 裡設定的聊天機器人，包含它的知識庫。"
+
+msgid "Who"
+msgstr "對象"
+
+msgid "Width"
+msgstr "寬度"
+
+msgid "With immediate capture off, payments are only authorised. You then have to capture or void each one, and an order cancelled in WooCommerce releases its authorisation automatically."
+msgstr "關閉立即請款時，付款只會被授權。之後你必須自己請款或作廢，而在 WooCommerce 取消訂單會自動釋放該筆授權。"
+
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+msgid "WooCommerce is not active, so there is nothing to notify about."
+msgstr "WooCommerce 沒有啟用，因此沒有可以通知的內容。"
+
+msgid "WooCommerce is not active."
+msgstr "WooCommerce 沒有啟用。"
+
+msgid "WordPress account"
+msgstr "WordPress 帳號"
+
+msgid "Working..."
+msgstr "處理中…"
+
+msgid "Write a message or choose a template first."
+msgstr "請先輸入訊息內容或選擇一個範本。"
+
+msgid "Write a reply"
+msgstr "輸入回覆內容"
+
+msgid "Write something first."
+msgstr "請先輸入內容。"
+
+msgid "You are not signed in."
+msgstr "你尚未登入。"
+
+msgid "You can use {display_name}, {site_name} and {site_url}."
+msgstr "可以使用 {display_name}、{site_name} 和 {site_url}。"
+
+msgid "You cannot change conversations."
+msgstr "你沒有權限變更對話。"
+
+msgid "You cannot clear the log."
+msgstr "你沒有權限清除紀錄。"
+
+msgid "You cannot create payment links."
+msgstr "你沒有權限建立收款連結。"
+
+msgid "You cannot read conversations."
+msgstr "你沒有權限檢視對話。"
+
+msgid "You cannot reply to conversations."
+msgstr "你沒有權限回覆對話。"
+
+msgid "You cannot resend notifications."
+msgstr "你沒有權限重新發送通知。"
+
+msgid "You cannot send broadcasts."
+msgstr "你沒有權限群發訊息。"
+
+msgid "You cannot send test notifications."
+msgstr "你沒有權限發送測試通知。"
+
+msgid "You cannot unlink another user."
+msgstr "你不能解除其他使用者的連結。"
+
+msgid "You do not have permission to change bot settings."
+msgstr "你沒有權限變更機器人設定。"
+
+msgid "You do not have permission to change these settings."
+msgstr "你沒有權限變更這些設定。"
+
+msgid "You do not have permission to manage rich menus."
+msgstr "你沒有權限管理圖文選單。"
+
+msgid "You do not have permission to manage templates."
+msgstr "你沒有權限管理範本。"
+
+msgid "You do not have permission to view this page."
+msgstr "你沒有權限檢視這個頁面。"
+
+msgid "Your LINE account is linked. Order updates will be sent to you on LINE."
+msgstr "你的 LINE 帳號已連結，訂單更新會透過 LINE 通知你。"
+
+msgid "Your message"
+msgstr "你的訊息"
+
+msgid "Your official account"
+msgstr "你的官方帳號"
+
 msgid "[%1$s] New LINE submission: %2$s"
 msgstr "[%1$s] 新的 LINE 表單回覆：%2$s"
+
+msgid "[Audio]"
+msgstr "[語音]"
+
+msgid "[File]"
+msgstr "[檔案]"
+
+msgid "[Flex]"
+msgstr "[Flex]"
+
+msgid "[Image]"
+msgstr "[圖片]"
+
+msgid "[Sticker]"
+msgstr "[貼圖]"
+
+msgid "[Video]"
+msgstr "[影片]"
+
+msgid "a link to your official account"
+msgstr "連到你官方帳號的連結"
+
+msgid "a message box that posts into the inbox"
+msgstr "一個把訊息送進收件匣的輸入框"
+
+msgid "altText is limited to 1500 characters."
+msgstr "altText 上限為 1500 字。"
+
+msgid "check every"
+msgstr "每隔"
+
+msgid "contains this"
+msgstr "包含這段文字"
+
+msgid "contents must be a bubble or a carousel."
+msgstr "contents 必須是 bubble 或 carousel。"
+
+msgid "default"
+msgstr "預設"
+
+msgid "e.g. cod, flat_rate, 1000"
+msgstr "例如 cod、flat_rate、1000"
+
+msgid "equals"
+msgstr "等於"
+
+msgid "greets the visitor by their LINE name"
+msgstr "用訪客的 LINE 名稱打招呼"
+
+msgid "is"
+msgstr "等於"
+
+msgid "is at least"
+msgstr "大於或等於"
+
+msgid "is at most"
+msgstr "小於或等於"
+
+msgid "is exactly this"
+msgstr "完全等於這段文字"
+
+msgid "is less than"
+msgstr "小於"
+
+msgid "is more than"
+msgstr "大於"
+
+msgid "is not"
+msgstr "不等於"
+
+msgid "never fires"
+msgstr "永遠不會觸發"
+
+msgid "no"
+msgstr "否"
+
+msgid "no detail given"
+msgstr "沒有提供詳細說明"
+
+msgid "not published"
+msgstr "尚未發布"
+
+msgid "off"
+msgstr "已停用"
+
+msgid "refunded %s"
+msgstr "已退款 %s"
+
+msgid "seconds,"
+msgstr "秒檢查一次，"
+
+msgid "the sign-in button"
+msgstr "登入按鈕"
+
+msgid "times"
+msgstr "次"
+
+msgid "up to"
+msgstr "最多"
+
+msgid "yes"
+msgstr "是"
 
 msgctxt "list separator"
 msgid ", "
 msgstr "、"
+
+msgctxt "sample customer name shown in previews"
+msgid "Ming"
+msgstr "小明"

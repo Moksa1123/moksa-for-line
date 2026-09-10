@@ -14,14 +14,22 @@ $account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account'
 
 $flows    = Flow::all();
 $selected = isset( $_GET['flow'] ) ? (int) $_GET['flow'] : 0;
+// The worked example a new flow starts from. It is the first thing a shop
+// edits, so it is translated like any other visible text -- left in English it
+// would have them rewriting four questions before writing their own.
 $example  = array(
 	'steps'            => array(
-		array( 'key' => 'name', 'prompt' => 'What name should we put this under?', 'type' => 'text' ),
-		array( 'key' => 'phone', 'prompt' => 'A phone number we can reach you on?', 'type' => 'phone' ),
-		array( 'key' => 'date', 'prompt' => 'Which date would you like?', 'type' => 'date' ),
-		array( 'key' => 'service', 'prompt' => 'Which service?', 'type' => 'choice', 'choices' => array( 'Consultation', 'Follow-up' ) ),
+		array( 'key' => 'name', 'prompt' => __( 'What name should we put this under?', 'moksa-line' ), 'type' => 'text' ),
+		array( 'key' => 'phone', 'prompt' => __( 'A phone number we can reach you on?', 'moksa-line' ), 'type' => 'phone' ),
+		array( 'key' => 'date', 'prompt' => __( 'Which date would you like?', 'moksa-line' ), 'type' => 'date' ),
+		array(
+			'key'     => 'service',
+			'prompt'  => __( 'Which service?', 'moksa-line' ),
+			'type'    => 'choice',
+			'choices' => array( __( 'Consultation', 'moksa-line' ), __( 'Follow-up', 'moksa-line' ) ),
+		),
 	),
-	'complete_message' => 'Thank you {display_name}, we have your request and will confirm shortly.',
+	'complete_message' => __( 'Thank you {display_name}, we have your request and will confirm shortly.', 'moksa-line' ),
 );
 ?>
 <div class="wrap moksa-line-wrap">

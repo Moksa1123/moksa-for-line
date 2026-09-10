@@ -402,6 +402,25 @@
 			$warnings.empty().append($list);
 		}
 
+		var $carouselNote = $('[data-moksa-carousel-note]');
+
+		// A carousel shows one card and an edge of the next, which is what a
+		// phone does too -- but in a preview it reads as a broken layout rather
+		// than as "there are more". So the count is stated.
+		function renderCarouselNote(parsed) {
+			if (!$carouselNote.length) {
+				return;
+			}
+
+			var count = parsed && 'carousel' === parsed.type && parsed.contents
+				? parsed.contents.length
+				: 0;
+
+			$carouselNote
+				.text(count > 1 ? moksaLine.strings.carouselCount.replace('%d', count) : '')
+				.prop('hidden', count < 2);
+		}
+
 		function renderPreview() {
 			renderNotification();
 
@@ -409,12 +428,16 @@
 				return;
 			}
 
+			var parsed = null;
+
 			try {
-				window.MoksaFlexRenderer.render(JSON.parse($json.val()), $preview);
+				parsed = JSON.parse($json.val());
+				window.MoksaFlexRenderer.render(parsed, $preview);
 			} catch (e) {
 				$preview.html('<p class="moksa-flex-preview__error">' + $('<div>').text(e.message).html() + '</p>');
 			}
 
+			renderCarouselNote(parsed);
 			renderWarnings();
 		}
 
@@ -438,6 +461,7 @@
 			if (contents) {
 				$json.val(typeof contents === 'string' ? contents : JSON.stringify(contents, null, 2));
 				renderPreview();
+				$(document).trigger('moksa:flex-loaded');
 			}
 		});
 
@@ -484,6 +508,7 @@
 			$form.find('input[name=id]').val('0');
 			$form.removeClass('is-editing');
 			renderPreview();
+			$(document).trigger('moksa:flex-loaded');
 		});
 
 		$('[data-moksa-load-flex]').on('click', function () {
@@ -501,6 +526,10 @@
 			}
 
 			renderPreview();
+
+			// The card strip reads from that textarea, so it has to be told it
+			// changed, or a loaded template shows the previous one's cards.
+			$(document).trigger('moksa:flex-loaded');
 		});
 
 		$('[data-moksa-delete-flex]').on('click', function () {
