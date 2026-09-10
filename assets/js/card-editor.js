@@ -492,9 +492,183 @@
 		);
 	};
 
+	/**
+	 * Picking WooCommerce products to turn into cards.
+	 *
+	 * Kept apart from the card editor: this only ever writes the JSON textarea
+	 * and lets the editor read it back, so there is one path by which cards
+	 * change and no second source of truth to keep in step.
+	 */
+	function ProductPicker(root) {
+		this.$root = $(root);
+		this.$list = this.$root.find('[data-moksa-product-list]');
+		this.$count = this.$root.find('[data-moksa-product-count]');
+		this.$insert = this.$root.find('[data-moksa-product-insert]');
+		this.$search = this.$root.find('[data-moksa-product-search]');
+		this.chosen = [];
+
+		this.bind();
+		this.find('');
+	}
+
+	ProductPicker.prototype.bind = function () {
+		var self = this;
+
+		this.$root.on('click', '[data-moksa-product-find]', function () {
+			self.find(self.$search.val() || '');
+		});
+
+		// Enter in a search box inside a form would submit the form, which here
+		// means saving a half-finished template.
+		this.$search.on('keydown', function (event) {
+			if (13 === event.which) {
+				event.preventDefault();
+				self.find(self.$search.val() || '');
+			}
+		});
+
+		this.$root.on('change', '[data-product-id]', function () {
+			var id = parseInt($(this).data('product-id'), 10);
+
+			if (this.checked) {
+				// Order matters: the carousel is built in the order picked, not
+				// in the order the catalogue happened to return them.
+				if (self.chosen.indexOf(id) === -1) {
+					self.chosen.push(id);
+				}
+			} else {
+				self.chosen = self.chosen.filter(function (other) { return other !== id; });
+			}
+
+			self.refresh();
+		});
+
+		this.$insert.on('click', function () {
+			self.insert();
+		});
+	};
+
+	ProductPicker.prototype.find = function (search) {
+		var self = this;
+
+		this.$list.html($('<p class="moksa-cards-note"></p>').text(t('working', 'Working...')));
+
+		$.post(moksaLine.ajaxUrl, {
+			action: 'moksa_line_flex_products',
+			nonce: moksaLine.nonce,
+			search: search
+		}).done(function (response) {
+			if (!response || !response.success) {
+				self.$list.html($('<p class="moksa-cards-note"></p>').text(t('failed', 'That did not work.')));
+				return;
+			}
+
+			self.render(response.data.products || []);
+		}).fail(function () {
+			self.$list.html($('<p class="moksa-cards-note"></p>').text(t('failed', 'That did not work.')));
+		});
+	};
+
+	ProductPicker.prototype.render = function (products) {
+		var self = this;
+		this.$list.empty();
+
+		if (!products.length) {
+			this.$list.append($('<p class="moksa-cards-note"></p>').text(t('productsNone', 'No products found.')));
+			return;
+		}
+
+		$.each(products, function (i, product) {
+			var $row = $('<label class="moksa-product"></label>');
+
+			$row.append($('<input type="checkbox" />')
+				.attr('data-product-id', product.id)
+				.prop('checked', self.chosen.indexOf(product.id) !== -1));
+
+			var $thumb = $('<span class="moksa-product__thumb"></span>');
+
+			if (product.image) {
+				$thumb.append($('<img alt="" />').attr('src', product.image));
+			}
+
+			$row.append($thumb);
+
+			var $body = $('<span class="moksa-product__body"></span>')
+				.append($('<span class="moksa-product__name"></span>').text(product.name))
+				.append($('<span class="moksa-product__meta"></span>').text(product.price || ''));
+
+			// Saying so here is cheaper than discovering it in the preview: a
+			// carousel advertising sold-out stock is worse than a shorter one.
+			if (!product.in_stock) {
+				$body.append($('<span class="moksa-pill moksa-pill--warn"></span>')
+					.text(t('productsOutOfStock', 'Out of stock')));
+			}
+
+			$row.append($body);
+			self.$list.append($row);
+		});
+
+		this.refresh();
+	};
+
+	ProductPicker.prototype.refresh = function () {
+		var max = MAX_BUBBLES;
+		var over = this.chosen.length > max;
+
+		this.$count
+			.text(t('productsChosen', '%1$d of %2$d chosen')
+				.replace('%1$d', this.chosen.length).replace('%2$d', max))
+			.toggleClass('is-near-limit', over);
+
+		this.$insert.prop('disabled', 0 === this.chosen.length);
+	};
+
+	ProductPicker.prototype.insert = function () {
+		var self = this;
+		var $json = $('[data-moksa-flex-json]');
+
+		if ($.trim($json.val() || '') !== '' && !window.confirm(
+			t('productsReplace', 'Replace the current cards with these products?')
+		)) {
+			return;
+		}
+
+		this.$insert.prop('disabled', true);
+
+		$.post(moksaLine.ajaxUrl, {
+			action: 'moksa_line_flex_product_cards',
+			nonce: moksaLine.nonce,
+			ids: this.chosen
+		}).done(function (response) {
+			self.$insert.prop('disabled', false);
+
+			if (!response || !response.success) {
+				window.alert((response && response.data && response.data.message) || t('failed', 'That did not work.'));
+				return;
+			}
+
+			$json.val(JSON.stringify(response.data.contents, null, 2));
+
+			// One event, and both the card strip and the preview follow from it.
+			$(document).trigger('moksa:flex-loaded');
+			$json.trigger('input');
+
+			if (response.data.problems && response.data.problems.length) {
+				window.alert(response.data.problems.join(' • '));
+			}
+		}).fail(function () {
+			self.$insert.prop('disabled', false);
+			window.alert(t('failed', 'That did not work.'));
+		});
+	};
+
 	$(function () {
 		$('[data-moksa-card-editor]').each(function () {
 			new CardEditor(this);
+		});
+
+		$('[data-moksa-product-picker]').each(function () {
+			new ProductPicker(this);
 		});
 
 		$(document).on('click', '[data-moksa-toggle-flex-json]', function () {

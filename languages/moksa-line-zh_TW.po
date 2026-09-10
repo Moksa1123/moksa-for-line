@@ -24,6 +24,12 @@ msgstr "「%s」不是有效的 action 類型。"
 msgid "%1$d LINE notification sent for status: %2$s"
 msgstr "狀態 %2$s 已送出 %1$d 則 LINE 通知"
 
+msgid "%1$d of %2$d chosen"
+msgstr "已選 %1$d／%2$d"
+
+msgid "%1$s (was %2$s)"
+msgstr "%1$s（原價 %2$s）"
+
 msgid "%1$s cannot be \"%2$s\". Allowed: %3$s."
 msgstr "%1$s 不能是「%2$s」。可用值：%3$s。"
 
@@ -35,6 +41,9 @@ msgstr "%2$s 筆中的 %1$s 筆"
 
 msgid "%1$s of %2$s push messages used."
 msgstr "已使用 %1$s／%2$s 則推播訊息。"
+
+msgid "%1$s to %2$s"
+msgstr "%1$s 至 %2$s"
 
 msgid "%1$s: %2$s"
 msgstr "%1$s：%2$s"
@@ -357,6 +366,9 @@ msgstr "第 %1$d 個 bubble：%2$s"
 msgid "Bubble or carousel JSON"
 msgstr "Bubble 或 carousel 的 JSON"
 
+msgid "Build from products"
+msgstr "從商品建立"
+
 msgid "Built-in card"
 msgstr "內建卡片"
 
@@ -374,6 +386,9 @@ msgstr "按鈕文字"
 
 msgid "Buttons, one per line"
 msgstr "按鈕選項，一行一個"
+
+msgid "Buy now"
+msgstr "立即購買"
 
 msgid "Callback URL"
 msgstr "Callback URL"
@@ -422,6 +437,9 @@ msgstr "請先選擇選單圖片。LINE 規定必須是寬 2500px、高 1686px �
 
 msgid "Choose a menu image to start drawing areas."
 msgstr "請先選擇選單圖片才能開始畫區塊。"
+
+msgid "Choose at least one product."
+msgstr "請至少選擇一項商品。"
 
 msgid "Choose image"
 msgstr "選擇圖片"
@@ -686,6 +704,9 @@ msgstr "檔案"
 
 msgid "Filter"
 msgstr "篩選"
+
+msgid "Find"
+msgstr "搜尋"
 
 msgid "Find out more"
 msgstr "了解更多"
@@ -1035,6 +1056,9 @@ msgstr "長效 Token"
 msgid "Lowercase letters, digits, hyphen and underscore. Other tabs point at this. Generated automatically if left blank."
 msgstr "小寫英文字母、數字、連字號與底線。其他分頁會指向這個別名。留空的話會自動產生。"
 
+msgid "Make cards from these"
+msgstr "用這些建立卡片"
+
 msgid "Make default"
 msgstr "設為預設"
 
@@ -1194,6 +1218,9 @@ msgstr "還沒有任何收款。"
 msgid "No problem, that has been cancelled."
 msgstr "好的，已經幫您取消了。"
 
+msgid "No products found."
+msgstr "找不到商品。"
+
 msgid "No questions yet. Add the first one below."
 msgstr "還沒有問題，請從下方新增第一題。"
 
@@ -1208,6 +1235,9 @@ msgstr "找不到這筆交易。"
 
 msgid "None"
 msgstr "無"
+
+msgid "None of those products could be loaded."
+msgstr "這些商品都載入不了。"
 
 msgid "None yet."
 msgstr "還沒有。"
@@ -1359,6 +1389,9 @@ msgstr "訂單總額"
 msgid "Order total, formatted"
 msgstr "訂單總額（已格式化）"
 
+msgid "Out of stock"
+msgstr "已售完"
+
 msgid "Package and sticker ID"
 msgstr "貼圖包與貼圖 ID"
 
@@ -1406,6 +1439,9 @@ msgstr "收款請求：%1$s %2$s"
 
 msgid "Payments"
 msgstr "收款"
+
+msgid "Pick up to %d products and they become cards you can then edit. Prices, images and links come from the catalogue."
+msgstr "最多挑 %d 項商品，它們會變成可以再編輯的卡片。價格、圖片和連結都取自商品資料。"
 
 msgid "Pickup store address"
 msgstr "取貨門市地址"
@@ -1539,6 +1575,9 @@ msgstr "要移除這個問題嗎？"
 msgid "Replace the current areas with this layout?"
 msgstr "要用這個版面取代目前的區塊嗎？"
 
+msgid "Replace the current cards with these products?"
+msgstr "要用這些商品取代目前的卡片嗎？"
+
 msgid "Replies are sent as push messages, which are billed against your channel quota."
 msgstr "回覆是以推播訊息送出的，會計入頻道額度。"
 
@@ -1631,6 +1670,12 @@ msgstr "搜尋名稱或訊息"
 
 msgid "Search notifications"
 msgstr "搜尋通知"
+
+msgid "Search products"
+msgstr "搜尋商品"
+
+msgid "Search products by name"
+msgstr "用名稱搜尋商品"
 
 msgid "Seconds. Useful when another plugin adjusts the order right after the status changes. 0 sends immediately."
 msgstr "秒。當有別的外掛會在狀態變更後立刻調整訂單時很有用。填 0 就立即送出。"
@@ -2235,6 +2280,9 @@ msgstr "LIFF 短代碼在沒有另外指定時會使用這個。"
 msgid "Uses the most recent order to fill in the values. Save first."
 msgstr "會用最近一筆訂單的資料填入變數。請先儲存。"
 
+msgid "View"
+msgstr "看看"
+
 msgid "View order"
 msgstr "查看訂單"
 
@@ -2330,6 +2378,9 @@ msgstr "關閉立即請款時，付款只會被授權。之後你必須自己請
 
 msgid "WooCommerce"
 msgstr "WooCommerce"
+
+msgid "WooCommerce is not active, so there are no products to build from."
+msgstr "WooCommerce 沒有啟用，沒有商品可以建立卡片。"
 
 msgid "WooCommerce is not active, so there is nothing to notify about."
 msgstr "WooCommerce 沒有啟用，因此沒有可以通知的內容。"

@@ -14,6 +14,7 @@ namespace Moksa\Line\Flex;
 
 use Moksa\Line\Data\Flex;
 use Moksa\Line\Api\MessagingClient;
+use Moksa\Line\Woo\ProductCards;
 use Moksa\Line\Api\TokenManager;
 
 defined( 'ABSPATH' ) || exit;
@@ -25,6 +26,50 @@ class FlexModule {
 		add_action( 'wp_ajax_moksa_line_flex_delete', array( $this, 'ajax_delete' ) );
 		add_action( 'wp_ajax_moksa_line_flex_validate', array( $this, 'ajax_validate' ) );
 		add_action( 'wp_ajax_moksa_line_flex_send_test', array( $this, 'ajax_send_test' ) );
+		add_action( 'wp_ajax_moksa_line_flex_products', array( $this, 'ajax_products' ) );
+		add_action( 'wp_ajax_moksa_line_flex_product_cards', array( $this, 'ajax_product_cards' ) );
+	}
+
+	/**
+	 * Products for the picker.
+	 */
+	public function ajax_products(): void {
+		$this->guard();
+
+		$search = isset( $_POST['search'] ) ? sanitize_text_field( wp_unslash( $_POST['search'] ) ) : '';
+
+		wp_send_json_success( array( 'products' => ProductCards::search( $search ) ) );
+	}
+
+	/**
+	 * Turn the chosen products into Flex contents.
+	 */
+	public function ajax_product_cards(): void {
+		$this->guard();
+
+		$ids = isset( $_POST['ids'] ) ? array_map( 'intval', (array) wp_unslash( $_POST['ids'] ) ) : array();
+
+		if ( empty( $ids ) ) {
+			wp_send_json_error( array( 'message' => __( 'Choose at least one product.', 'moksa-line' ) ) );
+		}
+
+		$contents = ProductCards::carousel( $ids );
+
+		if ( is_wp_error( $contents ) ) {
+			wp_send_json_error( array( 'message' => $contents->get_error_message() ) );
+		}
+
+		// Built cards go through the same validator as hand-written ones. If
+		// this plugin can generate something LINE would refuse, the shop should
+		// hear it here rather than when a broadcast fails.
+		$problems = Validator::check_message( MessagingClient::flex( 'x', $contents ) );
+
+		wp_send_json_success(
+			array(
+				'contents' => $contents,
+				'problems' => $problems,
+			)
+		);
 	}
 
 	/**

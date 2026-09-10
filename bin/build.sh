@@ -99,6 +99,23 @@ main() {
 		fi
 	done < <(find "${STAGE}" -name '*.php')
 
+	# And the JavaScript. A broken .js does not stop the plugin loading, it just
+	# makes an editor quietly stop working in the browser, which is how a string
+	# containing a literal newline shipped once and was only found by opening
+	# the console. node is optional so the build still works without it, but a
+	# release should not be cut blind.
+	if command -v node >/dev/null 2>&1; then
+		while IFS= read -r file; do
+			if ! node --check "${file}" >/dev/null 2>&1; then
+				echo "Syntax error in ${file}:" >&2
+				node --check "${file}" >&2 || true
+				exit 1
+			fi
+		done < <(find "${STAGE}" -name '*.js')
+	else
+		echo "node is not on PATH, so the JavaScript was not syntax checked." >&2
+	fi
+
 	if command -v zip >/dev/null 2>&1; then
 		( cd "${DIST}" && zip -qr "${SLUG}.zip" "${SLUG}" )
 	else

@@ -55,6 +55,34 @@ $account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account'
 					</select>
 				</p>
 
+				<?php if ( \Moksa\Line\Woo\ProductCards::available() ) : ?>
+					<div class="moksa-field moksa-products" data-moksa-product-picker>
+						<label><?php esc_html_e( 'Build from products', 'moksa-line' ); ?></label>
+						<span class="description">
+							<?php
+							printf(
+								/* translators: %d: the carousel limit. */
+								esc_html__( 'Pick up to %d products and they become cards you can then edit. Prices, images and links come from the catalogue.', 'moksa-line' ),
+								(int) \Moksa\Line\Woo\ProductCards::MAX_PRODUCTS
+							);
+							?>
+						</span>
+
+						<span class="moksa-products__bar">
+							<label for="moksa-product-search" class="screen-reader-text"><?php esc_html_e( 'Search products', 'moksa-line' ); ?></label>
+							<input type="search" id="moksa-product-search" class="moksa-search" data-moksa-product-search
+								placeholder="<?php esc_attr_e( 'Search products by name', 'moksa-line' ); ?>" />
+							<button type="button" class="button" data-moksa-product-find><?php esc_html_e( 'Find', 'moksa-line' ); ?></button>
+							<span class="moksa-products__count" data-moksa-product-count></span>
+							<button type="button" class="button button-primary" data-moksa-product-insert disabled>
+								<?php esc_html_e( 'Make cards from these', 'moksa-line' ); ?>
+							</button>
+						</span>
+
+						<div class="moksa-products__list" data-moksa-product-list></div>
+					</div>
+				<?php endif; ?>
+
 				<div class="moksa-field" data-moksa-card-editor="[data-moksa-flex-json]">
 					<label><?php esc_html_e( 'Cards', 'moksa-line' ); ?></label>
 					<span class="description">

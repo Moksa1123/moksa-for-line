@@ -213,6 +213,11 @@ class AdminModule {
 					/* translators: %d: number of cards in the carousel. */
 					'carouselCount' => __( '%d cards. The customer swipes sideways to reach the rest.', 'moksa-line' ),
 					'cardTitle'    => __( 'Headline', 'moksa-line' ),
+					'productsNone' => __( 'No products found.', 'moksa-line' ),
+					'productsOutOfStock' => __( 'Out of stock', 'moksa-line' ),
+					/* translators: 1: how many chosen, 2: the limit. */
+					'productsChosen' => __( '%1$d of %2$d chosen', 'moksa-line' ),
+					'productsReplace' => __( 'Replace the current cards with these products?', 'moksa-line' ),
 					'cardBody'     => __( 'Text under it', 'moksa-line' ),
 					'cardHero'     => __( 'Image URL', 'moksa-line' ),
 					'cardButtonLabel' => __( 'Button label', 'moksa-line' ),
