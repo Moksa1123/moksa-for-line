@@ -169,9 +169,14 @@ class RichMenuModule extends Repository {
 			Logger::capture( $default, 'Could not set the default rich menu', 'richmenu' );
 		}
 
-		// Now that nothing points at it, retire the old menu.
+		// Now that nothing points at it, retire the old menu. A failure here
+		// costs nothing at the time, but it leaves a menu on LINE that the sync
+		// screen will later report as an orphan of unknown origin -- so say so
+		// now, while the cause is still obvious.
 		if ( '' !== $previous && $previous !== $new_id ) {
-			RichMenuClient::delete( $previous );
+			$retired = RichMenuClient::delete( $previous );
+
+			Logger::capture( $retired, 'Could not remove the rich menu this one replaced', 'richmenu' );
 		}
 
 		return true;
@@ -515,7 +520,9 @@ class RichMenuModule extends Repository {
 		}
 
 		if ( '' !== (string) $row->alias_id ) {
-			RichMenuClient::delete_alias( (string) $row->alias_id );
+			$dropped = RichMenuClient::delete_alias( (string) $row->alias_id );
+
+			Logger::capture( $dropped, 'Could not remove the rich menu alias', 'richmenu' );
 		}
 
 		// Deleting whatever LINE is serving as the default takes the menu away
