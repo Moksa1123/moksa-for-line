@@ -31,6 +31,24 @@ function __( $text, $domain = null ) {
 	return $text;
 }
 
+function remove_accents( $text ) {
+	// Enough here: the sanitiser only needs it not to explode.
+	return $text;
+}
+
+function wp_generate_password( $length = 12, $special = true, $extra = true ) {
+	// The real one returns mixed case, which is exactly what the alias
+	// generator must not pass through, so this stub does too.
+	$pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	$out  = '';
+
+	for ( $i = 0; $i < $length; $i++ ) {
+		$out .= $pool[ $i % strlen( $pool ) ];
+	}
+
+	return $out;
+}
+
 function esc_url_raw( $url ) {
 	return $url;
 }
@@ -60,6 +78,7 @@ require_once $base . '/src/Support/Crypto.php';
 require_once $base . '/src/Support/Options.php';
 require_once $base . '/src/Api/Signature.php';
 require_once $base . '/src/Flex/Validator.php';
+require_once $base . '/src/Api/RichMenuClient.php';
 
 use Moksa\Line\Flex\Validator;
 use Moksa\Line\Api\Signature;
@@ -154,6 +173,32 @@ $format = function ( $amount, $currency ) {
 check( $format( 1500.0, 'TWD' ) === 1500, 'TWD has no minor unit' );
 check( $format( 1500.4, 'TWD' ) === 1500, 'TWD rounds to whole units' );
 check( $format( 15.005, 'USD' ) === 15.01, 'USD keeps two decimals' );
+
+echo "\nRich menu alias ids\n";
+// LINE allows only a-z, 0-9, underscore and hyphen, up to 32 characters. A name
+// written entirely in Chinese survives none of that and falls through to the
+// generated fallback, which once produced mixed case and LINE rejected outright
+// -- so every tabbed menu named in Chinese had a broken alias.
+$alias_ok = static function ( $value ) {
+	return (bool) preg_match( '/^[a-z0-9_-]{1,32}$/', $value );
+};
+
+foreach ( array( '測試選單', '日本語メニュー', '', '---', 'tab群組-第二頁' ) as $name ) {
+	check(
+		$alias_ok( Moksa\Line\Api\RichMenuClient::sanitize_alias_id( $name ) ),
+		'alias id from ' . ( '' === $name ? '(empty)' : $name ) . ' is a shape LINE accepts'
+	);
+}
+
+check(
+	'main-menu' === Moksa\Line\Api\RichMenuClient::sanitize_alias_id( 'Main Menu' ),
+	'a Latin name keeps a readable alias'
+);
+
+check(
+	$alias_ok( Moksa\Line\Api\RichMenuClient::sanitize_alias_id( str_repeat( 'very-long-menu-name-', 5 ) ) ),
+	'an over-long name is cut without leaving a trailing hyphen'
+);
 
 echo "\nFlex validator\n";
 $good = array(

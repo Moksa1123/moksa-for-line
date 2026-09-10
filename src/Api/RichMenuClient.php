@@ -258,10 +258,16 @@ class RichMenuClient {
 		$value = trim( (string) preg_replace( '/-+/', '-', $value ), '-' );
 
 		if ( '' === $value ) {
-			$value = 'menu-' . wp_generate_password( 6, false, false );
+			// A name written entirely in Chinese, Japanese or Korean survives
+			// none of the above, which for this plugin's audience is the normal
+			// case rather than the edge one. The fallback has to be lowercase:
+			// wp_generate_password() returns mixed case, and LINE allows only
+			// a-z, 0-9, underscore and hyphen -- it rejected "menu-UL0l8y".
+			$value = 'menu-' . strtolower( wp_generate_password( 8, false, false ) );
 		}
 
-		return substr( $value, 0, 32 );
+		// Truncating can leave a trailing hyphen, which LINE also refuses.
+		return trim( substr( $value, 0, 32 ), '-_' );
 	}
 
 	/**
