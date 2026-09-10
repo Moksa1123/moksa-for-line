@@ -111,7 +111,7 @@ $status_labels = array(
 			</div>
 
 			<div class="moksa-inbox__messages" data-moksa-thread>
-				<p class="moksa-inbox-empty"><?php esc_html_e( 'Pick a conversation on the left to read it and reply.', 'moksa-line' ); ?></p>
+				<p class="moksa-inbox-empty"><span><?php esc_html_e( 'Pick a conversation on the left to read it and reply.', 'moksa-line' ); ?></span></p>
 			</div>
 
 			<?php // The picker sits above the composer so opening it does not push the send button off screen. ?>
@@ -144,29 +144,39 @@ $status_labels = array(
 			</div>
 
 			<form class="moksa-inbox__reply" data-moksa-reply hidden>
-				<label class="screen-reader-text" for="moksa-reply-text"><?php esc_html_e( 'Reply', 'moksa-line' ); ?></label>
-
 				<?php
-				// A chosen sticker waits here until Send is pressed, exactly as
-				// typed text does. Nothing in this composer leaves on one click.
+				// Tools sit above the field, not beside it. Stretching an icon
+				// button to the height of a three-row textarea made a 47x78
+				// sliver; a square button in its own row keeps its proportions
+				// and leaves the row below to the field and Send.
 				?>
-				<span class="moksa-reply-sticker" data-moksa-chosen-sticker hidden>
-					<img src="" alt="" width="52" height="52" data-moksa-chosen-sticker-image />
-					<button type="button" class="moksa-reply-sticker__clear" data-moksa-clear-sticker
-						title="<?php esc_attr_e( 'Remove this sticker', 'moksa-line' ); ?>">
-						<span aria-hidden="true">&times;</span>
-						<span class="screen-reader-text"><?php esc_html_e( 'Remove this sticker', 'moksa-line' ); ?></span>
+				<div class="moksa-inbox__tools">
+					<button type="button" class="button moksa-inbox__sticker-toggle" data-moksa-toggle-stickers
+						aria-expanded="false" title="<?php esc_attr_e( 'Send a sticker', 'moksa-line' ); ?>">
+						<span aria-hidden="true">☺</span>
+						<span class="screen-reader-text"><?php esc_html_e( 'Send a sticker', 'moksa-line' ); ?></span>
 					</button>
-				</span>
 
-				<?php // Not required: a sticker on its own is a complete reply. ?>
-				<textarea id="moksa-reply-text" rows="3" placeholder="<?php esc_attr_e( 'Write a reply', 'moksa-line' ); ?>"></textarea>
-				<button type="button" class="button moksa-inbox__sticker-toggle" data-moksa-toggle-stickers
-					aria-expanded="false" title="<?php esc_attr_e( 'Send a sticker', 'moksa-line' ); ?>">
-					<span aria-hidden="true">☺</span>
-					<span class="screen-reader-text"><?php esc_html_e( 'Send a sticker', 'moksa-line' ); ?></span>
-				</button>
-				<button type="submit" class="button button-primary"><?php esc_html_e( 'Send', 'moksa-line' ); ?></button>
+					<?php
+					// A chosen sticker waits here until Send is pressed, exactly
+					// as typed text does. Nothing here leaves on one click.
+					?>
+					<span class="moksa-reply-sticker" data-moksa-chosen-sticker hidden>
+						<img src="" alt="" width="34" height="34" data-moksa-chosen-sticker-image />
+						<button type="button" class="moksa-reply-sticker__clear" data-moksa-clear-sticker
+							title="<?php esc_attr_e( 'Remove this sticker', 'moksa-line' ); ?>">
+							<span aria-hidden="true">&times;</span>
+							<span class="screen-reader-text"><?php esc_html_e( 'Remove this sticker', 'moksa-line' ); ?></span>
+						</button>
+					</span>
+				</div>
+
+				<div class="moksa-inbox__compose">
+					<label class="screen-reader-text" for="moksa-reply-text"><?php esc_html_e( 'Reply', 'moksa-line' ); ?></label>
+					<?php // Not required: a sticker on its own is a complete reply. ?>
+					<textarea id="moksa-reply-text" rows="3" placeholder="<?php esc_attr_e( 'Write a reply', 'moksa-line' ); ?>"></textarea>
+					<button type="submit" class="button button-primary"><?php esc_html_e( 'Send', 'moksa-line' ); ?></button>
+				</div>
 			</form>
 		</div>
 	</div>

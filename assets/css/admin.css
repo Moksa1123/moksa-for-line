@@ -64,6 +64,11 @@
  * above it and regularly left a single character stranded on its own line.
  */
 .moksa-line-wrap .description {
+	/* inline-block, not the default inline: max-width has no effect on an
+	   inline box, so every <span class="description"> ignored the ceiling and
+	   ran the full width of its panel -- 1337px, about 103 Chinese characters
+	   on one line. Inline-block still sits where it did. */
+	display: inline-block;
 	max-width: var(--moksa-field-max);
 }
 
@@ -213,6 +218,7 @@
 
 .moksa-checklist__hint {
 	display: block;
+	max-width: var(--moksa-field-max);
 	color: var(--moksa-muted);
 	font-size: 13px;
 	margin-top: 2px;
@@ -840,8 +846,18 @@
 	object-fit: contain;
 }
 
-.moksa-inbox__sticker-toggle {
+/* Scoped to the wrapper to match the specificity of core's .wp-core-ui
+   .button, whose min-height and line-height otherwise force 40px and leave
+   this 34x40 rather than square. */
+.moksa-line-wrap .moksa-inbox__sticker-toggle {
 	flex: 0 0 auto;
+	width: 34px;
+	height: 34px;
+	min-height: 0;
+	padding: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	font-size: 18px;
 	line-height: 1;
 }
@@ -1242,13 +1258,26 @@
 
 .moksa-inbox__empty,
 .moksa-inbox__messages .moksa-inbox-empty {
-	color: #fff;
 	margin: 0;
 	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	text-align: center;
+}
+
+/*
+ * White on the #849ebf chat wallpaper measures 2.75:1, well under the 4.5:1
+ * minimum for body text. The words sit on a card instead, which is how LINE's
+ * own empty states read anyway.
+ */
+.moksa-inbox__messages .moksa-inbox-empty > span {
+	display: inline-block;
+	padding: 10px 16px;
+	border-radius: 16px;
+	background: #fff;
+	color: #1d2327;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .moksa-msg {
@@ -1292,21 +1321,37 @@
 	border-top: 1px solid var(--moksa-border);
 	padding: 12px;
 	display: flex;
+	flex-direction: column;
 	gap: 8px;
-	/* Everything in the row is as tall as the text box. They used to sit on its
-	   baseline, so a 40px button hung off the bottom of a 78px field. */
+}
+
+/* Icon tools, above the field. */
+.moksa-inbox__tools {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 34px;
+}
+
+.moksa-inbox__compose {
+	display: flex;
+	gap: 8px;
+	/* The field and Send share one height. Anything with its own proportions
+	   to keep -- the sticker button -- lives in the row above instead. */
 	align-items: stretch;
 }
 
-.moksa-inbox__reply textarea {
+.moksa-inbox__compose textarea {
 	flex: 1;
 	min-height: 78px;
 	resize: vertical;
 }
 
-.moksa-inbox__reply button {
-	/* Buttons are inline-block by default and would keep their own height. */
+.moksa-inbox__compose button[type="submit"] {
+	/* Full height, but wide enough that it reads as a button rather than a
+	   sliver. Buttons are inline-block, so the height has to be released. */
 	height: auto;
+	min-width: 96px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1318,7 +1363,7 @@
 	flex: 0 0 auto;
 	display: inline-flex;
 	align-items: center;
-	padding: 4px;
+	padding: 2px;
 	border: 1px solid var(--moksa-border);
 	border-radius: 6px;
 	background: #fff;
@@ -1330,8 +1375,8 @@
 
 .moksa-reply-sticker__clear {
 	position: absolute;
-	top: -8px;
-	right: -8px;
+	top: -7px;
+	right: -7px;
 	width: 20px;
 	height: 20px;
 	padding: 0;

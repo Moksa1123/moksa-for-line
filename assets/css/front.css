@@ -5,6 +5,13 @@
  * theme the site uses, so they inherit type and spacing rather than fighting it.
  */
 
+/*
+ * White on #06C755 measures 2.26:1, below the 4.5:1 a contrast checker wants,
+ * and it stays that way on purpose. LINE's login button guidelines state that
+ * "Only the following colors can be used for the LINE Login button" and list
+ * using a non-designated colour as prohibited. The colour is theirs, not a
+ * choice of ours to correct.
+ */
 .moksa-line-button {
 	--moksa-green: #06c755;
 
