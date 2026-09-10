@@ -164,6 +164,16 @@ class AdminModule {
 			);
 		}
 
+		// Every editor asks a confirmation question, and they all load before
+		// admin.js, so this has to come first and be a dependency of each.
+		wp_enqueue_script(
+			'moksa-line-confirm',
+			MOKSA_LINE_URL . 'assets/js/confirm.js',
+			array( 'jquery' ),
+			self::asset_version( 'assets/js/confirm.js' ),
+			true
+		);
+
 		wp_enqueue_script(
 			'moksa-line-flex-renderer',
 			MOKSA_LINE_URL . 'assets/js/moksa-flex-renderer.js',
@@ -175,7 +185,7 @@ class AdminModule {
 		wp_enqueue_script(
 			'moksa-line-richmenu-editor',
 			MOKSA_LINE_URL . 'assets/js/richmenu-editor.js',
-			array( 'jquery' ),
+			array( 'jquery', 'moksa-line-confirm' ),
 			self::asset_version( 'assets/js/richmenu-editor.js' ),
 			true
 		);
@@ -183,7 +193,7 @@ class AdminModule {
 		wp_enqueue_script(
 			'moksa-line-card-editor',
 			MOKSA_LINE_URL . 'assets/js/card-editor.js',
-			array( 'jquery' ),
+			array( 'jquery', 'moksa-line-confirm' ),
 			self::asset_version( 'assets/js/card-editor.js' ),
 			true
 		);
@@ -191,7 +201,7 @@ class AdminModule {
 		wp_enqueue_script(
 			'moksa-line-template-editor',
 			MOKSA_LINE_URL . 'assets/js/template-editor.js',
-			array( 'jquery' ),
+			array( 'jquery', 'moksa-line-confirm' ),
 			self::asset_version( 'assets/js/template-editor.js' ),
 			true
 		);
@@ -199,7 +209,7 @@ class AdminModule {
 		wp_enqueue_script(
 			'moksa-line-flow-editor',
 			MOKSA_LINE_URL . 'assets/js/flow-editor.js',
-			array( 'jquery' ),
+			array( 'jquery', 'moksa-line-confirm' ),
 			self::asset_version( 'assets/js/flow-editor.js' ),
 			true
 		);
@@ -207,7 +217,7 @@ class AdminModule {
 		wp_enqueue_script(
 			'moksa-line-admin',
 			MOKSA_LINE_URL . 'assets/js/admin.js',
-			array( 'jquery', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor', 'moksa-line-flow-editor', 'moksa-line-card-editor', 'moksa-line-template-editor' ),
+			array( 'jquery', 'moksa-line-confirm', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor', 'moksa-line-flow-editor', 'moksa-line-card-editor', 'moksa-line-template-editor' ),
 			self::asset_version( 'assets/js/admin.js' ),
 			true
 		);
@@ -308,6 +318,15 @@ class AdminModule {
 					/* translators: 1: the text, 2: measured contrast ratio, 3: required ratio. */
 					'contrastWarning' => __( '"%1$s" has a contrast ratio of %2$s against its background; %3$s is the readable minimum.', 'moksa-line' ),
 					'failed'       => __( 'That did not work.', 'moksa-line' ),
+					'confirmYes'   => __( 'Yes, do it', 'moksa-line' ),
+					'confirmDeleteAction' => _x( 'Delete', 'confirmation button', 'moksa-line' ),
+					'confirmSendAction' => _x( 'Send', 'confirmation button', 'moksa-line' ),
+					'confirmClearAction' => _x( 'Clear', 'confirmation button', 'moksa-line' ),
+					'confirmReplaceAction' => _x( 'Replace', 'confirmation button', 'moksa-line' ),
+					'productsReplaceAction' => _x( 'Replace', 'confirmation button', 'moksa-line' ),
+					'confirmClearAreas' => __( 'Remove every area from this menu?', 'moksa-line' ),
+					'dismiss'      => __( 'Dismiss', 'moksa-line' ),
+					'confirmNo'    => __( 'Cancel', 'moksa-line' ),
 					'confirmDelete' => __( 'Delete this permanently?', 'moksa-line' ),
 					'confirmDeleteDefault' => __( 'This is the default rich menu. Deleting it takes the menu away from every customer at once, until you make another one the default. Delete it anyway?', 'moksa-line' ),
 					'publishing'   => __( 'Publishing to LINE...', 'moksa-line' ),

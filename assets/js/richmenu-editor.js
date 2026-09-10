@@ -759,25 +759,47 @@
 			var cols = parseInt(preset[0], 10);
 			var rows = parseInt(preset[1], 10);
 
-			if (self.areas.length && !window.confirm(strings.replaceAreas || 'Replace the current areas with this layout?')) {
+			function apply() {
+				self.areas = gridAreas(cols, rows, self.imageWidth, self.imageHeight);
+				self.selected = 0;
+				self.save();
+				self.render();
+			}
+
+			// An empty canvas has nothing to replace.
+			if (!self.areas.length) {
+				apply();
 				return;
 			}
 
-			self.areas = gridAreas(cols, rows, self.imageWidth, self.imageHeight);
-			self.selected = 0;
-			self.save();
-			self.render();
+			moksaConfirm(
+				strings.replaceAreas || 'Replace the current areas with this layout?',
+				{ danger: true, confirmLabel: strings.confirmReplaceAction || 'Replace' }
+			).then(function (confirmed) {
+				if (confirmed) {
+					apply();
+				}
+			});
 		});
 
 		$scope.on('click', '[data-moksa-clear-areas]', function () {
-			if (!self.areas.length || !window.confirm(strings.confirmDelete || 'Delete this permanently?')) {
+			if (!self.areas.length) {
 				return;
 			}
 
-			self.areas = [];
-			self.selected = null;
-			self.save();
-			self.render();
+			moksaConfirm(
+				strings.confirmClearAreas || 'Remove every area from this menu?',
+				{ danger: true, confirmLabel: strings.confirmClearAction || 'Clear' }
+			).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
+
+				self.areas = [];
+				self.selected = null;
+				self.save();
+				self.render();
+			});
 		});
 
 		// Editing the JSON directly stays available, and feeds back in.

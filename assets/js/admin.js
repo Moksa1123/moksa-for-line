@@ -151,18 +151,22 @@
 		});
 
 		$('[data-moksa-delete-rule]').on('click', function () {
-			if (!window.confirm(strings.confirmDelete)) {
-				return;
-			}
+			var $trigger = $(this);
 
-			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+			moksaConfirm(strings.confirmDelete, { danger: true, confirmLabel: strings.confirmDeleteAction }).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
 
-			post('rule_delete', { id: $(this).data('moksa-delete-rule') }).then(function () {
-				window.location.reload();
-			}, function (error) {
-				// Without this the page reloaded either way, so a delete LINE or
-				// the server refused was indistinguishable from one that worked.
-				feedback($scope, error.message, 'bad');
+				var $scope = $trigger.closest('form, .moksa-panel, .wrap');
+
+				post('rule_delete', { id: $trigger.data('moksa-delete-rule') }).then(function () {
+					window.location.reload();
+				}, function (error) {
+					// Without this the page reloaded either way, so a delete LINE or
+					// the server refused was indistinguishable from one that worked.
+					feedback($scope, error.message, 'bad');
+				});
 			});
 		});
 	}
@@ -222,18 +226,22 @@
 		});
 
 		$('[data-moksa-delete-flow]').on('click', function () {
-			if (!window.confirm(strings.confirmDelete)) {
-				return;
-			}
+			var $trigger = $(this);
 
-			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+			moksaConfirm(strings.confirmDelete, { danger: true, confirmLabel: strings.confirmDeleteAction }).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
 
-			post('flow_delete', { id: $(this).data('moksa-delete-flow') }).then(function () {
-				window.location.reload();
-			}, function (error) {
-				// Without this the page reloaded either way, so a delete LINE or
-				// the server refused was indistinguishable from one that worked.
-				feedback($scope, error.message, 'bad');
+				var $scope = $trigger.closest('form, .moksa-panel, .wrap');
+
+				post('flow_delete', { id: $trigger.data('moksa-delete-flow') }).then(function () {
+					window.location.reload();
+				}, function (error) {
+					// Without this the page reloaded either way, so a delete LINE or
+					// the server refused was indistinguishable from one that worked.
+					feedback($scope, error.message, 'bad');
+				});
 			});
 		});
 	}
@@ -545,18 +553,22 @@
 		});
 
 		$('[data-moksa-delete-flex]').on('click', function () {
-			if (!window.confirm(strings.confirmDelete)) {
-				return;
-			}
+			var $trigger = $(this);
 
-			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+			moksaConfirm(strings.confirmDelete, { danger: true, confirmLabel: strings.confirmDeleteAction }).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
 
-			post('flex_delete', { id: $(this).data('moksa-delete-flex') }).then(function () {
-				window.location.reload();
-			}, function (error) {
-				// Without this the page reloaded either way, so a delete LINE or
-				// the server refused was indistinguishable from one that worked.
-				feedback($scope, error.message, 'bad');
+				var $scope = $trigger.closest('form, .moksa-panel, .wrap');
+
+				post('flex_delete', { id: $trigger.data('moksa-delete-flex') }).then(function () {
+					window.location.reload();
+				}, function (error) {
+					// Without this the page reloaded either way, so a delete LINE or
+					// the server refused was indistinguishable from one that worked.
+					feedback($scope, error.message, 'bad');
+				});
 			});
 		});
 	}
@@ -784,18 +796,22 @@
 			// once, so ask that question rather than the generic one.
 			var isDefault = 1 === parseInt($row.attr('data-is-default'), 10);
 
-			if (!window.confirm(isDefault ? strings.confirmDeleteDefault : strings.confirmDelete)) {
-				return;
-			}
+			var $trigger = $(this);
 
-			post('richmenu_delete', { id: $(this).data('moksa-delete-menu') }).then(function (result) {
-				// Drop the row rather than reloading, so the answer -- which may
-				// be the warning that the channel now has no default -- survives
-				// long enough to read.
-				$row.remove();
-				feedback($form, result.message, result.warning ? 'warn' : 'ok');
-			}, function (error) {
-				feedback($form, error.message, 'bad');
+			moksaConfirm(isDefault ? strings.confirmDeleteDefault : strings.confirmDelete, { danger: true, confirmLabel: strings.confirmDeleteAction }).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
+
+				post('richmenu_delete', { id: $trigger.data('moksa-delete-menu') }).then(function (result) {
+					// Drop the row rather than reloading, so the answer -- which may
+					// be the warning that the channel now has no default -- survives
+					// long enough to read.
+					$row.remove();
+					feedback($form, result.message, result.warning ? 'warn' : 'ok');
+				}, function (error) {
+					feedback($form, error.message, 'bad');
+				});
 			});
 		});
 	}
@@ -884,7 +900,7 @@
 				scrollToLatest();
 			}, function (error) {
 				$button.prop('disabled', false);
-				window.alert(error.message);
+				moksaNotify(error.message);
 			});
 		});
 
@@ -923,25 +939,27 @@
 
 			// A sticker cannot be unsent and is billed, so it is confirmed --
 			// the grid is a wall of small targets and a mis-click is easy.
-			if (!window.confirm(strings.confirmSendSticker)) {
-				return;
-			}
+			moksaConfirm(strings.confirmSendSticker, { confirmLabel: strings.confirmSendAction }).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
 
-			$stickers.find('[data-moksa-send-sticker]').prop('disabled', true);
+				$stickers.find('[data-moksa-send-sticker]').prop('disabled', true);
 
-			post('inbox_send', {
-				conversation_id: current,
-				sticker_package: $sticker.data('moksa-send-sticker'),
-				sticker_id: $sticker.data('sticker-id')
-			}).then(function (result) {
-				$stickers.find('[data-moksa-send-sticker]').prop('disabled', false);
-				$stickers.prop('hidden', true);
-				$reply.find('[data-moksa-toggle-stickers]').attr('aria-expanded', 'false');
-				$thread.html(result.thread);
-				scrollToLatest();
-			}, function (error) {
-				$stickers.find('[data-moksa-send-sticker]').prop('disabled', false);
-				window.alert(error.message);
+				post('inbox_send', {
+					conversation_id: current,
+					sticker_package: $sticker.data('moksa-send-sticker'),
+					sticker_id: $sticker.data('sticker-id')
+				}).then(function (result) {
+					$stickers.find('[data-moksa-send-sticker]').prop('disabled', false);
+					$stickers.prop('hidden', true);
+					$reply.find('[data-moksa-toggle-stickers]').attr('aria-expanded', 'false');
+					$thread.html(result.thread);
+					scrollToLatest();
+				}, function (error) {
+					$stickers.find('[data-moksa-send-sticker]').prop('disabled', false);
+					moksaNotify(error.message);
+				});
 			});
 		});
 
@@ -960,7 +978,7 @@
 				showStatus(result.status || wanted);
 			}, function (error) {
 				$all.prop('disabled', false);
-				window.alert(error.message);
+				moksaNotify(error.message);
 			});
 		});
 	}
@@ -1031,16 +1049,18 @@
 		$('[data-moksa-line-unlink]').on('click', function () {
 			var $button = $(this);
 
-			if (!window.confirm(strings.confirmDelete)) {
-				return;
-			}
+			moksaConfirm(strings.confirmDelete, { danger: true, confirmLabel: strings.confirmDeleteAction }).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
 
-			$.post(settings.ajaxUrl || window.ajaxurl, {
-				action: 'moksa_line_unlink',
-				nonce: $button.data('nonce'),
-				user_id: $button.data('moksa-line-unlink')
-			}).then(function () {
-				window.location.reload();
+				$.post(settings.ajaxUrl || window.ajaxurl, {
+					action: 'moksa_line_unlink',
+					nonce: $button.data('nonce'),
+					user_id: $button.data('moksa-line-unlink')
+				}).then(function () {
+					window.location.reload();
+				});
 			});
 		});
 	}
@@ -1197,30 +1217,32 @@
 		$(document).on('click', '[data-moksa-resend-notification]', function () {
 			var $button = $(this);
 
-			if (!window.confirm(moksaLine.strings.confirmResend)) {
-				return;
-			}
-
-			$button.prop('disabled', true).text(moksaLine.strings.working);
-
-			$.post(moksaLine.ajaxUrl, {
-				action: 'moksa_line_resend_notification',
-				nonce: moksaLine.nonce,
-				order_id: $button.data('order'),
-				status: $button.data('status')
-			}).done(function (response) {
-				if (response && response.success) {
-					// The new attempt is a new row, so the list has to be
-					// re-read rather than patched in place.
-					window.location.reload();
+			moksaConfirm(moksaLine.strings.confirmResend, { confirmLabel: strings.confirmSendAction }).then(function (confirmed) {
+				if (!confirmed) {
 					return;
 				}
 
-				$button.prop('disabled', false).text(moksaLine.strings.sendAgain);
-				window.alert((response && response.data && response.data.message) || moksaLine.strings.failed);
-			}).fail(function () {
-				$button.prop('disabled', false).text(moksaLine.strings.sendAgain);
-				window.alert(moksaLine.strings.failed);
+				$button.prop('disabled', true).text(moksaLine.strings.working);
+
+				$.post(moksaLine.ajaxUrl, {
+					action: 'moksa_line_resend_notification',
+					nonce: moksaLine.nonce,
+					order_id: $button.data('order'),
+					status: $button.data('status')
+				}).done(function (response) {
+					if (response && response.success) {
+						// The new attempt is a new row, so the list has to be
+						// re-read rather than patched in place.
+						window.location.reload();
+						return;
+					}
+
+					$button.prop('disabled', false).text(moksaLine.strings.sendAgain);
+					moksaNotify((response && response.data && response.data.message) || moksaLine.strings.failed);
+				}).fail(function () {
+					$button.prop('disabled', false).text(moksaLine.strings.sendAgain);
+					moksaNotify(moksaLine.strings.failed);
+				});
 			});
 		});
 	}
@@ -1579,18 +1601,22 @@
 		});
 
 		$('[data-moksa-delete-imagemap]').on('click', function () {
-			if (!window.confirm(strings.confirmDelete)) {
-				return;
-			}
+			var $trigger = $(this);
 
-			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+			moksaConfirm(strings.confirmDelete, { danger: true, confirmLabel: strings.confirmDeleteAction }).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
 
-			post('imagemap_delete', { id: $(this).data('moksa-delete-imagemap') }).then(function () {
-				window.location.reload();
-			}, function (error) {
-				// Without this the page reloaded either way, so a delete LINE or
-				// the server refused was indistinguishable from one that worked.
-				feedback($scope, error.message, 'bad');
+				var $scope = $trigger.closest('form, .moksa-panel, .wrap');
+
+				post('imagemap_delete', { id: $trigger.data('moksa-delete-imagemap') }).then(function () {
+					window.location.reload();
+				}, function (error) {
+					// Without this the page reloaded either way, so a delete LINE or
+					// the server refused was indistinguishable from one that worked.
+					feedback($scope, error.message, 'bad');
+				});
 			});
 		});
 	}
@@ -1666,18 +1692,22 @@
 		});
 
 		$('[data-moksa-delete-template]').on('click', function () {
-			if (!window.confirm(strings.confirmDelete)) {
-				return;
-			}
+			var $trigger = $(this);
 
-			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+			moksaConfirm(strings.confirmDelete, { danger: true, confirmLabel: strings.confirmDeleteAction }).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
 
-			post('template_delete', { id: $(this).data('moksa-delete-template') }).then(function () {
-				window.location.reload();
-			}, function (error) {
-				// Without this the page reloaded either way, so a delete LINE or
-				// the server refused was indistinguishable from one that worked.
-				feedback($scope, error.message, 'bad');
+				var $scope = $trigger.closest('form, .moksa-panel, .wrap');
+
+				post('template_delete', { id: $trigger.data('moksa-delete-template') }).then(function () {
+					window.location.reload();
+				}, function (error) {
+					// Without this the page reloaded either way, so a delete LINE or
+					// the server refused was indistinguishable from one that worked.
+					feedback($scope, error.message, 'bad');
+				});
 			});
 		});
 	}
@@ -1730,20 +1760,24 @@
 
 	function bindClearLogs() {
 		$(document).on('click', '[data-moksa-clear-logs]', function () {
-			if (!window.confirm(moksaLine.strings.confirmClearLogs)) {
-				return;
-			}
+			var $trigger = $(this);
 
-			var $button = $(this).prop('disabled', true);
+			moksaConfirm(moksaLine.strings.confirmClearLogs, { danger: true, confirmLabel: strings.confirmClearAction }).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
 
-			$.post(moksaLine.ajaxUrl, {
-				action: 'moksa_line_clear_logs',
-				nonce: moksaLine.nonce
-			}).done(function () {
-				window.location.reload();
-			}).fail(function () {
-				$button.prop('disabled', false);
-				window.alert(moksaLine.strings.failed);
+				var $button = $trigger.prop('disabled', true);
+
+				$.post(moksaLine.ajaxUrl, {
+					action: 'moksa_line_clear_logs',
+					nonce: moksaLine.nonce
+				}).done(function () {
+					window.location.reload();
+				}).fail(function () {
+					$button.prop('disabled', false);
+					moksaNotify(moksaLine.strings.failed);
+				});
 			});
 		});
 	}

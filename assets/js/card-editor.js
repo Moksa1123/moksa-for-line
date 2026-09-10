@@ -183,7 +183,7 @@
 
 		this.$add.on('click', function () {
 			if (self.bubbles.length >= MAX_BUBBLES) {
-				window.alert(t('cardTooMany', 'A carousel holds at most 12 cards.'));
+				moksaNotify(t('cardTooMany', 'A carousel holds at most 12 cards.'));
 				return;
 			}
 
@@ -199,17 +199,28 @@
 		});
 
 		this.$single.on('click', function () {
-			if (self.bubbles.length > 1 && !window.confirm(
-				t('cardDropOthers', 'Keep only the card you are editing and remove the rest?')
-			)) {
+			function collapse() {
+				self.bubbles = [self.bubbles[self.selected] || blankBubble()];
+				self.isCarousel = false;
+				self.selected = 0;
+				self.write();
+				self.render();
+			}
+
+			// Nothing is lost when there is only one card, so nothing is asked.
+			if (self.bubbles.length <= 1) {
+				collapse();
 				return;
 			}
 
-			self.bubbles = [self.bubbles[self.selected] || blankBubble()];
-			self.isCarousel = false;
-			self.selected = 0;
-			self.write();
-			self.render();
+			moksaConfirm(
+				t('cardDropOthers', 'Keep only the card you are editing and remove the rest?'),
+				{ danger: true, confirmLabel: t('confirmDeleteAction', 'Delete') }
+			).then(function (confirmed) {
+				if (confirmed) {
+					collapse();
+				}
+			});
 		});
 
 		this.$list.on('click', '[data-moksa-select-card]', function () {
@@ -225,17 +236,19 @@
 			var action = $button.data('moksa-card-action');
 
 			if ('remove' === action) {
-				if (!window.confirm(t('cardRemove', 'Remove this card?'))) {
-					return;
-				}
+				moksaConfirm(t('cardRemove', 'Remove this card?'), { danger: true, confirmLabel: t('confirmDeleteAction', 'Delete') }).then(function (confirmed) {
+					if (!confirmed) {
+						return;
+					}
 
-				self.bubbles.splice(index, 1);
+					self.bubbles.splice(index, 1);
 
-				if (self.bubbles.length <= 1) {
-					self.isCarousel = false;
-				}
+					if (self.bubbles.length <= 1) {
+						self.isCarousel = false;
+					}
 
-				self.selected = Math.max(0, Math.min(self.selected, self.bubbles.length - 1));
+					self.selected = Math.max(0, Math.min(self.selected, self.bubbles.length - 1));
+				});
 			} else if ('left' === action && index > 0) {
 				self.bubbles.splice(index - 1, 0, self.bubbles.splice(index, 1)[0]);
 				self.selected = index - 1;
@@ -244,7 +257,7 @@
 				self.selected = index + 1;
 			} else if ('duplicate' === action) {
 				if (self.bubbles.length >= MAX_BUBBLES) {
-					window.alert(t('cardTooMany', 'A carousel holds at most 12 cards.'));
+					moksaNotify(t('cardTooMany', 'A carousel holds at most 12 cards.'));
 					return;
 				}
 
@@ -627,11 +640,24 @@
 		var self = this;
 		var $json = $('[data-moksa-flex-json]');
 
-		if ($.trim($json.val() || '') !== '' && !window.confirm(
-			t('productsReplace', 'Replace the current cards with these products?')
-		)) {
+		if ($.trim($json.val() || '') === '') {
+			this.send($json);
 			return;
 		}
+
+		moksaConfirm(
+			t('productsReplace', 'Replace the current cards with these products?'),
+			{ danger: true, confirmLabel: t('productsReplaceAction', 'Replace') }
+		).then(function (confirmed) {
+			if (confirmed) {
+				self.send($json);
+			}
+		});
+	};
+
+	/** Fetch the chosen products and drop them into the editor. */
+	ProductPicker.prototype.send = function ($json) {
+		var self = this;
 
 		this.$insert.prop('disabled', true);
 
@@ -643,7 +669,7 @@
 			self.$insert.prop('disabled', false);
 
 			if (!response || !response.success) {
-				window.alert((response && response.data && response.data.message) || t('failed', 'That did not work.'));
+				moksaNotify((response && response.data && response.data.message) || t('failed', 'That did not work.'));
 				return;
 			}
 
@@ -654,11 +680,11 @@
 			$json.trigger('input');
 
 			if (response.data.problems && response.data.problems.length) {
-				window.alert(response.data.problems.join(' • '));
+				moksaNotify(response.data.problems.join(' • '));
 			}
 		}).fail(function () {
 			self.$insert.prop('disabled', false);
-			window.alert(t('failed', 'That did not work.'));
+			moksaNotify(t('failed', 'That did not work.'));
 		});
 	};
 

@@ -2959,3 +2959,28 @@ msgstr "開啟收件匣"
 
 msgid "Pick a conversation on the left to read it and reply."
 msgstr "在左邊選一則對話，就能閱讀並回覆。"
+
+msgid "Yes, do it"
+msgstr "確定執行"
+
+msgid "Dismiss"
+msgstr "關閉"
+
+msgid "Remove every area from this menu?"
+msgstr "要移除這個選單上的所有區塊嗎？"
+
+msgctxt "confirmation button"
+msgid "Delete"
+msgstr "刪除"
+
+msgctxt "confirmation button"
+msgid "Send"
+msgstr "送出"
+
+msgctxt "confirmation button"
+msgid "Clear"
+msgstr "清除"
+
+msgctxt "confirmation button"
+msgid "Replace"
+msgstr "取代"

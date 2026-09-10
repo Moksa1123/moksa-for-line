@@ -154,7 +154,7 @@
 			var columns = self.model.columns || [];
 
 			if (columns.length >= MAX_COLUMNS) {
-				window.alert(t('templateTooMany', 'A carousel holds at most 10 cards.'));
+				moksaNotify(t('templateTooMany', 'A carousel holds at most 10 cards.'));
 				return;
 			}
 
@@ -180,7 +180,7 @@
 
 			if ('remove' === op) {
 				if (columns.length <= 1) {
-					window.alert(t('templateLastCard', 'A template needs at least one card.'));
+					moksaNotify(t('templateLastCard', 'A template needs at least one card.'));
 					return;
 				}
 

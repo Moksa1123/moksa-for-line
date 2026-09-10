@@ -142,11 +142,13 @@
 			var steps = self.model.steps;
 
 			if ('delete' === action) {
-				if (!window.confirm(t('flowDeleteStep', 'Remove this question?'))) {
-					return;
-				}
+				moksaConfirm(t('flowDeleteStep', 'Remove this question?'), { danger: true, confirmLabel: t('confirmDeleteAction', 'Delete') }).then(function (confirmed) {
+					if (!confirmed) {
+						return;
+					}
 
-				steps.splice(index, 1);
+					steps.splice(index, 1);
+				});
 			} else if ('up' === action && index > 0) {
 				steps.splice(index - 1, 0, steps.splice(index, 1)[0]);
 			} else if ('down' === action && index < steps.length - 1) {
