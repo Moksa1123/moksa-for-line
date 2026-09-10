@@ -2949,3 +2949,10 @@ msgstr "比對完成。"
 
 msgid "Only on LINE: %1$s (%2$s)"
 msgstr "只存在於 LINE：%1$s（%2$s）"
+
+msgid "%s conversation is being handled by a person right now. None of these rules run for it -- the bot stays quiet so it does not talk over you. Hand it back to the bot in the inbox to test a rule with that account."
+msgid_plural "%s conversations are being handled by a person right now. None of these rules run for them -- the bot stays quiet so it does not talk over you. Hand them back to the bot in the inbox to test a rule with those accounts."
+msgstr[0] "目前有 %s 個對話由真人接手中。這些規則對它們完全不會執行——機器人會保持安靜，才不會蓋過你說的話。要用那個帳號測試規則，請先在收件匣把它交還給機器人。"
+
+msgid "Open the inbox"
+msgstr "開啟收件匣"

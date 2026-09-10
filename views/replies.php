@@ -16,9 +16,37 @@ $rules = AutoReply::all();
 
 $basic_id     = ltrim( trim( (string) \Moksa\Line\Support\Options::get( 'bot_basic_id' ) ), '@' );
 $account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account', 'moksa-line' );
+
+// A conversation an agent has taken over gets no keyword replies at all -- by
+// design, so the bot does not talk over a person. Nothing said so anywhere,
+// which makes a working rule look broken: you send the keyword, and nothing
+// happens.
+$held = \Moksa\Line\Support\Options::get( 'inbox_enabled' )
+	? \Moksa\Line\Inbox\Conversations::human_handled_total()
+	: 0;
 ?>
 <div class="wrap moksa-line-wrap">
 	<h1><?php esc_html_e( 'Auto replies', 'moksa-line' ); ?></h1>
+
+	<?php if ( $held > 0 ) : ?>
+		<div class="notice notice-warning inline">
+			<p>
+				<?php
+				printf(
+					/* translators: %s: number of conversations. */
+					esc_html( _n(
+						'%s conversation is being handled by a person right now. None of these rules run for it -- the bot stays quiet so it does not talk over you. Hand it back to the bot in the inbox to test a rule with that account.',
+						'%s conversations are being handled by a person right now. None of these rules run for them -- the bot stays quiet so it does not talk over you. Hand them back to the bot in the inbox to test a rule with those accounts.',
+						$held,
+						'moksa-line'
+					) ),
+					esc_html( number_format_i18n( $held ) )
+				);
+				?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=moksa-line-inbox' ) ); ?>"><?php esc_html_e( 'Open the inbox', 'moksa-line' ); ?></a>
+			</p>
+		</div>
+	<?php endif; ?>
 
 	<p class="description">
 		<?php esc_html_e( 'Rules are checked in order of match strength first (exact, then prefix, then pattern, then partial, then catch-all) and priority second, so a lower priority number wins between rules of equal strength.', 'moksa-line' ); ?>

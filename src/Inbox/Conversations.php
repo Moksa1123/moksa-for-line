@@ -293,6 +293,20 @@ class Conversations {
 	}
 
 	/**
+	 * How many conversations an agent currently holds.
+	 *
+	 * The bot deliberately stays quiet on these, so this is what turns "my auto
+	 * replies do nothing" into an answer.
+	 */
+	public static function human_handled_total(): int {
+		global $wpdb;
+		$table = self::table();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE status = 'human'" );
+	}
+
+	/**
 	 * Number of conversations waiting on a human.
 	 */
 	public static function unread_total(): int {

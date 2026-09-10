@@ -377,11 +377,14 @@ class AutoReply {
 
 		$format = array( '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s' );
 
-		self::flush_cache();
-
+		// Flush AFTER the write. Flushing first leaves a window in which an
+		// inbound webhook repopulates the cache from the pre-edit rows, and the
+		// bot then answers with the old rule for the next five minutes.
 		if ( $id > 0 ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 			$wpdb->update( self::table(), $data, array( 'id' => $id ), $format, array( '%d' ) );
+
+			self::flush_cache();
 
 			return $id;
 		}
@@ -391,6 +394,8 @@ class AutoReply {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->insert( self::table(), $data, $format );
+
+		self::flush_cache();
 
 		return (int) $wpdb->insert_id;
 	}
@@ -403,10 +408,12 @@ class AutoReply {
 	public static function delete( int $id ): bool {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
+		$deleted = (bool) $wpdb->delete( self::table(), array( 'id' => $id ), array( '%d' ) );
+
 		self::flush_cache();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
-		return (bool) $wpdb->delete( self::table(), array( 'id' => $id ), array( '%d' ) );
+		return $deleted;
 	}
 
 	/**

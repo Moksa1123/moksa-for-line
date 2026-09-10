@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-10 07:44+0000\n"
+"POT-Creation-Date: 2026-09-10 08:47+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -85,6 +85,12 @@ msgid_plural "%d conditions"
 msgstr[0] ""
 msgstr[1] ""
 
+#: views/replies.php:37
+msgid "%s conversation is being handled by a person right now. None of these rules run for it -- the bot stays quiet so it does not talk over you. Hand it back to the bot in the inbox to test a rule with that account."
+msgid_plural "%s conversations are being handled by a person right now. None of these rules run for them -- the bot stays quiet so it does not talk over you. Hand them back to the bot in the inbox to test a rule with those accounts."
+msgstr[0] ""
+msgstr[1] ""
+
 #. translators: %s: messages used.
 #: views/dashboard.php:118
 msgid "%s push messages sent this month. This plan has no monthly cap."
@@ -141,7 +147,7 @@ msgstr ""
 msgid "A Flex message needs altText (shown in the chat list and push notification)."
 msgstr ""
 
-#: views/replies.php:101
+#: views/replies.php:129
 msgid "A Flex template"
 msgstr ""
 
@@ -254,7 +260,7 @@ msgstr ""
 msgid "A question with exactly two answers"
 msgstr ""
 
-#: views/replies.php:102
+#: views/replies.php:130
 msgid "A quick reply set"
 msgstr ""
 
@@ -262,7 +268,7 @@ msgstr ""
 msgid "A sentence or two about what this is."
 msgstr ""
 
-#: views/replies.php:104
+#: views/replies.php:132
 msgid "A sticker"
 msgstr ""
 
@@ -345,12 +351,12 @@ msgstr ""
 msgid "Action labels are limited to 20 characters."
 msgstr ""
 
-#: views/replies.php:38
+#: views/replies.php:66
 msgid "Actions"
 msgstr ""
 
 #: views/flows.php:114
-#: views/replies.php:167
+#: views/replies.php:195
 msgid "Active"
 msgstr ""
 
@@ -378,7 +384,7 @@ msgstr ""
 msgid "Add condition"
 msgstr ""
 
-#: views/replies.php:71
+#: views/replies.php:99
 msgid "Add or edit a rule"
 msgstr ""
 
@@ -447,7 +453,7 @@ msgstr ""
 msgid "An icon component needs a url."
 msgstr ""
 
-#: views/replies.php:105
+#: views/replies.php:133
 msgid "An image"
 msgstr ""
 
@@ -480,7 +486,7 @@ msgstr ""
 msgid "Any order"
 msgstr ""
 
-#: views/replies.php:93
+#: views/replies.php:121
 msgid "Anything (catch-all)"
 msgstr ""
 
@@ -518,7 +524,7 @@ msgid "Attach a Flex template"
 msgstr ""
 
 #: src/Admin/AdminModule.php:66
-#: views/replies.php:21
+#: views/replies.php:29
 msgid "Auto replies"
 msgstr ""
 
@@ -950,7 +956,7 @@ msgstr ""
 #: views/flex.php:176
 #: views/flows.php:154
 #: views/imagemaps.php:151
-#: views/replies.php:60
+#: views/replies.php:88
 #: views/richmenus.php:77
 #: views/templates.php:141
 msgid "Delete"
@@ -1030,7 +1036,7 @@ msgstr ""
 msgid "Each notification is a push message and is billed. The customer only hears about a given order and status once, however many times the status is set."
 msgstr ""
 
-#: views/replies.php:59
+#: views/replies.php:87
 #: views/richmenus.php:71
 msgid "Edit"
 msgstr ""
@@ -1049,7 +1055,7 @@ msgstr ""
 
 #: src/Admin/AdminModule.php:316
 #: views/imagemaps.php:42
-#: views/replies.php:72
+#: views/replies.php:100
 #: views/richmenus.php:107
 #: views/templates.php:30
 msgid "Editing"
@@ -1201,7 +1207,7 @@ msgstr ""
 msgid "Flex messages"
 msgstr ""
 
-#: views/replies.php:135
+#: views/replies.php:163
 msgid "Flow"
 msgstr ""
 
@@ -1308,7 +1314,7 @@ msgstr ""
 msgid "Hello, %s"
 msgstr ""
 
-#: views/replies.php:37
+#: views/replies.php:65
 msgid "Hits"
 msgstr ""
 
@@ -1339,7 +1345,7 @@ msgid "Image %d has no picture."
 msgstr ""
 
 #: src/Admin/AdminModule.php:251
-#: views/replies.php:149
+#: views/replies.php:177
 msgid "Image URL"
 msgstr ""
 
@@ -1775,8 +1781,8 @@ msgstr ""
 msgid "Manage templates"
 msgstr ""
 
-#: views/replies.php:34
-#: views/replies.php:87
+#: views/replies.php:62
+#: views/replies.php:115
 msgid "Match"
 msgstr ""
 
@@ -1812,7 +1818,7 @@ msgstr ""
 #: src/Woo/NotifyTemplates.php:83
 #: views/broadcast.php:57
 #: views/logs.php:186
-#: views/replies.php:111
+#: views/replies.php:139
 msgid "Message"
 msgstr ""
 
@@ -1821,7 +1827,7 @@ msgstr ""
 msgid "Message %d is missing its type."
 msgstr ""
 
-#: views/replies.php:155
+#: views/replies.php:183
 msgid "Message JSON"
 msgstr ""
 
@@ -1881,7 +1887,7 @@ msgstr ""
 msgid "Move up"
 msgstr ""
 
-#: views/replies.php:151
+#: views/replies.php:179
 msgid "Must be HTTPS, JPEG or PNG, and at most 10 MB."
 msgstr ""
 
@@ -1895,8 +1901,8 @@ msgstr ""
 
 #: views/flows.php:48
 #: views/imagemaps.php:48
-#: views/replies.php:32
-#: views/replies.php:77
+#: views/replies.php:60
+#: views/replies.php:105
 #: views/richmenus.php:36
 #: views/richmenus.php:114
 #: views/users.php:39
@@ -1931,7 +1937,7 @@ msgstr ""
 msgid "New menu"
 msgstr ""
 
-#: views/replies.php:173
+#: views/replies.php:201
 msgid "New rule"
 msgstr ""
 
@@ -2017,7 +2023,7 @@ msgstr ""
 msgid "No rich menus yet."
 msgstr ""
 
-#: views/replies.php:43
+#: views/replies.php:71
 msgid "No rules yet."
 msgstr ""
 
@@ -2174,6 +2180,10 @@ msgstr ""
 msgid "Open settings"
 msgstr ""
 
+#: views/replies.php:46
+msgid "Open the inbox"
+msgstr ""
+
 #: views/richmenus.php:220
 msgid "Open the menu by default when the chat opens"
 msgstr ""
@@ -2273,7 +2283,7 @@ msgstr ""
 msgid "Out of stock"
 msgstr ""
 
-#: views/replies.php:144
+#: views/replies.php:172
 msgid "Package and sticker ID"
 msgstr ""
 
@@ -2410,14 +2420,14 @@ msgstr ""
 #: views/broadcast.php:130
 #: views/flex.php:133
 #: views/flows.php:129
-#: views/replies.php:180
+#: views/replies.php:208
 #: views/settings.php:248
 #: views/templates.php:111
 msgid "Preview"
 msgstr ""
 
-#: views/replies.php:36
-#: views/replies.php:160
+#: views/replies.php:64
+#: views/replies.php:188
 msgid "Priority"
 msgstr ""
 
@@ -2489,7 +2499,7 @@ msgstr ""
 msgid "Questions %1$d and %2$d both store their answer as \"%3$s\", so the second overwrites the first."
 msgstr ""
 
-#: views/replies.php:126
+#: views/replies.php:154
 msgid "Quick reply set"
 msgstr ""
 
@@ -2501,7 +2511,7 @@ msgstr ""
 msgid "Quick reply set saved."
 msgstr ""
 
-#: views/replies.php:106
+#: views/replies.php:134
 msgid "Raw message JSON"
 msgstr ""
 
@@ -2554,11 +2564,11 @@ msgid "Replies to an inbound message are free. Push, multicast and broadcast are
 msgstr ""
 
 #: views/inbox.php:145
-#: views/replies.php:35
+#: views/replies.php:63
 msgid "Reply"
 msgstr ""
 
-#: views/replies.php:98
+#: views/replies.php:126
 msgid "Reply with"
 msgstr ""
 
@@ -2608,7 +2618,7 @@ msgstr ""
 msgid "Rule saved."
 msgstr ""
 
-#: views/replies.php:24
+#: views/replies.php:52
 msgid "Rules are checked in order of match strength first (exact, then prefix, then pattern, then partial, then catch-all) and priority second, so a lower priority number wins between rules of equal strength."
 msgstr ""
 
@@ -2638,7 +2648,7 @@ msgstr ""
 msgid "Save flow"
 msgstr ""
 
-#: views/replies.php:172
+#: views/replies.php:200
 msgid "Save rule"
 msgstr ""
 
@@ -2881,7 +2891,7 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: views/replies.php:103
+#: views/replies.php:131
 msgid "Start a conversation flow"
 msgstr ""
 
@@ -2998,7 +3008,7 @@ msgstr ""
 
 #: src/Inbox/Messages.php:145
 #: views/notifications.php:108
-#: views/replies.php:117
+#: views/replies.php:145
 #: views/templates.php:29
 msgid "Template"
 msgstr ""
@@ -3036,7 +3046,7 @@ msgid "Test sent."
 msgstr ""
 
 #: src/Admin/AdminModule.php:230
-#: views/replies.php:100
+#: views/replies.php:128
 msgid "Text"
 msgstr ""
 
@@ -3272,7 +3282,7 @@ msgstr ""
 msgid "The customer is messaged when the order enters any of these statuses. Each notification is billed as a push message."
 msgstr ""
 
-#: views/replies.php:182
+#: views/replies.php:210
 msgid "The customer sends the trigger, the bot answers. Placeholders are filled in with sample values so you can see the sentence they actually read."
 msgstr ""
 
@@ -3344,7 +3354,7 @@ msgstr ""
 msgid "The login response was issued for a different channel."
 msgstr ""
 
-#: views/replies.php:91
+#: views/replies.php:119
 msgid "The message contains this"
 msgstr ""
 
@@ -3353,11 +3363,11 @@ msgstr ""
 msgid "The message is not valid JSON, so this notification will not send: %s"
 msgstr ""
 
-#: views/replies.php:92
+#: views/replies.php:120
 msgid "The message matches this pattern"
 msgstr ""
 
-#: views/replies.php:90
+#: views/replies.php:118
 msgid "The message starts with this"
 msgstr ""
 
@@ -3451,7 +3461,7 @@ msgstr ""
 msgid "The whole conversation, from the trigger to the last answer. Buttons are drawn where LINE puts them, under the message."
 msgstr ""
 
-#: views/replies.php:89
+#: views/replies.php:117
 msgid "The whole message is exactly this"
 msgstr ""
 
@@ -3653,12 +3663,12 @@ msgstr ""
 msgid "Transaction"
 msgstr ""
 
-#: views/replies.php:33
+#: views/replies.php:61
 msgid "Trigger"
 msgstr ""
 
 #: views/flows.php:61
-#: views/replies.php:82
+#: views/replies.php:110
 msgid "Trigger text"
 msgstr ""
 
@@ -3939,7 +3949,7 @@ msgid "You are not signed in."
 msgstr ""
 
 #: views/flows.php:103
-#: views/replies.php:113
+#: views/replies.php:141
 msgid "You can use {display_name}, {site_name} and {site_url}."
 msgstr ""
 
@@ -4167,7 +4177,7 @@ msgstr ""
 msgid "not published"
 msgstr ""
 
-#: views/replies.php:50
+#: views/replies.php:78
 msgid "off"
 msgstr ""
 
