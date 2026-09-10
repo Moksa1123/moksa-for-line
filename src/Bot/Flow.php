@@ -158,11 +158,11 @@ class Flow extends Repository {
 
 		$validation = self::validate( $step, $text );
 
-		if ( is_string( $validation ) ) {
+		if ( is_wp_error( $validation ) ) {
 			// Re-ask rather than advancing, so a typo does not lose the answer
 			// the user was part-way through giving.
 			return array_merge(
-				array( MessagingClient::text( $validation ) ),
+				array( MessagingClient::text( $validation->get_error_message() ) ),
 				self::ask( $step )
 			);
 		}
@@ -228,7 +228,31 @@ class Flow extends Repository {
 			? (string) $definition['complete_message']
 			: __( 'Thank you, we have received your details.', 'moksa-line' );
 
-		return array( MessagingClient::text( AutoReply::expand( $message, $line_user_id ) ) );
+		return array( MessagingClient::text( self::fill( $message, $answers, $line_user_id ) ) );
+	}
+
+	/**
+	 * Put the collected answers into the closing message.
+	 *
+	 * A flow has just asked for a name, a date and a phone number, and the one
+	 * message it sends afterwards could only say the customer's LINE display
+	 * name. Reading the booking back is how a confirmation earns its place, and
+	 * it is the difference between "we have your request" and "we have you down
+	 * for the 15th".
+	 *
+	 * @param string $message      Raw message with {placeholders}.
+	 * @param array  $answers      Answers keyed by step key.
+	 * @param string $line_user_id LINE user id, for the profile placeholders.
+	 * @return string
+	 */
+	private static function fill( string $message, array $answers, string $line_user_id ): string {
+		foreach ( $answers as $key => $value ) {
+			if ( is_scalar( $value ) ) {
+				$message = str_replace( '{' . $key . '}', (string) $value, $message );
+			}
+		}
+
+		return AutoReply::expand( $message, $line_user_id );
 	}
 
 	/**
@@ -360,41 +384,47 @@ class Flow extends Repository {
 	/**
 	 * Validate one answer.
 	 *
+	 * A rejection is a WP_Error and an accepted answer is the cleaned value.
+	 * They used to be told apart with is_string(), but every accepted answer is
+	 * a string too -- a name, a phone number, a date, the chosen option -- so
+	 * every correct answer was read as a rejection and the flow re-asked the
+	 * same question forever. No scenario could get past its first step.
+	 *
 	 * @param array  $step Step definition.
 	 * @param string $text Raw answer.
-	 * @return string|mixed The cleaned value, or a string error message.
+	 * @return mixed|\WP_Error The cleaned value, or the reason it was refused.
 	 */
 	private static function validate( array $step, string $text ) {
 		$type = isset( $step['type'] ) ? (string) $step['type'] : 'text';
 
 		if ( '' === $text ) {
-			return __( 'That looked empty. Please try again.', 'moksa-line' );
+			return new \WP_Error( 'moksa_line_flow_empty', __( 'That looked empty. Please try again.', 'moksa-line' ) );
 		}
 
 		switch ( $type ) {
 			case 'email':
 				return is_email( $text )
 					? sanitize_email( $text )
-					: __( 'That does not look like an email address. Please try again.', 'moksa-line' );
+					: new \WP_Error( 'moksa_line_flow_email', __( 'That does not look like an email address. Please try again.', 'moksa-line' ) );
 
 			case 'phone':
 				$digits = preg_replace( '/[^0-9+]/', '', $text );
 
 				return strlen( (string) $digits ) >= 8
 					? $digits
-					: __( 'That does not look like a phone number. Please try again.', 'moksa-line' );
+					: new \WP_Error( 'moksa_line_flow_phone', __( 'That does not look like a phone number. Please try again.', 'moksa-line' ) );
 
 			case 'number':
 				return is_numeric( $text )
 					? $text + 0
-					: __( 'Please reply with a number.', 'moksa-line' );
+					: new \WP_Error( 'moksa_line_flow_number', __( 'Please reply with a number.', 'moksa-line' ) );
 
 			case 'date':
 				$timestamp = strtotime( $text );
 
 				return false !== $timestamp
 					? gmdate( 'Y-m-d', $timestamp )
-					: __( 'Please reply with a date, for example 2026-03-15.', 'moksa-line' );
+					: new \WP_Error( 'moksa_line_flow_date', __( 'Please reply with a date, for example 2026-03-15.', 'moksa-line' ) );
 
 			case 'choice':
 				$choices = isset( $step['choices'] ) ? array_map( 'strval', (array) $step['choices'] ) : array();
@@ -405,11 +435,14 @@ class Flow extends Repository {
 					}
 				}
 
-				return sprintf(
-					/* translators: %s: list of choices, joined with the separator below. */
-					__( 'Please choose one of: %s', 'moksa-line' ),
-					/* translators: separator between items in a list, including any trailing space. Chinese uses a full-width enumeration comma with no space. */
-					implode( _x( ', ', 'list separator', 'moksa-line' ), $choices )
+				return new \WP_Error(
+					'moksa_line_flow_choice',
+					sprintf(
+						/* translators: %s: list of choices, joined with the separator below. */
+						__( 'Please choose one of: %s', 'moksa-line' ),
+						/* translators: separator between items in a list, including any trailing space. Chinese uses a full-width enumeration comma with no space. */
+						implode( _x( ', ', 'list separator', 'moksa-line' ), $choices )
+					)
 				);
 
 			default:

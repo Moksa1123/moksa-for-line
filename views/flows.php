@@ -100,7 +100,7 @@ $example  = array(
 				<p>
 					<label for="moksa-flow-complete"><?php esc_html_e( 'When they finish, say', 'moksa-line' ); ?></label>
 					<textarea id="moksa-flow-complete" rows="2" class="widefat" data-moksa-flow-complete></textarea>
-					<span class="description"><?php esc_html_e( 'You can use {display_name}, {site_name} and {site_url}.', 'moksa-line' ); ?></span>
+					<span class="description"><?php esc_html_e( 'You can use {display_name}, {site_name}, {site_url}, and the field name of any answer -- {name} for a step stored as name.', 'moksa-line' ); ?></span>
 				</p>
 
 				<p>

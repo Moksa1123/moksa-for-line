@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-10 14:34+0000\n"
+"POT-Creation-Date: 2026-09-10 17:39+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -303,7 +303,7 @@ msgid "A uri action must point at https://, tel: or a LINE URL scheme."
 msgstr ""
 
 #. translators: %s: flow name.
-#: src/Bot/Flow.php:252
+#: src/Bot/Flow.php:276
 msgid "A visitor completed \"%s\" on LINE."
 msgstr ""
 
@@ -650,9 +650,9 @@ msgstr ""
 
 #: src/Admin/AdminModule.php:288
 #: src/Admin/AdminModule.php:328
-#: src/Bot/Flow.php:352
-#: src/Bot/Flow.php:353
-#: src/Bot/Flow.php:440
+#: src/Bot/Flow.php:376
+#: src/Bot/Flow.php:377
+#: src/Bot/Flow.php:473
 msgid "Cancel"
 msgstr ""
 
@@ -1022,7 +1022,7 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#: src/Bot/Flow.php:256
+#: src/Bot/Flow.php:280
 msgid "Display name"
 msgstr ""
 
@@ -1689,7 +1689,7 @@ msgstr ""
 msgid "LINE treats the base URL as a prefix and appends the width it wants, with no file extension. This is why the image is served from the plugin rather than straight from the media library."
 msgstr ""
 
-#: src/Bot/Flow.php:257
+#: src/Bot/Flow.php:281
 #: views/broadcast.php:113
 #: views/users.php:40
 msgid "LINE user id"
@@ -2421,19 +2421,19 @@ msgid "Please choose an option:"
 msgstr ""
 
 #. translators: %s: list of choices, joined with the separator below.
-#: src/Bot/Flow.php:410
+#: src/Bot/Flow.php:442
 msgid "Please choose one of: %s"
 msgstr ""
 
-#: src/Bot/Flow.php:397
+#: src/Bot/Flow.php:427
 msgid "Please reply with a date, for example 2026-03-15."
 msgstr ""
 
-#: src/Bot/Flow.php:390
+#: src/Bot/Flow.php:420
 msgid "Please reply with a number."
 msgstr ""
 
-#: src/Bot/Flow.php:326
+#: src/Bot/Flow.php:350
 msgid "Please reply with your answer."
 msgstr ""
 
@@ -2587,8 +2587,8 @@ msgstr ""
 msgid "Remove this question?"
 msgstr ""
 
-#: views/inbox.php:156
-#: views/inbox.php:158
+#: views/inbox.php:167
+#: views/inbox.php:169
 msgid "Remove this sticker"
 msgstr ""
 
@@ -2608,7 +2608,7 @@ msgstr ""
 msgid "Replies to an inbound message are free. Push, multicast and broadcast are billed."
 msgstr ""
 
-#: views/inbox.php:147
+#: views/inbox.php:175
 #: views/replies.php:67
 msgid "Reply"
 msgstr ""
@@ -2762,7 +2762,7 @@ msgstr ""
 
 #: src/Liff/LiffModule.php:328
 #: views/broadcast.php:122
-#: views/inbox.php:169
+#: views/inbox.php:178
 msgid "Send"
 msgstr ""
 
@@ -2774,8 +2774,8 @@ msgstr ""
 msgid "Send a message"
 msgstr ""
 
-#: views/inbox.php:165
-#: views/inbox.php:167
+#: views/inbox.php:155
+#: views/inbox.php:157
 msgid "Send a sticker"
 msgstr ""
 
@@ -3137,11 +3137,11 @@ msgstr ""
 msgid "That did not work."
 msgstr ""
 
-#: src/Bot/Flow.php:385
+#: src/Bot/Flow.php:415
 msgid "That does not look like a phone number. Please try again."
 msgstr ""
 
-#: src/Bot/Flow.php:378
+#: src/Bot/Flow.php:408
 msgid "That does not look like an email address. Please try again."
 msgstr ""
 
@@ -3174,7 +3174,7 @@ msgstr ""
 msgid "That is not valid JSON: %s"
 msgstr ""
 
-#: src/Bot/Flow.php:371
+#: src/Bot/Flow.php:401
 msgid "That looked empty. Please try again."
 msgstr ""
 
@@ -3988,7 +3988,7 @@ msgstr ""
 msgid "Write a message or choose a template first."
 msgstr ""
 
-#: views/inbox.php:163
+#: views/inbox.php:177
 msgid "Write a reply"
 msgstr ""
 
@@ -4014,9 +4014,12 @@ msgstr ""
 msgid "You are not signed in."
 msgstr ""
 
-#: views/flows.php:103
 #: views/replies.php:139
 msgid "You can use {display_name}, {site_name} and {site_url}."
+msgstr ""
+
+#: views/flows.php:103
+msgid "You can use {display_name}, {site_name}, {site_url}, and the field name of any answer -- {name} for a step stored as name."
 msgstr ""
 
 #: src/Inbox/InboxModule.php:294
@@ -4101,7 +4104,7 @@ msgid "Your official account"
 msgstr ""
 
 #. translators: 1: site name, 2: flow name.
-#: src/Bot/Flow.php:269
+#: src/Bot/Flow.php:293
 msgid "[%1$s] New LINE submission: %2$s"
 msgstr ""
 
@@ -4243,7 +4246,7 @@ msgstr ""
 msgid "is not"
 msgstr ""
 
-#: src/Bot/Flow.php:412
+#: src/Bot/Flow.php:444
 msgctxt "list separator"
 msgid ", "
 msgstr ""

@@ -3035,3 +3035,6 @@ msgstr "除錯"
 
 msgid "Channel access token"
 msgstr "Channel access token"
+
+msgid "You can use {display_name}, {site_name}, {site_url}, and the field name of any answer -- {name} for a step stored as name."
+msgstr "可以使用 {display_name}、{site_name}、{site_url}，以及任何一題的欄位名稱——例如存成 name 的那題就用 {name}。"
