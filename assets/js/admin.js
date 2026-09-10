@@ -155,8 +155,14 @@
 				return;
 			}
 
+			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+
 			post('rule_delete', { id: $(this).data('moksa-delete-rule') }).then(function () {
 				window.location.reload();
+			}, function (error) {
+				// Without this the page reloaded either way, so a delete LINE or
+				// the server refused was indistinguishable from one that worked.
+				feedback($scope, error.message, 'bad');
 			});
 		});
 	}
@@ -220,8 +226,14 @@
 				return;
 			}
 
+			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+
 			post('flow_delete', { id: $(this).data('moksa-delete-flow') }).then(function () {
 				window.location.reload();
+			}, function (error) {
+				// Without this the page reloaded either way, so a delete LINE or
+				// the server refused was indistinguishable from one that worked.
+				feedback($scope, error.message, 'bad');
 			});
 		});
 	}
@@ -537,8 +549,14 @@
 				return;
 			}
 
+			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+
 			post('flex_delete', { id: $(this).data('moksa-delete-flex') }).then(function () {
 				window.location.reload();
+			}, function (error) {
+				// Without this the page reloaded either way, so a delete LINE or
+				// the server refused was indistinguishable from one that worked.
+				feedback($scope, error.message, 'bad');
 			});
 		});
 	}
@@ -1578,8 +1596,14 @@
 				return;
 			}
 
+			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+
 			post('imagemap_delete', { id: $(this).data('moksa-delete-imagemap') }).then(function () {
 				window.location.reload();
+			}, function (error) {
+				// Without this the page reloaded either way, so a delete LINE or
+				// the server refused was indistinguishable from one that worked.
+				feedback($scope, error.message, 'bad');
 			});
 		});
 	}
@@ -1659,8 +1683,60 @@
 				return;
 			}
 
+			var $scope = $(this).closest('form, .moksa-panel, .wrap');
+
 			post('template_delete', { id: $(this).data('moksa-delete-template') }).then(function () {
 				window.location.reload();
+			}, function (error) {
+				// Without this the page reloaded either way, so a delete LINE or
+				// the server refused was indistinguishable from one that worked.
+				feedback($scope, error.message, 'bad');
+			});
+		});
+	}
+
+	function bindWebhookCheck() {
+		var $scope = $('[data-moksa-webhook]').closest('td');
+
+		if (!$scope.length) {
+			return;
+		}
+
+		function report(result, kind) {
+			feedback($scope, result.message, kind || (result.ok ? 'ok' : 'warn'), result.lines);
+		}
+
+		$scope.on('click', '[data-moksa-webhook-check]', function () {
+			var $button = $(this).prop('disabled', true);
+
+			feedback($scope, strings.working, 'busy');
+
+			post('webhook_check', {}).then(function (result) {
+				report(result);
+			}, function (error) {
+				feedback($scope, error.message, 'bad');
+			}).always(function () {
+				$button.prop('disabled', false);
+			});
+		});
+
+		$scope.on('click', '[data-moksa-webhook-set]', function () {
+			var $button = $(this).prop('disabled', true);
+
+			feedback($scope, strings.working, 'busy');
+
+			post('webhook_set', {}).then(function (result) {
+				// Setting the URL is only half of it, so read the state straight
+				// back rather than claiming success on the write alone.
+				post('webhook_check', {}).then(function (checked) {
+					feedback($scope, result.message, checked.ok ? 'ok' : 'warn', checked.lines);
+				}, function () {
+					feedback($scope, result.message, 'ok');
+				});
+			}, function (error) {
+				feedback($scope, error.message, 'bad');
+			}).always(function () {
+				$button.prop('disabled', false);
 			});
 		});
 	}
@@ -1698,6 +1774,7 @@
 		bindCopy();
 		bindImagemaps();
 		bindTemplates();
+		bindWebhookCheck();
 		bindClearLogs();
 		bindReplyPreview();
 		bindCounters();

@@ -23,6 +23,68 @@ class MessagingClient {
 	const MAX_MULTICAST = 500;
 
 	/**
+	 * The webhook endpoint LINE currently holds for this channel.
+	 *
+	 * LINE answers 404 when none has been set, which is an ordinary state and
+	 * not a failure, so that reads back as an empty endpoint rather than an
+	 * error the caller has to unpick.
+	 *
+	 * @return array{endpoint:string,active:bool}|WP_Error
+	 */
+	public static function webhook_endpoint() {
+		$result = Client::request( 'GET', '/channel/webhook/endpoint' );
+
+		if ( is_wp_error( $result ) ) {
+			$data = $result->get_error_data();
+
+			if ( is_array( $data ) && 404 === (int) ( $data['status'] ?? 0 ) ) {
+				return array(
+					'endpoint' => '',
+					'active'   => false,
+				);
+			}
+
+			return $result;
+		}
+
+		return array(
+			'endpoint' => isset( $result['endpoint'] ) ? (string) $result['endpoint'] : '',
+			'active'   => ! empty( $result['active'] ),
+		);
+	}
+
+	/**
+	 * Point the channel at a webhook URL.
+	 *
+	 * @param string $url HTTPS URL, at most 500 characters.
+	 * @return array|WP_Error
+	 */
+	public static function set_webhook_endpoint( string $url ) {
+		return Client::request( 'PUT', '/channel/webhook/endpoint', array( 'endpoint' => $url ) );
+	}
+
+	/**
+	 * Ask LINE to deliver a test event and report what it found.
+	 *
+	 * A refusal LINE can describe -- a timeout, a bad status, an unreachable
+	 * host -- comes back as a successful call carrying reason and statusCode,
+	 * so failure here means the request itself failed, not the delivery.
+	 *
+	 * @param string $url Endpoint to test; empty tests the configured one.
+	 * @return array|WP_Error
+	 */
+	public static function test_webhook_endpoint( string $url = '' ) {
+		// An empty array encodes as [], which LINE reads as a malformed body.
+		// Omitting the body entirely is what "test the configured endpoint"
+		// looks like on the wire.
+		return Client::request(
+			'POST',
+			'/channel/webhook/test',
+			'' !== $url ? array( 'endpoint' => $url ) : null
+		);
+	}
+
+	/**
 	 * Reply to an inbound event.
 	 *
 	 * Reply tokens are single-use and expire after a minute; when one has

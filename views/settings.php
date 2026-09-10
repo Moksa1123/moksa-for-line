@@ -275,6 +275,14 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 						<p class="description">
 							<?php esc_html_e( 'Paste this into the Messaging API channel, turn on "Use webhook", then press Verify.', 'moksa-line' ); ?>
 						</p>
+
+						<?php // Checking costs nothing and answers the one question the URL alone cannot: is LINE actually delivering here? ?>
+						<p>
+							<button type="button" class="button" data-moksa-webhook-check><?php esc_html_e( 'Check what LINE has', 'moksa-line' ); ?></button>
+							<button type="button" class="button" data-moksa-webhook-set><?php esc_html_e( 'Point LINE at this site', 'moksa-line' ); ?></button>
+						</p>
+
+						<div class="moksa-feedback" data-moksa-webhook data-moksa-feedback></div>
 					</td>
 				</tr>
 

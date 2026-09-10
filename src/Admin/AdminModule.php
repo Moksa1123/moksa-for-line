@@ -7,6 +7,7 @@
 
 namespace Moksa\Line\Admin;
 
+use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Bot\Ai\Providers;
 use Moksa\Line\Inbox\Conversations;
 use Moksa\Line\Support\Migrator;
@@ -25,6 +26,8 @@ class AdminModule {
 		add_action( 'admin_notices', array( $this, 'setup_notice' ) );
 		add_action( 'wp_ajax_moksa_line_broadcast', array( $this, 'ajax_broadcast' ) );
 		add_action( 'wp_ajax_moksa_line_clear_logs', array( $this, 'ajax_clear_logs' ) );
+		add_action( 'wp_ajax_moksa_line_webhook_check', array( $this, 'ajax_webhook_check' ) );
+		add_action( 'wp_ajax_moksa_line_webhook_set', array( $this, 'ajax_webhook_set' ) );
 		add_action( 'wp_ajax_moksa_line_resend_notification', array( $this, 'ajax_resend_notification' ) );
 
 		add_filter( 'parent_file', array( $this, 'keep_menu_open' ) );
@@ -425,7 +428,7 @@ class AdminModule {
 		$items[] = array(
 			'done'  => \Moksa\Line\Webhook\EventQueue::has_any(),
 			'label' => __( 'Webhook has received an event', 'moksa-line' ),
-			'hint'  => __( 'Paste the webhook URL into the Console, enable "Use webhook", then press Verify.', 'moksa-line' ),
+			'hint'  => __( 'Paste the webhook URL into the Console, enable "Use webhook", then press Verify. "Check what LINE has" on the Messaging API tab reports whether that worked.', 'moksa-line' ),
 			'fix'   => $tab( 'messaging' ),
 		);
 
@@ -611,6 +614,124 @@ class AdminModule {
 	 * Broadcasting is billed per recipient and cannot be recalled, so the
 	 * only unguarded path here is the test send.
 	 */
+	/**
+	 * Report the webhook LINE actually holds, and whether it is this site.
+	 *
+	 * Until now the settings screen could only print the URL and ask someone to
+	 * paste it into the Console. Nothing here could tell whether that was ever
+	 * done, whether "Use webhook" is switched on, or whether the channel is
+	 * pointed at a staging copy of the site -- and a bot pointed elsewhere goes
+	 * quiet without a single error appearing anywhere in wp-admin.
+	 */
+	public function ajax_webhook_check(): void {
+		$this->webhook_guard();
+
+		$current = MessagingClient::webhook_endpoint();
+
+		if ( is_wp_error( $current ) ) {
+			wp_send_json_error( array( 'message' => $current->get_error_message() ) );
+		}
+
+		$ours    = \Moksa\Line\Webhook\WebhookModule::endpoint_url();
+		$matches = untrailingslashit( $current['endpoint'] ) === untrailingslashit( $ours );
+		$lines   = array();
+
+		if ( '' === $current['endpoint'] ) {
+			$lines[] = __( 'This channel has no webhook URL set, so nothing anyone sends the bot reaches this site.', 'moksa-line' );
+		} else {
+			$lines[] = sprintf(
+				/* translators: %s: webhook URL. */
+				__( 'LINE is set to deliver to %s', 'moksa-line' ),
+				$current['endpoint']
+			);
+
+			if ( ! $matches ) {
+				$lines[] = sprintf(
+					/* translators: %s: webhook URL. */
+					__( 'That is not this site, which expects %s. Events are going somewhere else.', 'moksa-line' ),
+					$ours
+				);
+			}
+
+			$lines[] = $current['active']
+				? __( 'Webhook delivery is switched on.', 'moksa-line' )
+				: __( 'Webhook delivery is switched OFF in the Console, so LINE holds the URL but sends nothing to it.', 'moksa-line' );
+		}
+
+		// LINE's own delivery attempt, which is the only thing that proves the
+		// endpoint is reachable from outside -- a URL can be correct and still
+		// be blocked by a firewall, a maintenance page or basic auth.
+		$test = MessagingClient::test_webhook_endpoint();
+
+		if ( ! is_wp_error( $test ) ) {
+			$reason = isset( $test['reason'] ) ? (string) $test['reason'] : '';
+			$status = isset( $test['statusCode'] ) ? (int) $test['statusCode'] : 0;
+
+			if ( ! empty( $test['success'] ) ) {
+				$lines[] = sprintf(
+					/* translators: %d: HTTP status code. */
+					__( 'LINE delivered a test event and this site answered %d.', 'moksa-line' ),
+					$status
+				);
+			} else {
+				$lines[] = sprintf(
+					/* translators: 1: LINE's reason code, 2: HTTP status code. */
+					__( 'LINE could not deliver a test event: %1$s (HTTP %2$d).', 'moksa-line' ),
+					$reason,
+					$status
+				);
+			}
+		}
+
+		wp_send_json_success(
+			array(
+				'endpoint' => $current['endpoint'],
+				'active'   => $current['active'],
+				'matches'  => $matches,
+				'ok'       => $matches && $current['active'],
+				'message'  => $matches && $current['active']
+					? __( 'The channel is pointed at this site and delivery is on.', 'moksa-line' )
+					: __( 'The channel is not delivering to this site.', 'moksa-line' ),
+				'lines'    => $lines,
+			)
+		);
+	}
+
+	/**
+	 * Point the channel at this site.
+	 *
+	 * This only sets the URL. "Use webhook" is a separate switch that lives in
+	 * the Console and has no API, so the check above still has to report it.
+	 */
+	public function ajax_webhook_set(): void {
+		$this->webhook_guard();
+
+		$ours   = \Moksa\Line\Webhook\WebhookModule::endpoint_url();
+		$result = MessagingClient::set_webhook_endpoint( $ours );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+		}
+
+		wp_send_json_success(
+			array(
+				'message' => __( 'LINE now delivers to this site. If delivery is still off, turn on "Use webhook" in the Console -- that switch has no API.', 'moksa-line' ),
+			)
+		);
+	}
+
+	private function webhook_guard(): void {
+		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You cannot change the webhook settings.', 'moksa-line' ) ), 403 );
+		}
+
+		if ( ! \Moksa\Line\Api\TokenManager::is_configured() ) {
+			wp_send_json_error( array( 'message' => __( 'Fill in the Messaging API channel first.', 'moksa-line' ) ) );
+		}
+	}
+
 	/**
 	 * Empty the plugin log.
 	 *

@@ -2887,3 +2887,48 @@ msgstr "預設選單：%s，和這個網站記錄的一致。"
 
 msgid "LINE serves %s as the default, which is not what this site has marked. Set the default again here to line them up."
 msgstr "LINE 實際發送的預設是 %s，和這個網站標記的不一樣。在這裡重新設定一次預設就會對齊。"
+
+msgid "Check what LINE has"
+msgstr "查看 LINE 那邊的設定"
+
+msgid "Point LINE at this site"
+msgstr "把 LINE 指向這個網站"
+
+msgid "This channel has no webhook URL set, so nothing anyone sends the bot reaches this site."
+msgstr "這個頻道沒有設定 Webhook 網址，所以任何人傳給機器人的訊息都不會進到這個網站。"
+
+msgid "LINE is set to deliver to %s"
+msgstr "LINE 目前設定送到 %s"
+
+msgid "That is not this site, which expects %s. Events are going somewhere else."
+msgstr "那不是這個網站，這裡預期的是 %s。事件被送到別的地方了。"
+
+msgid "Webhook delivery is switched on."
+msgstr "Webhook 傳送已開啟。"
+
+msgid "Webhook delivery is switched OFF in the Console, so LINE holds the URL but sends nothing to it."
+msgstr "Console 裡的 Webhook 傳送是關閉的，所以 LINE 記著這個網址，但什麼都不會送過來。"
+
+msgid "LINE delivered a test event and this site answered %d."
+msgstr "LINE 送出了一個測試事件，這個網站回應 %d。"
+
+msgid "LINE could not deliver a test event: %1$s (HTTP %2$d)."
+msgstr "LINE 無法送出測試事件：%1$s（HTTP %2$d）。"
+
+msgid "The channel is pointed at this site and delivery is on."
+msgstr "頻道已指向這個網站，傳送也是開啟的。"
+
+msgid "The channel is not delivering to this site."
+msgstr "頻道目前沒有把事件送到這個網站。"
+
+msgid "LINE now delivers to this site. If delivery is still off, turn on \"Use webhook\" in the Console -- that switch has no API."
+msgstr "LINE 現在會送到這個網站了。如果傳送仍是關閉的，請到 Console 打開「Use webhook」——那個開關沒有 API 可以控制。"
+
+msgid "You cannot change the webhook settings."
+msgstr "你沒有變更 Webhook 設定的權限。"
+
+msgid "Fill in the Messaging API channel first."
+msgstr "請先填好 Messaging API 頻道資訊。"
+
+msgid "Paste the webhook URL into the Console, enable \"Use webhook\", then press Verify. \"Check what LINE has\" on the Messaging API tab reports whether that worked."
+msgstr "把 Webhook 網址貼到 Console，打開「Use webhook」，然後按 Verify。Messaging API 分頁上的「查看 LINE 那邊的設定」會告訴你到底成功了沒有。"
