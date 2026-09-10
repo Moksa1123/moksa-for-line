@@ -124,7 +124,7 @@ msgid "A flow needs at least one step."
 msgstr "流程至少要有一個步驟。"
 
 msgid "A member of our team will reply here shortly."
-msgstr "我們的同事很快會在這裡回覆你。"
+msgstr "我們的同事很快會在這裡回覆您。"
 
 msgid "A number"
 msgstr "數字"
@@ -158,6 +158,12 @@ msgstr "uri action 必須指向 https://、tel: 或 LINE 的 URL scheme。"
 
 msgid "A visitor completed \"%s\" on LINE."
 msgstr "有訪客在 LINE 上完成了「%s」。"
+
+msgid "AI Engine has no AI service with an API key yet. Add one under Meow Apps > AI Engine > Settings."
+msgstr "AI Engine 還沒有任何帶 API 金鑰的 AI 服務。請到 Meow Apps > AI Engine > Settings 新增一組。"
+
+msgid "AI Engine is active but has no AI service with an API key, so it cannot answer anything yet. Add one under Meow Apps > AI Engine > Settings."
+msgstr "AI Engine 已啟用，但還沒有任何帶 API 金鑰的 AI 服務，所以它目前一句話也答不出來。請到 Meow Apps > AI Engine > Settings 新增一組。"
 
 msgid "AI Engine is not active"
 msgstr "AI Engine 沒有啟用"
@@ -1630,7 +1636,7 @@ msgid "Send to"
 msgstr "發送對象"
 
 msgid "Send us a message and we will reply in your LINE chat."
-msgstr "傳訊息給我們，我們會在你的 LINE 聊天室回覆。"
+msgstr "傳訊息給我們，我們會在您的 LINE 聊天室回覆。"
 
 msgid "Sending..."
 msgstr "傳送中…"
@@ -1756,7 +1762,7 @@ msgid "Subtotal, formatted"
 msgstr "小計（已格式化）"
 
 msgid "Sure -- I have passed this to a member of our team. They will reply here shortly."
-msgstr "好的，我已經把訊息轉給同事，他們很快會在這裡回覆你。"
+msgstr "好的，我已經把訊息轉給同事，他們很快會在這裡回覆您。"
 
 msgid "Switch to another tab"
 msgstr "切換到其他分頁"
@@ -1816,7 +1822,7 @@ msgid "Text under it"
 msgstr "標題下方的文字"
 
 msgid "Thank you {display_name}, we have your request and will confirm shortly."
-msgstr "謝謝你 {display_name}，我們已經收到你的需求，很快會跟你確認。"
+msgstr "謝謝您 {display_name}，我們已經收到您的需求，很快會跟您確認。"
 
 msgid "Thank you, we have received your details."
 msgstr "謝謝您，我們已經收到您的資料。"
@@ -2161,7 +2167,7 @@ msgid "Type SEND to confirm"
 msgstr "輸入 SEND 以確認"
 
 msgid "Type your message"
-msgstr "輸入你的訊息"
+msgstr "輸入您的訊息"
 
 msgid "Unlink"
 msgstr "解除連結"
@@ -2356,7 +2362,7 @@ msgid "Your LINE account is linked. Order updates will be sent to you on LINE."
 msgstr "你的 LINE 帳號已連結，訂單更新會透過 LINE 通知你。"
 
 msgid "Your message"
-msgstr "你的訊息"
+msgstr "您的訊息"
 
 msgid "Your official account"
 msgstr "你的官方帳號"

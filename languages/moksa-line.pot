@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-10T03:15:20+00:00\n"
+"POT-Creation-Date: 2026-09-10T04:13:36+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-line\n"
@@ -502,132 +502,136 @@ msgstr ""
 msgid "Paste the webhook URL into the Console, enable \"Use webhook\", then press Verify."
 msgstr ""
 
-#: src/Admin/AdminModule.php:405
+#: src/Admin/AdminModule.php:408
 msgid "AI provider available"
 msgstr ""
 
-#: src/Admin/AdminModule.php:406
+#: src/Admin/AdminModule.php:410
+msgid "AI Engine is active but has no AI service with an API key, so it cannot answer anything yet. Add one under Meow Apps > AI Engine > Settings."
+msgstr ""
+
+#: src/Admin/AdminModule.php:411
 msgid "AI replies are switched on, but AI Engine is not active on this site."
 msgstr ""
 
-#: src/Admin/AdminModule.php:414
+#: src/Admin/AdminModule.php:419
 msgid "LINE Pay credentials present"
 msgstr ""
 
-#: src/Admin/AdminModule.php:415
+#: src/Admin/AdminModule.php:420
 msgid "Add the LINE Pay Channel ID and Channel Secret."
 msgstr ""
 
-#: src/Admin/AdminModule.php:421
+#: src/Admin/AdminModule.php:426
 msgid "LINE Pay is in production mode"
 msgstr ""
 
-#: src/Admin/AdminModule.php:422
+#: src/Admin/AdminModule.php:427
 msgid "Sandbox mode is on, so no real money moves. Turn it off when you go live."
 msgstr ""
 
-#: src/Admin/AdminModule.php:430
+#: src/Admin/AdminModule.php:435
 #: views/settings.php:502
 msgid "Credentials are encrypted at rest"
 msgstr ""
 
-#: src/Admin/AdminModule.php:431
+#: src/Admin/AdminModule.php:436
 msgid "OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text."
 msgstr ""
 
-#: src/Admin/AdminModule.php:462
+#: src/Admin/AdminModule.php:467
 msgid "Moksa LINE Suite is installed but not connected to a LINE channel yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:464
+#: src/Admin/AdminModule.php:469
 msgid "Finish setup"
 msgstr ""
 
-#: src/Admin/AdminModule.php:475
+#: src/Admin/AdminModule.php:480
 msgid "You do not have permission to change these settings."
 msgstr ""
 
-#: src/Admin/AdminModule.php:583
+#: src/Admin/AdminModule.php:588
 msgid "You cannot clear the log."
 msgstr ""
 
 #. translators: %s: number of entries removed.
-#: src/Admin/AdminModule.php:597
+#: src/Admin/AdminModule.php:602
 #, php-format
 msgid "Cleared %s entries."
 msgstr ""
 
-#: src/Admin/AdminModule.php:617
+#: src/Admin/AdminModule.php:622
 msgid "You cannot resend notifications."
 msgstr ""
 
-#: src/Admin/AdminModule.php:624
+#: src/Admin/AdminModule.php:629
 msgid "That row does not name an order and a status to resend."
 msgstr ""
 
-#: src/Admin/AdminModule.php:628
+#: src/Admin/AdminModule.php:633
 #: src/Woo/NotifyTemplates.php:510
 msgid "WooCommerce is not active."
 msgstr ""
 
-#: src/Admin/AdminModule.php:634
+#: src/Admin/AdminModule.php:639
 msgid "That order no longer exists."
 msgstr ""
 
-#: src/Admin/AdminModule.php:644
+#: src/Admin/AdminModule.php:649
 msgid "Sent again. The result is in the list below."
 msgstr ""
 
-#: src/Admin/AdminModule.php:651
+#: src/Admin/AdminModule.php:656
 msgid "You cannot send broadcasts."
 msgstr ""
 
-#: src/Admin/AdminModule.php:666
+#: src/Admin/AdminModule.php:671
 msgid "That template could not be loaded."
 msgstr ""
 
-#: src/Admin/AdminModule.php:677
+#: src/Admin/AdminModule.php:682
 msgid "Write a message or choose a template first."
 msgstr ""
 
-#: src/Admin/AdminModule.php:682
+#: src/Admin/AdminModule.php:687
 #: src/Woo/NotifyTemplates.php:506
 msgid "Enter a LINE user id to send the test to."
 msgstr ""
 
-#: src/Admin/AdminModule.php:691
+#: src/Admin/AdminModule.php:696
 msgid "Test sent."
 msgstr ""
 
-#: src/Admin/AdminModule.php:699
+#: src/Admin/AdminModule.php:704
 msgid "Type SEND in the confirmation box to go ahead."
 msgstr ""
 
-#: src/Admin/AdminModule.php:709
+#: src/Admin/AdminModule.php:714
 msgid "Broadcast sent to every friend of the account."
 msgstr ""
 
-#: src/Admin/AdminModule.php:717
+#: src/Admin/AdminModule.php:722
 msgid "No friends have been recorded on this site yet."
 msgstr ""
 
 #. translators: 1: delivered count, 2: failed count, 3: first error.
-#: src/Admin/AdminModule.php:727
+#: src/Admin/AdminModule.php:732
 #, php-format
 msgid "Delivered to %1$d, failed for %2$d. %3$s"
 msgstr ""
 
 #. translators: %d: number of recipients.
-#: src/Admin/AdminModule.php:740
+#: src/Admin/AdminModule.php:745
 #, php-format
 msgid "Sent to %d people."
 msgstr ""
 
-#: src/Admin/AdminModule.php:804
+#: src/Admin/AdminModule.php:809
 msgid "You do not have permission to view this page."
 msgstr ""
 
-#: src/Admin/AdminModule.php:810
+#: src/Admin/AdminModule.php:815
 msgid "This screen is missing."
 msgstr ""
 
@@ -678,15 +682,19 @@ msgstr ""
 msgid "Messaging API Channel ID and Channel Secret are required to issue a token."
 msgstr ""
 
-#: src/Bot/Ai/AiEngineProvider.php:60
+#: src/Bot/Ai/AiEngineProvider.php:89
 msgid "AI Engine is not active on this site."
 msgstr ""
 
-#: src/Bot/Ai/AiEngineProvider.php:117
+#: src/Bot/Ai/AiEngineProvider.php:98
+msgid "AI Engine has no AI service with an API key yet. Add one under Meow Apps > AI Engine > Settings."
+msgstr ""
+
+#: src/Bot/Ai/AiEngineProvider.php:155
 msgid "The AI returned an empty answer."
 msgstr ""
 
-#: src/Bot/Ai/AiEngineProvider.php:156
+#: src/Bot/Ai/AiEngineProvider.php:194
 msgid "Default chatbot"
 msgstr ""
 
@@ -790,7 +798,7 @@ msgid "Display name"
 msgstr ""
 
 #: src/Bot/Flow.php:257
-#: views/broadcast.php:108
+#: views/broadcast.php:113
 #: views/users.php:40
 msgid "LINE user id"
 msgstr ""
@@ -1236,7 +1244,7 @@ msgid "Your message"
 msgstr ""
 
 #: src/Liff/LiffModule.php:328
-#: views/broadcast.php:117
+#: views/broadcast.php:122
 #: views/inbox.php:110
 msgid "Send"
 msgstr ""
@@ -2036,39 +2044,39 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: views/broadcast.php:76
+#: views/broadcast.php:81
 msgid "Send to"
 msgstr ""
 
-#: views/broadcast.php:78
+#: views/broadcast.php:83
 msgid "Just one person (a test)"
 msgstr ""
 
 #. translators: %s: number of recorded friends.
-#: views/broadcast.php:83
+#: views/broadcast.php:88
 #, php-format
 msgid "Friends recorded on this site (%s)"
 msgstr ""
 
 #. translators: %s: number of people a broadcast reaches.
-#: views/broadcast.php:93
+#: views/broadcast.php:98
 #, php-format
 msgid "Everyone who follows the account (%s)"
 msgstr ""
 
-#: views/broadcast.php:97
+#: views/broadcast.php:102
 msgid "Everyone who follows the account"
 msgstr ""
 
-#: views/broadcast.php:103
+#: views/broadcast.php:108
 msgid "The recorded list only includes people this site has seen since the webhook was switched on, so it is usually smaller than the real follower count."
 msgstr ""
 
-#: views/broadcast.php:113
+#: views/broadcast.php:118
 msgid "Type SEND to confirm"
 msgstr ""
 
-#: views/broadcast.php:125
+#: views/broadcast.php:130
 #: views/flex.php:105
 #: views/flows.php:129
 #: views/replies.php:180
@@ -2076,7 +2084,7 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: views/broadcast.php:127
+#: views/broadcast.php:132
 msgid "What every recipient gets. A broadcast is billed per person and cannot be recalled, so this is the last look you have."
 msgstr ""
 

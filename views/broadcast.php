@@ -67,7 +67,12 @@ if ( TokenManager::is_configured() ) {
 			<select id="moksa-broadcast-flex" name="flex_id" class="widefat">
 				<option value="0"><?php esc_html_e( 'None', 'moksa-line' ); ?></option>
 				<?php foreach ( Flex::all() as $template ) : ?>
-					<option value="<?php echo esc_attr( (string) $template->id ); ?>"><?php echo esc_html( (string) $template->name ); ?></option>
+					<?php // The card travels with the option so the preview can draw the real thing rather than name it. ?>
+					<option value="<?php echo esc_attr( (string) $template->id ); ?>"
+						data-contents="<?php echo esc_attr( (string) $template->contents ); ?>"
+						data-alt="<?php echo esc_attr( (string) $template->alt_text ); ?>">
+						<?php echo esc_html( (string) $template->name ); ?>
+					</option>
 				<?php endforeach; ?>
 			</select>
 		</p>

@@ -314,14 +314,21 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 			<?php elseif ( 'ai' === $current ) : ?>
 
 				<?php
+				// Three states, not two. "Installed" and "ready" are different
+				// questions with different answers: AI Engine with no API key
+				// is present, lists its chatbots, and cannot answer a word.
 				$provider  = new AiEngineProvider();
-				$available = $provider->is_available();
+				$installed = $provider->installed();
+				$ready     = $provider->is_available();
 				?>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Provider status', 'moksa-line' ); ?></th>
 					<td>
-						<?php if ( $available ) : ?>
+						<?php if ( $ready ) : ?>
 							<span class="moksa-pill moksa-pill--ok"><?php echo esc_html( $provider->label() ); ?></span>
+						<?php elseif ( $installed ) : ?>
+							<span class="moksa-pill moksa-pill--warn"><?php echo esc_html( $provider->label() ); ?></span>
+							<p class="description"><?php esc_html_e( 'AI Engine is active but has no AI service with an API key, so it cannot answer anything yet. Add one under Meow Apps > AI Engine > Settings.', 'moksa-line' ); ?></p>
 						<?php else : ?>
 							<span class="moksa-pill moksa-pill--warn"><?php esc_html_e( 'AI Engine is not active', 'moksa-line' ); ?></span>
 							<p class="description"><?php esc_html_e( 'Install and activate AI Engine, then configure a chatbot in it. AI replies stay switched off until then.', 'moksa-line' ); ?></p>
@@ -332,7 +339,9 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				<?php
 				$checkbox( 'ai_enabled', __( 'AI replies', 'moksa-line' ), __( 'Let the AI answer messages no rule or flow handled', 'moksa-line' ) );
 
-				if ( $available ) {
+				// The chatbot list only needs AI Engine present, not keyed, so
+				// the bot can be chosen while the key is still being sorted out.
+				if ( $installed ) {
 					$select( 'ai_bot_id', __( 'Chatbot', 'moksa-line' ), $provider->chatbots(), __( 'Whichever chatbot you have set up in AI Engine, including its knowledge base.', 'moksa-line' ) );
 				} else {
 					$field( 'ai_bot_id', __( 'Chatbot ID', 'moksa-line' ), __( 'The bot id from AI Engine.', 'moksa-line' ) );

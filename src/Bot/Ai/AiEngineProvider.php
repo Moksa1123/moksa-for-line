@@ -25,9 +25,38 @@ defined( 'ABSPATH' ) || exit;
 class AiEngineProvider implements ProviderInterface {
 
 	/**
-	 * Whether AI Engine is installed and exposing its API.
+	 * Whether AI Engine can actually answer a question.
+	 *
+	 * An active AI Engine with no API key is the common half-configured state,
+	 * and it is indistinguishable from a working one until a customer asks
+	 * something and the reply fails. hasAI() is how AI Engine reports that, so
+	 * "available" here means ready, not merely installed -- otherwise the setup
+	 * checklist shows a tick over a bot that cannot say a word.
 	 */
 	public function is_available(): bool {
+		if ( ! $this->installed() ) {
+			return false;
+		}
+
+		$api = $this->api();
+
+		// hasAI() arrived in AI Engine 2.x; on anything older, being installed
+		// is the most that can be established.
+		if ( ! method_exists( $api, 'hasAI' ) ) {
+			return true;
+		}
+
+		try {
+			return (bool) $api->hasAI();
+		} catch ( \Throwable $e ) {
+			return false;
+		}
+	}
+
+	/**
+	 * Whether AI Engine is present and exposing the API this uses at all.
+	 */
+	public function installed(): bool {
 		if ( ! defined( 'MWAI_VERSION' ) ) {
 			return false;
 		}
@@ -58,6 +87,15 @@ class AiEngineProvider implements ProviderInterface {
 			return new WP_Error(
 				'moksa_line_ai_unavailable',
 				__( 'AI Engine is not active on this site.', 'moksa-line' )
+			);
+		}
+
+		// Without a key AI Engine answers "The environment is required.", which
+		// is true and tells a shop owner nothing. Say what is actually missing.
+		if ( ! $this->is_available() ) {
+			return new WP_Error(
+				'moksa_line_ai_no_key',
+				__( 'AI Engine has no AI service with an API key yet. Add one under Meow Apps > AI Engine > Settings.', 'moksa-line' )
 			);
 		}
 

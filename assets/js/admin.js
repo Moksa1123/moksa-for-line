@@ -1194,11 +1194,38 @@
 			var flexId = parseInt($flex.val(), 10) || 0;
 
 			if (flexId > 0) {
-				var name = $flex.find('option:selected').text();
-				$preview.append(
-					$('<div class="moksa-bubble moksa-bubble--card"></div>')
-						.text(moksaLine.strings.flexAttached.replace('%s', name))
-				);
+				// Draw the actual card, carousel and all. Naming it was no use:
+				// a broadcast cannot be recalled, and the attached template is
+				// usually the part carrying the offer.
+				var $option = $flex.find('option:selected');
+				var raw = $option.data('contents');
+				var $card = $('<div class="moksa-broadcast-card"></div>');
+				var drawn = false;
+
+				if (raw && window.MoksaFlexRenderer) {
+					try {
+						var parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+						window.MoksaFlexRenderer.render(parsed, $card);
+						drawn = true;
+
+						if ('carousel' === parsed.type && parsed.contents && parsed.contents.length > 1) {
+							$card.append(
+								$('<p class="moksa-bubble moksa-bubble--empty"></p>').text(
+									moksaLine.strings.carouselCount.replace('%d', parsed.contents.length)
+								)
+							);
+						}
+					} catch (e) {
+						drawn = false;
+					}
+				}
+
+				// A template that will not parse is a real problem worth seeing
+				// here, not a reason to silently show nothing.
+				$preview.append(drawn
+					? $card
+					: $('<div class="moksa-bubble moksa-bubble--card"></div>')
+						.text(moksaLine.strings.flexAttached.replace('%s', $.trim($option.text()))));
 			}
 
 			if (!$preview.children().length) {

@@ -16,8 +16,20 @@ interface ProviderInterface {
 
 	/**
 	 * Whether this provider can currently answer.
+	 *
+	 * Ready, not merely present. A provider that is installed but has no
+	 * credentials must report false, or callers will offer a bot that cannot
+	 * say a word.
 	 */
 	public function is_available(): bool;
+
+	/**
+	 * Whether the underlying plugin or service is present at all.
+	 *
+	 * Separate from is_available() so a caller can tell "not installed" from
+	 * "installed but not configured" and point at the right fix.
+	 */
+	public function installed(): bool;
 
 	/**
 	 * Human-readable name for the settings screen.

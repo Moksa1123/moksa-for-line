@@ -400,11 +400,16 @@ class AdminModule {
 		if ( Options::get( 'ai_enabled' ) ) {
 			$provider = new AiEngineProvider();
 
+			// Two distinct failures needing two different fixes: the plugin is
+			// missing, or it is installed with no API key. One message for both
+			// sends half the readers to the wrong place.
 			$items[] = array(
 				'done'  => $provider->is_available(),
 				'label' => __( 'AI provider available', 'moksa-line' ),
-				'hint'  => __( 'AI replies are switched on, but AI Engine is not active on this site.', 'moksa-line' ),
-			'fix'   => $tab( 'ai' ),
+				'hint'  => $provider->installed()
+					? __( 'AI Engine is active but has no AI service with an API key, so it cannot answer anything yet. Add one under Meow Apps > AI Engine > Settings.', 'moksa-line' )
+					: __( 'AI replies are switched on, but AI Engine is not active on this site.', 'moksa-line' ),
+				'fix'   => $tab( 'ai' ),
 			);
 		}
 
