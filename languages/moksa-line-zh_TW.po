@@ -3011,3 +3011,9 @@ msgstr "失敗"
 
 msgid "Waiting"
 msgstr "等待中"
+
+msgid "LINE Pay is switched off, so nothing is being charged and there is nothing to show here yet."
+msgstr "LINE Pay 目前是關閉的，所以不會進行任何收款，這裡也還沒有東西可以顯示。"
+
+msgid "Turn it on in the LINE Pay settings"
+msgstr "到 LINE Pay 設定裡開啟"

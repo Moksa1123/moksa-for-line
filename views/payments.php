@@ -11,13 +11,23 @@ use Moksa\Line\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
+// Switched off is a normal state, not an error -- but the screen used to say
+// so in one line of unstyled grey text naming a settings page it did not link
+// to, which leaves the reader to go and find it. Same words, somewhere to go.
 if ( ! Options::get( 'pay_enabled' ) ) {
-	printf(
-		'<div class="wrap"><h1>%s</h1><p>%s</p></div>',
-		esc_html__( 'Payments', 'moksa-line' ),
-		esc_html__( 'LINE Pay is switched off under LINE > Settings > LINE Pay.', 'moksa-line' )
-	);
+	$settings_url = admin_url( 'admin.php?page=moksa-line-settings&tab=pay' );
+	?>
+	<div class="wrap moksa-line-wrap">
+		<h1><?php esc_html_e( 'Payments', 'moksa-line' ); ?></h1>
 
+		<div class="notice notice-info inline">
+			<p>
+				<?php esc_html_e( 'LINE Pay is switched off, so nothing is being charged and there is nothing to show here yet.', 'moksa-line' ); ?>
+				<a href="<?php echo esc_url( $settings_url ); ?>"><?php esc_html_e( 'Turn it on in the LINE Pay settings', 'moksa-line' ); ?></a>
+			</p>
+		</div>
+	</div>
+	<?php
 	return;
 }
 

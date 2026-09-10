@@ -230,6 +230,13 @@
 
 		this.load();
 		this.bind();
+
+		// Draw straight away. The rich menu screen only looked right because
+		// its own binder happened to call render() while syncing the menu size;
+		// the imagemap screen has no such call, so its inspector sat there as
+		// an empty bordered box instead of telling anyone how to add an area.
+		// Whether the editor has drawn itself is the editor's business.
+		this.render();
 	}
 
 	/** Read the areas out of the hidden field the form actually submits. */
