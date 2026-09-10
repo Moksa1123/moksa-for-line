@@ -688,6 +688,10 @@
 					'This site tracks ' + result.local_count + '.'
 				];
 
+				if (result.default_note) {
+					lines.push(result.default_note);
+				}
+
 				(result.orphans || []).forEach(function (orphan) {
 					lines.push('Only on LINE: ' + (orphan.name || orphan.id));
 				});

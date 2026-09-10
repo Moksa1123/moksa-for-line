@@ -92,6 +92,24 @@ class RichMenuClient {
 	}
 
 	/**
+	 * The menu LINE currently serves as the channel-wide default.
+	 *
+	 * LINE answers 404 when there is none, which is an ordinary answer here and
+	 * not a failure, so that reads back as an empty string.
+	 *
+	 * @return string Rich menu id, or '' when the channel has no default.
+	 */
+	public static function default_id(): string {
+		$result = Client::request( 'GET', '/user/all/richmenu' );
+
+		if ( is_wp_error( $result ) || ! isset( $result['richMenuId'] ) ) {
+			return '';
+		}
+
+		return (string) $result['richMenuId'];
+	}
+
+	/**
 	 * Make a menu the default for every user who has no per-user menu.
 	 *
 	 * @param string $rich_menu_id Rich menu id.

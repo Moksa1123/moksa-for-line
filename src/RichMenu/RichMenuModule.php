@@ -136,16 +136,34 @@ class RichMenuModule extends Repository {
 			Logger::capture( $alias_result, 'Could not point the rich menu alias at the new menu', 'richmenu' );
 		}
 
+		// Ask LINE what it is actually serving rather than trusting the local
+		// flag. A default set from anywhere else -- the LINE console, an earlier
+		// version of this plugin, a direct API call -- leaves the flag at 0, and
+		// republishing would then delete the menu LINE was serving and leave the
+		// account with no default at all: every customer would silently drop
+		// back to the Official Account Manager menu, or to none.
+		$was_default = '' !== $previous && RichMenuClient::default_id() === $previous;
+
 		self::save(
 			array(
 				'id'          => $id,
 				'richmenu_id' => $new_id,
 				'alias_id'    => $alias,
+				'is_default'  => ( (bool) $row->is_default || $was_default ) ? 1 : 0,
 				'synced_at'   => current_time( 'mysql', true ),
 			)
 		);
 
-		if ( (bool) $row->is_default ) {
+		if ( (bool) $row->is_default || $was_default ) {
+			if ( $was_default ) {
+				// Only one menu can hold the flag, or the screen would show two.
+				global $wpdb;
+				$table = self::table();
+
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+				$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET is_default = 0 WHERE id <> %d", $id ) );
+			}
+
 			$default = RichMenuClient::set_default( $new_id );
 
 			Logger::capture( $default, 'Could not set the default rich menu', 'richmenu' );
@@ -615,12 +633,42 @@ class RichMenuModule extends Repository {
 			}
 		}
 
+		// Which menu LINE actually serves, and whether this site agrees. Drift
+		// here is what makes a shop's menu quietly disappear, so it is worth
+		// naming rather than leaving to be discovered on someone's phone.
+		$line_default  = RichMenuClient::default_id();
+		$local_default = '';
+
+		foreach ( self::all() as $row ) {
+			if ( (bool) $row->is_default ) {
+				$local_default = (string) $row->richmenu_id;
+			}
+		}
+
+		if ( '' === $line_default ) {
+			$default_note = __( 'LINE has no default menu, so everyone falls back to whatever the Official Account Manager holds.', 'moksa-line' );
+		} elseif ( $line_default === $local_default ) {
+			$default_note = sprintf(
+				/* translators: %s: rich menu name. */
+				__( 'Default menu: %s, which matches this site.', 'moksa-line' ),
+				isset( $known[ $line_default ] ) ? $known[ $line_default ] : $line_default
+			);
+		} else {
+			$default_note = sprintf(
+				/* translators: %s: rich menu name or id. */
+				__( 'LINE serves %s as the default, which is not what this site has marked. Set the default again here to line them up.', 'moksa-line' ),
+				isset( $known[ $line_default ] ) ? $known[ $line_default ] : $line_default
+			);
+		}
+
 		wp_send_json_success(
 			array(
 				'remote_count'  => count( (array) ( $remote['richmenus'] ?? array() ) ),
 				'local_count'   => count( $known ),
 				'alias_count'   => is_wp_error( $aliases ) ? 0 : count( (array) ( $aliases['aliases'] ?? array() ) ),
 				'orphans'       => $orphans,
+				'default_note'  => $default_note,
+				'default_ok'    => $line_default === $local_default,
 			)
 		);
 	}
