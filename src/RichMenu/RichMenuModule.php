@@ -518,6 +518,12 @@ class RichMenuModule extends Repository {
 			RichMenuClient::delete_alias( (string) $row->alias_id );
 		}
 
+		// Deleting whatever LINE is serving as the default takes the menu away
+		// from every customer at once, and LINE reports nothing back when it
+		// happens. Worth checking before, and saying so after.
+		$was_default = '' !== (string) $row->richmenu_id
+			&& RichMenuClient::default_id() === (string) $row->richmenu_id;
+
 		if ( '' !== (string) $row->richmenu_id ) {
 			$deleted = RichMenuClient::delete( (string) $row->richmenu_id );
 
@@ -525,6 +531,15 @@ class RichMenuModule extends Repository {
 		}
 
 		self::delete( $id );
+
+		if ( $was_default ) {
+			wp_send_json_success(
+				array(
+					'message' => __( 'Rich menu deleted. That was the default, so until you make another menu the default, customers see whatever the LINE Official Account Manager holds -- or no menu at all.', 'moksa-line' ),
+					'warning' => true,
+				)
+			);
+		}
 
 		wp_send_json_success( array( 'message' => __( 'Rich menu deleted.', 'moksa-line' ) ) );
 	}

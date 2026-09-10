@@ -774,12 +774,23 @@
 		});
 
 		$('[data-moksa-delete-menu]').on('click', function () {
-			if (!window.confirm(strings.confirmDelete)) {
+			var $row = $(this).closest('tr');
+			// Losing the default takes the menu away from every customer at
+			// once, so ask that question rather than the generic one.
+			var isDefault = 1 === parseInt($row.attr('data-is-default'), 10);
+
+			if (!window.confirm(isDefault ? strings.confirmDeleteDefault : strings.confirmDelete)) {
 				return;
 			}
 
-			post('richmenu_delete', { id: $(this).data('moksa-delete-menu') }).then(function () {
-				window.location.reload();
+			post('richmenu_delete', { id: $(this).data('moksa-delete-menu') }).then(function (result) {
+				// Drop the row rather than reloading, so the answer -- which may
+				// be the warning that the channel now has no default -- survives
+				// long enough to read.
+				$row.remove();
+				feedback($form, result.message, result.warning ? 'warn' : 'ok');
+			}, function (error) {
+				feedback($form, error.message, 'bad');
 			});
 		});
 	}

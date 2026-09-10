@@ -203,6 +203,11 @@
 	border-left-color: #d63638;
 }
 
+.moksa-feedback__message--warn {
+	border-left-color: #dba617;
+	background: #fcf9e8;
+}
+
 .moksa-feedback__message--busy {
 	border-left-color: #2271b1;
 }

@@ -2872,3 +2872,18 @@ msgstr "、"
 msgctxt "sample customer name shown in previews"
 msgid "Ming"
 msgstr "小明"
+
+msgid "This is the default rich menu. Deleting it takes the menu away from every customer at once, until you make another one the default. Delete it anyway?"
+msgstr "這是預設的圖文選單。刪掉之後，在你把另一個設為預設之前，所有客人的選單都會立刻消失。仍然要刪除嗎？"
+
+msgid "Rich menu deleted. That was the default, so until you make another menu the default, customers see whatever the LINE Official Account Manager holds -- or no menu at all."
+msgstr "圖文選單已刪除。那是預設選單，在你把另一個設為預設之前，客人看到的會是 LINE 官方帳號管理後台上傳的那個——或是完全沒有選單。"
+
+msgid "LINE has no default menu, so everyone falls back to whatever the Official Account Manager holds."
+msgstr "LINE 這邊沒有預設選單，所有人都會退回到官方帳號管理後台上傳的那個。"
+
+msgid "Default menu: %s, which matches this site."
+msgstr "預設選單：%s，和這個網站記錄的一致。"
+
+msgid "LINE serves %s as the default, which is not what this site has marked. Set the default again here to line them up."
+msgstr "LINE 實際發送的預設是 %s，和這個網站標記的不一樣。在這裡重新設定一次預設就會對齊。"

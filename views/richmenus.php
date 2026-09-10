@@ -51,7 +51,7 @@ $groups = RichMenuModule::groups();
 							? (string) wp_get_attachment_url( (int) $menu->image_attachment_id )
 							: '';
 						?>
-						<tr data-menu='<?php echo esc_attr( (string) wp_json_encode( $menu_data ) ); ?>'>
+						<tr data-menu='<?php echo esc_attr( (string) wp_json_encode( $menu_data ) ); ?>' data-is-default="<?php echo (int) $menu->is_default; ?>">
 							<td>
 								<strong><?php echo esc_html( (string) $menu->name ); ?></strong>
 								<?php if ( (int) $menu->is_default ) : ?>
@@ -70,7 +70,10 @@ $groups = RichMenuModule::groups();
 							<td>
 								<button type="button" class="button-link" data-moksa-edit-menu><?php esc_html_e( 'Edit', 'moksa-line' ); ?></button>
 								<button type="button" class="button-link" data-moksa-publish-menu="<?php echo esc_attr( (string) $menu->id ); ?>"><?php esc_html_e( 'Publish', 'moksa-line' ); ?></button>
-								<button type="button" class="button-link" data-moksa-default-menu="<?php echo esc_attr( (string) $menu->id ); ?>"><?php esc_html_e( 'Make default', 'moksa-line' ); ?></button>
+								<?php // Only a published menu can be made the default; LINE has nothing to point at otherwise. ?>
+								<?php if ( '' !== (string) $menu->richmenu_id && ! (int) $menu->is_default ) : ?>
+									<button type="button" class="button-link" data-moksa-default-menu="<?php echo esc_attr( (string) $menu->id ); ?>"><?php esc_html_e( 'Make default', 'moksa-line' ); ?></button>
+								<?php endif; ?>
 								<button type="button" class="button-link delete" data-moksa-delete-menu="<?php echo esc_attr( (string) $menu->id ); ?>"><?php esc_html_e( 'Delete', 'moksa-line' ); ?></button>
 							</td>
 						</tr>

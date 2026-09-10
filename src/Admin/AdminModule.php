@@ -306,6 +306,7 @@ class AdminModule {
 					'contrastWarning' => __( '"%1$s" has a contrast ratio of %2$s against its background; %3$s is the readable minimum.', 'moksa-line' ),
 					'failed'       => __( 'That did not work.', 'moksa-line' ),
 					'confirmDelete' => __( 'Delete this permanently?', 'moksa-line' ),
+					'confirmDeleteDefault' => __( 'This is the default rich menu. Deleting it takes the menu away from every customer at once, until you make another one the default. Delete it anyway?', 'moksa-line' ),
 					'publishing'   => __( 'Publishing to LINE...', 'moksa-line' ),
 					'working'      => __( 'Working...', 'moksa-line' ),
 					'chooseImage'  => __( 'Rich menu image', 'moksa-line' ),
