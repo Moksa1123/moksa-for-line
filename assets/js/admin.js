@@ -872,6 +872,59 @@
 		// conversation you had just taken over -- press the button, and the
 		// screen empties. Nothing was shown in the meantime either, and a
 		// failure did nothing at all. It updates in place now.
+		// Stickers. The picker is built server-side so the forty images per pack
+		// are ordinary lazy-loaded <img>, not forty requests fired by script.
+		var $stickers = $('[data-moksa-sticker-picker]');
+
+		$reply.on('click', '[data-moksa-toggle-stickers]', function () {
+			var $toggle = $(this);
+			var open = $stickers.prop('hidden');
+
+			$stickers.prop('hidden', !open);
+			$toggle.attr('aria-expanded', open ? 'true' : 'false');
+		});
+
+		$stickers.on('click', '[data-moksa-sticker-pack]', function () {
+			var pack = String($(this).data('moksa-sticker-pack'));
+
+			$stickers.find('[data-moksa-sticker-pack]').removeClass('is-current');
+			$(this).addClass('is-current');
+			$stickers.find('[data-moksa-sticker-grid]').each(function () {
+				$(this).prop('hidden', String($(this).data('moksa-sticker-grid')) !== pack);
+			});
+		});
+
+		$stickers.on('click', '[data-moksa-send-sticker]', function () {
+			if (!current) {
+				return;
+			}
+
+			var $sticker = $(this);
+
+			// A sticker cannot be unsent and is billed, so it is confirmed --
+			// the grid is a wall of small targets and a mis-click is easy.
+			if (!window.confirm(strings.confirmSendSticker)) {
+				return;
+			}
+
+			$stickers.find('[data-moksa-send-sticker]').prop('disabled', true);
+
+			post('inbox_send', {
+				conversation_id: current,
+				sticker_package: $sticker.data('moksa-send-sticker'),
+				sticker_id: $sticker.data('sticker-id')
+			}).then(function (result) {
+				$stickers.find('[data-moksa-send-sticker]').prop('disabled', false);
+				$stickers.prop('hidden', true);
+				$reply.find('[data-moksa-toggle-stickers]').attr('aria-expanded', 'false');
+				$thread.html(result.thread);
+				scrollToLatest();
+			}, function (error) {
+				$stickers.find('[data-moksa-send-sticker]').prop('disabled', false);
+				window.alert(error.message);
+			});
+		});
+
 		$actions.on('click', 'button', function () {
 			if (!current) {
 				return;

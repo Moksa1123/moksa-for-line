@@ -426,6 +426,24 @@ class MessagingClient {
 	 * @param array  $contents Bubble or carousel container.
 	 * @return array
 	 */
+	/**
+	 * A sticker message.
+	 *
+	 * Both ids are strings in LINE's schema even though they look numeric, and
+	 * sending them as integers is refused.
+	 *
+	 * @param string $package_id Sticker package id.
+	 * @param string $sticker_id Sticker id.
+	 * @return array
+	 */
+	public static function sticker( string $package_id, string $sticker_id ): array {
+		return array(
+			'type'      => 'sticker',
+			'packageId' => trim( $package_id ),
+			'stickerId' => trim( $sticker_id ),
+		);
+	}
+
 	public static function flex( string $alt_text, array $contents ): array {
 		return array(
 			'type'     => 'flex',

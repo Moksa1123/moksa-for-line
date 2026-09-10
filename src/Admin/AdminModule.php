@@ -211,6 +211,7 @@ class AdminModule {
 				'strings' => array(
 					'saved'        => __( 'Saved.', 'moksa-line' ),
 					'copied'       => __( 'Copied', 'moksa-line' ),
+					'confirmSendSticker' => __( 'Send this sticker? It cannot be unsent, and it is billed like any other message.', 'moksa-line' ),
 					// The inbox updates a conversation's state without reloading,
 					// so it needs the same words the server-rendered pill uses.
 					'conversationStatus' => array(

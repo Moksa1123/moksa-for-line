@@ -366,6 +366,12 @@ msgstr "已群發給帳號的所有好友。"
 msgid "Broadcasts are billed per recipient and cannot be recalled. Send a test to yourself first."
 msgstr "群發訊息按人數計費，而且送出後無法收回。請先發一則測試給自己。"
 
+msgid "Brown & Cony"
+msgstr "熊大 & 兔兔"
+
+msgid "Brown & Cony, second set"
+msgstr "熊大 & 兔兔（第二彈）"
+
 msgid "Bubble %1$d: %2$s"
 msgstr "第 %1$d 個 bubble：%2$s"
 
@@ -998,6 +1004,9 @@ msgstr "LINE 正在限制這個頻道的請求頻率，請稍後再試。"
 
 msgid "LINE only accepts an imagemap image over HTTPS, and this site is served over plain HTTP."
 msgstr "LINE 只接受用 HTTPS 提供的圖片訊息圖檔，而這個站台是純 HTTP。"
+
+msgid "LINE only accepts these from a bot. Sending one is billed like any other message."
+msgstr "機器人只能送這些貼圖。傳送一張跟一般訊息一樣會計費。"
 
 msgid "LINE rejected this login. Check the Channel ID, Channel Secret and Callback URL."
 msgstr "LINE 拒絕了這次登入。請檢查 Channel ID、Channel Secret 與 Callback URL。"
@@ -1671,6 +1680,9 @@ msgstr "規則已儲存。"
 msgid "Rules are checked in order of match strength first (exact, then prefix, then pattern, then partial, then catch-all) and priority second, so a lower priority number wins between rules of equal strength."
 msgstr "規則先比對強度（完全相符、開頭、比對式、包含、萬用），再比優先順序，所以強度相同時，數字較小的優先順序會勝出。"
 
+msgid "Sally"
+msgstr "莎莉"
+
 msgid "Sandbox"
 msgstr "沙盒"
 
@@ -1740,6 +1752,9 @@ msgstr "送出"
 msgid "Send a message"
 msgstr "送出一則訊息"
 
+msgid "Send a sticker"
+msgstr "傳送貼圖"
+
 msgid "Send a test to"
 msgstr "發送測試給"
 
@@ -1754,6 +1769,9 @@ msgstr "發送測試"
 
 msgid "Send this notification to the customer again?"
 msgstr "要再發送一次這則通知給客人嗎？"
+
+msgid "Send this sticker? It cannot be unsent, and it is billed like any other message."
+msgstr "要傳送這張貼圖嗎？送出後無法收回，而且跟一般訊息一樣會計費。"
 
 msgid "Send to"
 msgstr "發送對象"

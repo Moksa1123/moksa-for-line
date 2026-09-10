@@ -183,8 +183,11 @@ class InboxModule {
 
 		$conversation_id = isset( $_POST['conversation_id'] ) ? (int) $_POST['conversation_id'] : 0;
 		$text            = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+		$package_id      = isset( $_POST['sticker_package'] ) ? sanitize_text_field( wp_unslash( $_POST['sticker_package'] ) ) : '';
+		$sticker_id      = isset( $_POST['sticker_id'] ) ? sanitize_text_field( wp_unslash( $_POST['sticker_id'] ) ) : '';
+		$is_sticker      = '' !== $package_id && '' !== $sticker_id;
 
-		if ( '' === trim( $text ) ) {
+		if ( ! $is_sticker && '' === trim( $text ) ) {
 			wp_send_json_error( array( 'message' => __( 'Write something first.', 'moksa-line' ) ) );
 		}
 
@@ -195,7 +198,12 @@ class InboxModule {
 		}
 
 		$line_user_id = (string) $conversation->line_user_id;
-		$messages     = array( MessagingClient::text( $text ) );
+
+		// A sticker goes on its own: LINE has no notion of a caption, and
+		// sending both would be two billed messages rather than one.
+		$messages = $is_sticker
+			? array( MessagingClient::sticker( $package_id, $sticker_id ) )
+			: array( MessagingClient::text( $text ) );
 
 		$result = MessagingClient::push( $line_user_id, $messages, array( 'record' => false ) );
 
@@ -206,8 +214,8 @@ class InboxModule {
 				'conversation_id'   => $conversation_id,
 				'line_user_id'      => $line_user_id,
 				'direction'         => 'out',
-				'message_type'      => 'text',
-				'body'              => $text,
+				'message_type'      => $is_sticker ? 'sticker' : 'text',
+				'body'              => $is_sticker ? Messages::describe_outbound( $messages ) : $text,
 				'payload'           => $messages,
 				'sender_wp_user_id' => get_current_user_id(),
 				'sender_kind'       => 'agent',
@@ -230,7 +238,7 @@ class InboxModule {
 			);
 		}
 
-		Conversations::touch( $line_user_id, $text, false );
+		Conversations::touch( $line_user_id, $is_sticker ? Messages::describe_outbound( $messages ) : $text, false );
 
 		// Answering means taking ownership; the bot must not talk over an agent.
 		if ( 'human' !== $conversation->status ) {

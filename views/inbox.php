@@ -112,9 +112,43 @@ $status_labels = array(
 
 			<div class="moksa-inbox__messages" data-moksa-thread></div>
 
+			<?php // The picker sits above the composer so opening it does not push the send button off screen. ?>
+			<div class="moksa-stickers" data-moksa-sticker-picker hidden>
+				<div class="moksa-stickers__packs">
+					<?php foreach ( \Moksa\Line\Bot\Stickers::packs() as $index => $pack ) : ?>
+						<button type="button" class="button button-small<?php echo 0 === $index ? ' is-current' : ''; ?>"
+							data-moksa-sticker-pack="<?php echo esc_attr( (string) $pack['package_id'] ); ?>">
+							<?php echo esc_html( (string) $pack['label'] ); ?>
+						</button>
+					<?php endforeach; ?>
+					<span class="description">
+						<?php esc_html_e( 'LINE only accepts these from a bot. Sending one is billed like any other message.', 'moksa-line' ); ?>
+					</span>
+				</div>
+
+				<?php foreach ( \Moksa\Line\Bot\Stickers::packs() as $index => $pack ) : ?>
+					<div class="moksa-stickers__grid" data-moksa-sticker-grid="<?php echo esc_attr( (string) $pack['package_id'] ); ?>"<?php echo 0 === $index ? '' : ' hidden'; ?>>
+						<?php for ( $id = (int) $pack['from']; $id <= (int) $pack['to']; $id++ ) : ?>
+							<button type="button" class="moksa-sticker"
+								data-moksa-send-sticker="<?php echo esc_attr( (string) $pack['package_id'] ); ?>"
+								data-sticker-id="<?php echo esc_attr( (string) $id ); ?>"
+								title="<?php echo esc_attr( $pack['package_id'] . ', ' . $id ); ?>">
+								<img src="<?php echo esc_url( \Moksa\Line\Bot\Stickers::image_url( (string) $id ) ); ?>"
+									alt="" width="60" height="60" loading="lazy" />
+							</button>
+						<?php endfor; ?>
+					</div>
+				<?php endforeach; ?>
+			</div>
+
 			<form class="moksa-inbox__reply" data-moksa-reply hidden>
 				<label class="screen-reader-text" for="moksa-reply-text"><?php esc_html_e( 'Reply', 'moksa-line' ); ?></label>
 				<textarea id="moksa-reply-text" rows="3" required placeholder="<?php esc_attr_e( 'Write a reply', 'moksa-line' ); ?>"></textarea>
+				<button type="button" class="button moksa-inbox__sticker-toggle" data-moksa-toggle-stickers
+					aria-expanded="false" title="<?php esc_attr_e( 'Send a sticker', 'moksa-line' ); ?>">
+					<span aria-hidden="true">☺</span>
+					<span class="screen-reader-text"><?php esc_html_e( 'Send a sticker', 'moksa-line' ); ?></span>
+				</button>
 				<button type="submit" class="button button-primary"><?php esc_html_e( 'Send', 'moksa-line' ); ?></button>
 			</form>
 		</div>

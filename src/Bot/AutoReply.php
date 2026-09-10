@@ -178,17 +178,11 @@ class AutoReply {
 			case 'sticker':
 				$parts = array_map( 'trim', explode( ',', $data ) );
 
-				if ( count( $parts ) < 2 ) {
+				if ( count( $parts ) < 2 || '' === $parts[0] || '' === $parts[1] ) {
 					return null;
 				}
 
-				return array(
-					array(
-						'type'      => 'sticker',
-						'packageId' => $parts[0],
-						'stickerId' => $parts[1],
-					),
-				);
+				return array( MessagingClient::sticker( $parts[0], $parts[1] ) );
 
 			case 'image':
 				$url = esc_url_raw( $data );

@@ -564,6 +564,72 @@
 	color: #1d2327;
 }
 
+/* Sticker picker ------------------------------------------------------------ */
+
+.moksa-stickers {
+	border-top: 1px solid var(--moksa-border);
+	padding: 10px 12px;
+	background: #fbfbfc;
+}
+
+.moksa-stickers__packs {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-bottom: 8px;
+}
+
+.moksa-stickers__packs .button.is-current {
+	border-color: #2271b1;
+	background: #f0f6fc;
+	color: #2271b1;
+}
+
+/* Capped and scrollable: forty stickers would otherwise push the composer,
+   and the send button with it, off the bottom of the screen. */
+.moksa-stickers__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+	gap: 4px;
+	max-height: 190px;
+	overflow-y: auto;
+}
+
+.moksa-sticker {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2px;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	background: none;
+	cursor: pointer;
+}
+
+.moksa-sticker:hover:not(:disabled),
+.moksa-sticker:focus-visible {
+	border-color: #2271b1;
+	background: #f0f6fc;
+}
+
+.moksa-sticker:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+.moksa-sticker img {
+	width: 60px;
+	height: 60px;
+	object-fit: contain;
+}
+
+.moksa-inbox__sticker-toggle {
+	flex: 0 0 auto;
+	font-size: 18px;
+	line-height: 1;
+}
+
 /* Product picker ----------------------------------------------------------- */
 
 .moksa-products__bar {
