@@ -1130,7 +1130,13 @@
 	border: 1px solid var(--moksa-border);
 	border-radius: 6px;
 	overflow: hidden;
-	min-height: 60vh;
+	/*
+	 * Fill the window rather than stopping at 60vh. The screen header and the
+	 * filter row above account for the subtraction; the minimum keeps it usable
+	 * on a short window, where it simply scrolls with the page as before.
+	 */
+	height: calc(100vh - 230px);
+	min-height: 520px;
 }
 
 @media (max-width: 960px) {
@@ -1149,7 +1155,8 @@
 
 .moksa-inbox__list {
 	border-right: 1px solid var(--moksa-border);
-	max-height: 70vh;
+	/* Its own 70vh cap fought the container's height and left a gap below. */
+	min-height: 0;
 	overflow-y: auto;
 }
 
@@ -1211,7 +1218,9 @@
 .moksa-inbox__thread {
 	display: flex;
 	flex-direction: column;
-	max-height: 70vh;
+	/* min-height:0 is what lets the message list inside actually scroll rather
+	   than pushing the composer off the bottom. */
+	min-height: 0;
 }
 
 .moksa-inbox__header {
@@ -1284,11 +1293,23 @@
 	padding: 12px;
 	display: flex;
 	gap: 8px;
-	align-items: flex-end;
+	/* Everything in the row is as tall as the text box. They used to sit on its
+	   baseline, so a 40px button hung off the bottom of a 78px field. */
+	align-items: stretch;
 }
 
 .moksa-inbox__reply textarea {
 	flex: 1;
+	min-height: 78px;
+	resize: vertical;
+}
+
+.moksa-inbox__reply button {
+	/* Buttons are inline-block by default and would keep their own height. */
+	height: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* The chosen sticker, waiting in the composer next to the text box. */
@@ -1296,6 +1317,7 @@
 	position: relative;
 	flex: 0 0 auto;
 	display: inline-flex;
+	align-items: center;
 	padding: 4px;
 	border: 1px solid var(--moksa-border);
 	border-radius: 6px;
