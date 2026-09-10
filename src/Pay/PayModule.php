@@ -275,7 +275,7 @@ class PayModule {
 			$sent = MessagingClient::push(
 				(string) $payment->line_user_id,
 				array( $receipt ),
-				array( 'retry_key' => 'receipt-' . $payment->order_ref )
+				array( 'retry_key' => MessagingClient::retry_key( 'receipt-' . $payment->order_ref ) )
 			);
 
 			Logger::capture( $sent, 'Could not send the LINE Pay receipt', 'pay' );

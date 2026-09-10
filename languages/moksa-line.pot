@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-10T06:12:45+00:00\n"
+"POT-Creation-Date: 2026-09-10T06:35:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-line\n"
@@ -79,16 +79,21 @@ msgid "Imagemaps"
 msgstr ""
 
 #: src/Admin/AdminModule.php:68
+#: views/templates.php:19
+msgid "Template messages"
+msgstr ""
+
+#: src/Admin/AdminModule.php:69
 #: views/broadcast.php:36
 msgid "Broadcast"
 msgstr ""
 
-#: src/Admin/AdminModule.php:69
+#: src/Admin/AdminModule.php:70
 #: views/users.php:25
 msgid "LINE users"
 msgstr ""
 
-#: src/Admin/AdminModule.php:70
+#: src/Admin/AdminModule.php:71
 #: src/Woo/NotifyTemplates.php:44
 #: views/notifications.php:17
 #: views/notifications.php:40
@@ -96,591 +101,625 @@ msgstr ""
 msgid "Order notifications"
 msgstr ""
 
-#: src/Admin/AdminModule.php:71
+#: src/Admin/AdminModule.php:72
 #: views/payments.php:17
 #: views/payments.php:27
 #: views/settings.php:472
 msgid "Payments"
 msgstr ""
 
-#: src/Admin/AdminModule.php:72
+#: src/Admin/AdminModule.php:73
 #: views/logs.php:88
 msgid "Logs"
 msgstr ""
 
-#: src/Admin/AdminModule.php:73
-#: src/Admin/AdminModule.php:354
+#: src/Admin/AdminModule.php:74
+#: src/Admin/AdminModule.php:371
 msgid "Settings"
 msgstr ""
 
-#: src/Admin/AdminModule.php:95
 #: src/Admin/AdminModule.php:96
+#: src/Admin/AdminModule.php:97
 msgid "Notification templates"
 msgstr ""
 
-#: src/Admin/AdminModule.php:212
+#: src/Admin/AdminModule.php:221
 #: src/Imagemap/ImagemapModule.php:263
 msgid "Saved."
 msgstr ""
 
-#: src/Admin/AdminModule.php:213
+#: src/Admin/AdminModule.php:222
 msgid "Copied"
 msgstr ""
 
-#: src/Admin/AdminModule.php:214
+#: src/Admin/AdminModule.php:223
+msgid "Button"
+msgstr ""
+
+#: src/Admin/AdminModule.php:224
+msgid "Yes"
+msgstr ""
+
+#: src/Admin/AdminModule.php:225
+msgid "No"
+msgstr ""
+
+#: src/Admin/AdminModule.php:226
+msgid "The question"
+msgstr ""
+
+#: src/Admin/AdminModule.php:227
+#: views/replies.php:100
+msgid "Text"
+msgstr ""
+
+#: src/Admin/AdminModule.php:228
+msgid "+ Add a button"
+msgstr ""
+
+#: src/Admin/AdminModule.php:229
+msgid "A carousel holds at most 10 cards."
+msgstr ""
+
+#: src/Admin/AdminModule.php:230
+msgid "A template needs at least one card."
+msgstr ""
+
+#: src/Admin/AdminModule.php:231
 msgid "Send this sticker? It cannot be unsent, and it is billed like any other message."
 msgstr ""
 
-#: src/Admin/AdminModule.php:218
+#: src/Admin/AdminModule.php:235
 #: views/inbox.php:36
 msgid "bot"
 msgstr ""
 
-#: src/Admin/AdminModule.php:219
+#: src/Admin/AdminModule.php:236
 #: views/inbox.php:37
 msgid "human"
 msgstr ""
 
-#: src/Admin/AdminModule.php:220
+#: src/Admin/AdminModule.php:237
 #: views/inbox.php:38
 msgid "closed"
 msgstr ""
 
 #. translators: %d: number of cards in the carousel.
-#: src/Admin/AdminModule.php:223
+#: src/Admin/AdminModule.php:240
 #, php-format
 msgid "%d cards. The customer swipes sideways to reach the rest."
 msgstr ""
 
-#: src/Admin/AdminModule.php:224
+#: src/Admin/AdminModule.php:241
 #: src/Flex/FlexModule.php:266
 msgid "Headline"
 msgstr ""
 
-#: src/Admin/AdminModule.php:225
+#: src/Admin/AdminModule.php:242
 msgid "No products found."
 msgstr ""
 
-#: src/Admin/AdminModule.php:226
+#: src/Admin/AdminModule.php:243
 #: src/Woo/ProductCards.php:212
 msgid "Out of stock"
 msgstr ""
 
 #. translators: 1: how many chosen, 2: the limit.
-#: src/Admin/AdminModule.php:228
+#: src/Admin/AdminModule.php:245
 #, php-format
 msgid "%1$d of %2$d chosen"
 msgstr ""
 
-#: src/Admin/AdminModule.php:229
+#: src/Admin/AdminModule.php:246
 msgid "Replace the current cards with these products?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:230
+#: src/Admin/AdminModule.php:247
 msgid "Text under it"
 msgstr ""
 
-#: src/Admin/AdminModule.php:231
+#: src/Admin/AdminModule.php:248
 #: views/replies.php:149
 msgid "Image URL"
 msgstr ""
 
-#: src/Admin/AdminModule.php:232
+#: src/Admin/AdminModule.php:249
 msgid "Button label"
 msgstr ""
 
-#: src/Admin/AdminModule.php:233
+#: src/Admin/AdminModule.php:250
 msgid "Button link"
 msgstr ""
 
-#: src/Admin/AdminModule.php:234
+#: src/Admin/AdminModule.php:251
 #: src/Flex/FlexModule.php:296
 msgid "Find out more"
 msgstr ""
 
-#: src/Admin/AdminModule.php:235
+#: src/Admin/AdminModule.php:252
 msgid "New card"
 msgstr ""
 
 #. translators: %d: card position in the carousel.
-#: src/Admin/AdminModule.php:237
+#: src/Admin/AdminModule.php:254
 #, php-format
 msgid "Card %d"
 msgstr ""
 
-#: src/Admin/AdminModule.php:238
+#: src/Admin/AdminModule.php:255
 msgid "Move left"
 msgstr ""
 
-#: src/Admin/AdminModule.php:239
+#: src/Admin/AdminModule.php:256
 msgid "Move right"
 msgstr ""
 
-#: src/Admin/AdminModule.php:240
-#: src/Admin/AdminModule.php:254
+#: src/Admin/AdminModule.php:257
+#: src/Admin/AdminModule.php:271
 msgid "Duplicate"
 msgstr ""
 
-#: src/Admin/AdminModule.php:241
+#: src/Admin/AdminModule.php:258
 msgid "Remove this card?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:242
+#: src/Admin/AdminModule.php:259
 msgid "A carousel holds at most 12 cards."
 msgstr ""
 
-#: src/Admin/AdminModule.php:243
+#: src/Admin/AdminModule.php:260
 msgid "Keep only the card you are editing and remove the rest?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:244
+#: src/Admin/AdminModule.php:261
 msgid "No cards yet. Add the first one below."
 msgstr ""
 
-#: src/Admin/AdminModule.php:245
+#: src/Admin/AdminModule.php:262
 msgid "This message is not a card or a carousel, so it can only be edited as JSON."
 msgstr ""
 
-#: src/Admin/AdminModule.php:246
+#: src/Admin/AdminModule.php:263
 msgid "This card has a layout these fields cannot describe, so it is edited as JSON below. Nothing here will change it."
 msgstr ""
 
-#: src/Admin/AdminModule.php:247
+#: src/Admin/AdminModule.php:264
 msgid "These cover the common card. Anything else -- extra rows, colours, more buttons -- is edited in the JSON."
 msgstr ""
 
-#: src/Admin/AdminModule.php:248
+#: src/Admin/AdminModule.php:265
 msgid "What the bot asks"
 msgstr ""
 
-#: src/Admin/AdminModule.php:249
+#: src/Admin/AdminModule.php:266
 msgid "Answer"
 msgstr ""
 
-#: src/Admin/AdminModule.php:250
+#: src/Admin/AdminModule.php:267
 msgid "Stored as"
 msgstr ""
 
-#: src/Admin/AdminModule.php:251
+#: src/Admin/AdminModule.php:268
 msgid "Buttons, one per line"
 msgstr ""
 
-#: src/Admin/AdminModule.php:252
+#: src/Admin/AdminModule.php:269
 msgid "Move up"
 msgstr ""
 
-#: src/Admin/AdminModule.php:253
+#: src/Admin/AdminModule.php:270
 msgid "Move down"
 msgstr ""
 
-#: src/Admin/AdminModule.php:255
+#: src/Admin/AdminModule.php:272
 msgid "Remove this question?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:256
+#: src/Admin/AdminModule.php:273
 msgid "No questions yet. Add the first one below."
 msgstr ""
 
-#: src/Admin/AdminModule.php:257
+#: src/Admin/AdminModule.php:274
 msgid "(no question yet)"
 msgstr ""
 
-#: src/Admin/AdminModule.php:258
+#: src/Admin/AdminModule.php:275
 msgid "Their answer"
 msgstr ""
 
-#: src/Admin/AdminModule.php:259
+#: src/Admin/AdminModule.php:276
 #: src/Bot/Flow.php:352
 #: src/Bot/Flow.php:353
 #: src/Bot/Flow.php:440
 msgid "Cancel"
 msgstr ""
 
-#: src/Admin/AdminModule.php:260
+#: src/Admin/AdminModule.php:277
 msgid "That JSON cannot be read, so the questions below are not showing it."
 msgstr ""
 
 #. translators: %d: question number.
-#: src/Admin/AdminModule.php:262
+#: src/Admin/AdminModule.php:279
 #, php-format
 msgid "Question %d has nothing to ask."
 msgstr ""
 
 #. translators: 1: first question number, 2: second question number, 3: the key.
-#: src/Admin/AdminModule.php:264
+#: src/Admin/AdminModule.php:281
 #, php-format
 msgid "Questions %1$d and %2$d both store their answer as \"%3$s\", so the second overwrites the first."
 msgstr ""
 
 #. translators: %d: question number.
-#: src/Admin/AdminModule.php:266
+#: src/Admin/AdminModule.php:283
 #, php-format
 msgid "Question %d offers buttons but none are listed."
 msgstr ""
 
 #. translators: 1: question number, 2: how many buttons, 3: how many are sent.
-#: src/Admin/AdminModule.php:268
+#: src/Admin/AdminModule.php:285
 #, php-format
 msgid "Question %1$d has %2$d buttons. LINE allows 13 including the Cancel button, so only the first %3$d are sent."
 msgstr ""
 
 #. translators: 1: the button label, 2: question number, 3: the limit.
-#: src/Admin/AdminModule.php:270
+#: src/Admin/AdminModule.php:287
 #, php-format
 msgid "Button \"%1$s\" on question %2$d is longer than the %3$d characters LINE shows, and is cut."
 msgstr ""
 
-#: src/Admin/AdminModule.php:271
+#: src/Admin/AdminModule.php:288
 msgctxt "sample customer name shown in previews"
 msgid "Ming"
 msgstr ""
 
-#: src/Admin/AdminModule.php:272
+#: src/Admin/AdminModule.php:289
 msgid "Nothing to reply with yet."
 msgstr ""
 
 #. translators: 1: reply type, 2: the chosen item.
-#: src/Admin/AdminModule.php:274
+#: src/Admin/AdminModule.php:291
 #, php-format
 msgid "%1$s: %2$s"
 msgstr ""
 
 #. translators: 1: characters used, 2: the limit.
-#: src/Admin/AdminModule.php:276
+#: src/Admin/AdminModule.php:293
 #, php-format
 msgid "%1$s of %2$s characters"
 msgstr ""
 
 #. translators: %s: Flex template name.
-#: src/Admin/AdminModule.php:278
+#: src/Admin/AdminModule.php:295
 #, php-format
 msgid "Plus the Flex card \"%s\", drawn below this message."
 msgstr ""
 
-#: src/Admin/AdminModule.php:279
+#: src/Admin/AdminModule.php:296
 msgid "Nothing to send yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:280
+#: src/Admin/AdminModule.php:297
 #: views/notifications.php:168
 msgid "Send again"
 msgstr ""
 
-#: src/Admin/AdminModule.php:281
+#: src/Admin/AdminModule.php:298
 msgid "Send this notification to the customer again?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:282
+#: src/Admin/AdminModule.php:299
 msgid "Could not copy -- select it and copy by hand"
 msgstr ""
 
-#: src/Admin/AdminModule.php:283
+#: src/Admin/AdminModule.php:300
 msgid "Delete every entry in the plugin log? The log is only used for diagnosis, so nothing else is lost."
 msgstr ""
 
-#: src/Admin/AdminModule.php:284
+#: src/Admin/AdminModule.php:301
 msgid "(no fallback text -- the notification would be blank)"
 msgstr ""
 
-#: src/Admin/AdminModule.php:285
+#: src/Admin/AdminModule.php:302
 msgid "Fallback text is empty. The chat list and the push notification would show nothing."
 msgstr ""
 
 #. translators: %d: character count.
-#: src/Admin/AdminModule.php:287
+#: src/Admin/AdminModule.php:304
 #, php-format
 msgid "Fallback text is %d characters. LINE allows 1500 and cuts the rest."
 msgstr ""
 
 #. translators: 1: the text, 2: measured contrast ratio, 3: required ratio.
-#: src/Admin/AdminModule.php:289
+#: src/Admin/AdminModule.php:306
 #, php-format
 msgid "\"%1$s\" has a contrast ratio of %2$s against its background; %3$s is the readable minimum."
 msgstr ""
 
-#: src/Admin/AdminModule.php:290
+#: src/Admin/AdminModule.php:307
 msgid "That did not work."
 msgstr ""
 
-#: src/Admin/AdminModule.php:291
+#: src/Admin/AdminModule.php:308
 msgid "Delete this permanently?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:292
+#: src/Admin/AdminModule.php:309
 msgid "Publishing to LINE..."
 msgstr ""
 
-#: src/Admin/AdminModule.php:293
+#: src/Admin/AdminModule.php:310
 msgid "Working..."
 msgstr ""
 
-#: src/Admin/AdminModule.php:294
+#: src/Admin/AdminModule.php:311
 msgid "Rich menu image"
 msgstr ""
 
-#: src/Admin/AdminModule.php:295
+#: src/Admin/AdminModule.php:312
 #: views/imagemaps.php:42
 #: views/replies.php:72
 #: views/richmenus.php:104
+#: views/templates.php:30
 msgid "Editing"
 msgstr ""
 
-#: src/Admin/AdminModule.php:296
+#: src/Admin/AdminModule.php:313
 #: src/RichMenu/RichMenuModule.php:99
 #: views/richmenus.php:103
 #: views/richmenus.php:201
 msgid "Menu"
 msgstr ""
 
-#: src/Admin/AdminModule.php:297
+#: src/Admin/AdminModule.php:314
 #: views/logs.php:185
 msgid "Area"
 msgstr ""
 
-#: src/Admin/AdminModule.php:298
+#: src/Admin/AdminModule.php:315
 msgid "Drag on the image to add an area, or click one to edit it."
 msgstr ""
 
-#: src/Admin/AdminModule.php:299
+#: src/Admin/AdminModule.php:316
 msgid "When tapped"
 msgstr ""
 
-#: src/Admin/AdminModule.php:300
+#: src/Admin/AdminModule.php:317
 msgid "Label"
 msgstr ""
 
-#: src/Admin/AdminModule.php:301
+#: src/Admin/AdminModule.php:318
 msgid "Send a message"
 msgstr ""
 
-#: src/Admin/AdminModule.php:302
+#: src/Admin/AdminModule.php:319
 msgid "Open a link"
 msgstr ""
 
-#: src/Admin/AdminModule.php:303
+#: src/Admin/AdminModule.php:320
 msgid "Postback"
 msgstr ""
 
-#: src/Admin/AdminModule.php:304
+#: src/Admin/AdminModule.php:321
 msgid "Switch to another tab"
 msgstr ""
 
-#: src/Admin/AdminModule.php:305
+#: src/Admin/AdminModule.php:322
 msgid "Link"
 msgstr ""
 
-#: src/Admin/AdminModule.php:306
+#: src/Admin/AdminModule.php:323
 msgid "Message the customer sends"
 msgstr ""
 
-#: src/Admin/AdminModule.php:307
+#: src/Admin/AdminModule.php:324
 msgid "Tab to switch to"
 msgstr ""
 
-#: src/Admin/AdminModule.php:308
+#: src/Admin/AdminModule.php:325
 msgid "Postback data"
 msgstr ""
 
-#: src/Admin/AdminModule.php:309
+#: src/Admin/AdminModule.php:326
 msgid "No other menus in this tab group yet"
 msgstr ""
 
-#: src/Admin/AdminModule.php:310
+#: src/Admin/AdminModule.php:327
 msgid "Delete this area"
 msgstr ""
 
-#: src/Admin/AdminModule.php:311
+#: src/Admin/AdminModule.php:328
 msgid "Arrow keys nudge by 1 pixel, with Shift by 10."
 msgstr ""
 
-#: src/Admin/AdminModule.php:312
+#: src/Admin/AdminModule.php:329
 msgid "Replace the current areas with this layout?"
 msgstr ""
 
 #. translators: %s: list of overlapping area numbers.
-#: src/Admin/AdminModule.php:314
+#: src/Admin/AdminModule.php:331
 #, php-format
 msgid "Areas %s overlap. LINE uses whichever comes first, which is rarely what you want."
 msgstr ""
 
 #. translators: %d: maximum number of areas.
-#: src/Admin/AdminModule.php:316
+#: src/Admin/AdminModule.php:333
 #, php-format
 msgid "LINE allows at most %d areas; the extra ones will be dropped."
 msgstr ""
 
 #. translators: %d: number of areas without a destination.
-#: src/Admin/AdminModule.php:318
+#: src/Admin/AdminModule.php:335
 #, php-format
 msgid "%d area(s) have no destination set yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:388
+#: src/Admin/AdminModule.php:405
 msgid "LINE Login channel connected"
 msgstr ""
 
-#: src/Admin/AdminModule.php:389
+#: src/Admin/AdminModule.php:406
 msgid "Add the Channel ID and Channel Secret from the LINE Developers Console."
 msgstr ""
 
-#: src/Admin/AdminModule.php:395
+#: src/Admin/AdminModule.php:412
 msgid "Messaging API channel connected"
 msgstr ""
 
-#: src/Admin/AdminModule.php:396
+#: src/Admin/AdminModule.php:413
 msgid "The bot cannot send or receive anything until this is set."
 msgstr ""
 
-#: src/Admin/AdminModule.php:402
+#: src/Admin/AdminModule.php:419
 msgid "Webhook signing secret is the Messaging API one"
 msgstr ""
 
-#: src/Admin/AdminModule.php:403
+#: src/Admin/AdminModule.php:420
 msgid "Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual."
 msgstr ""
 
-#: src/Admin/AdminModule.php:409
+#: src/Admin/AdminModule.php:426
 msgid "Webhook has received an event"
 msgstr ""
 
-#: src/Admin/AdminModule.php:410
+#: src/Admin/AdminModule.php:427
 msgid "Paste the webhook URL into the Console, enable \"Use webhook\", then press Verify."
 msgstr ""
 
-#: src/Admin/AdminModule.php:421
+#: src/Admin/AdminModule.php:438
 msgid "AI replies are switched on but no AI service is selected."
 msgstr ""
 
-#: src/Admin/AdminModule.php:423
+#: src/Admin/AdminModule.php:440
 msgid "AI replies are switched on, but the selected AI service is not available on this site."
 msgstr ""
 
-#: src/Admin/AdminModule.php:425
+#: src/Admin/AdminModule.php:442
 msgid "The AI service is present but has no provider connected yet, so it cannot answer anything."
 msgstr ""
 
-#: src/Admin/AdminModule.php:430
+#: src/Admin/AdminModule.php:447
 msgid "AI provider available"
 msgstr ""
 
-#: src/Admin/AdminModule.php:439
+#: src/Admin/AdminModule.php:456
 msgid "LINE Pay credentials present"
 msgstr ""
 
-#: src/Admin/AdminModule.php:440
+#: src/Admin/AdminModule.php:457
 msgid "Add the LINE Pay Channel ID and Channel Secret."
 msgstr ""
 
-#: src/Admin/AdminModule.php:446
+#: src/Admin/AdminModule.php:463
 msgid "LINE Pay is in production mode"
 msgstr ""
 
-#: src/Admin/AdminModule.php:447
+#: src/Admin/AdminModule.php:464
 msgid "Sandbox mode is on, so no real money moves. Turn it off when you go live."
 msgstr ""
 
-#: src/Admin/AdminModule.php:455
+#: src/Admin/AdminModule.php:472
 #: views/settings.php:531
 msgid "Credentials are encrypted at rest"
 msgstr ""
 
-#: src/Admin/AdminModule.php:456
+#: src/Admin/AdminModule.php:473
 msgid "OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text."
 msgstr ""
 
-#: src/Admin/AdminModule.php:487
+#: src/Admin/AdminModule.php:504
 msgid "Moksa LINE Suite is installed but not connected to a LINE channel yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:489
+#: src/Admin/AdminModule.php:506
 msgid "Finish setup"
 msgstr ""
 
-#: src/Admin/AdminModule.php:500
+#: src/Admin/AdminModule.php:517
 msgid "You do not have permission to change these settings."
 msgstr ""
 
-#: src/Admin/AdminModule.php:608
+#: src/Admin/AdminModule.php:625
 msgid "You cannot clear the log."
 msgstr ""
 
 #. translators: %s: number of entries removed.
-#: src/Admin/AdminModule.php:622
+#: src/Admin/AdminModule.php:639
 #, php-format
 msgid "Cleared %s entries."
 msgstr ""
 
-#: src/Admin/AdminModule.php:642
+#: src/Admin/AdminModule.php:659
 msgid "You cannot resend notifications."
 msgstr ""
 
-#: src/Admin/AdminModule.php:649
+#: src/Admin/AdminModule.php:666
 msgid "That row does not name an order and a status to resend."
 msgstr ""
 
-#: src/Admin/AdminModule.php:653
+#: src/Admin/AdminModule.php:670
 #: src/Woo/NotifyTemplates.php:510
 msgid "WooCommerce is not active."
 msgstr ""
 
-#: src/Admin/AdminModule.php:659
+#: src/Admin/AdminModule.php:676
 msgid "That order no longer exists."
 msgstr ""
 
-#: src/Admin/AdminModule.php:669
+#: src/Admin/AdminModule.php:686
 msgid "Sent again. The result is in the list below."
 msgstr ""
 
-#: src/Admin/AdminModule.php:676
+#: src/Admin/AdminModule.php:693
 msgid "You cannot send broadcasts."
 msgstr ""
 
-#: src/Admin/AdminModule.php:691
+#: src/Admin/AdminModule.php:708
 msgid "That template could not be loaded."
 msgstr ""
 
-#: src/Admin/AdminModule.php:702
+#: src/Admin/AdminModule.php:719
 msgid "Write a message or choose a template first."
 msgstr ""
 
-#: src/Admin/AdminModule.php:707
+#: src/Admin/AdminModule.php:724
 #: src/Woo/NotifyTemplates.php:506
 msgid "Enter a LINE user id to send the test to."
 msgstr ""
 
-#: src/Admin/AdminModule.php:716
+#: src/Admin/AdminModule.php:733
 msgid "Test sent."
 msgstr ""
 
-#: src/Admin/AdminModule.php:724
+#: src/Admin/AdminModule.php:741
 msgid "Type SEND in the confirmation box to go ahead."
 msgstr ""
 
-#: src/Admin/AdminModule.php:734
+#: src/Admin/AdminModule.php:751
 msgid "Broadcast sent to every friend of the account."
 msgstr ""
 
-#: src/Admin/AdminModule.php:742
+#: src/Admin/AdminModule.php:759
 msgid "No friends have been recorded on this site yet."
 msgstr ""
 
 #. translators: 1: delivered count, 2: failed count, 3: first error.
-#: src/Admin/AdminModule.php:752
+#: src/Admin/AdminModule.php:769
 #, php-format
 msgid "Delivered to %1$d, failed for %2$d. %3$s"
 msgstr ""
 
 #. translators: %d: number of recipients.
-#: src/Admin/AdminModule.php:765
+#: src/Admin/AdminModule.php:782
 #, php-format
 msgid "Sent to %d people."
 msgstr ""
 
-#: src/Admin/AdminModule.php:833
+#: src/Admin/AdminModule.php:854
 msgid "You do not have permission to view this page."
 msgstr ""
 
-#: src/Admin/AdminModule.php:839
+#: src/Admin/AdminModule.php:860
 msgid "This screen is missing."
 msgstr ""
 
@@ -967,53 +1006,65 @@ msgid "Choose at least one product."
 msgstr ""
 
 #: src/Flex/FlexModule.php:102
+#: src/Template/TemplateModule.php:71
 msgid "This template will not send as it stands."
 msgstr ""
 
 #: src/Flex/FlexModule.php:121
+#: src/Template/TemplateModule.php:91
 msgid "The template could not be saved."
 msgstr ""
 
 #: src/Flex/FlexModule.php:127
+#: src/Template/TemplateModule.php:97
 msgid "Template saved."
 msgstr ""
 
 #: src/Flex/FlexModule.php:141
+#: src/Template/TemplateModule.php:175
 msgid "That template no longer exists."
 msgstr ""
 
 #: src/Flex/FlexModule.php:144
+#: src/Template/TemplateModule.php:203
 msgid "Template deleted."
 msgstr ""
 
 #: src/Flex/FlexModule.php:159
 #: src/Flex/FlexModule.php:223
+#: src/Template/TemplateModule.php:217
 msgid "That is not valid JSON."
 msgstr ""
 
 #: src/Flex/FlexModule.php:172
+#: src/Template/TemplateModule.php:118
 msgid "Found problems before contacting LINE."
 msgstr ""
 
 #: src/Flex/FlexModule.php:182
+#: src/Template/TemplateModule.php:128
 msgid "Passed the local checks. Connect the Messaging API channel to also validate against LINE."
 msgstr ""
 
 #: src/Flex/FlexModule.php:193
+#: src/Template/TemplateModule.php:143
 msgid "LINE rejected this template."
 msgstr ""
 
 #: src/Flex/FlexModule.php:202
+#: src/Template/TemplateModule.php:152
 msgid "LINE accepted this template."
 msgstr ""
 
 #: src/Flex/FlexModule.php:217
 #: src/Imagemap/ImagemapModule.php:294
+#: src/Template/TemplateModule.php:168
 msgid "Enter the LINE user id to send the test to."
 msgstr ""
 
 #: src/Flex/FlexModule.php:234
 #: src/Imagemap/ImagemapModule.php:316
+#: src/Template/TemplateModule.php:188
 msgid "Sent. Check the chat on your phone."
 msgstr ""
 
@@ -1039,6 +1090,7 @@ msgid "Total"
 msgstr ""
 
 #: src/Flex/FlexModule.php:368
+#: src/Template/TemplateModule.php:227
 msgid "You do not have permission to manage templates."
 msgstr ""
 
@@ -1271,6 +1323,7 @@ msgid "Give this imagemap a name."
 msgstr ""
 
 #: src/Imagemap/ImagemapModule.php:211
+#: src/Template/TemplateModule.php:63
 msgid "Fallback text is required: it is all the customer sees in the chat list."
 msgstr ""
 
@@ -1388,6 +1441,17 @@ msgstr ""
 
 #: src/Inbox/Messages.php:137
 msgid "[Flex]"
+msgstr ""
+
+#: src/Inbox/Messages.php:145
+#: views/notifications.php:108
+#: views/replies.php:117
+#: views/templates.php:29
+msgid "Template"
+msgstr ""
+
+#: src/Inbox/Messages.php:146
+msgid "[Template]"
 msgstr ""
 
 #: src/Liff/LiffModule.php:119
@@ -1890,6 +1954,192 @@ msgstr ""
 msgid "You do not have permission to manage rich menus."
 msgstr ""
 
+#: src/Template/TemplateMessages.php:55
+msgid "One card with up to four buttons"
+msgstr ""
+
+#: src/Template/TemplateMessages.php:56
+msgid "A question with exactly two answers"
+msgstr ""
+
+#: src/Template/TemplateMessages.php:57
+msgid "Up to ten cards side by side, each with buttons"
+msgstr ""
+
+#: src/Template/TemplateMessages.php:58
+msgid "Up to ten images side by side, each tappable"
+msgstr ""
+
+#: src/Template/TemplateMessages.php:92
+msgid "Choose what kind of template this is."
+msgstr ""
+
+#: src/Template/TemplateMessages.php:120
+msgid "A confirm template needs a question."
+msgstr ""
+
+#. translators: %d: character limit.
+#: src/Template/TemplateMessages.php:124
+#, php-format
+msgid "The question is limited to %d characters."
+msgstr ""
+
+#: src/Template/TemplateMessages.php:130
+msgid "A confirm template must have exactly two buttons -- LINE refuses one or three."
+msgstr ""
+
+#: src/Template/TemplateMessages.php:148
+msgid "A buttons template needs some text."
+msgstr ""
+
+#. translators: %d: character limit.
+#: src/Template/TemplateMessages.php:153
+#, php-format
+msgid "With an image or a title, the text is limited to %d characters."
+msgstr ""
+
+#. translators: %d: character limit.
+#: src/Template/TemplateMessages.php:158
+#, php-format
+msgid "The text is limited to %d characters."
+msgstr ""
+
+#. translators: %d: character limit.
+#: src/Template/TemplateMessages.php:166
+#, php-format
+msgid "The title is limited to %d characters."
+msgstr ""
+
+#: src/Template/TemplateMessages.php:172
+msgid "Add at least one button."
+msgstr ""
+
+#. translators: %d: the button limit.
+#: src/Template/TemplateMessages.php:176
+#, php-format
+msgid "A buttons template holds at most %d buttons."
+msgstr ""
+
+#: src/Template/TemplateMessages.php:196
+msgid "A carousel needs at least one card."
+msgstr ""
+
+#. translators: %d: the column limit.
+#: src/Template/TemplateMessages.php:202
+#, php-format
+msgid "A carousel holds at most %d cards."
+msgstr ""
+
+#. translators: %d: card number.
+#: src/Template/TemplateMessages.php:225
+#, php-format
+msgid "Card %d has no text."
+msgstr ""
+
+#. translators: 1: card number, 2: character limit.
+#: src/Template/TemplateMessages.php:231
+#, php-format
+msgid "Card %1$d has more than the %2$d characters LINE allows here."
+msgstr ""
+
+#. translators: 1: card number, 2: character limit.
+#: src/Template/TemplateMessages.php:240
+#, php-format
+msgid "The title on card %1$d is longer than %2$d characters."
+msgstr ""
+
+#. translators: %d: card number.
+#: src/Template/TemplateMessages.php:249
+#, php-format
+msgid "Card %d has no buttons."
+msgstr ""
+
+#. translators: 1: card number, 2: the button limit.
+#: src/Template/TemplateMessages.php:255
+#, php-format
+msgid "Card %1$d has more than the %2$d buttons a carousel card allows."
+msgstr ""
+
+#: src/Template/TemplateMessages.php:266
+msgid "Every card must be built the same way: all with an image or none, all with a title or none, and the same number of buttons. LINE refuses a carousel whose cards disagree."
+msgstr ""
+
+#: src/Template/TemplateMessages.php:281
+msgid "An image carousel needs at least one image."
+msgstr ""
+
+#. translators: %d: the column limit.
+#: src/Template/TemplateMessages.php:287
+#, php-format
+msgid "An image carousel holds at most %d images."
+msgstr ""
+
+#. translators: %d: image number.
+#: src/Template/TemplateMessages.php:299
+#, php-format
+msgid "Image %d has no picture."
+msgstr ""
+
+#. translators: %d: image number.
+#: src/Template/TemplateMessages.php:309
+#, php-format
+msgid "Image %d does nothing when tapped."
+msgstr ""
+
+#: src/Template/TemplateMessages.php:335
+msgid "Every button needs a label."
+msgstr ""
+
+#. translators: %d: card number.
+#: src/Template/TemplateMessages.php:338
+#, php-format
+msgid "A button on card %d has no label."
+msgstr ""
+
+#. translators: 1: the label, 2: character limit.
+#: src/Template/TemplateMessages.php:344
+#, php-format
+msgid "The button \"%1$s\" is longer than the %2$d characters LINE shows."
+msgstr ""
+
+#. translators: %s: the button label.
+#: src/Template/TemplateMessages.php:356
+#, php-format
+msgid "The button \"%s\" opens a link but has none."
+msgstr ""
+
+#. translators: %s: the button label.
+#: src/Template/TemplateMessages.php:362
+#, php-format
+msgid "The link on \"%s\" must start with https://, tel: or a LINE URL."
+msgstr ""
+
+#. translators: %s: the button label.
+#: src/Template/TemplateMessages.php:369
+#, php-format
+msgid "The button \"%s\" sends a message but has no text."
+msgstr ""
+
+#. translators: %s: the button label.
+#: src/Template/TemplateMessages.php:375
+#, php-format
+msgid "The button \"%s\" is a postback but carries no data."
+msgstr ""
+
+#: src/Template/TemplateMessages.php:400
+msgid "The image must be served over HTTPS. LINE refuses the whole message otherwise, not just the picture."
+msgstr ""
+
+#. translators: %d: card number.
+#: src/Template/TemplateMessages.php:403
+#, php-format
+msgid "The image on card %d must be served over HTTPS."
+msgstr ""
+
+#: src/Template/TemplateModule.php:59
+msgid "Give this template a name."
+msgstr ""
+
 #: src/Woo/NotifyTemplates.php:45
 msgid "Order notification"
 msgstr ""
@@ -1957,12 +2207,14 @@ msgstr ""
 #: src/Woo/NotifyTemplates.php:214
 #: views/flex.php:121
 #: views/imagemaps.php:120
+#: views/templates.php:99
 msgid "Send a test to"
 msgstr ""
 
 #: src/Woo/NotifyTemplates.php:217
 #: views/flex.php:123
 #: views/imagemaps.php:122
+#: views/templates.php:101
 msgid "Send test"
 msgstr ""
 
@@ -2238,6 +2490,7 @@ msgstr ""
 #: views/flex.php:20
 #: views/flows.php:13
 #: views/replies.php:18
+#: views/templates.php:16
 msgid "Your official account"
 msgstr ""
 
@@ -2292,6 +2545,7 @@ msgstr ""
 #: views/flows.php:129
 #: views/replies.php:180
 #: views/settings.php:248
+#: views/templates.php:111
 msgid "Preview"
 msgstr ""
 
@@ -2352,11 +2606,13 @@ msgid "The preview is an approximation. Use \"Check\" to validate against LINE i
 msgstr ""
 
 #: views/flex.php:35
+#: views/templates.php:36
 msgid "Template name"
 msgstr ""
 
 #: views/flex.php:40
 #: views/imagemaps.php:53
+#: views/templates.php:41
 msgid "Fallback text"
 msgstr ""
 
@@ -2409,6 +2665,7 @@ msgid "One card, or up to %d side by side that the customer swipes through."
 msgstr ""
 
 #: views/flex.php:101
+#: views/templates.php:81
 msgid "+ Add a card"
 msgstr ""
 
@@ -2424,18 +2681,22 @@ msgstr ""
 #: views/flows.php:97
 #: views/imagemaps.php:111
 #: views/richmenus.php:211
+#: views/templates.php:89
 msgid "Edit the JSON directly"
 msgstr ""
 
 #: views/flex.php:115
+#: views/templates.php:93
 msgid "Save template"
 msgstr ""
 
 #: views/flex.php:116
+#: views/templates.php:94
 msgid "Check"
 msgstr ""
 
 #: views/flex.php:117
+#: views/templates.php:95
 msgid "New template"
 msgstr ""
 
@@ -2456,12 +2717,14 @@ msgid "All the customer sees until they open the chat. This is the fallback text
 msgstr ""
 
 #: views/flex.php:168
+#: views/templates.php:132
 msgid "Saved templates"
 msgstr ""
 
 #: views/flex.php:171
 #: views/flows.php:148
 #: views/imagemaps.php:135
+#: views/templates.php:135
 msgid "None yet."
 msgstr ""
 
@@ -2470,6 +2733,7 @@ msgstr ""
 #: views/imagemaps.php:151
 #: views/replies.php:60
 #: views/richmenus.php:74
+#: views/templates.php:141
 msgid "Delete"
 msgstr ""
 
@@ -2699,6 +2963,7 @@ msgid "New imagemap"
 msgstr ""
 
 #: views/imagemaps.php:123
+#: views/templates.php:102
 msgid "Save first. Push messages are billed."
 msgstr ""
 
@@ -2973,11 +3238,6 @@ msgstr ""
 msgid "Recipient"
 msgstr ""
 
-#: views/notifications.php:108
-#: views/replies.php:117
-msgid "Template"
-msgstr ""
-
 #: views/notifications.php:109
 msgid "Result"
 msgstr ""
@@ -3124,10 +3384,6 @@ msgstr ""
 
 #: views/replies.php:98
 msgid "Reply with"
-msgstr ""
-
-#: views/replies.php:100
-msgid "Text"
 msgstr ""
 
 #: views/replies.php:101
@@ -3902,6 +4158,42 @@ msgstr ""
 
 #: views/settings.php:535
 msgid "OpenSSL with AES-256-GCM is missing, so credentials are stored as plain text."
+msgstr ""
+
+#: views/templates.php:22
+msgid "Fixed layouts with buttons, for when a card is all you need and a Flex design is more than you want to build."
+msgstr ""
+
+#: views/templates.php:43
+msgid "Shown in the chat list and in push notifications, where the card cannot be drawn."
+msgstr ""
+
+#: views/templates.php:48
+msgid "Kind"
+msgstr ""
+
+#: views/templates.php:63
+msgid "These apply to every card. LINE refuses a carousel whose cards are not built the same way."
+msgstr ""
+
+#: views/templates.php:65
+msgid "Cards have an image"
+msgstr ""
+
+#: views/templates.php:66
+msgid "Cards have a title"
+msgstr ""
+
+#: views/templates.php:68
+msgid "Buttons per card"
+msgstr ""
+
+#: views/templates.php:87
+msgid "Template JSON"
+msgstr ""
+
+#: views/templates.php:113
+msgid "Drawn as the customer receives it. The exact fonts and corners are LINE's, not this preview's."
 msgstr ""
 
 #: views/users.php:30

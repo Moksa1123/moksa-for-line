@@ -65,6 +65,7 @@ class AdminModule {
 			array( self::SLUG . '-flex', __( 'Flex messages', 'moksa-line' ), 'render_flex' ),
 			array( self::SLUG . '-richmenus', __( 'Rich menus', 'moksa-line' ), 'render_richmenus' ),
 			array( self::SLUG . '-imagemaps', __( 'Imagemaps', 'moksa-line' ), 'render_imagemaps' ),
+			array( self::SLUG . '-templates', __( 'Template messages', 'moksa-line' ), 'render_templates' ),
 			array( self::SLUG . '-broadcast', __( 'Broadcast', 'moksa-line' ), 'render_broadcast' ),
 			array( self::SLUG . '-users', __( 'LINE users', 'moksa-line' ), 'render_users' ),
 			array( self::SLUG . '-notifications', __( 'Order notifications', 'moksa-line' ), 'render_notifications' ),
@@ -185,6 +186,14 @@ class AdminModule {
 		);
 
 		wp_enqueue_script(
+			'moksa-line-template-editor',
+			MOKSA_LINE_URL . 'assets/js/template-editor.js',
+			array( 'jquery' ),
+			self::asset_version( 'assets/js/template-editor.js' ),
+			true
+		);
+
+		wp_enqueue_script(
 			'moksa-line-flow-editor',
 			MOKSA_LINE_URL . 'assets/js/flow-editor.js',
 			array( 'jquery' ),
@@ -195,7 +204,7 @@ class AdminModule {
 		wp_enqueue_script(
 			'moksa-line-admin',
 			MOKSA_LINE_URL . 'assets/js/admin.js',
-			array( 'jquery', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor', 'moksa-line-flow-editor', 'moksa-line-card-editor' ),
+			array( 'jquery', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor', 'moksa-line-flow-editor', 'moksa-line-card-editor', 'moksa-line-template-editor' ),
 			self::asset_version( 'assets/js/admin.js' ),
 			true
 		);
@@ -211,6 +220,14 @@ class AdminModule {
 				'strings' => array(
 					'saved'        => __( 'Saved.', 'moksa-line' ),
 					'copied'       => __( 'Copied', 'moksa-line' ),
+					'templateButton' => __( 'Button', 'moksa-line' ),
+					'templateYes'  => __( 'Yes', 'moksa-line' ),
+					'templateNo'   => __( 'No', 'moksa-line' ),
+					'templateQuestion' => __( 'The question', 'moksa-line' ),
+					'templateText' => __( 'Text', 'moksa-line' ),
+					'templateAddButton' => __( '+ Add a button', 'moksa-line' ),
+					'templateTooMany' => __( 'A carousel holds at most 10 cards.', 'moksa-line' ),
+					'templateLastCard' => __( 'A template needs at least one card.', 'moksa-line' ),
 					'confirmSendSticker' => __( 'Send this sticker? It cannot be unsent, and it is billed like any other message.', 'moksa-line' ),
 					// The inbox updates a conversation's state without reloading,
 					// so it needs the same words the server-rendered pill uses.
@@ -797,6 +814,10 @@ class AdminModule {
 
 	public function render_imagemaps(): void {
 		$this->view( 'imagemaps' );
+	}
+
+	public function render_templates(): void {
+		$this->view( 'templates' );
 	}
 
 	public function render_broadcast(): void {

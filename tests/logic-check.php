@@ -79,6 +79,7 @@ require_once $base . '/src/Support/Options.php';
 require_once $base . '/src/Api/Signature.php';
 require_once $base . '/src/Flex/Validator.php';
 require_once $base . '/src/Api/RichMenuClient.php';
+require_once $base . '/src/Api/MessagingClient.php';
 
 use Moksa\Line\Flex\Validator;
 use Moksa\Line\Api\Signature;
@@ -173,6 +174,32 @@ $format = function ( $amount, $currency ) {
 check( $format( 1500.0, 'TWD' ) === 1500, 'TWD has no minor unit' );
 check( $format( 1500.4, 'TWD' ) === 1500, 'TWD rounds to whole units' );
 check( $format( 15.005, 'USD' ) === 15.01, 'USD keeps two decimals' );
+
+echo "\nRetry keys\n";
+// X-Line-Retry-Key must be a UUID in hexadecimal form. Readable strings like
+// "order-48-processing-0" were being sent instead, and LINE refused every one
+// with "The value for the 'X-Line-Retry-Key' parameter is invalid" -- which
+// meant no order notification or payment receipt could ever be delivered.
+$uuid_v5 = '/^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/';
+
+foreach ( array( 'order-48-processing-0', 'receipt-ORD123', '訂單-48', '' ) as $seed ) {
+	check(
+		(bool) preg_match( $uuid_v5, Moksa\Line\Api\MessagingClient::retry_key( $seed ) ),
+		'a retry key from ' . ( '' === $seed ? '(empty)' : $seed ) . ' is a UUID LINE accepts'
+	);
+}
+
+check(
+	Moksa\Line\Api\MessagingClient::retry_key( 'order-48-processing-0' )
+		=== Moksa\Line\Api\MessagingClient::retry_key( 'order-48-processing-0' ),
+	'the same description always yields the same key, so LINE sees a repeat as a retry'
+);
+
+check(
+	Moksa\Line\Api\MessagingClient::retry_key( 'order-48-processing-0' )
+		!== Moksa\Line\Api\MessagingClient::retry_key( 'order-48-completed-0' ),
+	'a different status yields a different key, so a second notification is not swallowed'
+);
 
 echo "\nRich menu alias ids\n";
 // LINE allows only a-z, 0-9, underscore and hyphen, up to 32 characters. A name

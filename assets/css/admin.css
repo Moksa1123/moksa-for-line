@@ -564,6 +564,138 @@
 	color: #1d2327;
 }
 
+/* Template message editor --------------------------------------------------- */
+
+.moksa-template-shape {
+	padding: 10px 12px;
+	margin: 8px 0;
+	border: 1px solid var(--moksa-border);
+	border-radius: 6px;
+	background: #f6f7f7;
+}
+
+.moksa-template-shape__row {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 14px;
+	margin-top: 6px;
+}
+
+.moksa-tpl-card {
+	padding: 12px 14px;
+	margin-bottom: 10px;
+	border: 1px solid var(--moksa-border);
+	border-left: 3px solid #2271b1;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.moksa-tpl-card__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 6px;
+}
+
+.moksa-tpl-field {
+	display: block;
+	margin-top: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--moksa-muted);
+}
+
+.moksa-tpl-field input,
+.moksa-tpl-field textarea,
+.moksa-tpl-field select {
+	margin-top: 3px;
+	font-weight: 400;
+	color: #1d2327;
+}
+
+.moksa-tpl-actions {
+	margin-top: 10px;
+	padding-top: 8px;
+	border-top: 1px dashed var(--moksa-border);
+}
+
+.moksa-tpl-action {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+/* Preview. Fixed literals, like every other preview here: it imitates LINE,
+   so an admin theme must not be able to repaint it. */
+.moksa-template-preview {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.moksa-tpl-preview-strip {
+	display: flex;
+	gap: 8px;
+	overflow-x: auto;
+	padding-bottom: 6px;
+}
+
+.moksa-tpl-preview-card {
+	flex: 0 0 auto;
+	width: 240px;
+	max-width: 100%;
+	border-radius: 12px;
+	overflow: hidden;
+	background: #ffffff;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14);
+}
+
+.moksa-tpl-preview-card__image img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1.51 / 1;
+	object-fit: cover;
+}
+
+.moksa-tpl-preview-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	padding: 10px 12px;
+	font-size: 13px;
+	line-height: 1.45;
+	color: #1f2329;
+	word-break: break-word;
+}
+
+.moksa-tpl-preview-card__buttons {
+	display: flex;
+	flex-direction: column;
+	border-top: 1px solid #eceef1;
+}
+
+.moksa-tpl-preview-card__buttons--split {
+	flex-direction: row;
+}
+
+.moksa-tpl-preview-card__buttons span {
+	flex: 1;
+	padding: 9px 10px;
+	border-bottom: 1px solid #eceef1;
+	color: #2f6fb5;
+	font-size: 13px;
+	text-align: center;
+}
+
+.moksa-tpl-preview-card__buttons span:last-child {
+	border-bottom: 0;
+}
+
+.moksa-tpl-preview-card__buttons--split span + span {
+	border-left: 1px solid #eceef1;
+}
+
 /* Sticker picker ------------------------------------------------------------ */
 
 .moksa-stickers {

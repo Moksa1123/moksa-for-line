@@ -427,6 +427,42 @@ class MessagingClient {
 	 * @return array
 	 */
 	/**
+	 * A retry key LINE will accept, derived from a description.
+	 *
+	 * X-Line-Retry-Key must be a UUID in hexadecimal form. A readable string
+	 * like "order-48-processing-0" is refused outright with "The value for the
+	 * 'X-Line-Retry-Key' parameter is invalid", which meant every order
+	 * notification and payment receipt was rejected before it was sent.
+	 *
+	 * The intent behind those strings was worth keeping: the same order and
+	 * status should produce the same key, so that if the send runs twice inside
+	 * LINE's retry window LINE recognises the second as a retry rather than
+	 * delivering the message again. A version 5 UUID gives exactly that -- it is
+	 * derived from the text, so the same description always yields the same
+	 * UUID -- while being a shape LINE accepts.
+	 *
+	 * @param string $seed Stable description of the thing being sent.
+	 * @return string
+	 */
+	public static function retry_key( string $seed ): string {
+		// Version 5: SHA-1 over a namespace and a name. The namespace is this
+		// plugin's own, so keys cannot collide with another system's.
+		$namespace = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+		$hash      = sha1( hex2bin( str_replace( '-', '', $namespace ) ) . 'moksa-line:' . $seed );
+
+		return sprintf(
+			'%08s-%04s-%04x-%04x-%12s',
+			substr( $hash, 0, 8 ),
+			substr( $hash, 8, 4 ),
+			// Version 5.
+			( hexdec( substr( $hash, 12, 4 ) ) & 0x0fff ) | 0x5000,
+			// Variant RFC 4122.
+			( hexdec( substr( $hash, 16, 4 ) ) & 0x3fff ) | 0x8000,
+			substr( $hash, 20, 12 )
+		);
+	}
+
+	/**
 	 * A sticker message.
 	 *
 	 * Both ids are strings in LINE's schema even though they look numeric, and

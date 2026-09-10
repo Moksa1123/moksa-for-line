@@ -69,6 +69,9 @@ msgstr "（沒有備援文字，通知會是空白的）"
 msgid "(no question yet)"
 msgstr "（還沒填問題）"
 
+msgid "+ Add a button"
+msgstr "+ 新增按鈕"
+
 msgid "+ Add a card"
 msgstr "+ 新增卡片"
 
@@ -108,8 +111,23 @@ msgstr "bubble 至少要有 header、hero、body 或 footer 其中之一。"
 msgid "A button needs an action."
 msgstr "button 必須有 action。"
 
+msgid "A button on card %d has no label."
+msgstr "第 %d 張卡片上有按鈕沒有文字。"
+
+msgid "A buttons template holds at most %d buttons."
+msgstr "按鈕型範本最多 %d 個按鈕。"
+
+msgid "A buttons template needs some text."
+msgstr "按鈕型範本需要填入文字。"
+
 msgid "A carousel holds at most %d bubbles."
 msgstr "一組輪播最多 %d 個 bubble。"
+
+msgid "A carousel holds at most %d cards."
+msgstr "一組輪播最多 %d 張卡片。"
+
+msgid "A carousel holds at most 10 cards."
+msgstr "一組輪播最多 10 張卡片。"
 
 msgid "A carousel holds at most 12 cards."
 msgstr "一組輪播最多 12 張卡片。"
@@ -117,11 +135,20 @@ msgstr "一組輪播最多 12 張卡片。"
 msgid "A carousel needs at least one bubble in contents."
 msgstr "輪播的 contents 至少要有一個 bubble。"
 
+msgid "A carousel needs at least one card."
+msgstr "輪播至少要有一張卡片。"
+
 msgid "A colour matching the status"
 msgstr "對應該狀態的顏色"
 
 msgid "A component at %s is missing its type."
 msgstr "%s 的元件缺少 type。"
+
+msgid "A confirm template must have exactly two buttons -- LINE refuses one or three."
+msgstr "確認型範本必須剛好兩個按鈕——一個或三個 LINE 都會拒絕。"
+
+msgid "A confirm template needs a question."
+msgstr "確認型範本需要填入問題。"
 
 msgid "A date"
 msgstr "日期"
@@ -147,6 +174,9 @@ msgstr "電話號碼"
 msgid "A phone number we can reach you on?"
 msgstr "方便聯絡的電話號碼是？"
 
+msgid "A question with exactly two answers"
+msgstr "一個問題，剛好兩個答案"
+
 msgid "A quick reply set"
 msgstr "快速回覆組合"
 
@@ -155,6 +185,9 @@ msgstr "用一兩句話說明這是什麼。"
 
 msgid "A sticker"
 msgstr "貼圖"
+
+msgid "A template needs at least one card."
+msgstr "範本至少要有一張卡片。"
 
 msgid "A text component needs either text or a contents array of spans."
 msgstr "text 元件必須有 text，或是一個由 span 組成的 contents 陣列。"
@@ -225,6 +258,9 @@ msgstr "新增一個 LINE 分頁，讓客人可以連結或解除連結帳號"
 msgid "Add a notification template"
 msgstr "新增通知範本"
 
+msgid "Add at least one button."
+msgstr "請至少加入一個按鈕。"
+
 msgid "Add at least one quick reply button."
 msgstr "請至少加入一個快速回覆按鈕。"
 
@@ -284,6 +320,12 @@ msgstr "icon 元件必須有 url。"
 
 msgid "An image"
 msgstr "圖片"
+
+msgid "An image carousel holds at most %d images."
+msgstr "圖片輪播最多 %d 張圖片。"
+
+msgid "An image carousel needs at least one image."
+msgstr "圖片輪播至少要有一張圖片。"
 
 msgid "Answer"
 msgstr "答案類型"
@@ -384,6 +426,9 @@ msgstr "從商品建立"
 msgid "Built-in card"
 msgstr "內建卡片"
 
+msgid "Button"
+msgstr "按鈕"
+
 msgid "Button \"%1$s\" on question %2$d is longer than the %3$d characters LINE shows, and is cut."
 msgstr "第 %2$d 題的按鈕「%1$s」超過 LINE 顯示的 %3$d 字，會被截斷。"
 
@@ -395,6 +440,9 @@ msgstr "按鈕連結"
 
 msgid "Button text"
 msgstr "按鈕文字"
+
+msgid "Buttons per card"
+msgstr "每張卡片的按鈕數"
 
 msgid "Buttons, one per line"
 msgstr "按鈕選項，一行一個"
@@ -411,11 +459,29 @@ msgstr "取消"
 msgid "Capture immediately"
 msgstr "立即請款"
 
+msgid "Card %1$d has more than the %2$d buttons a carousel card allows."
+msgstr "第 %1$d 張卡片超過輪播卡片允許的 %2$d 個按鈕。"
+
+msgid "Card %1$d has more than the %2$d characters LINE allows here."
+msgstr "第 %1$d 張卡片超過這裡允許的 %2$d 字。"
+
 msgid "Card %d"
 msgstr "卡片 %d"
 
+msgid "Card %d has no buttons."
+msgstr "第 %d 張卡片沒有按鈕。"
+
+msgid "Card %d has no text."
+msgstr "第 %d 張卡片沒有文字。"
+
 msgid "Cards"
 msgstr "卡片"
+
+msgid "Cards have a title"
+msgstr "卡片有標題"
+
+msgid "Cards have an image"
+msgstr "卡片有圖片"
 
 msgid "Channel ID"
 msgstr "Channel ID"
@@ -461,6 +527,9 @@ msgstr "選擇圖片"
 
 msgid "Choose the banner image first."
 msgstr "請先選擇橫幅圖片。"
+
+msgid "Choose what kind of template this is."
+msgstr "請選擇這個範本的類型。"
 
 msgid "Clear"
 msgstr "清除"
@@ -645,6 +714,9 @@ msgstr "在圖片上拖曳來畫出區塊。點選區塊可以移動、調整大
 msgid "Drawn as the customer receives it, on a phone-width screen. A push cannot be recalled, so this and \"Send test\" are the only checks you get."
 msgstr "以客人收到的樣子、在手機寬度的畫面上呈現。推播送出後無法收回，所以這裡和「發送測試」是你僅有的兩道確認。"
 
+msgid "Drawn as the customer receives it. The exact fonts and corners are LINE's, not this preview's."
+msgstr "以客人收到的樣子呈現。實際的字體和圓角以 LINE 為準，不是這個預覽。"
+
 msgid "Duplicate"
 msgstr "複製"
 
@@ -692,6 +764,12 @@ msgstr "項目會在 %s 天後自動刪除，可以在「設定 > 進階」裡�
 
 msgid "Errors only"
 msgstr "只看錯誤"
+
+msgid "Every button needs a label."
+msgstr "每個按鈕都要有文字。"
+
+msgid "Every card must be built the same way: all with an image or none, all with a title or none, and the same number of buttons. LINE refuses a carousel whose cards disagree."
+msgstr "每張卡片的結構必須一致：要嘛都有圖、要嘛都沒有；要嘛都有標題、要嘛都沒有；按鈕數量也要相同。LINE 會拒絕卡片結構不一致的輪播。"
 
 msgid "Every condition must hold. Leave empty to send for every order that reaches those statuses."
 msgstr "所有條件都要成立才會發送。留空的話，只要進入上述狀態的訂單都會發送。"
@@ -743,6 +821,9 @@ msgstr "完成設定"
 
 msgid "Fix this"
 msgstr "去修正"
+
+msgid "Fixed layouts with buttons, for when a card is all you need and a Flex design is more than you want to build."
+msgstr "帶按鈕的固定版型。當你只需要一張卡片、又不想從頭排一個 Flex 版面時就用這個。"
 
 msgid "Flex"
 msgstr "Flex"
@@ -807,6 +888,9 @@ msgstr "請填入這條規則要比對的內容。"
 msgid "Give this imagemap a name."
 msgstr "請幫這則圖片訊息取個名稱。"
 
+msgid "Give this template a name."
+msgstr "請幫這個範本取個名稱。"
+
 msgid "Greeting message"
 msgstr "歡迎訊息"
 
@@ -839,6 +923,12 @@ msgstr "不知道的事就直說，並提議轉給真人處理。絕對不要自
 
 msgid "Image"
 msgstr "圖片"
+
+msgid "Image %d does nothing when tapped."
+msgstr "第 %d 張點擊後沒有任何動作。"
+
+msgid "Image %d has no picture."
+msgstr "第 %d 張沒有設定圖片。"
 
 msgid "Image URL"
 msgstr "圖片網址"
@@ -893,6 +983,9 @@ msgstr "讓 WordPress 的顯示名稱跟著 LINE 的顯示名稱更新"
 
 msgid "Keys are derived from this site's WordPress salts, so a database dump alone cannot reveal them. Changing the salts in wp-config.php makes stored credentials unreadable and they will need re-entering."
 msgstr "金鑰是從這個站台的 WordPress salt 推導出來的，所以光是資料庫備份無法解出。更改 wp-config.php 裡的 salt 會使已儲存的憑證無法讀取，屆時必須重新輸入。"
+
+msgid "Kind"
+msgstr "類型"
 
 msgid "LIFF"
 msgstr "LIFF"
@@ -1230,6 +1323,9 @@ msgstr "新增範本"
 msgid "New visitors"
 msgstr "新訪客"
 
+msgid "No"
+msgstr "不要"
+
 msgid "No AI provider is connected yet. Install the AI plugin from WordPress.org and connect a provider, or add one another way."
 msgstr "還沒有接上任何 AI 供應商。請從 WordPress.org 安裝「AI」外掛並在裡面連接一個供應商，或用其他方式註冊一個。"
 
@@ -1358,6 +1454,9 @@ msgstr "在狀態"
 
 msgid "One banner image the customer taps. The regions are invisible to them, so draw them on the image rather than guessing coordinates."
 msgstr "一張讓客人點擊的橫幅圖片。可點擊的範圍客人是看不到的，所以直接在圖上畫出來，不要用猜座標的方式。"
+
+msgid "One card with up to four buttons"
+msgstr "一張卡片，最多四個按鈕"
 
 msgid "One card, or up to %d side by side that the customer swipes through."
 msgstr "一張卡片，或最多 %d 張並排讓客人左右滑動。"
@@ -1851,6 +1950,9 @@ msgstr "要顯示哪些項目"
 msgid "Shown in the chat list and in push notifications, where the bubble cannot be drawn."
 msgstr "顯示在聊天列表和推播通知，那些地方畫不出卡片。"
 
+msgid "Shown in the chat list and in push notifications, where the card cannot be drawn."
+msgstr "顯示在聊天列表和推播通知，那些地方畫不出卡片。"
+
 msgid "Shown in the chat list and in push notifications, where the image cannot be drawn."
 msgstr "顯示在聊天列表和推播通知，那些地方畫不出圖片。"
 
@@ -1947,8 +2049,14 @@ msgstr "可點擊範圍的 JSON"
 msgid "Template"
 msgstr "範本"
 
+msgid "Template JSON"
+msgstr "範本 JSON"
+
 msgid "Template deleted."
 msgstr "範本已刪除。"
+
+msgid "Template messages"
+msgstr "訊息範本"
 
 msgid "Template name"
 msgstr "範本名稱"
@@ -2085,6 +2193,18 @@ msgstr "%s 的 box 必須有 contents 陣列。"
 msgid "The box at %s needs a layout."
 msgstr "%s 的 box 必須設定 layout。"
 
+msgid "The button \"%1$s\" is longer than the %2$d characters LINE shows."
+msgstr "按鈕「%1$s」超過 LINE 顯示的 %2$d 字。"
+
+msgid "The button \"%s\" is a postback but carries no data."
+msgstr "按鈕「%s」是 postback，卻沒有帶資料。"
+
+msgid "The button \"%s\" opens a link but has none."
+msgstr "按鈕「%s」設定為開啟連結，卻沒有填連結。"
+
+msgid "The button \"%s\" sends a message but has no text."
+msgstr "按鈕「%s」設定為送出訊息，卻沒有填內容。"
+
 msgid "The chat bar text is drawn by LINE below the menu, not on your image. This preview shows layout only, not exact fonts or corners."
 msgstr "聊天列文字是 LINE 畫在選單下方的，不在你的圖片上。這個預覽只呈現版面，字體和圓角不會完全一樣。"
 
@@ -2118,6 +2238,12 @@ msgstr "圖片超過 1 MB，LINE 會拒絕。"
 msgid "The image is only %d pixels wide. An imagemap needs at least 1040, because LINE renders it at that width."
 msgstr "這張圖只有 %d 像素寬。圖片訊息至少需要 1040，因為 LINE 就是以那個寬度算圖的。"
 
+msgid "The image must be served over HTTPS. LINE refuses the whole message otherwise, not just the picture."
+msgstr "圖片必須以 HTTPS 提供。否則 LINE 會拒收整則訊息，不只是那張圖。"
+
+msgid "The image on card %d must be served over HTTPS."
+msgstr "第 %d 張卡片的圖片必須以 HTTPS 提供。"
+
 msgid "The image sizes for this imagemap are missing. Choose the image again and save."
 msgstr "這則圖片訊息的圖檔不見了。請重新選擇圖片並儲存。"
 
@@ -2126,6 +2252,9 @@ msgstr "圖片訊息儲存失敗。"
 
 msgid "The inbox is switched off under LINE > Settings > Messaging API."
 msgstr "收件匣在 LINE > 設定 > Messaging API 裡被關閉了。"
+
+msgid "The link on \"%s\" must start with https://, tel: or a LINE URL."
+msgstr "「%s」的連結必須以 https://、tel: 或 LINE 的網址開頭。"
 
 msgid "The link was created, but LINE would not deliver it: %s"
 msgstr "連結已建立，但 LINE 沒有把它送出：%s"
@@ -2175,6 +2304,12 @@ msgstr "付款已取消。"
 msgid "The preview is an approximation. Use \"Check\" to validate against LINE itself, and \"Send test\" to see the real thing in a chat."
 msgstr "預覽只是近似的樣子。用「檢查」交給 LINE 驗證，用「發送測試」在聊天室裡看真正的效果。"
 
+msgid "The question"
+msgstr "問題內容"
+
+msgid "The question is limited to %d characters."
+msgstr "問題上限為 %d 字。"
+
 msgid "The questions as JSON"
 msgstr "問題的 JSON"
 
@@ -2202,6 +2337,15 @@ msgstr "無法讀取可點擊區塊的設定。"
 msgid "The template could not be saved."
 msgstr "範本儲存失敗。"
 
+msgid "The text is limited to %d characters."
+msgstr "文字上限為 %d 字。"
+
+msgid "The title is limited to %d characters."
+msgstr "標題上限為 %d 字。"
+
+msgid "The title on card %1$d is longer than %2$d characters."
+msgstr "第 %1$d 張卡片的標題超過 %2$d 字。"
+
 msgid "The whole conversation, from the trigger to the last answer. Buttons are drawn where LINE puts them, under the message."
 msgstr "從觸發到最後一個答案的完整對話。按鈕畫在 LINE 實際擺放的位置，也就是訊息下方。"
 
@@ -2216,6 +2360,9 @@ msgstr "還沒有訂單可以用來產生預覽。"
 
 msgid "There is nothing to send."
 msgstr "沒有可以送出的內容。"
+
+msgid "These apply to every card. LINE refuses a carousel whose cards are not built the same way."
+msgstr "這幾項套用到每一張卡片。LINE 會拒絕卡片結構不一致的輪播。"
 
 msgid "These cover the common card. Anything else -- extra rows, colours, more buttons -- is edited in the JSON."
 msgstr "這幾欄涵蓋最常見的卡片。其他的（多幾列、顏色、更多按鈕）請在 JSON 裡編輯。"
@@ -2373,6 +2520,12 @@ msgstr "要解除 LINE 帳號連結嗎？"
 msgid "Up to %d regions. The image must be at least 1040 pixels wide; LINE is served five sizes of it from this site."
 msgstr "最多 %d 個範圍。圖片寬度至少要 1040 像素；本站會提供五種尺寸給 LINE 取用。"
 
+msgid "Up to ten cards side by side, each with buttons"
+msgstr "最多十張卡片並排，每張都有按鈕"
+
+msgid "Up to ten images side by side, each tappable"
+msgstr "最多十張圖片並排，每張都可點擊"
+
 msgid "Use a long-lived token I paste below"
 msgstr "使用我在下方貼上的長效 Token"
 
@@ -2481,6 +2634,9 @@ msgstr "對象"
 msgid "Width"
 msgstr "寬度"
 
+msgid "With an image or a title, the text is limited to %d characters."
+msgstr "有圖片或標題時，文字上限為 %d 字。"
+
 msgid "With immediate capture off, payments are only authorised. You then have to capture or void each one, and an order cancelled in WooCommerce releases its authorisation automatically."
 msgstr "關閉立即請款時，付款只會被授權。之後你必須自己請款或作廢，而在 WooCommerce 取消訂單會自動釋放該筆授權。"
 
@@ -2522,6 +2678,9 @@ msgstr "輸入回覆內容"
 
 msgid "Write something first."
 msgstr "請先輸入內容。"
+
+msgid "Yes"
+msgstr "好"
 
 msgid "You are a customer service assistant for %s, replying inside LINE."
 msgstr "你是 %s 的客服助理，正在 LINE 裡回覆客人。"
@@ -2603,6 +2762,9 @@ msgstr "[圖片]"
 
 msgid "[Sticker]"
 msgstr "[貼圖]"
+
+msgid "[Template]"
+msgstr "[範本]"
 
 msgid "[Video]"
 msgstr "[影片]"

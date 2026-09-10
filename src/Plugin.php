@@ -81,6 +81,7 @@ final class Plugin {
 			'richmenu' => RichMenu\RichMenuModule::class,
 			'flex'     => Flex\FlexModule::class,
 			'imagemap' => Imagemap\ImagemapModule::class,
+			'template' => Template\TemplateModule::class,
 			'liff'     => Liff\LiffModule::class,
 			'shortcode' => Frontend\ShortcodeModule::class,
 			'admin'    => Admin\AdminModule::class,

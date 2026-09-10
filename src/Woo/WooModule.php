@@ -198,8 +198,14 @@ class WooModule {
 				$line_user_id,
 				array( $message ),
 				// Keyed on order, status and template so LINE also refuses a
-				// duplicate if this runs twice within its retry window.
-				array( 'retry_key' => sprintf( 'order-%d-%s-%d', $order_id, $status, (int) $template_id ) )
+				// duplicate if this runs twice within its retry window. It has
+				// to be a UUID, so the description is hashed into one rather
+				// than sent as text, which LINE rejects.
+				array(
+					'retry_key' => MessagingClient::retry_key(
+						sprintf( 'order-%d-%s-%d', $order_id, $status, (int) $template_id )
+					),
+				)
 			);
 
 			// The LINE push endpoint answers 200 with an empty body, so success

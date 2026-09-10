@@ -138,6 +138,15 @@ class Messages {
 				continue;
 			}
 
+			// A template message is only identifiable by its altText too, and
+			// without this the thread showed a bare "[template]".
+			if ( isset( $message['type'] ) && 'template' === $message['type'] ) {
+				$parts[] = isset( $message['altText'] )
+					? sprintf( '[%s] %s', __( 'Template', 'moksa-line' ), (string) $message['altText'] )
+					: __( '[Template]', 'moksa-line' );
+				continue;
+			}
+
 			$parts[] = self::describe( $message );
 		}
 

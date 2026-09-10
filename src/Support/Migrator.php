@@ -25,7 +25,7 @@ class Migrator {
 	 * plugin can ship many releases without the tables changing, and this only
 	 * moves when they do.
 	 */
-	const DB_VERSION = '1.0.2';
+	const DB_VERSION = '1.0.3';
 
 	/**
 	 * Run dbDelta when the stored version is behind the code version.
@@ -58,7 +58,7 @@ class Migrator {
 		return array(
 			'users', 'events', 'conversations', 'messages', 'auto_replies',
 			'quick_replies', 'flex', 'richmenus', 'flows', 'flow_sessions',
-			'flow_submissions', 'payments', 'imagemaps', 'notify_history', 'logs',
+			'flow_submissions', 'payments', 'imagemaps', 'templates', 'notify_history', 'logs',
 		);
 	}
 
@@ -344,6 +344,18 @@ class Migrator {
 				KEY transaction_id (transaction_id),
 				KEY wc_order_id (wc_order_id),
 				KEY status (status)
+			) {$collate};",
+
+			"CREATE TABLE {$t( 'templates' )} (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				name varchar(191) NOT NULL DEFAULT '',
+				alt_text varchar(1500) NOT NULL DEFAULT '',
+				kind varchar(20) NOT NULL DEFAULT 'buttons',
+				definition longtext NULL,
+				created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+				updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+				PRIMARY KEY  (id),
+				KEY kind (kind)
 			) {$collate};",
 
 			"CREATE TABLE {$t( 'imagemaps' )} (

@@ -1569,6 +1569,87 @@
 		});
 	}
 
+	function bindTemplates() {
+		var $form = $('[data-moksa-template-form]');
+
+		if (!$form.length) {
+			return;
+		}
+
+		function editor() {
+			return $form.data('moksaTemplateEditor');
+		}
+
+		$form.on('submit', function (event) {
+			event.preventDefault();
+
+			post('template_save', {
+				id: $form.find('input[name=id]').val(),
+				name: $form.find('input[name=name]').val(),
+				alt_text: $form.find('input[name=alt_text]').val(),
+				definition: $form.find('[data-moksa-template-json]').val()
+			}).then(function (result) {
+				feedback($form, result.message, 'ok');
+				window.setTimeout(function () { window.location.reload(); }, 600);
+			}, function (error) {
+				feedback($form, error.message, 'bad', error.problems);
+			});
+		});
+
+		$form.on('click', '[data-moksa-template-check]', function () {
+			post('template_validate', {
+				definition: $form.find('[data-moksa-template-json]').val(),
+				alt_text: $form.find('input[name=alt_text]').val()
+			}).then(function (result) {
+				feedback($form, result.message, 'ok');
+			}, function (error) {
+				feedback($form, error.message, 'bad', error.problems);
+			});
+		});
+
+		$form.on('click', '[data-moksa-template-test]', function () {
+			post('template_send_test', {
+				id: $form.find('input[name=id]').val(),
+				line_user_id: $form.find('[data-moksa-template-test-target]').val()
+			}).then(function (result) {
+				feedback($form, result.message, 'ok');
+			}, function (error) {
+				feedback($form, error.message, 'bad');
+			});
+		});
+
+		$form.on('click', '[data-moksa-reset-template]', function () {
+			$form[0].reset();
+			$form.find('input[name=id]').val('0');
+			$form.removeClass('is-editing');
+			$form.find('[data-moksa-template-kind]').trigger('change');
+		});
+
+		$('[data-moksa-load-template]').on('click', function () {
+			var row = $(this).closest('li').data('template');
+
+			$form.addClass('is-editing');
+			$form.find('input[name=id]').val(row.id);
+			$form.find('input[name=name]').val(row.name);
+			$form.find('input[name=alt_text]').val(row.alt_text);
+			$form.find('[data-moksa-template-json]').val(row.definition || '{}');
+
+			// The editor owns the cards, so it has to be told rather than left
+			// to notice a field it did not change itself.
+			$(document).trigger('moksa:template-loaded');
+		});
+
+		$('[data-moksa-delete-template]').on('click', function () {
+			if (!window.confirm(strings.confirmDelete)) {
+				return;
+			}
+
+			post('template_delete', { id: $(this).data('moksa-delete-template') }).then(function () {
+				window.location.reload();
+			});
+		});
+	}
+
 	function bindClearLogs() {
 		$(document).on('click', '[data-moksa-clear-logs]', function () {
 			if (!window.confirm(moksaLine.strings.confirmClearLogs)) {
@@ -1601,6 +1682,7 @@
 		bindUnlink();
 		bindCopy();
 		bindImagemaps();
+		bindTemplates();
 		bindClearLogs();
 		bindReplyPreview();
 		bindCounters();
