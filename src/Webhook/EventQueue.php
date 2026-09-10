@@ -191,6 +191,57 @@ class EventQueue {
 	}
 
 	/**
+	 * A one-line description of what an event actually carried.
+	 *
+	 * The Detail column showed only the error, so on a working site it was an
+	 * empty column on every row -- present, headed, and never saying anything.
+	 * What the message said is the thing that makes the list readable: it is
+	 * how you tell which delivery produced which reply.
+	 *
+	 * @param object $event Row from this table.
+	 * @return string Plain text, already trimmed for a table cell.
+	 */
+	public static function summary( $event ): string {
+		if ( '' !== (string) $event->error ) {
+			return (string) $event->error;
+		}
+
+		$payload = json_decode( (string) $event->payload, true );
+
+		if ( ! is_array( $payload ) ) {
+			return '';
+		}
+
+		$type = isset( $payload['type'] ) ? (string) $payload['type'] : '';
+
+		if ( 'message' === $type && isset( $payload['message']['type'] ) ) {
+			$kind = (string) $payload['message']['type'];
+
+			if ( 'text' === $kind ) {
+				return mb_strimwidth( (string) ( $payload['message']['text'] ?? '' ), 0, 80, '...' );
+			}
+
+			if ( 'sticker' === $kind ) {
+				return sprintf(
+					/* translators: 1: sticker package id, 2: sticker id. */
+					__( 'Sticker %1$s / %2$s', 'moksa-line' ),
+					(string) ( $payload['message']['packageId'] ?? '?' ),
+					(string) ( $payload['message']['stickerId'] ?? '?' )
+				);
+			}
+
+			/* translators: %s: message type, such as image or location. */
+			return sprintf( __( '%s message', 'moksa-line' ), $kind );
+		}
+
+		if ( 'postback' === $type ) {
+			return mb_strimwidth( (string) ( $payload['postback']['data'] ?? '' ), 0, 80, '...' );
+		}
+
+		return '';
+	}
+
+	/**
 	 * Whether any event has ever arrived, used by the setup checklist.
 	 */
 	public static function has_any(): bool {

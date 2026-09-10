@@ -106,7 +106,12 @@ class Client {
 
 		if ( is_wp_error( $response ) ) {
 			Logger::error(
-				'LINE request failed at the transport layer',
+				sprintf(
+					/* translators: 1: HTTP method and path, 2: the transport error. */
+					__( '%1$s never reached LINE: %2$s', 'moksa-line' ),
+					$method . ' ' . $path,
+					$response->get_error_message()
+				),
 				array( 'path' => $path, 'detail' => $response->get_error_message() ),
 				'api'
 			);
@@ -114,7 +119,7 @@ class Client {
 			return $response;
 		}
 
-		return self::interpret( $response, $path );
+		return self::interpret( $response, $path, $method );
 	}
 
 	/**
@@ -122,9 +127,10 @@ class Client {
 	 *
 	 * @param array  $response wp_remote_* response.
 	 * @param string $path     Endpoint path, for logging.
+	 * @param string $method   HTTP method, for logging.
 	 * @return array|WP_Error
 	 */
-	private static function interpret( array $response, string $path ) {
+	private static function interpret( array $response, string $path, string $method = 'POST' ) {
 		$status = (int) wp_remote_retrieve_response_code( $response );
 		$raw    = (string) wp_remote_retrieve_body( $response );
 		$data   = json_decode( $raw, true );
@@ -167,9 +173,19 @@ class Client {
 			$message = $message . ' ' . __( '(Check the channel plan and that the feature is enabled for this channel.)', 'moksa-line' );
 		}
 
+		// The log list shows this line and nothing else, so it has to say what
+		// broke. It read "LINE API returned an error" for every failure, which
+		// turned a page of problems into a page of identical rows and put the
+		// only useful part behind a disclosure triangle on each one.
 		Logger::error(
-			'LINE API returned an error',
-			array( 'path' => $path, 'status' => $status, 'detail' => $message ),
+			sprintf(
+				/* translators: 1: HTTP method and path, 2: HTTP status code, 3: LINE's own message. */
+				__( '%1$s failed (%2$d): %3$s', 'moksa-line' ),
+				$method . ' ' . $path,
+				$status,
+				$message
+			),
+			array( 'path' => $path, 'status' => $status, 'detail' => $message, 'body' => $data ),
 			'api'
 		);
 
@@ -207,7 +223,7 @@ class Client {
 			return $response;
 		}
 
-		return self::interpret( $response, $path );
+		return self::interpret( $response, $path, 'POST' );
 	}
 
 	/**

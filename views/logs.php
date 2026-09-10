@@ -117,11 +117,22 @@ $retention = max( 1, (int) Options::get( 'log_retention_days' ) );
 						</button>
 					</td>
 					<td>
-						<span class="moksa-pill moksa-pill--<?php echo esc_attr( 'done' === $event->status ? 'ok' : ( 'failed' === $event->status ? 'bad' : 'warn' ) ); ?>">
-							<?php echo esc_html( (string) $event->status ); ?>
+						<?php
+						// The raw column value was printed straight out, so the
+						// one word describing each row stayed in English on a
+						// site running entirely in Chinese.
+						$labels = array(
+							'done'    => __( 'Handled', 'moksa-line' ),
+							'failed'  => __( 'Failed', 'moksa-line' ),
+							'pending' => __( 'Waiting', 'moksa-line' ),
+						);
+						$status = (string) $event->status;
+						?>
+						<span class="moksa-pill moksa-pill--<?php echo esc_attr( 'done' === $status ? 'ok' : ( 'failed' === $status ? 'bad' : 'warn' ) ); ?>">
+							<?php echo esc_html( $labels[ $status ] ?? $status ); ?>
 						</span>
 					</td>
-					<td><?php echo esc_html( (string) $event->error ); ?></td>
+					<td><?php echo esc_html( \Moksa\Line\Webhook\EventQueue::summary( $event ) ); ?></td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>

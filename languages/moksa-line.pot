@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-10 13:59+0000\n"
+"POT-Creation-Date: 2026-09-10 14:17+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -47,12 +47,22 @@ msgstr ""
 msgid "%1$s cannot be \"%2$s\". Allowed: %3$s."
 msgstr ""
 
+#. translators: 1: HTTP method and path, 2: HTTP status code, 3: LINE's own message.
+#: src/Api/Client.php:183
+msgid "%1$s failed (%2$d): %3$s"
+msgstr ""
+
+#. translators: 1: HTTP method and path, 2: the transport error.
+#: src/Api/Client.php:111
+msgid "%1$s never reached LINE: %2$s"
+msgstr ""
+
 #: src/Admin/AdminModule.php:305
 msgid "%1$s of %2$s characters"
 msgstr ""
 
 #. translators: 1: rows matching the filter, 2: rows kept in total.
-#: views/logs.php:156
+#: views/logs.php:167
 msgid "%1$s of %2$s entries"
 msgstr ""
 
@@ -91,12 +101,16 @@ msgid_plural "%s conversations are being handled by a person right now. None of 
 msgstr[0] ""
 msgstr[1] ""
 
+#: src/Webhook/EventQueue.php:234
+msgid "%s message"
+msgstr ""
+
 #. translators: %s: messages used.
 #: views/dashboard.php:118
 msgid "%s push messages sent this month. This plan has no monthly cap."
 msgstr ""
 
-#: src/Api/Client.php:167
+#: src/Api/Client.php:173
 msgid "(Check the channel plan and that the feature is enabled for this channel.)"
 msgstr ""
 
@@ -420,7 +434,7 @@ msgstr ""
 msgid "Alias ID"
 msgstr ""
 
-#: views/logs.php:144
+#: views/logs.php:155
 msgid "All areas"
 msgstr ""
 
@@ -495,7 +509,7 @@ msgid "Anything they type"
 msgstr ""
 
 #: src/Admin/AdminModule.php:336
-#: views/logs.php:185
+#: views/logs.php:196
 msgid "Area"
 msgstr ""
 
@@ -763,7 +777,7 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: views/logs.php:165
+#: views/logs.php:176
 msgid "Clear the log"
 msgstr ""
 
@@ -805,7 +819,7 @@ msgstr ""
 msgid "Consultation"
 msgstr ""
 
-#: views/logs.php:222
+#: views/logs.php:233
 msgid "Context"
 msgstr ""
 
@@ -839,7 +853,7 @@ msgid "Could not create the folder for the imagemap images."
 msgstr ""
 
 #. translators: %d: HTTP status code.
-#: src/Api/Client.php:245
+#: src/Api/Client.php:261
 msgid "Could not download the message content (HTTP %d)."
 msgstr ""
 
@@ -1102,7 +1116,7 @@ msgid "Enter the LINE user id to send the test to."
 msgstr ""
 
 #. translators: %s: number of days.
-#: views/logs.php:174
+#: views/logs.php:185
 msgid "Entries are deleted automatically after %s days, which you can change under Settings > Advanced."
 msgstr ""
 
@@ -1141,6 +1155,7 @@ msgstr ""
 msgid "Expected a bubble here."
 msgstr ""
 
+#: views/logs.php:126
 #: views/notifications.php:91
 msgid "Failed"
 msgstr ""
@@ -1177,7 +1192,7 @@ msgid "Fill in the Messaging API channel first."
 msgstr ""
 
 #: views/inbox.php:60
-#: views/logs.php:150
+#: views/logs.php:161
 #: views/notifications.php:98
 msgid "Filter"
 msgstr ""
@@ -1304,6 +1319,10 @@ msgstr ""
 
 #: views/settings.php:380
 msgid "Hand-off keyword"
+msgstr ""
+
+#: views/logs.php:125
+msgid "Handled"
 msgstr ""
 
 #: views/inbox.php:54
@@ -1607,7 +1626,7 @@ msgstr[1] ""
 msgid "LINE has no default menu, so everyone falls back to whatever the Official Account Manager holds."
 msgstr ""
 
-#: src/Api/Client.php:164
+#: src/Api/Client.php:170
 msgid "LINE is rate limiting this channel. Try again shortly."
 msgstr ""
 
@@ -1702,7 +1721,7 @@ msgstr ""
 msgid "Let the AI answer messages no rule or flow handled"
 msgstr ""
 
-#: views/logs.php:184
+#: views/logs.php:195
 msgid "Level"
 msgstr ""
 
@@ -1822,7 +1841,7 @@ msgstr ""
 #: src/Inbox/Messages.php:116
 #: src/Woo/NotifyTemplates.php:83
 #: views/broadcast.php:57
-#: views/logs.php:186
+#: views/logs.php:197
 #: views/replies.php:139
 msgid "Message"
 msgstr ""
@@ -2064,11 +2083,11 @@ msgstr ""
 msgid "Notable events"
 msgstr ""
 
-#: views/logs.php:196
+#: views/logs.php:207
 msgid "Nothing logged."
 msgstr ""
 
-#: views/logs.php:194
+#: views/logs.php:205
 msgid "Nothing matches this filter. Set it to Everything to see the rest."
 msgstr ""
 
@@ -2406,7 +2425,7 @@ msgstr ""
 msgid "Please reply with your answer."
 msgstr ""
 
-#: views/logs.php:130
+#: views/logs.php:141
 msgid "Plugin log"
 msgstr ""
 
@@ -2877,7 +2896,7 @@ msgstr ""
 msgid "Show the add-friend step prominently"
 msgstr ""
 
-#: views/logs.php:135
+#: views/logs.php:146
 msgid "Show which entries"
 msgstr ""
 
@@ -2944,6 +2963,11 @@ msgstr ""
 #. translators: %d: step number.
 #: src/Bot/BotModule.php:150
 msgid "Step %d has no question to ask."
+msgstr ""
+
+#. translators: 1: sticker package id, 2: sticker id.
+#: src/Webhook/EventQueue.php:227
+msgid "Sticker %1$s / %2$s"
 msgstr ""
 
 #: views/settings.php:378
@@ -3644,7 +3668,7 @@ msgstr ""
 msgid "This template will not send as it stands."
 msgstr ""
 
-#: views/logs.php:183
+#: views/logs.php:194
 msgid "Time"
 msgstr ""
 
@@ -3767,6 +3791,10 @@ msgstr ""
 msgid "Wait for tracking"
 msgstr ""
 
+#: views/logs.php:127
+msgid "Waiting"
+msgstr ""
+
 #: src/Pay/WooGateway.php:196
 msgid "Waiting for the customer to complete payment on LINE Pay."
 msgstr ""
@@ -3853,7 +3881,7 @@ msgstr ""
 msgid "Where to send people after login. Leave blank to return them to the page they came from."
 msgstr ""
 
-#: views/logs.php:142
+#: views/logs.php:153
 msgid "Which area of the plugin"
 msgstr ""
 

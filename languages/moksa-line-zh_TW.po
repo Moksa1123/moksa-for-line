@@ -2990,3 +2990,24 @@ msgstr "移除這張貼圖"
 
 msgid "LINE only accepts these from a bot. Pick one, then press Send. It is billed like any other message."
 msgstr "LINE 只接受機器人傳送這些貼圖。選一張，然後按送出。跟一般訊息一樣會計費。"
+
+msgid "%1$s failed (%2$d): %3$s"
+msgstr "%1$s 失敗（%2$d）：%3$s"
+
+msgid "%1$s never reached LINE: %2$s"
+msgstr "%1$s 沒有送達 LINE：%2$s"
+
+msgid "Sticker %1$s / %2$s"
+msgstr "貼圖 %1$s / %2$s"
+
+msgid "%s message"
+msgstr "%s 訊息"
+
+msgid "Handled"
+msgstr "已處理"
+
+msgid "Failed"
+msgstr "失敗"
+
+msgid "Waiting"
+msgstr "等待中"
