@@ -867,6 +867,10 @@
 			$('.moksa-conv').removeClass('is-active');
 			$conv.addClass('is-active');
 
+			// A sticker picked for one person must not follow you to the next.
+			chosenSticker = null;
+			showChosenSticker();
+
 			post('inbox_thread', { conversation_id: current }).then(function (result) {
 				$thread.html(result.thread);
 				$name.text(result.name || '');
@@ -889,13 +893,39 @@
 			}
 
 			var $text = $reply.find('textarea');
-			var $button = $reply.find('button');
+			// Only the send button. This matched every button in the composer,
+			// so a send in flight also disabled the sticker picker and the
+			// button that removes a chosen sticker -- and if the request never
+			// came back, they stayed dead.
+			var $button = $reply.find('button[type=submit]');
+			var payload = { conversation_id: current };
+
+			// A sticker is a message in its own right, so it goes on its own.
+			// The textarea is no longer marked required, because a sticker with
+			// no words is a complete reply and the browser would have blocked
+			// it.
+			if (chosenSticker) {
+				payload.sticker_package = chosenSticker.pack;
+				payload.sticker_id = chosenSticker.id;
+			} else if ('' === $.trim($text.val() || '')) {
+				$text.trigger('focus');
+
+				return;
+			} else {
+				payload.message = $text.val();
+			}
 
 			$button.prop('disabled', true);
 
-			post('inbox_send', { conversation_id: current, message: $text.val() }).then(function (result) {
+			post('inbox_send', payload).then(function (result) {
 				$thread.html(result.thread);
-				$text.val('');
+
+				if (!chosenSticker) {
+					$text.val('');
+				}
+
+				chosenSticker = null;
+				showChosenSticker();
 				$button.prop('disabled', false);
 				scrollToLatest();
 			}, function (error) {
@@ -911,6 +941,24 @@
 		// Stickers. The picker is built server-side so the forty images per pack
 		// are ordinary lazy-loaded <img>, not forty requests fired by script.
 		var $stickers = $('[data-moksa-sticker-picker]');
+		var chosenSticker = null;
+
+		/** Reflect the chosen sticker, or the absence of one. */
+		function showChosenSticker() {
+			var $slot = $reply.find('[data-moksa-chosen-sticker]');
+
+			$slot.prop('hidden', !chosenSticker);
+			$stickers.find('[data-moksa-pick-sticker]').removeClass('is-chosen');
+
+			if (!chosenSticker) {
+				return;
+			}
+
+			$slot.find('[data-moksa-chosen-sticker-image]').attr('src', chosenSticker.src);
+			$stickers
+				.find('[data-moksa-pick-sticker="' + chosenSticker.pack + '"][data-sticker-id="' + chosenSticker.id + '"]')
+				.addClass('is-chosen');
+		}
 
 		$reply.on('click', '[data-moksa-toggle-stickers]', function () {
 			var $toggle = $(this);
@@ -930,37 +978,31 @@
 			});
 		});
 
-		$stickers.on('click', '[data-moksa-send-sticker]', function () {
-			if (!current) {
-				return;
-			}
-
+		// Picking a sticker does not send it. It waits in the composer next to
+		// the text box until Send is pressed, which is how the text half has
+		// always worked. Confirming every send instead was the wrong answer to
+		// the right worry: a wall of 120 small targets where one click was
+		// final. It also asked about something a plain text reply -- equally
+		// unsendable, equally billed -- never asks about.
+		$stickers.on('click', '[data-moksa-pick-sticker]', function () {
 			var $sticker = $(this);
 
-			// A sticker cannot be unsent and is billed, so it is confirmed --
-			// the grid is a wall of small targets and a mis-click is easy.
-			moksaConfirm(strings.confirmSendSticker, { confirmLabel: strings.confirmSendAction }).then(function (confirmed) {
-				if (!confirmed) {
-					return;
-				}
+			chosenSticker = {
+				pack: String($sticker.data('moksa-pick-sticker')),
+				id: String($sticker.data('sticker-id')),
+				src: $sticker.find('img').attr('src')
+			};
 
-				$stickers.find('[data-moksa-send-sticker]').prop('disabled', true);
+			showChosenSticker();
 
-				post('inbox_send', {
-					conversation_id: current,
-					sticker_package: $sticker.data('moksa-send-sticker'),
-					sticker_id: $sticker.data('sticker-id')
-				}).then(function (result) {
-					$stickers.find('[data-moksa-send-sticker]').prop('disabled', false);
-					$stickers.prop('hidden', true);
-					$reply.find('[data-moksa-toggle-stickers]').attr('aria-expanded', 'false');
-					$thread.html(result.thread);
-					scrollToLatest();
-				}, function (error) {
-					$stickers.find('[data-moksa-send-sticker]').prop('disabled', false);
-					moksaNotify(error.message);
-				});
-			});
+			$stickers.prop('hidden', true);
+			$reply.find('[data-moksa-toggle-stickers]').attr('aria-expanded', 'false');
+			$reply.find('button[type=submit]').trigger('focus');
+		});
+
+		$reply.on('click', '[data-moksa-clear-sticker]', function () {
+			chosenSticker = null;
+			showChosenSticker();
 		});
 
 		$actions.on('click', 'button', function () {

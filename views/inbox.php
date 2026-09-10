@@ -124,7 +124,7 @@ $status_labels = array(
 						</button>
 					<?php endforeach; ?>
 					<span class="description">
-						<?php esc_html_e( 'LINE only accepts these from a bot. Sending one is billed like any other message.', 'moksa-line' ); ?>
+						<?php esc_html_e( 'LINE only accepts these from a bot. Pick one, then press Send. It is billed like any other message.', 'moksa-line' ); ?>
 					</span>
 				</div>
 
@@ -132,7 +132,7 @@ $status_labels = array(
 					<div class="moksa-stickers__grid" data-moksa-sticker-grid="<?php echo esc_attr( (string) $pack['package_id'] ); ?>"<?php echo 0 === $index ? '' : ' hidden'; ?>>
 						<?php for ( $id = (int) $pack['from']; $id <= (int) $pack['to']; $id++ ) : ?>
 							<button type="button" class="moksa-sticker"
-								data-moksa-send-sticker="<?php echo esc_attr( (string) $pack['package_id'] ); ?>"
+								data-moksa-pick-sticker="<?php echo esc_attr( (string) $pack['package_id'] ); ?>"
 								data-sticker-id="<?php echo esc_attr( (string) $id ); ?>"
 								title="<?php echo esc_attr( $pack['package_id'] . ', ' . $id ); ?>">
 								<img src="<?php echo esc_url( \Moksa\Line\Bot\Stickers::image_url( (string) $id ) ); ?>"
@@ -145,7 +145,22 @@ $status_labels = array(
 
 			<form class="moksa-inbox__reply" data-moksa-reply hidden>
 				<label class="screen-reader-text" for="moksa-reply-text"><?php esc_html_e( 'Reply', 'moksa-line' ); ?></label>
-				<textarea id="moksa-reply-text" rows="3" required placeholder="<?php esc_attr_e( 'Write a reply', 'moksa-line' ); ?>"></textarea>
+
+				<?php
+				// A chosen sticker waits here until Send is pressed, exactly as
+				// typed text does. Nothing in this composer leaves on one click.
+				?>
+				<span class="moksa-reply-sticker" data-moksa-chosen-sticker hidden>
+					<img src="" alt="" width="52" height="52" data-moksa-chosen-sticker-image />
+					<button type="button" class="moksa-reply-sticker__clear" data-moksa-clear-sticker
+						title="<?php esc_attr_e( 'Remove this sticker', 'moksa-line' ); ?>">
+						<span aria-hidden="true">&times;</span>
+						<span class="screen-reader-text"><?php esc_html_e( 'Remove this sticker', 'moksa-line' ); ?></span>
+					</button>
+				</span>
+
+				<?php // Not required: a sticker on its own is a complete reply. ?>
+				<textarea id="moksa-reply-text" rows="3" placeholder="<?php esc_attr_e( 'Write a reply', 'moksa-line' ); ?>"></textarea>
 				<button type="button" class="button moksa-inbox__sticker-toggle" data-moksa-toggle-stickers
 					aria-expanded="false" title="<?php esc_attr_e( 'Send a sticker', 'moksa-line' ); ?>">
 					<span aria-hidden="true">☺</span>

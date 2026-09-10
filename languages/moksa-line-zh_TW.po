@@ -2984,3 +2984,9 @@ msgstr "清除"
 msgctxt "confirmation button"
 msgid "Replace"
 msgstr "取代"
+
+msgid "Remove this sticker"
+msgstr "移除這張貼圖"
+
+msgid "LINE only accepts these from a bot. Pick one, then press Send. It is billed like any other message."
+msgstr "LINE 只接受機器人傳送這些貼圖。選一張，然後按送出。跟一般訊息一樣會計費。"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-10 11:47+0000\n"
+"POT-Creation-Date: 2026-09-10 13:59+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: moksa-line\n"
 
-#: src/Admin/AdminModule.php:319
+#: src/Admin/AdminModule.php:318
 msgid "\"%1$s\" has a contrast ratio of %2$s against its background; %3$s is the readable minimum."
 msgstr ""
 
@@ -33,7 +33,7 @@ msgid_plural "%1$d LINE notifications sent for status: %2$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/AdminModule.php:258
+#: src/Admin/AdminModule.php:257
 msgid "%1$d of %2$d chosen"
 msgstr ""
 
@@ -47,7 +47,7 @@ msgstr ""
 msgid "%1$s cannot be \"%2$s\". Allowed: %3$s."
 msgstr ""
 
-#: src/Admin/AdminModule.php:306
+#: src/Admin/AdminModule.php:305
 msgid "%1$s of %2$s characters"
 msgstr ""
 
@@ -66,15 +66,15 @@ msgstr ""
 msgid "%1$s to %2$s"
 msgstr ""
 
-#: src/Admin/AdminModule.php:304
+#: src/Admin/AdminModule.php:303
 msgid "%1$s: %2$s"
 msgstr ""
 
-#: src/Admin/AdminModule.php:358
+#: src/Admin/AdminModule.php:357
 msgid "%d area(s) have no destination set yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:253
+#: src/Admin/AdminModule.php:252
 msgid "%d cards. The customer swipes sideways to reach the rest."
 msgstr ""
 
@@ -100,11 +100,11 @@ msgstr ""
 msgid "(Check the channel plan and that the feature is enabled for this channel.)"
 msgstr ""
 
-#: src/Admin/AdminModule.php:314
+#: src/Admin/AdminModule.php:313
 msgid "(no fallback text -- the notification would be blank)"
 msgstr ""
 
-#: src/Admin/AdminModule.php:287
+#: src/Admin/AdminModule.php:286
 msgid "(no question yet)"
 msgstr ""
 
@@ -195,7 +195,7 @@ msgstr ""
 msgid "A carousel holds at most 10 cards."
 msgstr ""
 
-#: src/Admin/AdminModule.php:272
+#: src/Admin/AdminModule.php:271
 msgid "A carousel holds at most 12 cards."
 msgstr ""
 
@@ -317,7 +317,7 @@ msgstr ""
 msgid "AI features are switched off for this site."
 msgstr ""
 
-#: src/Admin/AdminModule.php:470
+#: src/Admin/AdminModule.php:469
 msgid "AI provider available"
 msgstr ""
 
@@ -326,11 +326,11 @@ msgstr ""
 msgid "AI replies"
 msgstr ""
 
-#: src/Admin/AdminModule.php:461
+#: src/Admin/AdminModule.php:460
 msgid "AI replies are switched on but no AI service is selected."
 msgstr ""
 
-#: src/Admin/AdminModule.php:463
+#: src/Admin/AdminModule.php:462
 msgid "AI replies are switched on, but the selected AI service is not available on this site."
 msgstr ""
 
@@ -392,11 +392,11 @@ msgstr ""
 msgid "Add order notification"
 msgstr ""
 
-#: src/Admin/AdminModule.php:429
+#: src/Admin/AdminModule.php:428
 msgid "Add the Channel ID and Channel Secret from the LINE Developers Console."
 msgstr ""
 
-#: src/Admin/AdminModule.php:480
+#: src/Admin/AdminModule.php:479
 msgid "Add the LINE Pay Channel ID and Channel Secret."
 msgstr ""
 
@@ -466,7 +466,7 @@ msgstr ""
 msgid "An image carousel needs at least one image."
 msgstr ""
 
-#: src/Admin/AdminModule.php:279
+#: src/Admin/AdminModule.php:278
 msgid "Answer"
 msgstr ""
 
@@ -494,16 +494,16 @@ msgstr ""
 msgid "Anything they type"
 msgstr ""
 
-#: src/Admin/AdminModule.php:337
+#: src/Admin/AdminModule.php:336
 #: views/logs.php:185
 msgid "Area"
 msgstr ""
 
-#: src/Admin/AdminModule.php:354
+#: src/Admin/AdminModule.php:353
 msgid "Areas %s overlap. LINE uses whichever comes first, which is rarely what you want."
 msgstr ""
 
-#: src/Admin/AdminModule.php:351
+#: src/Admin/AdminModule.php:350
 msgid "Arrow keys nudge by 1 pixel, with Shift by 10."
 msgstr ""
 
@@ -569,7 +569,7 @@ msgstr ""
 msgid "Broadcast"
 msgstr ""
 
-#: src/Admin/AdminModule.php:892
+#: src/Admin/AdminModule.php:891
 msgid "Broadcast sent to every friend of the account."
 msgstr ""
 
@@ -606,15 +606,15 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
-#: src/Admin/AdminModule.php:300
+#: src/Admin/AdminModule.php:299
 msgid "Button \"%1$s\" on question %2$d is longer than the %3$d characters LINE shows, and is cut."
 msgstr ""
 
-#: src/Admin/AdminModule.php:262
+#: src/Admin/AdminModule.php:261
 msgid "Button label"
 msgstr ""
 
-#: src/Admin/AdminModule.php:263
+#: src/Admin/AdminModule.php:262
 msgid "Button link"
 msgstr ""
 
@@ -626,7 +626,7 @@ msgstr ""
 msgid "Buttons per card"
 msgstr ""
 
-#: src/Admin/AdminModule.php:281
+#: src/Admin/AdminModule.php:280
 msgid "Buttons, one per line"
 msgstr ""
 
@@ -638,8 +638,8 @@ msgstr ""
 msgid "Callback URL"
 msgstr ""
 
-#: src/Admin/AdminModule.php:289
-#: src/Admin/AdminModule.php:329
+#: src/Admin/AdminModule.php:288
+#: src/Admin/AdminModule.php:328
 #: src/Bot/Flow.php:352
 #: src/Bot/Flow.php:353
 #: src/Bot/Flow.php:440
@@ -660,7 +660,7 @@ msgstr ""
 msgid "Card %1$d has more than the %2$d characters LINE allows here."
 msgstr ""
 
-#: src/Admin/AdminModule.php:267
+#: src/Admin/AdminModule.php:266
 msgid "Card %d"
 msgstr ""
 
@@ -768,7 +768,7 @@ msgid "Clear the log"
 msgstr ""
 
 #. translators: %s: number of entries removed.
-#: src/Admin/AdminModule.php:780
+#: src/Admin/AdminModule.php:779
 msgid "Cleared %s entries."
 msgstr ""
 
@@ -830,7 +830,7 @@ msgstr ""
 msgid "Corner radius"
 msgstr ""
 
-#: src/Admin/AdminModule.php:312
+#: src/Admin/AdminModule.php:311
 msgid "Could not copy -- select it and copy by hand"
 msgstr ""
 
@@ -884,7 +884,7 @@ msgstr ""
 msgid "Credentials"
 msgstr ""
 
-#: src/Admin/AdminModule.php:495
+#: src/Admin/AdminModule.php:494
 #: views/settings.php:539
 msgid "Credentials are encrypted at rest"
 msgstr ""
@@ -963,15 +963,15 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: src/Admin/AdminModule.php:313
+#: src/Admin/AdminModule.php:312
 msgid "Delete every entry in the plugin log? The log is only used for diagnosis, so nothing else is lost."
 msgstr ""
 
-#: src/Admin/AdminModule.php:350
+#: src/Admin/AdminModule.php:349
 msgid "Delete this area"
 msgstr ""
 
-#: src/Admin/AdminModule.php:330
+#: src/Admin/AdminModule.php:329
 msgid "Delete this permanently?"
 msgstr ""
 
@@ -984,7 +984,7 @@ msgid "Delivered in the last 30 days"
 msgstr ""
 
 #. translators: 1: delivered count, 2: failed count, 3: first error.
-#: src/Admin/AdminModule.php:910
+#: src/Admin/AdminModule.php:909
 msgid "Delivered to %1$d, failed for %2$d. %3$s"
 msgstr ""
 
@@ -1000,7 +1000,7 @@ msgstr ""
 msgid "Discount"
 msgstr ""
 
-#: src/Admin/AdminModule.php:328
+#: src/Admin/AdminModule.php:327
 msgid "Dismiss"
 msgstr ""
 
@@ -1012,7 +1012,7 @@ msgstr ""
 msgid "Do not invite"
 msgstr ""
 
-#: src/Admin/AdminModule.php:338
+#: src/Admin/AdminModule.php:337
 msgid "Drag on the image to add an area, or click one to edit it."
 msgstr ""
 
@@ -1032,8 +1032,8 @@ msgstr ""
 msgid "Drawn as the customer receives it. The exact fonts and corners are LINE's, not this preview's."
 msgstr ""
 
-#: src/Admin/AdminModule.php:270
-#: src/Admin/AdminModule.php:284
+#: src/Admin/AdminModule.php:269
+#: src/Admin/AdminModule.php:283
 msgid "Duplicate"
 msgstr ""
 
@@ -1058,7 +1058,7 @@ msgstr ""
 msgid "Edit the JSON directly"
 msgstr ""
 
-#: src/Admin/AdminModule.php:335
+#: src/Admin/AdminModule.php:334
 #: views/imagemaps.php:42
 #: views/replies.php:100
 #: views/richmenus.php:107
@@ -1086,7 +1086,7 @@ msgstr ""
 msgid "Encryption"
 msgstr ""
 
-#: src/Admin/AdminModule.php:865
+#: src/Admin/AdminModule.php:864
 #: src/Woo/NotifyTemplates.php:506
 msgid "Enter a LINE user id to send the test to."
 msgstr ""
@@ -1155,11 +1155,11 @@ msgstr ""
 msgid "Fallback text"
 msgstr ""
 
-#: src/Admin/AdminModule.php:317
+#: src/Admin/AdminModule.php:316
 msgid "Fallback text is %d characters. LINE allows 1500 and cuts the rest."
 msgstr ""
 
-#: src/Admin/AdminModule.php:315
+#: src/Admin/AdminModule.php:314
 msgid "Fallback text is empty. The chat list and the push notification would show nothing."
 msgstr ""
 
@@ -1172,7 +1172,7 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-#: src/Admin/AdminModule.php:750
+#: src/Admin/AdminModule.php:749
 msgid "Fill in the Messaging API channel first."
 msgstr ""
 
@@ -1186,12 +1186,12 @@ msgstr ""
 msgid "Find"
 msgstr ""
 
-#: src/Admin/AdminModule.php:264
+#: src/Admin/AdminModule.php:263
 #: src/Flex/FlexModule.php:296
 msgid "Find out more"
 msgstr ""
 
-#: src/Admin/AdminModule.php:529
+#: src/Admin/AdminModule.php:528
 msgid "Finish setup"
 msgstr ""
 
@@ -1310,7 +1310,7 @@ msgstr ""
 msgid "Handled by the bot"
 msgstr ""
 
-#: src/Admin/AdminModule.php:254
+#: src/Admin/AdminModule.php:253
 #: src/Flex/FlexModule.php:266
 msgid "Headline"
 msgstr ""
@@ -1349,7 +1349,7 @@ msgstr ""
 msgid "Image %d has no picture."
 msgstr ""
 
-#: src/Admin/AdminModule.php:261
+#: src/Admin/AdminModule.php:260
 #: views/replies.php:177
 msgid "Image URL"
 msgstr ""
@@ -1414,7 +1414,7 @@ msgstr ""
 msgid "Keep notification history for"
 msgstr ""
 
-#: src/Admin/AdminModule.php:273
+#: src/Admin/AdminModule.php:272
 msgid "Keep only the card you are editing and remove the rest?"
 msgstr ""
 
@@ -1450,7 +1450,7 @@ msgstr ""
 msgid "LINE Login Channel ID"
 msgstr ""
 
-#: src/Admin/AdminModule.php:428
+#: src/Admin/AdminModule.php:427
 msgid "LINE Login channel connected"
 msgstr ""
 
@@ -1483,7 +1483,7 @@ msgstr ""
 msgid "LINE Pay credentials are missing, so nothing can be charged yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:479
+#: src/Admin/AdminModule.php:478
 msgid "LINE Pay credentials present"
 msgstr ""
 
@@ -1507,7 +1507,7 @@ msgstr ""
 msgid "LINE Pay is configured on the <a href=\"%s\">LINE Pay tab</a>, and the gateway is switched on under WooCommerce > Settings > Payments."
 msgstr ""
 
-#: src/Admin/AdminModule.php:486
+#: src/Admin/AdminModule.php:485
 msgid "LINE Pay is in production mode"
 msgstr ""
 
@@ -1565,7 +1565,7 @@ msgstr ""
 msgid "LINE account unlinked."
 msgstr ""
 
-#: src/Admin/AdminModule.php:356
+#: src/Admin/AdminModule.php:355
 msgid "LINE allows at most %d areas; the extra ones will be dropped."
 msgstr ""
 
@@ -1574,12 +1574,12 @@ msgid "LINE allows at most 13 quick reply buttons."
 msgstr ""
 
 #. translators: 1: LINE's reason code, 2: HTTP status code.
-#: src/Admin/AdminModule.php:698
+#: src/Admin/AdminModule.php:697
 msgid "LINE could not deliver a test event: %1$s (HTTP %2$d)."
 msgstr ""
 
 #. translators: %d: HTTP status code.
-#: src/Admin/AdminModule.php:692
+#: src/Admin/AdminModule.php:691
 msgid "LINE delivered a test event and this site answered %d."
 msgstr ""
 
@@ -1612,11 +1612,11 @@ msgid "LINE is rate limiting this channel. Try again shortly."
 msgstr ""
 
 #. translators: %s: webhook URL.
-#: src/Admin/AdminModule.php:663
+#: src/Admin/AdminModule.php:662
 msgid "LINE is set to deliver to %s"
 msgstr ""
 
-#: src/Admin/AdminModule.php:737
+#: src/Admin/AdminModule.php:736
 msgid "LINE now delivers to this site. If delivery is still off, turn on \"Use webhook\" in the Console -- that switch has no API."
 msgstr ""
 
@@ -1625,7 +1625,7 @@ msgid "LINE only accepts an imagemap image over HTTPS, and this site is served o
 msgstr ""
 
 #: views/inbox.php:127
-msgid "LINE only accepts these from a bot. Sending one is billed like any other message."
+msgid "LINE only accepts these from a bot. Pick one, then press Send. It is billed like any other message."
 msgstr ""
 
 #: src/Login/LoginModule.php:317
@@ -1678,7 +1678,7 @@ msgstr ""
 msgid "LINE would not deliver that message: %s"
 msgstr ""
 
-#: src/Admin/AdminModule.php:340
+#: src/Admin/AdminModule.php:339
 msgid "Label"
 msgstr ""
 
@@ -1706,7 +1706,7 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
-#: src/Admin/AdminModule.php:345
+#: src/Admin/AdminModule.php:344
 msgid "Link"
 msgstr ""
 
@@ -1807,7 +1807,7 @@ msgstr ""
 msgid "Media URLs must use HTTPS."
 msgstr ""
 
-#: src/Admin/AdminModule.php:336
+#: src/Admin/AdminModule.php:335
 #: src/RichMenu/RichMenuModule.php:99
 #: views/richmenus.php:106
 #: views/richmenus.php:204
@@ -1844,7 +1844,7 @@ msgstr ""
 msgid "Message the customer in LINE when their order status changes"
 msgstr ""
 
-#: src/Admin/AdminModule.php:346
+#: src/Admin/AdminModule.php:345
 msgid "Message the customer sends"
 msgstr ""
 
@@ -1860,7 +1860,7 @@ msgstr ""
 msgid "Messaging API Channel ID and Channel Secret are required to issue a token."
 msgstr ""
 
-#: src/Admin/AdminModule.php:435
+#: src/Admin/AdminModule.php:434
 msgid "Messaging API channel connected"
 msgstr ""
 
@@ -1872,23 +1872,23 @@ msgstr ""
 msgid "Minimum height"
 msgstr ""
 
-#: src/Admin/AdminModule.php:527
+#: src/Admin/AdminModule.php:526
 msgid "Moksa LINE Suite is installed but not connected to a LINE channel yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:283
+#: src/Admin/AdminModule.php:282
 msgid "Move down"
 msgstr ""
 
-#: src/Admin/AdminModule.php:268
+#: src/Admin/AdminModule.php:267
 msgid "Move left"
 msgstr ""
 
-#: src/Admin/AdminModule.php:269
+#: src/Admin/AdminModule.php:268
 msgid "Move right"
 msgstr ""
 
-#: src/Admin/AdminModule.php:282
+#: src/Admin/AdminModule.php:281
 msgid "Move up"
 msgstr ""
 
@@ -1926,7 +1926,7 @@ msgstr ""
 msgid "Never settled"
 msgstr ""
 
-#: src/Admin/AdminModule.php:265
+#: src/Admin/AdminModule.php:264
 msgid "New card"
 msgstr ""
 
@@ -1980,7 +1980,7 @@ msgstr ""
 msgid "No LINE users recorded yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:274
+#: src/Admin/AdminModule.php:273
 msgid "No cards yet. Add the first one below."
 msgstr ""
 
@@ -1992,7 +1992,7 @@ msgstr ""
 msgid "No conversations yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:900
+#: src/Admin/AdminModule.php:899
 msgid "No friends have been recorded on this site yet."
 msgstr ""
 
@@ -2004,7 +2004,7 @@ msgstr ""
 msgid "No notification templates yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:349
+#: src/Admin/AdminModule.php:348
 msgid "No other menus in this tab group yet"
 msgstr ""
 
@@ -2016,11 +2016,11 @@ msgstr ""
 msgid "No problem, that has been cancelled."
 msgstr ""
 
-#: src/Admin/AdminModule.php:255
+#: src/Admin/AdminModule.php:254
 msgid "No products found."
 msgstr ""
 
-#: src/Admin/AdminModule.php:286
+#: src/Admin/AdminModule.php:285
 msgid "No questions yet. Add the first one below."
 msgstr ""
 
@@ -2080,11 +2080,11 @@ msgstr ""
 msgid "Nothing submitted yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:302
+#: src/Admin/AdminModule.php:301
 msgid "Nothing to reply with yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:309
+#: src/Admin/AdminModule.php:308
 msgid "Nothing to send yet."
 msgstr ""
 
@@ -2177,7 +2177,7 @@ msgstr ""
 msgid "Only when"
 msgstr ""
 
-#: src/Admin/AdminModule.php:342
+#: src/Admin/AdminModule.php:341
 msgid "Open a link"
 msgstr ""
 
@@ -2201,7 +2201,7 @@ msgstr ""
 msgid "OpenSSL with AES-256-GCM is missing, so credentials are stored as plain text."
 msgstr ""
 
-#: src/Admin/AdminModule.php:496
+#: src/Admin/AdminModule.php:495
 msgid "OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text."
 msgstr ""
 
@@ -2283,7 +2283,7 @@ msgstr ""
 msgid "Order total, formatted"
 msgstr ""
 
-#: src/Admin/AdminModule.php:256
+#: src/Admin/AdminModule.php:255
 #: src/Woo/ProductCards.php:212
 msgid "Out of stock"
 msgstr ""
@@ -2297,7 +2297,7 @@ msgstr ""
 msgid "Passed the local checks. Connect the Messaging API channel to also validate against LINE."
 msgstr ""
 
-#: src/Admin/AdminModule.php:450
+#: src/Admin/AdminModule.php:449
 msgid "Paste the webhook URL into the Console, enable \"Use webhook\", then press Verify. \"Check what LINE has\" on the Messaging API tab reports whether that worked."
 msgstr ""
 
@@ -2410,7 +2410,7 @@ msgstr ""
 msgid "Plugin log"
 msgstr ""
 
-#: src/Admin/AdminModule.php:308
+#: src/Admin/AdminModule.php:307
 msgid "Plus the Flex card \"%s\", drawn below this message."
 msgstr ""
 
@@ -2418,11 +2418,11 @@ msgstr ""
 msgid "Point LINE at this site"
 msgstr ""
 
-#: src/Admin/AdminModule.php:343
+#: src/Admin/AdminModule.php:342
 msgid "Postback"
 msgstr ""
 
-#: src/Admin/AdminModule.php:348
+#: src/Admin/AdminModule.php:347
 msgid "Postback data"
 msgstr ""
 
@@ -2484,19 +2484,19 @@ msgstr ""
 msgid "Publishes every menu in the group in order and repoints their aliases, so the tabs stay consistent with each other."
 msgstr ""
 
-#: src/Admin/AdminModule.php:332
+#: src/Admin/AdminModule.php:331
 msgid "Publishing to LINE..."
 msgstr ""
 
-#: src/Admin/AdminModule.php:298
+#: src/Admin/AdminModule.php:297
 msgid "Question %1$d has %2$d buttons. LINE allows 13 including the Cancel button, so only the first %3$d are sent."
 msgstr ""
 
-#: src/Admin/AdminModule.php:292
+#: src/Admin/AdminModule.php:291
 msgid "Question %d has nothing to ask."
 msgstr ""
 
-#: src/Admin/AdminModule.php:296
+#: src/Admin/AdminModule.php:295
 msgid "Question %d offers buttons but none are listed."
 msgstr ""
 
@@ -2504,7 +2504,7 @@ msgstr ""
 msgid "Questions"
 msgstr ""
 
-#: src/Admin/AdminModule.php:294
+#: src/Admin/AdminModule.php:293
 msgid "Questions %1$d and %2$d both store their answer as \"%3$s\", so the second overwrites the first."
 msgstr ""
 
@@ -2548,23 +2548,28 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: src/Admin/AdminModule.php:327
+#: src/Admin/AdminModule.php:326
 msgid "Remove every area from this menu?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:271
+#: src/Admin/AdminModule.php:270
 msgid "Remove this card?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:285
+#: src/Admin/AdminModule.php:284
 msgid "Remove this question?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:352
+#: views/inbox.php:156
+#: views/inbox.php:158
+msgid "Remove this sticker"
+msgstr ""
+
+#: src/Admin/AdminModule.php:351
 msgid "Replace the current areas with this layout?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:259
+#: src/Admin/AdminModule.php:258
 msgid "Replace the current cards with these products?"
 msgstr ""
 
@@ -2601,7 +2606,7 @@ msgstr ""
 msgid "Rich menu deleted. That was the default, so until you make another menu the default, customers see whatever the LINE Official Account Manager holds -- or no menu at all."
 msgstr ""
 
-#: src/Admin/AdminModule.php:334
+#: src/Admin/AdminModule.php:333
 msgid "Rich menu image"
 msgstr ""
 
@@ -2643,7 +2648,7 @@ msgstr ""
 msgid "Sandbox"
 msgstr ""
 
-#: src/Admin/AdminModule.php:487
+#: src/Admin/AdminModule.php:486
 msgid "Sandbox mode is on, so no real money moves. Turn it off when you go live."
 msgstr ""
 
@@ -2730,16 +2735,16 @@ msgstr ""
 
 #: src/Liff/LiffModule.php:328
 #: views/broadcast.php:122
-#: views/inbox.php:154
+#: views/inbox.php:169
 msgid "Send"
 msgstr ""
 
-#: src/Admin/AdminModule.php:341
+#: src/Admin/AdminModule.php:340
 msgid "Send a message"
 msgstr ""
 
-#: views/inbox.php:150
-#: views/inbox.php:152
+#: views/inbox.php:165
+#: views/inbox.php:167
 msgid "Send a sticker"
 msgstr ""
 
@@ -2750,7 +2755,7 @@ msgstr ""
 msgid "Send a test to"
 msgstr ""
 
-#: src/Admin/AdminModule.php:310
+#: src/Admin/AdminModule.php:309
 #: views/notifications.php:168
 msgid "Send again"
 msgstr ""
@@ -2766,12 +2771,8 @@ msgstr ""
 msgid "Send test"
 msgstr ""
 
-#: src/Admin/AdminModule.php:311
+#: src/Admin/AdminModule.php:310
 msgid "Send this notification to the customer again?"
-msgstr ""
-
-#: src/Admin/AdminModule.php:244
-msgid "Send this sticker? It cannot be unsent, and it is billed like any other message."
 msgstr ""
 
 #: views/broadcast.php:81
@@ -2790,12 +2791,12 @@ msgstr ""
 msgid "Sent (30 days)"
 msgstr ""
 
-#: src/Admin/AdminModule.php:827
+#: src/Admin/AdminModule.php:826
 msgid "Sent again. The result is in the list below."
 msgstr ""
 
 #. translators: %d: number of recipients.
-#: src/Admin/AdminModule.php:923
+#: src/Admin/AdminModule.php:922
 msgid "Sent to %d people."
 msgstr ""
 
@@ -2827,7 +2828,7 @@ msgid "Set the official account basic ID in the LINE settings first."
 msgstr ""
 
 #: src/Admin/AdminModule.php:77
-#: src/Admin/AdminModule.php:394
+#: src/Admin/AdminModule.php:393
 msgid "Settings"
 msgstr ""
 
@@ -2949,7 +2950,7 @@ msgstr ""
 msgid "Stops the AI answering after this many replies in a day. Set to 0 for no limit -- but every reply costs money."
 msgstr ""
 
-#: src/Admin/AdminModule.php:280
+#: src/Admin/AdminModule.php:279
 msgid "Stored as"
 msgstr ""
 
@@ -2970,7 +2971,7 @@ msgstr ""
 msgid "Sure -- I have passed this to a member of our team. They will reply here shortly."
 msgstr ""
 
-#: src/Admin/AdminModule.php:344
+#: src/Admin/AdminModule.php:343
 msgid "Switch to another tab"
 msgstr ""
 
@@ -2983,7 +2984,7 @@ msgstr ""
 msgid "Tab order"
 msgstr ""
 
-#: src/Admin/AdminModule.php:347
+#: src/Admin/AdminModule.php:346
 msgid "Tab to switch to"
 msgstr ""
 
@@ -3054,7 +3055,7 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: src/Admin/AdminModule.php:874
+#: src/Admin/AdminModule.php:873
 msgid "Test sent."
 msgstr ""
 
@@ -3067,7 +3068,7 @@ msgstr ""
 msgid "Text colour"
 msgstr ""
 
-#: src/Admin/AdminModule.php:260
+#: src/Admin/AdminModule.php:259
 msgid "Text under it"
 msgstr ""
 
@@ -3079,7 +3080,7 @@ msgstr ""
 msgid "Thank you, we have received your details."
 msgstr ""
 
-#: src/Admin/AdminModule.php:290
+#: src/Admin/AdminModule.php:289
 msgid "That JSON cannot be read, so the questions below are not showing it."
 msgstr ""
 
@@ -3096,7 +3097,7 @@ msgstr ""
 msgid "That did not send. Please try again."
 msgstr ""
 
-#: src/Admin/AdminModule.php:320
+#: src/Admin/AdminModule.php:319
 msgid "That did not work."
 msgstr ""
 
@@ -3121,7 +3122,7 @@ msgid "That is a lot of messages at once. Please wait a moment."
 msgstr ""
 
 #. translators: %s: webhook URL.
-#: src/Admin/AdminModule.php:670
+#: src/Admin/AdminModule.php:669
 msgid "That is not this site, which expects %s. Events are going somewhere else."
 msgstr ""
 
@@ -3149,7 +3150,7 @@ msgstr ""
 msgid "That order could not be found."
 msgstr ""
 
-#: src/Admin/AdminModule.php:817
+#: src/Admin/AdminModule.php:816
 msgid "That order no longer exists."
 msgstr ""
 
@@ -3167,11 +3168,11 @@ msgstr ""
 msgid "That rich menu no longer exists."
 msgstr ""
 
-#: src/Admin/AdminModule.php:807
+#: src/Admin/AdminModule.php:806
 msgid "That row does not name an order and a status to resend."
 msgstr ""
 
-#: src/Admin/AdminModule.php:849
+#: src/Admin/AdminModule.php:848
 msgid "That template could not be loaded."
 msgstr ""
 
@@ -3203,7 +3204,7 @@ msgstr ""
 msgid "The AI returned an empty answer."
 msgstr ""
 
-#: src/Admin/AdminModule.php:465
+#: src/Admin/AdminModule.php:464
 msgid "The AI service is present but has no provider connected yet, so it cannot answer anything."
 msgstr ""
 
@@ -3224,7 +3225,7 @@ msgstr ""
 msgid "The amount is not valid for this currency."
 msgstr ""
 
-#: src/Admin/AdminModule.php:436
+#: src/Admin/AdminModule.php:435
 msgid "The bot cannot send or receive anything until this is set."
 msgstr ""
 
@@ -3262,11 +3263,11 @@ msgstr ""
 msgid "The button \"%s\" sends a message but has no text."
 msgstr ""
 
-#: src/Admin/AdminModule.php:713
+#: src/Admin/AdminModule.php:712
 msgid "The channel is not delivering to this site."
 msgstr ""
 
-#: src/Admin/AdminModule.php:712
+#: src/Admin/AdminModule.php:711
 msgid "The channel is pointed at this site and delivery is on."
 msgstr ""
 
@@ -3478,7 +3479,7 @@ msgstr ""
 msgid "The whole message is exactly this"
 msgstr ""
 
-#: src/Admin/AdminModule.php:288
+#: src/Admin/AdminModule.php:287
 msgid "Their answer"
 msgstr ""
 
@@ -3494,7 +3495,7 @@ msgstr ""
 msgid "These apply to every card. LINE refuses a carousel whose cards are not built the same way."
 msgstr ""
 
-#: src/Admin/AdminModule.php:277
+#: src/Admin/AdminModule.php:276
 msgid "These cover the common card. Anything else -- extra rows, colours, more buttons -- is edited in the JSON."
 msgstr ""
 
@@ -3514,7 +3515,7 @@ msgstr ""
 msgid "This bubble exceeds the 30 KB limit."
 msgstr ""
 
-#: src/Admin/AdminModule.php:276
+#: src/Admin/AdminModule.php:275
 msgid "This card has a layout these fields cannot describe, so it is edited as JSON below. Nothing here will change it."
 msgstr ""
 
@@ -3522,7 +3523,7 @@ msgstr ""
 msgid "This carousel exceeds the 50 KB limit. Remove bubbles or shorten the content."
 msgstr ""
 
-#: src/Admin/AdminModule.php:659
+#: src/Admin/AdminModule.php:658
 msgid "This channel has no webhook URL set, so nothing anyone sends the bot reaches this site."
 msgstr ""
 
@@ -3535,7 +3536,7 @@ msgstr ""
 msgid "This imagemap has no tappable areas yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:331
+#: src/Admin/AdminModule.php:330
 msgid "This is the default rich menu. Deleting it takes the menu away from every customer at once, until you make another one the default. Delete it anyway?"
 msgstr ""
 
@@ -3571,7 +3572,7 @@ msgstr ""
 msgid "This merchant is not registered with LINE Pay. Check the Channel ID and whether you are pointed at sandbox or production."
 msgstr ""
 
-#: src/Admin/AdminModule.php:275
+#: src/Admin/AdminModule.php:274
 msgid "This message is not a card or a carousel, so it can only be edited as JSON."
 msgstr ""
 
@@ -3607,7 +3608,7 @@ msgstr ""
 msgid "This rich menu has no tappable areas yet."
 msgstr ""
 
-#: src/Admin/AdminModule.php:1001
+#: src/Admin/AdminModule.php:1000
 msgid "This screen is missing."
 msgstr ""
 
@@ -3693,7 +3694,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: src/Admin/AdminModule.php:882
+#: src/Admin/AdminModule.php:881
 msgid "Type SEND in the confirmation box to go ahead."
 msgstr ""
 
@@ -3783,15 +3784,15 @@ msgstr ""
 msgid "Webhook URL"
 msgstr ""
 
-#: src/Admin/AdminModule.php:677
+#: src/Admin/AdminModule.php:676
 msgid "Webhook delivery is switched OFF in the Console, so LINE holds the URL but sends nothing to it."
 msgstr ""
 
-#: src/Admin/AdminModule.php:676
+#: src/Admin/AdminModule.php:675
 msgid "Webhook delivery is switched on."
 msgstr ""
 
-#: src/Admin/AdminModule.php:449
+#: src/Admin/AdminModule.php:448
 msgid "Webhook has received an event"
 msgstr ""
 
@@ -3799,11 +3800,11 @@ msgstr ""
 msgid "Webhook signatures are verified with this. Without it, nothing the bot receives can be trusted."
 msgstr ""
 
-#: src/Admin/AdminModule.php:442
+#: src/Admin/AdminModule.php:441
 msgid "Webhook signing secret is the Messaging API one"
 msgstr ""
 
-#: src/Admin/AdminModule.php:443
+#: src/Admin/AdminModule.php:442
 msgid "Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual."
 msgstr ""
 
@@ -3819,7 +3820,7 @@ msgstr ""
 msgid "What name should we put this under?"
 msgstr ""
 
-#: src/Admin/AdminModule.php:278
+#: src/Admin/AdminModule.php:277
 msgid "What the bot asks"
 msgstr ""
 
@@ -3836,7 +3837,7 @@ msgstr ""
 msgid "When a message contains this, the bot stops answering and the conversation is flagged for a human."
 msgstr ""
 
-#: src/Admin/AdminModule.php:339
+#: src/Admin/AdminModule.php:338
 msgid "When tapped"
 msgstr ""
 
@@ -3905,7 +3906,7 @@ msgstr ""
 msgid "WooCommerce is not active, so there is nothing to notify about."
 msgstr ""
 
-#: src/Admin/AdminModule.php:811
+#: src/Admin/AdminModule.php:810
 #: src/Woo/NotifyTemplates.php:510
 msgid "WooCommerce is not active."
 msgstr ""
@@ -3931,15 +3932,15 @@ msgstr ""
 msgid "WordPress has the AI Client but no provider is connected, so it cannot answer anything yet. Install the AI plugin from WordPress.org and connect a provider there."
 msgstr ""
 
-#: src/Admin/AdminModule.php:333
+#: src/Admin/AdminModule.php:332
 msgid "Working..."
 msgstr ""
 
-#: src/Admin/AdminModule.php:860
+#: src/Admin/AdminModule.php:859
 msgid "Write a message or choose a template first."
 msgstr ""
 
-#: views/inbox.php:148
+#: views/inbox.php:163
 msgid "Write a reply"
 msgstr ""
 
@@ -3952,7 +3953,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: src/Admin/AdminModule.php:321
+#: src/Admin/AdminModule.php:320
 msgid "Yes, do it"
 msgstr ""
 
@@ -3974,11 +3975,11 @@ msgstr ""
 msgid "You cannot change conversations."
 msgstr ""
 
-#: src/Admin/AdminModule.php:746
+#: src/Admin/AdminModule.php:745
 msgid "You cannot change the webhook settings."
 msgstr ""
 
-#: src/Admin/AdminModule.php:766
+#: src/Admin/AdminModule.php:765
 msgid "You cannot clear the log."
 msgstr ""
 
@@ -3994,11 +3995,11 @@ msgstr ""
 msgid "You cannot reply to conversations."
 msgstr ""
 
-#: src/Admin/AdminModule.php:800
+#: src/Admin/AdminModule.php:799
 msgid "You cannot resend notifications."
 msgstr ""
 
-#: src/Admin/AdminModule.php:834
+#: src/Admin/AdminModule.php:833
 msgid "You cannot send broadcasts."
 msgstr ""
 
@@ -4014,7 +4015,7 @@ msgstr ""
 msgid "You do not have permission to change bot settings."
 msgstr ""
 
-#: src/Admin/AdminModule.php:540
+#: src/Admin/AdminModule.php:539
 msgid "You do not have permission to change these settings."
 msgstr ""
 
@@ -4031,7 +4032,7 @@ msgstr ""
 msgid "You do not have permission to manage templates."
 msgstr ""
 
-#: src/Admin/AdminModule.php:995
+#: src/Admin/AdminModule.php:994
 msgid "You do not have permission to view this page."
 msgstr ""
 
@@ -4096,7 +4097,7 @@ msgstr ""
 msgid "altText is limited to 1500 characters."
 msgstr ""
 
-#: src/Admin/AdminModule.php:248
+#: src/Admin/AdminModule.php:247
 #: views/inbox.php:36
 msgid "bot"
 msgstr ""
@@ -4105,28 +4106,28 @@ msgstr ""
 msgid "check every"
 msgstr ""
 
-#: src/Admin/AdminModule.php:250
+#: src/Admin/AdminModule.php:249
 #: views/inbox.php:38
 msgid "closed"
 msgstr ""
 
-#: src/Admin/AdminModule.php:324
+#: src/Admin/AdminModule.php:323
 msgctxt "confirmation button"
 msgid "Clear"
 msgstr ""
 
-#: src/Admin/AdminModule.php:322
+#: src/Admin/AdminModule.php:321
 msgctxt "confirmation button"
 msgid "Delete"
 msgstr ""
 
+#: src/Admin/AdminModule.php:324
 #: src/Admin/AdminModule.php:325
-#: src/Admin/AdminModule.php:326
 msgctxt "confirmation button"
 msgid "Replace"
 msgstr ""
 
-#: src/Admin/AdminModule.php:323
+#: src/Admin/AdminModule.php:322
 msgctxt "confirmation button"
 msgid "Send"
 msgstr ""
@@ -4155,7 +4156,7 @@ msgstr ""
 msgid "greets the visitor by their LINE name"
 msgstr ""
 
-#: src/Admin/AdminModule.php:249
+#: src/Admin/AdminModule.php:248
 #: views/inbox.php:37
 msgid "human"
 msgstr ""
@@ -4224,7 +4225,7 @@ msgstr ""
 msgid "refunded %s"
 msgstr ""
 
-#: src/Admin/AdminModule.php:301
+#: src/Admin/AdminModule.php:300
 msgctxt "sample customer name shown in previews"
 msgid "Ming"
 msgstr ""
