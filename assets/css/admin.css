@@ -447,6 +447,131 @@
 	border-radius: 10px;
 }
 
+/* Conversation flow editor ------------------------------------------------ */
+
+.moksa-flow-steps {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 8px 0 12px;
+}
+
+.moksa-flow-empty {
+	margin: 0;
+	padding: 16px;
+	border: 1px dashed var(--moksa-border);
+	border-radius: 6px;
+	color: var(--moksa-muted);
+	text-align: center;
+}
+
+.moksa-flow-step {
+	position: relative;
+	padding: 12px 14px 14px;
+	border: 1px solid var(--moksa-border);
+	border-left: 3px solid #2271b1;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.moksa-flow-step__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+
+/* The number is the order the customer meets these in, which is the one thing
+   about a flow that cannot be read off any single card. */
+.moksa-flow-step__number {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: #2271b1;
+	color: #fff;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.moksa-flow-step__actions {
+	display: flex;
+	gap: 2px;
+}
+
+.moksa-flow-step__actions .button-link {
+	width: 26px;
+	height: 26px;
+	line-height: 1;
+	border-radius: 4px;
+	color: var(--moksa-muted);
+	text-decoration: none;
+	text-align: center;
+}
+
+.moksa-flow-step__actions .button-link:hover:not(:disabled) {
+	background: #f0f0f1;
+	color: #1d2327;
+}
+
+.moksa-flow-step__actions .button-link:disabled {
+	opacity: 0.35;
+	cursor: default;
+}
+
+.moksa-flow-step__label {
+	display: block;
+	margin-top: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--moksa-muted);
+}
+
+.moksa-flow-step__label textarea,
+.moksa-flow-step__label input,
+.moksa-flow-step__label select {
+	margin-top: 3px;
+	font-weight: 400;
+	color: #1d2327;
+}
+
+.moksa-flow-step__row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+}
+
+/* Quick replies are drawn under the message in LINE, not inside the bubble,
+   and they scroll sideways rather than wrapping. */
+.moksa-bubble-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	min-width: 0;
+}
+
+.moksa-quick {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.moksa-quick__button {
+	padding: 4px 12px;
+	border: 1px solid #ffffff;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.9);
+	color: #2f6fb5;
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.moksa-quick__button--cancel {
+	color: #6b7280;
+}
+
 .is-near-limit {
 	color: #b32d2e;
 	font-weight: 600;

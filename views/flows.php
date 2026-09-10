@@ -9,6 +9,9 @@ use Moksa\Line\Bot\Flow;
 
 defined( 'ABSPATH' ) || exit;
 
+$basic_id     = ltrim( trim( (string) \Moksa\Line\Support\Options::get( 'bot_basic_id' ) ), '@' );
+$account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account', 'moksa-line' );
+
 $flows    = Flow::all();
 $selected = isset( $_GET['flow'] ) ? (int) $_GET['flow'] : 0;
 $example  = array(
@@ -51,12 +54,45 @@ $example  = array(
 					<input type="text" id="moksa-flow-trigger" name="trigger_value" class="widefat" />
 				</p>
 
-				<p>
-					<label for="moksa-flow-definition"><?php esc_html_e( 'Steps', 'moksa-line' ); ?></label>
-					<textarea id="moksa-flow-definition" name="definition" rows="18" class="widefat code" spellcheck="false"><?php echo esc_textarea( (string) wp_json_encode( $example, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) ); ?></textarea>
+				<div class="moksa-field">
+					<label><?php esc_html_e( 'Questions', 'moksa-line' ); ?></label>
 					<span class="description">
-						<?php esc_html_e( 'Each step needs a prompt. Types: text, number, phone, email, date, choice. A choice step also needs a choices array, which is rendered as quick reply buttons.', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Asked one at a time, in this order. Each answer is stored under its own key, which is the column you see in submissions.', 'moksa-line' ); ?>
 					</span>
+
+					<div class="moksa-flow-editor" data-moksa-flow-editor="[data-moksa-flow-definition]"
+						data-types="<?php
+						echo esc_attr(
+							(string) wp_json_encode(
+								array(
+									'text'   => __( 'Anything they type', 'moksa-line' ),
+									'choice' => __( 'One of these buttons', 'moksa-line' ),
+									'number' => __( 'A number', 'moksa-line' ),
+									'phone'  => __( 'A phone number', 'moksa-line' ),
+									'email'  => __( 'An email address', 'moksa-line' ),
+									'date'   => __( 'A date', 'moksa-line' ),
+								)
+							)
+						);
+						?>">
+						<div class="moksa-flow-steps" data-moksa-flow-steps></div>
+						<p>
+							<button type="button" class="button" data-moksa-add-step>
+								<?php esc_html_e( '+ Add a question', 'moksa-line' ); ?>
+							</button>
+						</p>
+						<div class="moksa-preview-warnings" data-moksa-flow-warnings></div>
+					</div>
+
+					<label for="moksa-flow-definition" class="screen-reader-text"><?php esc_html_e( 'The questions as JSON', 'moksa-line' ); ?></label>
+					<textarea id="moksa-flow-definition" name="definition" rows="18" class="widefat code moksa-area-json" spellcheck="false" data-moksa-flow-definition hidden><?php echo esc_textarea( (string) wp_json_encode( $example, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) ); ?></textarea>
+					<button type="button" class="button-link" data-moksa-toggle-flow-json><?php esc_html_e( 'Edit the JSON directly', 'moksa-line' ); ?></button>
+				</div>
+
+				<p>
+					<label for="moksa-flow-complete"><?php esc_html_e( 'When they finish, say', 'moksa-line' ); ?></label>
+					<textarea id="moksa-flow-complete" rows="2" class="widefat" data-moksa-flow-complete></textarea>
+					<span class="description"><?php esc_html_e( 'You can use {display_name}, {site_name} and {site_url}.', 'moksa-line' ); ?></span>
 				</p>
 
 				<p>
@@ -81,6 +117,22 @@ $example  = array(
 		</div>
 
 		<div class="moksa-split__side">
+			<div class="moksa-panel">
+				<h2><?php esc_html_e( 'Preview', 'moksa-line' ); ?></h2>
+				<p class="description">
+					<?php esc_html_e( 'The whole conversation, from the trigger to the last answer. Buttons are drawn where LINE puts them, under the message.', 'moksa-line' ); ?>
+				</p>
+
+				<?php // data-line-preview marks a deliberate imitation of LINE's UI so accessibility scanners skip it. ?>
+				<div class="moksa-phone-chat" data-line-preview>
+					<div class="moksa-phone-chat__bar">
+						<span class="moksa-phone-chat__dot"></span>
+						<?php echo esc_html( $account_name ); ?>
+					</div>
+					<div class="moksa-phone-chat__body moksa-phone-chat__body--thread" data-moksa-flow-preview></div>
+				</div>
+			</div>
+
 			<div class="moksa-panel">
 				<h2><?php esc_html_e( 'Saved flows', 'moksa-line' ); ?></h2>
 				<ul class="moksa-list">

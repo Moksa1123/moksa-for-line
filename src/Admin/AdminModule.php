@@ -176,9 +176,17 @@ class AdminModule {
 		);
 
 		wp_enqueue_script(
+			'moksa-line-flow-editor',
+			MOKSA_LINE_URL . 'assets/js/flow-editor.js',
+			array( 'jquery' ),
+			self::asset_version( 'assets/js/flow-editor.js' ),
+			true
+		);
+
+		wp_enqueue_script(
 			'moksa-line-admin',
 			MOKSA_LINE_URL . 'assets/js/admin.js',
-			array( 'jquery', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor' ),
+			array( 'jquery', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor', 'moksa-line-flow-editor' ),
 			self::asset_version( 'assets/js/admin.js' ),
 			true
 		);
@@ -194,6 +202,29 @@ class AdminModule {
 				'strings' => array(
 					'saved'        => __( 'Saved.', 'moksa-line' ),
 					'copied'       => __( 'Copied', 'moksa-line' ),
+					'flowPrompt'   => __( 'What the bot asks', 'moksa-line' ),
+					'flowAnswerType' => __( 'Answer', 'moksa-line' ),
+					'flowKey'      => __( 'Stored as', 'moksa-line' ),
+					'flowChoices'  => __( 'Buttons, one per line', 'moksa-line' ),
+					'flowMoveUp'   => __( 'Move up', 'moksa-line' ),
+					'flowMoveDown' => __( 'Move down', 'moksa-line' ),
+					'flowDuplicate' => __( 'Duplicate', 'moksa-line' ),
+					'flowDeleteStep' => __( 'Remove this question?', 'moksa-line' ),
+					'flowNoSteps'  => __( 'No questions yet. Add the first one below.', 'moksa-line' ),
+					'flowPromptMissing' => __( '(no question yet)', 'moksa-line' ),
+					'flowSampleText' => __( 'Their answer', 'moksa-line' ),
+					'flowCancel'   => __( 'Cancel', 'moksa-line' ),
+					'flowBadJson'  => __( 'That JSON cannot be read, so the questions below are not showing it.', 'moksa-line' ),
+					/* translators: %d: question number. */
+					'flowNoPrompt' => __( 'Question %d has nothing to ask.', 'moksa-line' ),
+					/* translators: 1: first question number, 2: second question number, 3: the key. */
+					'flowDuplicateKey' => __( 'Questions %1$d and %2$d both store their answer as "%3$s", so the second overwrites the first.', 'moksa-line' ),
+					/* translators: %d: question number. */
+					'flowNoChoices' => __( 'Question %d offers buttons but none are listed.', 'moksa-line' ),
+					/* translators: 1: question number, 2: how many buttons, 3: how many are sent. */
+					'flowTooManyChoices' => __( 'Question %1$d has %2$d buttons. LINE allows 13 including the Cancel button, so only the first %3$d are sent.', 'moksa-line' ),
+					/* translators: 1: the button label, 2: question number, 3: the limit. */
+					'flowLongChoice' => __( 'Button "%1$s" on question %2$d is longer than the %3$d characters LINE shows, and is cut.', 'moksa-line' ),
 					'sampleName'   => _x( 'Ming', 'sample customer name shown in previews', 'moksa-line' ),
 					'replyEmpty'   => __( 'Nothing to reply with yet.', 'moksa-line' ),
 					/* translators: 1: reply type, 2: the chosen item. */

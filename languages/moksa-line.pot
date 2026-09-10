@@ -1,353 +1,1813 @@
-# Copyright (C) Moksa
+# Copyright (C) 2026 Moksa
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
-"Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-09 17:31+0000\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/moksa-line\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: 2026-09-10T02:48:22+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-line\n"
 
-#. translators: %s: component type.
-#: src/Flex/Validator.php:323
-msgid "\"%s\" cannot be placed inside a box."
+#. Plugin Name of the plugin
+#: moksa-line.php
+msgid "Moksa LINE Suite"
 msgstr ""
 
-#. translators: %s: action type.
-#: src/Flex/Validator.php:363
-msgid "\"%s\" is not a valid action type."
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: moksa-line.php
+msgid "https://moksaweb.com/"
 msgstr ""
 
-#. translators: 1: number of messages, 2: order status label.
-#: src/Woo/WooModule.php:230
-msgid "%1$d LINE notification sent for status: %2$s"
-msgid_plural "%1$d LINE notifications sent for status: %2$s"
-msgstr[0] ""
-msgstr[1] ""
-
-#. translators: 1: property, 2: supplied value, 3: allowed values.
-#: src/Flex/Validator.php:302
-msgid "%1$s cannot be \"%2$s\". Allowed: %3$s."
+#. Description of the plugin
+#: moksa-line.php
+msgid "LINE Login, Messaging API bot, Flex Message builder, tabbed rich menus, customer-service inbox, AI replies and LINE Pay for WordPress and WooCommerce."
 msgstr ""
 
-#. translators: 1: messages used, 2: monthly allowance.
-#: views/dashboard.php:82
-msgid "%1$s of %2$s push messages used."
+#. Author of the plugin
+#: moksa-line.php
+msgid "Moksa"
 msgstr ""
 
-#: src/Admin/AdminModule.php:220
+#: src/Admin/AdminModule.php:41
+#: views/inbox.php:16
+#: views/inbox.php:35
+#: views/settings.php:311
+msgid "Inbox"
+msgstr ""
+
+#: src/Admin/AdminModule.php:51
+#: src/Admin/AdminModule.php:52
+#: src/Woo/WooModule.php:634
+#: views/dashboard.php:34
+msgid "LINE"
+msgstr ""
+
+#: src/Admin/AdminModule.php:61
+msgid "Dashboard"
+msgstr ""
+
+#: src/Admin/AdminModule.php:63
+#: views/replies.php:21
+msgid "Auto replies"
+msgstr ""
+
+#: src/Admin/AdminModule.php:64
+#: views/flows.php:28
+msgid "Conversation flows"
+msgstr ""
+
+#: src/Admin/AdminModule.php:65
+#: views/flex.php:23
+msgid "Flex messages"
+msgstr ""
+
+#: src/Admin/AdminModule.php:66
+#: views/richmenus.php:17
+msgid "Rich menus"
+msgstr ""
+
+#: src/Admin/AdminModule.php:67
+#: views/broadcast.php:36
+msgid "Broadcast"
+msgstr ""
+
+#: src/Admin/AdminModule.php:68
+#: views/users.php:25
+msgid "LINE users"
+msgstr ""
+
+#: src/Admin/AdminModule.php:69
+#: src/Woo/NotifyTemplates.php:44
+#: views/notifications.php:17
+#: views/notifications.php:40
+#: views/settings.php:366
+msgid "Order notifications"
+msgstr ""
+
+#: src/Admin/AdminModule.php:70
+#: views/payments.php:17
+#: views/payments.php:27
+#: views/settings.php:443
+msgid "Payments"
+msgstr ""
+
+#: src/Admin/AdminModule.php:71
+#: views/logs.php:88
+msgid "Logs"
+msgstr ""
+
+#: src/Admin/AdminModule.php:72
+#: src/Admin/AdminModule.php:311
+msgid "Settings"
+msgstr ""
+
+#: src/Admin/AdminModule.php:94
+#: src/Admin/AdminModule.php:95
+msgid "Notification templates"
+msgstr ""
+
+#: src/Admin/AdminModule.php:203
+msgid "Saved."
+msgstr ""
+
+#: src/Admin/AdminModule.php:204
+msgid "Copied"
+msgstr ""
+
+#: src/Admin/AdminModule.php:205
+msgid "What the bot asks"
+msgstr ""
+
+#: src/Admin/AdminModule.php:206
+msgid "Answer"
+msgstr ""
+
+#: src/Admin/AdminModule.php:207
+msgid "Stored as"
+msgstr ""
+
+#: src/Admin/AdminModule.php:208
+msgid "Buttons, one per line"
+msgstr ""
+
+#: src/Admin/AdminModule.php:209
+msgid "Move up"
+msgstr ""
+
+#: src/Admin/AdminModule.php:210
+msgid "Move down"
+msgstr ""
+
+#: src/Admin/AdminModule.php:211
+msgid "Duplicate"
+msgstr ""
+
+#: src/Admin/AdminModule.php:212
+msgid "Remove this question?"
+msgstr ""
+
+#: src/Admin/AdminModule.php:213
+msgid "No questions yet. Add the first one below."
+msgstr ""
+
+#: src/Admin/AdminModule.php:214
+msgid "(no question yet)"
+msgstr ""
+
+#: src/Admin/AdminModule.php:215
+msgid "Their answer"
+msgstr ""
+
+#: src/Admin/AdminModule.php:216
+#: src/Bot/Flow.php:352
+#: src/Bot/Flow.php:353
+#: src/Bot/Flow.php:440
+msgid "Cancel"
+msgstr ""
+
+#: src/Admin/AdminModule.php:217
+msgid "That JSON cannot be read, so the questions below are not showing it."
+msgstr ""
+
+#. translators: %d: question number.
+#: src/Admin/AdminModule.php:219
+#, php-format
+msgid "Question %d has nothing to ask."
+msgstr ""
+
+#. translators: 1: first question number, 2: second question number, 3: the key.
+#: src/Admin/AdminModule.php:221
+#, php-format
+msgid "Questions %1$d and %2$d both store their answer as \"%3$s\", so the second overwrites the first."
+msgstr ""
+
+#. translators: %d: question number.
+#: src/Admin/AdminModule.php:223
+#, php-format
+msgid "Question %d offers buttons but none are listed."
+msgstr ""
+
+#. translators: 1: question number, 2: how many buttons, 3: how many are sent.
+#: src/Admin/AdminModule.php:225
+#, php-format
+msgid "Question %1$d has %2$d buttons. LINE allows 13 including the Cancel button, so only the first %3$d are sent."
+msgstr ""
+
+#. translators: 1: the button label, 2: question number, 3: the limit.
+#: src/Admin/AdminModule.php:227
+#, php-format
+msgid "Button \"%1$s\" on question %2$d is longer than the %3$d characters LINE shows, and is cut."
+msgstr ""
+
+#: src/Admin/AdminModule.php:228
+msgctxt "sample customer name shown in previews"
+msgid "Ming"
+msgstr ""
+
+#: src/Admin/AdminModule.php:229
+msgid "Nothing to reply with yet."
+msgstr ""
+
+#. translators: 1: reply type, 2: the chosen item.
+#: src/Admin/AdminModule.php:231
+#, php-format
+msgid "%1$s: %2$s"
+msgstr ""
+
+#. translators: 1: characters used, 2: the limit.
+#: src/Admin/AdminModule.php:233
+#, php-format
+msgid "%1$s of %2$s characters"
+msgstr ""
+
+#. translators: %s: Flex template name.
+#: src/Admin/AdminModule.php:235
+#, php-format
+msgid "Plus the Flex card \"%s\", drawn below this message."
+msgstr ""
+
+#: src/Admin/AdminModule.php:236
+msgid "Nothing to send yet."
+msgstr ""
+
+#: src/Admin/AdminModule.php:237
+#: views/notifications.php:168
+msgid "Send again"
+msgstr ""
+
+#: src/Admin/AdminModule.php:238
+msgid "Send this notification to the customer again?"
+msgstr ""
+
+#: src/Admin/AdminModule.php:239
+msgid "Could not copy -- select it and copy by hand"
+msgstr ""
+
+#: src/Admin/AdminModule.php:240
+msgid "Delete every entry in the plugin log? The log is only used for diagnosis, so nothing else is lost."
+msgstr ""
+
+#: src/Admin/AdminModule.php:241
+msgid "(no fallback text -- the notification would be blank)"
+msgstr ""
+
+#: src/Admin/AdminModule.php:242
+msgid "Fallback text is empty. The chat list and the push notification would show nothing."
+msgstr ""
+
+#. translators: %d: character count.
+#: src/Admin/AdminModule.php:244
+#, php-format
+msgid "Fallback text is %d characters. LINE allows 1500 and cuts the rest."
+msgstr ""
+
+#. translators: 1: the text, 2: measured contrast ratio, 3: required ratio.
+#: src/Admin/AdminModule.php:246
+#, php-format
+msgid "\"%1$s\" has a contrast ratio of %2$s against its background; %3$s is the readable minimum."
+msgstr ""
+
+#: src/Admin/AdminModule.php:247
+msgid "That did not work."
+msgstr ""
+
+#: src/Admin/AdminModule.php:248
+msgid "Delete this permanently?"
+msgstr ""
+
+#: src/Admin/AdminModule.php:249
+msgid "Publishing to LINE..."
+msgstr ""
+
+#: src/Admin/AdminModule.php:250
+msgid "Working..."
+msgstr ""
+
+#: src/Admin/AdminModule.php:251
+msgid "Rich menu image"
+msgstr ""
+
+#: src/Admin/AdminModule.php:252
+#: views/replies.php:72
+#: views/richmenus.php:104
+msgid "Editing"
+msgstr ""
+
+#: src/Admin/AdminModule.php:253
+#: src/RichMenu/RichMenuModule.php:99
+#: views/richmenus.php:103
+#: views/richmenus.php:201
+msgid "Menu"
+msgstr ""
+
+#: src/Admin/AdminModule.php:254
+#: views/logs.php:185
+msgid "Area"
+msgstr ""
+
+#: src/Admin/AdminModule.php:255
+msgid "Drag on the image to add an area, or click one to edit it."
+msgstr ""
+
+#: src/Admin/AdminModule.php:256
+msgid "When tapped"
+msgstr ""
+
+#: src/Admin/AdminModule.php:257
+msgid "Label"
+msgstr ""
+
+#: src/Admin/AdminModule.php:258
+msgid "Send a message"
+msgstr ""
+
+#: src/Admin/AdminModule.php:259
+msgid "Open a link"
+msgstr ""
+
+#: src/Admin/AdminModule.php:260
+msgid "Postback"
+msgstr ""
+
+#: src/Admin/AdminModule.php:261
+msgid "Switch to another tab"
+msgstr ""
+
+#: src/Admin/AdminModule.php:262
+msgid "Link"
+msgstr ""
+
+#: src/Admin/AdminModule.php:263
+msgid "Message the customer sends"
+msgstr ""
+
+#: src/Admin/AdminModule.php:264
+msgid "Tab to switch to"
+msgstr ""
+
+#: src/Admin/AdminModule.php:265
+msgid "Postback data"
+msgstr ""
+
+#: src/Admin/AdminModule.php:266
+msgid "No other menus in this tab group yet"
+msgstr ""
+
+#: src/Admin/AdminModule.php:267
+msgid "Delete this area"
+msgstr ""
+
+#: src/Admin/AdminModule.php:268
+msgid "Arrow keys nudge by 1 pixel, with Shift by 10."
+msgstr ""
+
+#: src/Admin/AdminModule.php:269
+msgid "Replace the current areas with this layout?"
+msgstr ""
+
+#. translators: %s: list of overlapping area numbers.
+#: src/Admin/AdminModule.php:271
+#, php-format
+msgid "Areas %s overlap. LINE uses whichever comes first, which is rarely what you want."
+msgstr ""
+
+#. translators: %d: maximum number of areas.
+#: src/Admin/AdminModule.php:273
+#, php-format
+msgid "LINE allows at most %d areas; the extra ones will be dropped."
+msgstr ""
+
+#. translators: %d: number of areas without a destination.
+#: src/Admin/AdminModule.php:275
+#, php-format
 msgid "%d area(s) have no destination set yet."
 msgstr ""
 
-#. translators: %d: number of conditions.
-#: src/Woo/NotifyTemplates.php:354
-msgid "%d condition"
-msgid_plural "%d conditions"
-msgstr[0] ""
-msgstr[1] ""
+#: src/Admin/AdminModule.php:345
+msgid "LINE Login channel connected"
+msgstr ""
 
-#. translators: %s: messages used.
-#: views/dashboard.php:96
-msgid "%s push messages sent this month. This plan has no monthly cap."
+#: src/Admin/AdminModule.php:346
+msgid "Add the Channel ID and Channel Secret from the LINE Developers Console."
+msgstr ""
+
+#: src/Admin/AdminModule.php:352
+msgid "Messaging API channel connected"
+msgstr ""
+
+#: src/Admin/AdminModule.php:353
+msgid "The bot cannot send or receive anything until this is set."
+msgstr ""
+
+#: src/Admin/AdminModule.php:359
+msgid "Webhook signing secret is the Messaging API one"
+msgstr ""
+
+#: src/Admin/AdminModule.php:360
+msgid "Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual."
+msgstr ""
+
+#: src/Admin/AdminModule.php:366
+msgid "Webhook has received an event"
+msgstr ""
+
+#: src/Admin/AdminModule.php:367
+msgid "Paste the webhook URL into the Console, enable \"Use webhook\", then press Verify."
+msgstr ""
+
+#: src/Admin/AdminModule.php:376
+msgid "AI provider available"
+msgstr ""
+
+#: src/Admin/AdminModule.php:377
+msgid "AI replies are switched on, but AI Engine is not active on this site."
+msgstr ""
+
+#: src/Admin/AdminModule.php:385
+msgid "LINE Pay credentials present"
+msgstr ""
+
+#: src/Admin/AdminModule.php:386
+msgid "Add the LINE Pay Channel ID and Channel Secret."
+msgstr ""
+
+#: src/Admin/AdminModule.php:392
+msgid "LINE Pay is in production mode"
+msgstr ""
+
+#: src/Admin/AdminModule.php:393
+msgid "Sandbox mode is on, so no real money moves. Turn it off when you go live."
+msgstr ""
+
+#: src/Admin/AdminModule.php:401
+#: views/settings.php:502
+msgid "Credentials are encrypted at rest"
+msgstr ""
+
+#: src/Admin/AdminModule.php:402
+msgid "OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text."
+msgstr ""
+
+#: src/Admin/AdminModule.php:433
+msgid "Moksa LINE Suite is installed but not connected to a LINE channel yet."
+msgstr ""
+
+#: src/Admin/AdminModule.php:435
+msgid "Finish setup"
+msgstr ""
+
+#: src/Admin/AdminModule.php:446
+msgid "You do not have permission to change these settings."
+msgstr ""
+
+#: src/Admin/AdminModule.php:554
+msgid "You cannot clear the log."
+msgstr ""
+
+#. translators: %s: number of entries removed.
+#: src/Admin/AdminModule.php:568
+#, php-format
+msgid "Cleared %s entries."
+msgstr ""
+
+#: src/Admin/AdminModule.php:588
+msgid "You cannot resend notifications."
+msgstr ""
+
+#: src/Admin/AdminModule.php:595
+msgid "That row does not name an order and a status to resend."
+msgstr ""
+
+#: src/Admin/AdminModule.php:599
+#: src/Woo/NotifyTemplates.php:510
+msgid "WooCommerce is not active."
+msgstr ""
+
+#: src/Admin/AdminModule.php:605
+msgid "That order no longer exists."
+msgstr ""
+
+#: src/Admin/AdminModule.php:615
+msgid "Sent again. The result is in the list below."
+msgstr ""
+
+#: src/Admin/AdminModule.php:622
+msgid "You cannot send broadcasts."
+msgstr ""
+
+#: src/Admin/AdminModule.php:637
+msgid "That template could not be loaded."
+msgstr ""
+
+#: src/Admin/AdminModule.php:648
+msgid "Write a message or choose a template first."
+msgstr ""
+
+#: src/Admin/AdminModule.php:653
+#: src/Woo/NotifyTemplates.php:506
+msgid "Enter a LINE user id to send the test to."
+msgstr ""
+
+#: src/Admin/AdminModule.php:662
+msgid "Test sent."
+msgstr ""
+
+#: src/Admin/AdminModule.php:670
+msgid "Type SEND in the confirmation box to go ahead."
+msgstr ""
+
+#: src/Admin/AdminModule.php:680
+msgid "Broadcast sent to every friend of the account."
+msgstr ""
+
+#: src/Admin/AdminModule.php:688
+msgid "No friends have been recorded on this site yet."
+msgstr ""
+
+#. translators: 1: delivered count, 2: failed count, 3: first error.
+#: src/Admin/AdminModule.php:698
+#, php-format
+msgid "Delivered to %1$d, failed for %2$d. %3$s"
+msgstr ""
+
+#. translators: %d: number of recipients.
+#: src/Admin/AdminModule.php:711
+#, php-format
+msgid "Sent to %d people."
+msgstr ""
+
+#: src/Admin/AdminModule.php:775
+msgid "You do not have permission to view this page."
+msgstr ""
+
+#: src/Admin/AdminModule.php:781
+msgid "This screen is missing."
+msgstr ""
+
+#: src/Api/Client.php:164
+msgid "LINE is rate limiting this channel. Try again shortly."
 msgstr ""
 
 #: src/Api/Client.php:167
 msgid "(Check the channel plan and that the feature is enabled for this channel.)"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:160
-msgid "-- choose --"
+#. translators: %d: HTTP status code.
+#: src/Api/Client.php:245
+#, php-format
+msgid "Could not download the message content (HTTP %d)."
 msgstr ""
 
-#. translators: 1: action type, 2: missing field.
-#: src/Flex/Validator.php:374
-msgid "A %1$s action needs %2$s."
+#: src/Api/MessagingClient.php:335
+msgid "There is nothing to send."
 msgstr ""
 
-#. translators: %s: component type.
-#: src/Flex/Validator.php:260
-msgid "A %s component needs a url."
+#. translators: %d: maximum number of messages.
+#: src/Api/MessagingClient.php:346
+#, php-format
+msgid "LINE accepts at most %d messages per send."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:208
-msgid "A Flex Message bubble or carousel, as JSON. Values in braces are replaced with the order's details before sending."
+#. translators: %d: zero-based message index.
+#: src/Api/MessagingClient.php:358
+#, php-format
+msgid "Message %d is missing its type."
 msgstr ""
 
-#: src/Flex/Validator.php:85
-msgid "A Flex message needs a contents container."
+#: src/Api/RichMenuClient.php:51
+#: src/RichMenu/RichMenuModule.php:416
+msgid "Rich menu images must be JPEG or PNG."
 msgstr ""
 
-#: src/Flex/Validator.php:79
-msgid "A Flex message needs altText (shown in the chat list and push notification)."
+#: src/Api/RichMenuClient.php:58
+msgid "Rich menu images must be 1 MB or smaller."
 msgstr ""
 
-#: views/replies.php:98
-msgid "A Flex template"
+#: src/Api/TokenManager.php:41
+msgid "No channel access token is configured. Add one under LINE > Settings > Messaging API."
 msgstr ""
 
-#: views/flex.php:67
-msgid "A LINE user id, which you can copy from the LINE users screen. Push messages are billed."
-msgstr ""
-
-#: views/payments.php:56
-msgid "A LINE user id. Leave blank to just get a link you can share yourself."
-msgstr ""
-
-#: src/Flex/Validator.php:186
-msgid "A bubble needs at least one of header, hero, body or footer."
-msgstr ""
-
-#: src/Flex/Validator.php:276
-msgid "A button needs an action."
-msgstr ""
-
-#. translators: %d: maximum number of bubbles.
-#: src/Flex/Validator.php:113
-msgid "A carousel holds at most %d bubbles."
-msgstr ""
-
-#: src/Flex/Validator.php:105
-msgid "A carousel needs at least one bubble in contents."
-msgstr ""
-
-#: src/Woo/OrderContext.php:263
-msgid "A colour matching the status"
-msgstr ""
-
-#. translators: %s: location in the message.
-#: src/Flex/Validator.php:218
-msgid "A component at %s is missing its type."
-msgstr ""
-
-#: views/flows.php:28
-msgid "A flow asks a series of questions and stores the answers. Only one flow runs per person at a time, it expires after 30 minutes of silence, and every question offers a way to cancel."
-msgstr ""
-
-#: src/Bot/BotModule.php:141
-msgid "A flow needs at least one step."
-msgstr ""
-
-#: views/settings.php:227
-msgid "A hex colour, for example #06C755."
-msgstr ""
-
-#: src/Bot/BotModule.php:384
-msgid "A member of our team will reply here shortly."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:335
-msgid "A payment for this order id already exists."
-msgstr ""
-
-#: views/replies.php:99
-msgid "A quick reply set"
-msgstr ""
-
-#: src/Flex/FlexModule.php:228
-msgid "A sentence or two about what this is."
-msgstr ""
-
-#: views/replies.php:101
-msgid "A sticker"
-msgstr ""
-
-#: src/Flex/Validator.php:251
-msgid "A text component needs either text or a contents array of spans."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:154
-msgid "A transaction id or order id is required."
-msgstr ""
-
-#: src/Flex/Validator.php:389
-msgid "A uri action must point at https://, tel: or a LINE URL scheme."
-msgstr ""
-
-#. translators: %s: flow name.
-#: src/Bot/Flow.php:252
-msgid "A visitor completed \"%s\" on LINE."
-msgstr ""
-
-#: views/settings.php:307
-msgid "AI Engine is not active"
+#: src/Api/TokenManager.php:69
+msgid "Messaging API Channel ID and Channel Secret are required to issue a token."
 msgstr ""
 
 #: src/Bot/Ai/AiEngineProvider.php:60
 msgid "AI Engine is not active on this site."
 msgstr ""
 
-#: src/Admin/AdminModule.php:302
-msgid "AI provider available"
+#: src/Bot/Ai/AiEngineProvider.php:117
+msgid "The AI returned an empty answer."
 msgstr ""
 
-#: views/settings.php:19
-#: views/settings.php:314
-msgid "AI replies"
+#: src/Bot/Ai/AiEngineProvider.php:156
+msgid "Default chatbot"
 msgstr ""
 
-#: src/Admin/AdminModule.php:303
-msgid "AI replies are switched on, but AI Engine is not active on this site."
+#: src/Bot/Ai/AiResponder.php:98
+msgid "Sure -- I have passed this to a member of our team. They will reply here shortly."
 msgstr ""
 
-#. translators: %s: remaining message allowance.
-#: views/broadcast.php:37
-msgid "About %s messages remain in this month allowance."
+#: src/Bot/AutoReply.php:306
+msgid "Please choose an option:"
 msgstr ""
 
-#: views/settings.php:273
-msgid "Access token"
+#. translators: %s: JSON parser message.
+#: src/Bot/BotModule.php:75
+#: src/Flex/FlexModule.php:44
+#, php-format
+msgid "That is not valid JSON: %s"
 msgstr ""
 
-#: src/Flex/Validator.php:382
-msgid "Action labels are limited to 20 characters."
+#: src/Bot/BotModule.php:93
+msgid "Give the rule something to match on."
 msgstr ""
 
-#: views/replies.php:35
-msgid "Actions"
+#: src/Bot/BotModule.php:98
+msgid "That pattern is not valid."
 msgstr ""
 
-#: views/flows.php:70
-#: views/replies.php:164
-msgid "Active"
+#: src/Bot/BotModule.php:114
+msgid "Rule saved."
 msgstr ""
 
-#: views/notifications.php:72
-msgid "Active templates"
+#: src/Bot/BotModule.php:125
+msgid "Rule deleted."
 msgstr ""
 
-#: views/settings.php:420
-msgid "Add a LINE tab where customers can link and unlink their account"
+#: src/Bot/BotModule.php:137
+msgid "The flow definition is not valid JSON."
 msgstr ""
 
-#: views/notifications.php:78
-msgid "Add a notification template"
+#: src/Bot/BotModule.php:141
+msgid "A flow needs at least one step."
+msgstr ""
+
+#. translators: %d: step number.
+#: src/Bot/BotModule.php:150
+#, php-format
+msgid "Step %d has no question to ask."
+msgstr ""
+
+#: src/Bot/BotModule.php:161
+msgid "That notification address is not valid."
+msgstr ""
+
+#: src/Bot/BotModule.php:176
+msgid "Flow saved."
+msgstr ""
+
+#: src/Bot/BotModule.php:187
+msgid "Flow deleted."
 msgstr ""
 
 #: src/Bot/BotModule.php:199
 msgid "Add at least one quick reply button."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:141
-msgid "Add condition"
+#: src/Bot/BotModule.php:203
+msgid "LINE allows at most 13 quick reply buttons."
 msgstr ""
 
-#: views/replies.php:68
-msgid "Add or edit a rule"
+#: src/Bot/BotModule.php:215
+msgid "Quick reply set saved."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:46
-msgid "Add order notification"
+#: src/Bot/BotModule.php:226
+msgid "Quick reply set deleted."
 msgstr ""
 
-#: src/Admin/AdminModule.php:276
-msgid "Add the Channel ID and Channel Secret from the LINE Developers Console."
+#: src/Bot/BotModule.php:236
+msgid "You do not have permission to change bot settings."
 msgstr ""
 
-#: src/Admin/AdminModule.php:311
-msgid "Add the LINE Pay Channel ID and Channel Secret."
+#: src/Bot/BotModule.php:384
+msgid "A member of our team will reply here shortly."
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:155
-msgid "Add us on LINE"
+#: src/Bot/Flow.php:147
+msgid "No problem, that has been cancelled."
 msgstr ""
 
-#: views/settings.php:22
-msgid "Advanced"
+#: src/Bot/Flow.php:229
+msgid "Thank you, we have received your details."
 msgstr ""
 
-#: src/Inbox/InboxModule.php:292
-msgid "Agent"
+#. translators: %s: flow name.
+#: src/Bot/Flow.php:252
+#, php-format
+msgid "A visitor completed \"%s\" on LINE."
 msgstr ""
 
-#: views/richmenus.php:38
-msgid "Alias"
+#: src/Bot/Flow.php:256
+msgid "Display name"
 msgstr ""
 
-#: views/richmenus.php:146
-msgid "Alias ID"
+#: src/Bot/Flow.php:257
+#: views/broadcast.php:108
+#: views/users.php:40
+msgid "LINE user id"
 msgstr ""
 
-#: views/inbox.php:45
-msgid "All conversations"
+#. translators: 1: site name, 2: flow name.
+#: src/Bot/Flow.php:269
+#, php-format
+msgid "[%1$s] New LINE submission: %2$s"
 msgstr ""
 
-#: views/notifications.php:88
-msgid "All results"
+#: src/Bot/Flow.php:326
+msgid "Please reply with your answer."
 msgstr ""
 
-#: src/Woo/WooModule.php:744
-msgid "Already shopped with us?"
+#: src/Bot/Flow.php:371
+msgid "That looked empty. Please try again."
 msgstr ""
 
-#: views/payments.php:49
-#: views/payments.php:68
-msgid "Amount"
+#: src/Bot/Flow.php:378
+msgid "That does not look like an email address. Please try again."
+msgstr ""
+
+#: src/Bot/Flow.php:385
+msgid "That does not look like a phone number. Please try again."
+msgstr ""
+
+#: src/Bot/Flow.php:390
+msgid "Please reply with a number."
+msgstr ""
+
+#: src/Bot/Flow.php:397
+msgid "Please reply with a date, for example 2026-03-15."
+msgstr ""
+
+#. translators: %s: list of choices, joined with the separator below.
+#: src/Bot/Flow.php:410
+#, php-format
+msgid "Please choose one of: %s"
+msgstr ""
+
+#. translators: separator between items in a list, including any trailing space. Chinese uses a full-width enumeration comma with no space.
+#: src/Bot/Flow.php:412
+msgctxt "list separator"
+msgid ", "
+msgstr ""
+
+#: src/Flex/FlexModule.php:57
+msgid "This template will not send as it stands."
+msgstr ""
+
+#: src/Flex/FlexModule.php:76
+msgid "The template could not be saved."
+msgstr ""
+
+#: src/Flex/FlexModule.php:82
+msgid "Template saved."
+msgstr ""
+
+#: src/Flex/FlexModule.php:96
+msgid "That template no longer exists."
+msgstr ""
+
+#: src/Flex/FlexModule.php:99
+msgid "Template deleted."
+msgstr ""
+
+#: src/Flex/FlexModule.php:114
+#: src/Flex/FlexModule.php:178
+msgid "That is not valid JSON."
+msgstr ""
+
+#: src/Flex/FlexModule.php:127
+msgid "Found problems before contacting LINE."
+msgstr ""
+
+#: src/Flex/FlexModule.php:137
+msgid "Passed the local checks. Connect the Messaging API channel to also validate against LINE."
+msgstr ""
+
+#: src/Flex/FlexModule.php:148
+msgid "LINE rejected this template."
+msgstr ""
+
+#: src/Flex/FlexModule.php:157
+msgid "LINE accepted this template."
+msgstr ""
+
+#: src/Flex/FlexModule.php:172
+msgid "Enter the LINE user id to send the test to."
+msgstr ""
+
+#: src/Flex/FlexModule.php:189
+msgid "Sent. Check the chat on your phone."
+msgstr ""
+
+#: src/Flex/FlexModule.php:200
+msgid "Image card with a button"
+msgstr ""
+
+#: src/Flex/FlexModule.php:221
+msgid "Headline"
+msgstr ""
+
+#: src/Flex/FlexModule.php:228
+msgid "A sentence or two about what this is."
+msgstr ""
+
+#: src/Flex/FlexModule.php:251
+msgid "Find out more"
+msgstr ""
+
+#: src/Flex/FlexModule.php:260
+msgid "Order summary"
+msgstr ""
+
+#: src/Flex/FlexModule.php:270
+msgid "Order confirmed"
+msgstr ""
+
+#: src/Flex/FlexModule.php:279
+#: src/Woo/WooModule.php:460
+msgid "Total"
+msgstr ""
+
+#: src/Flex/FlexModule.php:323
+msgid "You do not have permission to manage templates."
+msgstr ""
+
+#: src/Flex/Validator.php:79
+msgid "A Flex message needs altText (shown in the chat list and push notification)."
+msgstr ""
+
+#: src/Flex/Validator.php:81
+msgid "altText is limited to 1500 characters."
+msgstr ""
+
+#: src/Flex/Validator.php:85
+msgid "A Flex message needs a contents container."
+msgstr ""
+
+#: src/Flex/Validator.php:105
+msgid "A carousel needs at least one bubble in contents."
+msgstr ""
+
+#. translators: %d: maximum number of bubbles.
+#: src/Flex/Validator.php:113
+#, php-format
+msgid "A carousel holds at most %d bubbles."
+msgstr ""
+
+#: src/Flex/Validator.php:119
+msgid "This carousel exceeds the 50 KB limit. Remove bubbles or shorten the content."
+msgstr ""
+
+#. translators: 1: bubble number, 2: the problem.
+#: src/Flex/Validator.php:126
+#, php-format
+msgid "Bubble %1$d: %2$s"
+msgstr ""
+
+#: src/Flex/Validator.php:140
+msgid "contents must be a bubble or a carousel."
+msgstr ""
+
+#: src/Flex/Validator.php:155
+msgid "Expected a bubble here."
+msgstr ""
+
+#. translators: 1: section name, 2: allowed types.
+#: src/Flex/Validator.php:174
+#, php-format
+msgid "The %1$s section must contain one of: %2$s."
+msgstr ""
+
+#: src/Flex/Validator.php:186
+msgid "A bubble needs at least one of header, hero, body or footer."
+msgstr ""
+
+#: src/Flex/Validator.php:190
+msgid "This bubble exceeds the 30 KB limit."
+msgstr ""
+
+#: src/Flex/Validator.php:208
+msgid "This layout nests too deeply."
+msgstr ""
+
+#. translators: %s: location in the message.
+#: src/Flex/Validator.php:218
+#, php-format
+msgid "A component at %s is missing its type."
+msgstr ""
+
+#: src/Flex/Validator.php:226
+msgid "The filler component was removed by LINE. Use a box with margin, padding or offset instead."
+msgstr ""
+
+#. translators: %s: location in the message.
+#: src/Flex/Validator.php:235
+#, php-format
+msgid "The box at %s needs a layout."
+msgstr ""
+
+#. translators: %s: location in the message.
+#: src/Flex/Validator.php:243
+#, php-format
+msgid "The box at %s needs a contents array."
+msgstr ""
+
+#: src/Flex/Validator.php:251
+msgid "A text component needs either text or a contents array of spans."
+msgstr ""
+
+#. translators: %s: component type.
+#: src/Flex/Validator.php:260
+#, php-format
+msgid "A %s component needs a url."
+msgstr ""
+
+#: src/Flex/Validator.php:264
+msgid "Media URLs must use HTTPS."
 msgstr ""
 
 #: src/Flex/Validator.php:270
 msgid "An icon component needs a url."
 msgstr ""
 
-#: views/replies.php:102
-msgid "An image"
+#: src/Flex/Validator.php:276
+msgid "A button needs an action."
 msgstr ""
 
-#: views/flows.php:108
-msgid "Answers"
+#. translators: 1: property, 2: supplied value, 3: allowed values.
+#: src/Flex/Validator.php:302
+#, php-format
+msgid "%1$s cannot be \"%2$s\". Allowed: %3$s."
 msgstr ""
 
-#: views/settings.php:323
-msgid "Answers longer than this are truncated. LINE hard-limits a text message at 5000 characters."
+#. translators: %s: component type.
+#: src/Flex/Validator.php:323
+#, php-format
+msgid "\"%s\" cannot be placed inside a box."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:357
-msgid "Any order"
+#. translators: %s: action type.
+#: src/Flex/Validator.php:363
+#, php-format
+msgid "\"%s\" is not a valid action type."
 msgstr ""
 
-#: views/replies.php:90
-msgid "Anything (catch-all)"
+#. translators: 1: action type, 2: missing field.
+#: src/Flex/Validator.php:374
+#, php-format
+msgid "A %1$s action needs %2$s."
 msgstr ""
 
-#: src/Admin/AdminModule.php:199
-#: views/logs.php:65
-msgid "Area"
+#: src/Flex/Validator.php:382
+msgid "Action labels are limited to 20 characters."
 msgstr ""
 
-#: src/Admin/AdminModule.php:216
-msgid "Areas %s overlap. LINE uses whichever comes first, which is rarely what you want."
+#: src/Flex/Validator.php:389
+msgid "A uri action must point at https://, tel: or a LINE URL scheme."
 msgstr ""
 
-#: src/Admin/AdminModule.php:213
-msgid "Arrow keys nudge by 1 pixel, with Shift by 10."
+#: src/Frontend/ShortcodeModule.php:52
+#: views/settings.php:261
+msgid "Log in with LINE"
 msgstr ""
 
-#: views/richmenus.php:118
-msgid "At most 14 characters, shown at the bottom of the chat."
+#: src/Frontend/ShortcodeModule.php:66
+msgid "LINE Login is not configured yet."
 msgstr ""
 
-#: views/broadcast.php:52
-msgid "Attach a Flex template"
+#: src/Frontend/ShortcodeModule.php:155
+msgid "Add us on LINE"
 msgstr ""
 
-#: src/Admin/AdminModule.php:61
-#: views/replies.php:18
-msgid "Auto replies"
+#: src/Frontend/ShortcodeModule.php:167
+msgid "Set the official account basic ID in the LINE settings first."
+msgstr ""
+
+#: src/Frontend/ShortcodeModule.php:235
+#: src/Woo/WooModule.php:596
+msgid "LINE account"
+msgstr ""
+
+#: src/Frontend/ShortcodeModule.php:238
+#: views/logs.php:97
+#: views/notifications.php:106
+#: views/payments.php:69
+msgid "Status"
+msgstr ""
+
+#. translators: %s: LINE display name.
+#: src/Frontend/ShortcodeModule.php:245
+#, php-format
+msgid "Linked to %s."
+msgstr ""
+
+#: src/Frontend/ShortcodeModule.php:252
+msgid "Unlink LINE account"
+msgstr ""
+
+#: src/Frontend/ShortcodeModule.php:268
+#: src/Woo/WooModule.php:700
+msgid "Link my LINE account"
+msgstr ""
+
+#: src/Frontend/ShortcodeModule.php:270
+msgid "No LINE account is linked. Only this user can link their own."
+msgstr ""
+
+#: src/Inbox/InboxModule.php:140
+msgid "You cannot reply to conversations."
+msgstr ""
+
+#: src/Inbox/InboxModule.php:147
+#: src/Liff/LiffModule.php:136
+msgid "Write something first."
+msgstr ""
+
+#: src/Inbox/InboxModule.php:153
+#: src/Inbox/InboxModule.php:223
+msgid "That conversation no longer exists."
+msgstr ""
+
+#. translators: %s: error detail from LINE.
+#: src/Inbox/InboxModule.php:185
+#, php-format
+msgid "LINE would not deliver that message: %s"
+msgstr ""
+
+#: src/Inbox/InboxModule.php:203
+msgid "Sent."
+msgstr ""
+
+#: src/Inbox/InboxModule.php:216
+msgid "You cannot read conversations."
+msgstr ""
+
+#: src/Inbox/InboxModule.php:245
+msgid "You cannot change conversations."
+msgstr ""
+
+#: src/Inbox/InboxModule.php:254
+msgid "That change is not valid."
+msgstr ""
+
+#: src/Inbox/InboxModule.php:277
+msgid "No messages yet. Only messages received after this plugin was installed appear here -- LINE does not provide access to earlier chat history."
+msgstr ""
+
+#: src/Inbox/InboxModule.php:287
+msgid "Visitor"
+msgstr ""
+
+#: src/Inbox/InboxModule.php:292
+msgid "Agent"
+msgstr ""
+
+#: src/Inbox/InboxModule.php:294
+msgid "Bot"
+msgstr ""
+
+#: src/Inbox/Messages.php:93
+msgid "[Image]"
+msgstr ""
+
+#: src/Inbox/Messages.php:96
+msgid "[Video]"
+msgstr ""
+
+#: src/Inbox/Messages.php:99
+msgid "[Audio]"
+msgstr ""
+
+#: src/Inbox/Messages.php:103
+msgid "File"
+msgstr ""
+
+#: src/Inbox/Messages.php:104
+msgid "[File]"
+msgstr ""
+
+#: src/Inbox/Messages.php:110
+msgid "Location"
+msgstr ""
+
+#: src/Inbox/Messages.php:113
+msgid "[Sticker]"
+msgstr ""
+
+#: src/Inbox/Messages.php:116
+#: src/Woo/NotifyTemplates.php:83
+#: views/broadcast.php:57
+#: views/logs.php:186
+#: views/replies.php:111
+msgid "Message"
+msgstr ""
+
+#: src/Inbox/Messages.php:136
+msgid "Flex"
+msgstr ""
+
+#: src/Inbox/Messages.php:137
+msgid "[Flex]"
+msgstr ""
+
+#: src/Liff/LiffModule.php:119
+msgid "Messaging is not available right now."
+msgstr ""
+
+#: src/Liff/LiffModule.php:146
+msgid "That is a lot of messages at once. Please wait a moment."
+msgstr ""
+
+#: src/Liff/LiffModule.php:192
+msgid "This page could not identify you. Reopen it from LINE."
+msgstr ""
+
+#: src/Liff/LiffModule.php:218
+msgid "Could not reach LINE to verify this session."
+msgstr ""
+
+#: src/Liff/LiffModule.php:228
+msgid "This session could not be verified. Reopen the page from LINE."
+msgstr ""
+
+#: src/Liff/LiffModule.php:239
+msgid "This session belongs to a different channel."
+msgstr ""
+
+#: src/Liff/LiffModule.php:283
+#: src/Liff/LiffModule.php:314
+msgid "No LIFF ID has been configured yet."
+msgstr ""
+
+#: src/Liff/LiffModule.php:289
+#: src/Liff/LiffModule.php:323
+msgid "Connecting to LINE..."
+msgstr ""
+
+#: src/Liff/LiffModule.php:302
+msgid "Type your message"
+msgstr ""
+
+#: src/Liff/LiffModule.php:303
+msgid "Send us a message and we will reply in your LINE chat."
+msgstr ""
+
+#: src/Liff/LiffModule.php:325
+msgid "Your message"
+msgstr ""
+
+#: src/Liff/LiffModule.php:328
+#: views/broadcast.php:117
+#: views/inbox.php:110
+msgid "Send"
+msgstr ""
+
+#: src/Liff/LiffModule.php:371
+#, php-format
+msgid "Hello, %s"
+msgstr ""
+
+#: src/Liff/LiffModule.php:372
+msgid "Sending..."
+msgstr ""
+
+#: src/Liff/LiffModule.php:373
+msgid "Sent. We will reply in your LINE chat."
+msgstr ""
+
+#: src/Liff/LiffModule.php:374
+msgid "That did not send. Please try again."
+msgstr ""
+
+#: src/Liff/LiffModule.php:375
+msgid "Open this page from LINE to continue."
+msgstr ""
+
+#: src/Login/IdToken.php:42
+msgid "LINE did not return an ID token. Make sure the openid scope is enabled for this channel."
+msgstr ""
+
+#: src/Login/IdToken.php:64
+msgid "Could not reach LINE to verify the login. Please try again."
+msgstr ""
+
+#: src/Login/IdToken.php:80
+msgid "This login could not be verified. Please try again."
+msgstr ""
+
+#: src/Login/IdToken.php:107
+msgid "The login response did not identify a user."
+msgstr ""
+
+#: src/Login/IdToken.php:111
+msgid "The login response came from an unexpected issuer."
+msgstr ""
+
+#: src/Login/IdToken.php:117
+msgid "The login response was issued for a different channel."
+msgstr ""
+
+#: src/Login/IdToken.php:121
+msgid "The login response has expired. Please try again."
+msgstr ""
+
+#: src/Login/IdToken.php:130
+msgid "The login response did not match this login attempt."
+msgstr ""
+
+#: src/Login/LoginModule.php:141
+msgid "This link expired. Please go back and try again."
+msgstr ""
+
+#: src/Login/LoginModule.php:147
+msgid "LINE Login is not configured on this site yet."
+msgstr ""
+
+#: src/Login/LoginModule.php:163
+msgid "This login request is missing its state. Please start again."
+msgstr ""
+
+#: src/Login/LoginModule.php:173
+msgid "This login link has expired. Please try again."
+msgstr ""
+
+#: src/Login/LoginModule.php:191
+msgid "LINE did not return an authorization code."
+msgstr ""
+
+#: src/Login/LoginModule.php:301
+msgid "Could not reach LINE to complete the login. Please try again."
+msgstr ""
+
+#: src/Login/LoginModule.php:317
+msgid "LINE rejected this login. Check the Channel ID, Channel Secret and Callback URL."
+msgstr ""
+
+#: src/Login/LoginModule.php:418
+msgid "This site is not accepting new registrations through LINE. Please sign in with your existing account first, then link LINE from your profile."
+msgstr ""
+
+#: src/Login/LoginModule.php:495
+msgid "The account to link to no longer exists."
+msgstr ""
+
+#: src/Login/LoginModule.php:504
+msgid "This LINE account is already linked to another user on this site."
+msgstr ""
+
+#: src/Login/LoginModule.php:567
+msgid "You are not signed in."
+msgstr ""
+
+#: src/Login/LoginModule.php:573
+msgid "You cannot unlink another user."
+msgstr ""
+
+#: src/Login/LoginModule.php:578
+msgid "LINE account unlinked."
+msgstr ""
+
+#: src/Login/LoginModule.php:675
+#: views/settings.php:17
+msgid "LINE Login"
+msgstr ""
+
+#: src/Pay/LinePayClient.php:154
+msgid "A transaction id or order id is required."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:184
+#: src/Pay/LinePayClient.php:223
+msgid "LINE Pay is not configured. Add the Channel ID and Channel Secret first."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:195
+msgid "The payment request could not be encoded."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:279
+msgid "Could not reach LINE Pay. Please try again."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:291
+msgid "LINE Pay returned a response this site could not read."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:324
+msgid "This merchant is not registered with LINE Pay. Check the Channel ID and whether you are pointed at sandbox or production."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:325
+msgid "This merchant cannot use LINE Pay right now. Contact LINE Pay support."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:326
+msgid "The request headers were not accepted. Check the Channel Secret."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:327
+msgid "The amount is not valid for this currency."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:328
+msgid "The payment account status does not allow this operation."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:329
+msgid "This payment is already being processed."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:330
+msgid "No such transaction exists."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:331
+msgid "That transaction id does not belong to this merchant."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:332
+msgid "This payment has already been refunded, or the refund window has closed."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:333
+msgid "This payment has already been captured."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:334
+msgid "The customer has insufficient balance."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:335
+msgid "A payment for this order id already exists."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:336
+msgid "The customer has not completed authentication."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:337
+msgid "LINE Pay is processing a duplicate request. Try again shortly."
+msgstr ""
+
+#: src/Pay/LinePayClient.php:338
+msgid "LINE Pay had an internal error. Try again shortly."
+msgstr ""
+
+#. translators: 1: LINE Pay return code, 2: LINE Pay message.
+#: src/Pay/LinePayClient.php:347
+#, php-format
+msgid "LINE Pay returned %1$s: %2$s"
+msgstr ""
+
+#: src/Pay/LinePayClient.php:349
+msgid "no detail given"
+msgstr ""
+
+#: src/Pay/PayModule.php:107
+#: src/Pay/PayModule.php:166
+msgid "That payment could not be found."
+msgstr ""
+
+#: src/Pay/PayModule.php:137
+msgid "The customer cancelled the LINE Pay payment."
+msgstr ""
+
+#: src/Pay/PayModule.php:142
+msgid "The payment was cancelled."
+msgstr ""
+
+#: src/Pay/PayModule.php:180
+msgid "LINE Pay did not identify this transaction."
+msgstr ""
+
+#: src/Pay/PayModule.php:195
+msgid "This payment is already being confirmed. Please wait a moment and refresh."
+msgstr ""
+
+#. translators: %s: LINE Pay transaction id.
+#: src/Pay/PayModule.php:256
+#, php-format
+msgid "LINE Pay confirmed. Transaction %s."
+msgstr ""
+
+#. translators: 1: amount, 2: currency, 3: order reference.
+#: src/Pay/PayModule.php:268
+#, php-format
+msgid "Payment received: %1$s %2$s (order %3$s). Thank you!"
+msgstr ""
+
+#: src/Pay/PayModule.php:400
+msgid "Enter an amount greater than zero."
+msgstr ""
+
+#: src/Pay/PayModule.php:415
+msgid "The payment could not be recorded."
+msgstr ""
+
+#: src/Pay/PayModule.php:465
+msgid "LINE Pay did not return a payment URL."
+msgstr ""
+
+#: src/Pay/PayModule.php:479
+msgid "You cannot create payment links."
+msgstr ""
+
+#. translators: %s: error detail.
+#: src/Pay/PayModule.php:501
+#, php-format
+msgid "The link was created, but LINE would not deliver it: %s"
+msgstr ""
+
+#: src/Pay/PayModule.php:512
+msgid "Payment link created."
+msgstr ""
+
+#. translators: 1: item title, 2: formatted amount.
+#: src/Pay/PayModule.php:536
+#, php-format
+msgid "Payment request: %1$s %2$s"
+msgstr ""
+
+#: src/Pay/PayModule.php:549
+msgid "Payment request"
+msgstr ""
+
+#: src/Pay/PayModule.php:578
+msgid "Pay with LINE Pay"
+msgstr ""
+
+#: src/Pay/WooGateway.php:25
+#: src/Pay/WooGateway.php:35
+#: src/Pay/WooGateway.php:54
+#: views/settings.php:21
+#: views/settings.php:460
+msgid "LINE Pay"
+msgstr ""
+
+#: src/Pay/WooGateway.php:26
+msgid "Take payments through LINE Pay. Credentials are configured under LINE > Settings > LINE Pay."
+msgstr ""
+
+#: src/Pay/WooGateway.php:36
+#: src/Pay/WooGateway.php:60
+msgid "Pay with LINE Pay, LINE Points or a registered card."
+msgstr ""
+
+#: src/Pay/WooGateway.php:45
+msgid "Enable"
+msgstr ""
+
+#: src/Pay/WooGateway.php:47
+msgid "Offer LINE Pay at checkout"
+msgstr ""
+
+#: src/Pay/WooGateway.php:51
+msgid "Title"
+msgstr ""
+
+#: src/Pay/WooGateway.php:53
+msgid "What the customer sees at checkout."
+msgstr ""
+
+#: src/Pay/WooGateway.php:58
+msgid "Description"
+msgstr ""
+
+#: src/Pay/WooGateway.php:63
+msgid "Credentials"
+msgstr ""
+
+#. translators: %s: settings page URL.
+#: src/Pay/WooGateway.php:67
+#, php-format
+msgid "The Channel ID, Channel Secret and sandbox switch live on the <a href=\"%s\">LINE Pay settings screen</a>, so they are stored encrypted and shared with payment links."
+msgstr ""
+
+#: src/Pay/WooGateway.php:107
+msgid "That order could not be found."
+msgstr ""
+
+#: src/Pay/WooGateway.php:116
+msgid "This order has nothing to pay."
+msgstr ""
+
+#: src/Pay/WooGateway.php:146
+msgid "The payment could not be started. Please try again."
+msgstr ""
+
+#: src/Pay/WooGateway.php:196
+msgid "Waiting for the customer to complete payment on LINE Pay."
+msgstr ""
+
+#: src/Pay/WooGateway.php:200
+msgid "LINE Pay did not return a payment URL. Please try again."
+msgstr ""
+
+#: src/Pay/WooGateway.php:225
+msgid "This order has no LINE Pay transaction to refund."
+msgstr ""
+
+#: src/Pay/WooGateway.php:232
+msgid "Only a captured payment can be refunded."
+msgstr ""
+
+#. translators: %s: remaining refundable amount.
+#: src/Pay/WooGateway.php:246
+#, php-format
+msgid "Only %s remains refundable on this payment."
+msgstr ""
+
+#. translators: 1: refunded amount, 2: reason.
+#: src/Pay/WooGateway.php:275
+#, php-format
+msgid "LINE Pay refunded %1$s. %2$s"
+msgstr ""
+
+#: src/Pay/WooGateway.php:331
+msgid "Shipping, fees and tax"
+msgstr ""
+
+#: src/Pay/WooGateway.php:332
+msgid "Discount"
+msgstr ""
+
+#. translators: %s: order number.
+#: src/Pay/WooGateway.php:342
+#: src/Woo/WooModule.php:435
+#, php-format
+msgid "Order %s"
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:77
+#: src/RichMenu/RichMenuModule.php:496
+msgid "That rich menu no longer exists."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:91
+msgid "This rich menu has no tappable areas yet."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:112
+msgid "LINE accepted the menu but did not return an id."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:349
+msgid "Choose a menu image first. LINE requires one, 2500px wide and either 1686px or 843px tall."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:358
+msgid "The selected image could not be read from the media library."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:373
+msgid "The selected image could not be read from disk."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:393
+msgid "Could not read the image dimensions."
+msgstr ""
+
+#. translators: 1: required width, 2: required height, 3: actual width, 4: actual height.
+#: src/RichMenu/RichMenuModule.php:399
+#, php-format
+msgid "LINE expects %1$d x %2$d pixels for this menu size; this image is %3$d x %4$d."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:410
+msgid "The image is larger than 1 MB, which LINE will reject."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:434
+msgid "The tappable areas could not be read."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:459
+msgid "The rich menu could not be saved."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:480
+msgid "Saved. Publish it to push the change to LINE."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:511
+msgid "Rich menu deleted."
+msgstr ""
+
+#. translators: %d: number of menus published.
+#: src/RichMenu/RichMenuModule.php:538
+#, php-format
+msgid "Published %d menu to LINE."
+msgid_plural "Published %d menus to LINE."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/RichMenu/RichMenuModule.php:551
+msgid "Published to LINE."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:564
+msgid "Publish this menu to LINE before making it the default."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:581
+msgid "This menu is now the default for everyone."
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:635
+msgid "You do not have permission to manage rich menus."
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:45
+msgid "Order notification"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:46
+msgid "Add order notification"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:47
+msgid "Edit order notification"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:48
+msgid "Search notifications"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:49
+msgid "No notification templates yet."
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:74
+msgid "When to send"
 msgstr ""
 
 #: src/Woo/NotifyTemplates.php:92
 msgid "Available values"
 msgstr ""
 
-#: views/settings.php:227
-msgid "Background"
+#: src/Woo/NotifyTemplates.php:110
+msgid "Order statuses"
 msgstr ""
 
-#: src/Woo/OrderContext.php:273
-msgid "Billing address"
+#: src/Woo/NotifyTemplates.php:112
+msgid "The customer is messaged when the order enters any of these statuses. Each notification is billed as a push message."
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:125
+msgid "Only when"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:127
+msgid "Every condition must hold. Leave empty to send for every order that reaches those statuses."
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:141
+msgid "Add condition"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:160
+msgid "-- choose --"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:188
+msgid "e.g. cod, flat_rate, 1000"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:190
+msgid "Remove"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:208
+msgid "A Flex Message bubble or carousel, as JSON. Values in braces are replaced with the order's details before sending."
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:214
+#: views/flex.php:70
+msgid "Send a test to"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:217
+#: views/flex.php:72
+msgid "Send test"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:219
+msgid "Uses the most recent order to fill in the values. Save first."
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:230
+msgid "Click to copy."
+msgstr ""
+
+#. translators: %s: JSON parser message.
+#: src/Woo/NotifyTemplates.php:296
+#, php-format
+msgid "The message is not valid JSON, so this notification will not send: %s"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:317
+msgid "Statuses"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:318
+msgid "Conditions"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:319
+msgid "Sent (30 days)"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:342
+msgid "never fires"
+msgstr ""
+
+#. translators: %d: number of conditions.
+#: src/Woo/NotifyTemplates.php:354
+#, php-format
+msgid "%d condition"
+msgid_plural "%d conditions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Woo/NotifyTemplates.php:357
+msgid "Any order"
+msgstr ""
+
+#. translators: 1: order number, 2: status label.
+#: src/Woo/NotifyTemplates.php:463
+#: src/Woo/WooModule.php:516
+#, php-format
+msgid "Order %1$s: %2$s"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:499
+msgid "You cannot send test notifications."
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:516
+msgid "There are no orders yet to build a preview from."
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:524
+msgid "This template did not produce a valid message. Check the JSON and the placeholders."
+msgstr ""
+
+#. translators: %s: order number used for the preview.
+#: src/Woo/NotifyTemplates.php:538
+#, php-format
+msgid "Sent, using order %s for the values."
+msgstr ""
+
+#: src/Woo/OrderContext.php:260
+#: views/notifications.php:95
+msgid "Order number"
+msgstr ""
+
+#: src/Woo/OrderContext.php:261
+msgid "Status slug"
+msgstr ""
+
+#: src/Woo/OrderContext.php:262
+msgid "Status name, translated"
+msgstr ""
+
+#: src/Woo/OrderContext.php:263
+msgid "A colour matching the status"
+msgstr ""
+
+#: src/Woo/OrderContext.php:264
+msgid "Date the order was placed"
+msgstr ""
+
+#: src/Woo/OrderContext.php:265
+msgid "Order total, formatted"
+msgstr ""
+
+#: src/Woo/OrderContext.php:266
+msgid "Subtotal, formatted"
+msgstr ""
+
+#: src/Woo/OrderContext.php:267
+msgid "Number of items"
+msgstr ""
+
+#: src/Woo/OrderContext.php:268
+msgid "List of items and quantities"
+msgstr ""
+
+#: src/Woo/OrderContext.php:269
+msgid "Customer name"
+msgstr ""
+
+#: src/Woo/OrderContext.php:270
+msgid "Customer email"
 msgstr ""
 
 #: src/Woo/OrderContext.php:271
@@ -358,1711 +1818,12 @@ msgstr ""
 msgid "Billing phone"
 msgstr ""
 
-#: views/flex.php:42
-msgid "Blank"
+#: src/Woo/OrderContext.php:273
+msgid "Billing address"
 msgstr ""
 
-#: src/Inbox/InboxModule.php:294
-msgid "Bot"
-msgstr ""
-
-#: src/Admin/AdminModule.php:65
-#: views/broadcast.php:28
-msgid "Broadcast"
-msgstr ""
-
-#: src/Admin/AdminModule.php:527
-msgid "Broadcast sent to every friend of the account."
-msgstr ""
-
-#: views/broadcast.php:32
-msgid "Broadcasts are billed per recipient and cannot be recalled. Send a test to yourself first."
-msgstr ""
-
-#. translators: 1: bubble number, 2: the problem.
-#: src/Flex/Validator.php:126
-msgid "Bubble %1$d: %2$s"
-msgstr ""
-
-#: views/flex.php:53
-msgid "Bubble or carousel JSON"
-msgstr ""
-
-#: views/notifications.php:152
-msgid "Built-in card"
-msgstr ""
-
-#: views/settings.php:226
-msgid "Button text"
-msgstr ""
-
-#: views/settings.php:177
-msgid "Callback URL"
-msgstr ""
-
-#: src/Bot/Flow.php:352
-#: src/Bot/Flow.php:353
-#: src/Bot/Flow.php:439
-msgid "Cancel"
-msgstr ""
-
-#: views/settings.php:451
-msgid "Capture immediately"
-msgstr ""
-
-#: views/settings.php:187
-#: views/settings.php:269
-msgid "Channel ID"
-msgstr ""
-
-#: views/settings.php:188
-#: views/settings.php:270
-msgid "Channel secret"
-msgstr ""
-
-#: views/settings.php:331
-msgid "Chat LIFF ID"
-msgstr ""
-
-#: views/richmenus.php:116
-msgid "Chat bar label"
-msgstr ""
-
-#: views/settings.php:317
-msgid "Chatbot"
-msgstr ""
-
-#: views/settings.php:319
-msgid "Chatbot ID"
-msgstr ""
-
-#: views/flex.php:59
-msgid "Check"
-msgstr ""
-
-#: views/inbox.php:88
-msgid "Choose a conversation"
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:349
-msgid "Choose a menu image first. LINE requires one, 2500px wide and either 1686px or 843px tall."
-msgstr ""
-
-#: views/richmenus.php:185
-msgid "Choose a menu image to start drawing areas."
-msgstr ""
-
-#: views/richmenus.php:156
-msgid "Choose image"
-msgstr ""
-
-#: views/richmenus.php:173
-msgid "Clear"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:230
-msgid "Click to copy."
-msgstr ""
-
-#: views/inbox.php:92
-msgid "Close"
-msgstr ""
-
-#: views/inbox.php:48
-msgid "Closed"
-msgstr ""
-
-#: views/richmenus.php:230
-msgid "Compare with LINE"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:318
-msgid "Conditions"
-msgstr ""
-
-#: src/Liff/LiffModule.php:289
-#: src/Liff/LiffModule.php:323
-msgid "Connecting to LINE..."
-msgstr ""
-
-#: views/logs.php:67
-msgid "Context"
-msgstr ""
-
-#: src/Woo/WooModule.php:727
-msgid "Continue with LINE"
-msgstr ""
-
-#: src/Admin/AdminModule.php:62
-#: views/flows.php:25
-msgid "Conversation flows"
-msgstr ""
-
-#: views/dashboard.php:51
-msgid "Conversations waiting"
-msgstr ""
-
-#: views/settings.php:229
-msgid "Corner radius"
-msgstr ""
-
-#. translators: %d: HTTP status code.
-#: src/Api/Client.php:245
-msgid "Could not download the message content (HTTP %d)."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:279
-msgid "Could not reach LINE Pay. Please try again."
-msgstr ""
-
-#: src/Login/LoginModule.php:301
-msgid "Could not reach LINE to complete the login. Please try again."
-msgstr ""
-
-#: src/Login/IdToken.php:64
-msgid "Could not reach LINE to verify the login. Please try again."
-msgstr ""
-
-#: src/Liff/LiffModule.php:218
-msgid "Could not reach LINE to verify this session."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:393
-msgid "Could not read the image dimensions."
-msgstr ""
-
-#: views/settings.php:189
-msgid "Create a WordPress account the first time someone logs in with LINE"
-msgstr ""
-
-#: views/payments.php:42
-msgid "Create a payment link"
-msgstr ""
-
-#: views/payments.php:58
-msgid "Create link"
-msgstr ""
-
-#: views/payments.php:71
-msgid "Created"
-msgstr ""
-
-#: src/Pay/WooGateway.php:63
-msgid "Credentials"
-msgstr ""
-
-#: src/Admin/AdminModule.php:324
-#: views/settings.php:483
-msgid "Credentials are encrypted at rest"
-msgstr ""
-
-#: views/settings.php:447
-msgid "Currency"
-msgstr ""
-
-#: src/Woo/OrderContext.php:270
-msgid "Customer email"
-msgstr ""
-
-#: src/Woo/OrderContext.php:269
-msgid "Customer name"
-msgstr ""
-
-#: src/Woo/OrderContext.php:282
-msgid "Customer note"
-msgstr ""
-
-#: views/settings.php:322
-msgid "Daily reply limit"
-msgstr ""
-
-#: src/Admin/AdminModule.php:59
-msgid "Dashboard"
-msgstr ""
-
-#: src/Woo/OrderContext.php:264
-msgid "Date the order was placed"
-msgstr ""
-
-#: views/settings.php:476
-msgid "Days. Older rows are deleted daily."
-msgstr ""
-
-#: views/settings.php:419
-msgid "Days. Set to 0 to keep it indefinitely."
-msgstr ""
-
-#: views/settings.php:477
-msgid "Days. Set to 0 to keep messages forever."
-msgstr ""
-
-#: views/settings.php:330
-msgid "Default LIFF ID"
-msgstr ""
-
-#: src/Bot/Ai/AiEngineProvider.php:156
-msgid "Default chatbot"
-msgstr ""
-
-#: views/settings.php:218
-msgid "Default destination"
-msgstr ""
-
-#: views/settings.php:384
-msgid "Delay before sending"
-msgstr ""
-
-#: views/flex.php:89
-#: views/flows.php:94
-#: views/replies.php:57
-#: views/richmenus.php:74
-msgid "Delete"
-msgstr ""
-
-#: src/Admin/AdminModule.php:212
-msgid "Delete this area"
-msgstr ""
-
-#: src/Admin/AdminModule.php:193
-msgid "Delete this permanently?"
-msgstr ""
-
-#: views/notifications.php:89
-msgid "Delivered"
-msgstr ""
-
-#: views/notifications.php:56
-msgid "Delivered in the last 30 days"
-msgstr ""
-
-#. translators: 1: delivered count, 2: failed count, 3: first error.
-#: src/Admin/AdminModule.php:545
-msgid "Delivered to %1$d, failed for %2$d. %3$s"
-msgstr ""
-
-#: src/Pay/WooGateway.php:58
-msgid "Description"
-msgstr ""
-
-#: views/logs.php:32
-msgid "Detail"
-msgstr ""
-
-#: src/Pay/WooGateway.php:332
-msgid "Discount"
-msgstr ""
-
-#: src/Bot/Flow.php:256
-msgid "Display name"
-msgstr ""
-
-#: views/settings.php:212
-msgid "Do not invite"
-msgstr ""
-
-#: src/Admin/AdminModule.php:200
-msgid "Drag on the image to add an area, or click one to edit it."
-msgstr ""
-
-#: views/richmenus.php:163
-msgid "Drag on the image to draw an area. Click one to move, resize or set what it does. Edges snap to each other, because a one-pixel gap is invisible here and dead to the customer."
-msgstr ""
-
-#: views/settings.php:364
-msgid "Each notification is a push message and is billed. The customer only hears about a given order and status once, however many times the status is set."
-msgstr ""
-
-#: views/flows.php:58
-msgid "Each step needs a prompt. Types: text, number, phone, email, date, choice. A choice step also needs a choices array, which is rendered as quick reply buttons."
-msgstr ""
-
-#: views/replies.php:56
-#: views/richmenus.php:71
-msgid "Edit"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:47
-msgid "Edit order notification"
-msgstr ""
-
-#: views/richmenus.php:210
-msgid "Edit the JSON directly"
-msgstr ""
-
-#: src/Admin/AdminModule.php:197
-#: views/replies.php:69
-#: views/richmenus.php:104
-msgid "Editing"
-msgstr ""
-
-#: views/settings.php:196
-msgid "Email address"
-msgstr ""
-
-#: views/flows.php:63
-msgid "Email submissions to"
-msgstr ""
-
-#: src/Pay/WooGateway.php:45
-msgid "Enable"
-msgstr ""
-
-#: views/settings.php:441
-msgid "Enable LINE Pay for WooCommerce and payment links"
-msgstr ""
-
-#: views/settings.php:480
-msgid "Encryption"
-msgstr ""
-
-#: src/Admin/AdminModule.php:500
-#: src/Woo/NotifyTemplates.php:506
-msgid "Enter a LINE user id to send the test to."
-msgstr ""
-
-#: src/Pay/PayModule.php:400
-msgid "Enter an amount greater than zero."
-msgstr ""
-
-#: src/Flex/FlexModule.php:172
-msgid "Enter the LINE user id to send the test to."
-msgstr ""
-
-#: views/settings.php:472
-msgid "Errors only"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:127
-msgid "Every condition must hold. Leave empty to send for every order that reaches those statuses."
-msgstr ""
-
-#: views/broadcast.php:74
-msgid "Everyone who follows the account"
-msgstr ""
-
-#: views/settings.php:469
-msgid "Everything"
-msgstr ""
-
-#: src/Flex/Validator.php:155
-msgid "Expected a bubble here."
-msgstr ""
-
-#: views/notifications.php:90
-msgid "Failed"
-msgstr ""
-
-#: views/notifications.php:60
-msgid "Failed in the last 30 days"
-msgstr ""
-
-#: views/flex.php:34
-msgid "Fallback text"
-msgstr ""
-
-#: src/Inbox/Messages.php:103
-msgid "File"
-msgstr ""
-
-#: views/inbox.php:51
-#: views/notifications.php:96
-msgid "Filter"
-msgstr ""
-
-#: src/Flex/FlexModule.php:245
-msgid "Find out more"
-msgstr ""
-
-#: src/Admin/AdminModule.php:358
-msgid "Finish setup"
-msgstr ""
-
-#: src/Inbox/Messages.php:136
-msgid "Flex"
-msgstr ""
-
-#: src/Admin/AdminModule.php:63
-#: views/flex.php:17
-msgid "Flex messages"
-msgstr ""
-
-#: views/replies.php:132
-msgid "Flow"
-msgstr ""
-
-#: src/Bot/BotModule.php:187
-msgid "Flow deleted."
-msgstr ""
-
-#: src/Bot/BotModule.php:176
-msgid "Flow saved."
-msgstr ""
-
-#: views/settings.php:230
-msgid "For example 100%, 240px, or blank to fit the text."
-msgstr ""
-
-#: views/settings.php:281
-msgid "For example @moksa. Used by the add-friend shortcode."
-msgstr ""
-
-#: views/settings.php:291
-msgid "Forward events to"
-msgstr ""
-
-#: src/Flex/FlexModule.php:127
-msgid "Found problems before contacting LINE."
-msgstr ""
-
-#: views/users.php:40
-msgid "Friend"
-msgstr ""
-
-#: views/dashboard.php:43
-msgid "Friends of the account"
-msgstr ""
-
-#. translators: %s: number of recorded friends.
-#: views/broadcast.php:69
-msgid "Friends recorded on this site (%s)"
-msgstr ""
-
-#: views/logs.php:30
-msgid "From"
-msgstr ""
-
-#: views/settings.php:187
-msgid "From the LINE Login channel, not the Messaging API one."
-msgstr ""
-
-#: views/settings.php:442
-msgid "From the LINE Pay merchant console, not the Developers Console."
-msgstr ""
-
-#: views/settings.php:269
-msgid "From the Messaging API channel."
-msgstr ""
-
-#: views/richmenus.php:124
-msgid "Full (2500 x 1686)"
-msgstr ""
-
-#: views/inbox.php:91
-msgid "Give back to the bot"
-msgstr ""
-
-#: src/Bot/BotModule.php:93
-msgid "Give the rule something to match on."
-msgstr ""
-
-#: views/settings.php:284
-msgid "Greeting message"
-msgstr ""
-
-#: views/richmenus.php:125
-msgid "Half (2500 x 843)"
-msgstr ""
-
-#: views/settings.php:324
-msgid "Hand-off keyword"
-msgstr ""
-
-#: views/inbox.php:46
-msgid "Handled by the bot"
-msgstr ""
-
-#: src/Flex/FlexModule.php:221
-msgid "Headline"
-msgstr ""
-
-#: src/Liff/LiffModule.php:371
-msgid "Hello, %s"
-msgstr ""
-
-#: views/replies.php:34
-msgid "Hits"
-msgstr ""
-
-#: views/settings.php:385
-msgid "Hold the shipping notification until the tracking number appears"
-msgstr ""
-
-#: views/richmenus.php:154
-msgid "Image"
-msgstr ""
-
-#: views/replies.php:146
-msgid "Image URL"
-msgstr ""
-
-#: src/Flex/FlexModule.php:200
-msgid "Image card with a button"
-msgstr ""
-
-#: views/notifications.php:92
-msgid "Imported, result unknown"
-msgstr ""
-
-#: src/Admin/AdminModule.php:39
-#: views/inbox.php:16
-#: views/inbox.php:35
-#: views/settings.php:292
-msgid "Inbox"
-msgstr ""
-
-#: views/settings.php:308
-msgid "Install and activate AI Engine, then configure a chatbot in it. AI replies stay switched off until then."
-msgstr ""
-
-#: views/settings.php:210
-msgid "Invite to add the bot"
-msgstr ""
-
-#: views/settings.php:275
-msgid "Issue short-lived tokens automatically (recommended)"
-msgstr ""
-
-#: views/broadcast.php:64
-msgid "Just one person (a test)"
-msgstr ""
-
-#: views/settings.php:477
-msgid "Keep conversations for"
-msgstr ""
-
-#: views/settings.php:476
-msgid "Keep logs for"
-msgstr ""
-
-#: views/settings.php:419
-msgid "Keep notification history for"
-msgstr ""
-
-#: views/settings.php:195
-msgid "Keep the WordPress display name in step with the LINE display name"
-msgstr ""
-
-#: views/settings.php:484
-msgid "Keys are derived from this site's WordPress salts, so a database dump alone cannot reveal them. Changing the salts in wp-config.php makes stored credentials unreadable and they will need re-entering."
-msgstr ""
-
-#: views/settings.php:20
-msgid "LIFF"
-msgstr ""
-
-#: src/Admin/AdminModule.php:49
-#: src/Admin/AdminModule.php:50
-#: src/Woo/WooModule.php:634
-#: views/dashboard.php:34
-msgid "LINE"
-msgstr ""
-
-#: src/Login/LoginModule.php:675
-#: views/settings.php:17
-msgid "LINE Login"
-msgstr ""
-
-#: views/settings.php:132
-msgid "LINE Login Channel ID"
-msgstr ""
-
-#: src/Admin/AdminModule.php:275
-msgid "LINE Login channel connected"
-msgstr ""
-
-#: src/Login/LoginModule.php:147
-msgid "LINE Login is not configured on this site yet."
-msgstr ""
-
-#: src/Frontend/ShortcodeModule.php:66
-msgid "LINE Login is not configured yet."
-msgstr ""
-
-#: src/Pay/WooGateway.php:25
-#: src/Pay/WooGateway.php:35
-#: src/Pay/WooGateway.php:54
-#: views/settings.php:21
-#: views/settings.php:441
-msgid "LINE Pay"
-msgstr ""
-
-#: views/settings.php:134
-msgid "LINE Pay Channel ID"
-msgstr ""
-
-#. translators: %s: LINE Pay transaction id.
-#: src/Pay/PayModule.php:256
-msgid "LINE Pay confirmed. Transaction %s."
-msgstr ""
-
-#: views/payments.php:37
-msgid "LINE Pay credentials are missing, so nothing can be charged yet."
-msgstr ""
-
-#: src/Admin/AdminModule.php:310
-msgid "LINE Pay credentials present"
-msgstr ""
-
-#: src/Pay/PayModule.php:180
-msgid "LINE Pay did not identify this transaction."
-msgstr ""
-
-#: src/Pay/PayModule.php:465
-msgid "LINE Pay did not return a payment URL."
-msgstr ""
-
-#: src/Pay/WooGateway.php:200
-msgid "LINE Pay did not return a payment URL. Please try again."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:338
-msgid "LINE Pay had an internal error. Try again shortly."
-msgstr ""
-
-#: views/settings.php:430
-msgid "LINE Pay is configured on the <a href=\"%s\">LINE Pay tab</a>, and the gateway is switched on under WooCommerce > Settings > Payments."
-msgstr ""
-
-#: src/Admin/AdminModule.php:316
-msgid "LINE Pay is in production mode"
-msgstr ""
-
-#: views/payments.php:31
-msgid "LINE Pay is in sandbox mode. No real money moves."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:184
-#: src/Pay/LinePayClient.php:223
-msgid "LINE Pay is not configured. Add the Channel ID and Channel Secret first."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:337
-msgid "LINE Pay is processing a duplicate request. Try again shortly."
-msgstr ""
-
-#: views/payments.php:18
-msgid "LINE Pay is switched off under LINE > Settings > LINE Pay."
-msgstr ""
-
-#. translators: 1: refunded amount, 2: reason.
-#: src/Pay/WooGateway.php:275
-msgid "LINE Pay refunded %1$s. %2$s"
-msgstr ""
-
-#. translators: 1: LINE Pay return code, 2: LINE Pay message.
-#: src/Pay/LinePayClient.php:347
-msgid "LINE Pay returned %1$s: %2$s"
-msgstr ""
-
-#: src/Pay/LinePayClient.php:291
-msgid "LINE Pay returned a response this site could not read."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:112
-msgid "LINE accepted the menu but did not return an id."
-msgstr ""
-
-#: src/Flex/FlexModule.php:157
-msgid "LINE accepted this template."
-msgstr ""
-
-#. translators: %d: maximum number of messages.
-#: src/Api/MessagingClient.php:313
-msgid "LINE accepts at most %d messages per send."
-msgstr ""
-
-#: src/Frontend/ShortcodeModule.php:235
-#: src/Woo/WooModule.php:596
-msgid "LINE account"
-msgstr ""
-
-#: src/Login/LoginModule.php:578
-msgid "LINE account unlinked."
-msgstr ""
-
-#: src/Admin/AdminModule.php:218
-msgid "LINE allows at most %d areas; the extra ones will be dropped."
-msgstr ""
-
-#: src/Bot/BotModule.php:203
-msgid "LINE allows at most 13 quick reply buttons."
-msgstr ""
-
-#: src/Login/IdToken.php:42
-msgid "LINE did not return an ID token. Make sure the openid scope is enabled for this channel."
-msgstr ""
-
-#: src/Login/LoginModule.php:191
-msgid "LINE did not return an authorization code."
-msgstr ""
-
-#. translators: 1: required width, 2: required height, 3: actual width, 4: actual height.
-#: src/RichMenu/RichMenuModule.php:399
-msgid "LINE expects %1$d x %2$d pixels for this menu size; this image is %3$d x %4$d."
-msgstr ""
-
-#: src/Api/Client.php:164
-msgid "LINE is rate limiting this channel. Try again shortly."
-msgstr ""
-
-#: src/Login/LoginModule.php:317
-msgid "LINE rejected this login. Check the Channel ID, Channel Secret and Callback URL."
-msgstr ""
-
-#: src/Flex/FlexModule.php:148
-msgid "LINE rejected this template."
-msgstr ""
-
-#: views/settings.php:121
-msgid "LINE settings"
-msgstr ""
-
-#: src/Bot/Flow.php:257
-#: views/broadcast.php:82
-#: views/users.php:39
-msgid "LINE user id"
-msgstr ""
-
-#: src/Admin/AdminModule.php:66
-#: views/users.php:25
-msgid "LINE users"
-msgstr ""
-
-#: views/dashboard.php:39
-msgid "LINE users known"
-msgstr ""
-
-#. translators: %s: error detail from LINE.
-#: src/Inbox/InboxModule.php:185
-msgid "LINE would not deliver that message: %s"
-msgstr ""
-
-#: src/Admin/AdminModule.php:202
-msgid "Label"
-msgstr ""
-
-#: views/users.php:42
-msgid "Last seen"
-msgstr ""
-
-#: views/richmenus.php:137
-msgid "Leave blank for a standalone menu."
-msgstr ""
-
-#: views/settings.php:226
-msgid "Leave blank to use the shortcode label, or the default wording."
-msgstr ""
-
-#: views/settings.php:59
-msgid "Leave unchanged to keep the stored value"
-msgstr ""
-
-#: views/settings.php:314
-msgid "Let the AI answer messages no rule or flow handled"
-msgstr ""
-
-#: views/logs.php:64
-msgid "Level"
-msgstr ""
-
-#: src/Admin/AdminModule.php:207
-msgid "Link"
-msgstr ""
-
-#: src/Frontend/ShortcodeModule.php:268
-#: src/Woo/WooModule.php:700
-msgid "Link my LINE account"
-msgstr ""
-
-#: views/settings.php:197
-msgid "Link to an existing account when the email matches"
-msgstr ""
-
-#: src/Woo/OrderContext.php:283
-msgid "Link to the order (https sites only)"
-msgstr ""
-
-#: src/Woo/WooModule.php:688
-msgid "Link your LINE account to get order updates in LINE and to sign in with one tap."
-msgstr ""
-
-#: views/dashboard.php:47
-msgid "Linked WordPress accounts"
-msgstr ""
-
-#. translators: %s: LINE display name.
-#: src/Frontend/ShortcodeModule.php:245
-msgid "Linked to %s."
-msgstr ""
-
-#: src/Woo/OrderContext.php:268
-msgid "List of items and quantities"
-msgstr ""
-
-#: src/Inbox/Messages.php:110
-msgid "Location"
-msgstr ""
-
-#: src/Frontend/ShortcodeModule.php:52
-#: views/settings.php:248
-msgid "Log in with LINE"
-msgstr ""
-
-#: views/settings.php:467
-msgid "Log level"
-msgstr ""
-
-#: views/settings.php:222
-msgid "Login button"
-msgstr ""
-
-#: views/settings.php:421
-msgid "Login buttons"
-msgstr ""
-
-#: src/Admin/AdminModule.php:69
-#: views/logs.php:22
-msgid "Logs"
-msgstr ""
-
-#: views/settings.php:280
-msgid "Long-lived token"
-msgstr ""
-
-#: views/richmenus.php:148
-msgid "Lowercase letters, digits, hyphen and underscore. Other tabs point at this. Generated automatically if left blank."
-msgstr ""
-
-#: views/richmenus.php:73
-msgid "Make default"
-msgstr ""
-
-#: views/notifications.php:81
-msgid "Manage templates"
-msgstr ""
-
-#: views/replies.php:31
-#: views/replies.php:84
-msgid "Match"
-msgstr ""
-
-#: views/settings.php:197
-msgid "Match by email"
-msgstr ""
-
-#: views/settings.php:203
-msgid "Matching by email means anyone who controls a LINE account with that address can sign in as the matching WordPress user. Leave it off unless you know every LINE email on your site is verified and trusted."
-msgstr ""
-
-#: views/settings.php:323
-msgid "Maximum reply length"
-msgstr ""
-
-#: src/Flex/Validator.php:264
-msgid "Media URLs must use HTTPS."
-msgstr ""
-
-#: src/Admin/AdminModule.php:198
-#: src/RichMenu/RichMenuModule.php:99
-#: views/richmenus.php:103
-#: views/richmenus.php:201
-msgid "Menu"
-msgstr ""
-
-#. translators: 1: full size, 2: half size.
-#: views/richmenus.php:23
-msgid "Menu images must be %1$s or %2$s pixels, JPEG or PNG, and at most 1 MB."
-msgstr ""
-
-#: src/Inbox/Messages.php:116
-#: src/Woo/NotifyTemplates.php:83
-#: views/broadcast.php:47
-#: views/logs.php:66
-#: views/replies.php:108
-msgid "Message"
-msgstr ""
-
-#. translators: %d: zero-based message index.
-#: src/Api/MessagingClient.php:325
-msgid "Message %d is missing its type."
-msgstr ""
-
-#: views/replies.php:152
-msgid "Message JSON"
-msgstr ""
-
-#: views/dashboard.php:76
-msgid "Message quota this month"
-msgstr ""
-
-#: views/settings.php:347
-msgid "Message the customer in LINE when their order status changes"
-msgstr ""
-
-#: src/Admin/AdminModule.php:208
-msgid "Message the customer sends"
-msgstr ""
-
-#: views/settings.php:18
-msgid "Messaging API"
-msgstr ""
-
-#: views/settings.php:133
-msgid "Messaging API Channel ID"
-msgstr ""
-
-#: src/Api/TokenManager.php:69
-msgid "Messaging API Channel ID and Channel Secret are required to issue a token."
-msgstr ""
-
-#: src/Admin/AdminModule.php:281
-msgid "Messaging API channel connected"
-msgstr ""
-
-#: src/Liff/LiffModule.php:119
-msgid "Messaging is not available right now."
-msgstr ""
-
-#: views/settings.php:231
-msgid "Minimum height"
-msgstr ""
-
-#: src/Admin/AdminModule.php:356
-msgid "Moksa LINE Suite is installed but not connected to a LINE channel yet."
-msgstr ""
-
-#: views/replies.php:148
-msgid "Must be HTTPS, JPEG or PNG, and at most 10 MB."
-msgstr ""
-
-#: views/settings.php:449
-msgid "Must match both your LINE Pay merchant currency and the WooCommerce store currency, or the gateway hides itself at checkout."
-msgstr ""
-
-#: views/settings.php:420
-msgid "My Account tab"
-msgstr ""
-
-#: views/flows.php:37
-#: views/replies.php:29
-#: views/replies.php:74
-#: views/richmenus.php:36
-#: views/richmenus.php:111
-#: views/users.php:38
-msgid "Name"
-msgstr ""
-
-#: views/users.php:30
-msgid "Name, LINE id or email"
-msgstr ""
-
-#: views/notifications.php:91
-msgid "Never settled"
-msgstr ""
-
-#: views/flows.php:76
-msgid "New flow"
-msgstr ""
-
-#: views/richmenus.php:229
-msgid "New menu"
-msgstr ""
-
-#: views/replies.php:170
-msgid "New rule"
-msgstr ""
-
-#: views/flex.php:60
-msgid "New template"
-msgstr ""
-
-#: views/settings.php:189
-msgid "New visitors"
-msgstr ""
-
-#: src/Liff/LiffModule.php:283
-#: src/Liff/LiffModule.php:314
-msgid "No LIFF ID has been configured yet."
-msgstr ""
-
-#: src/Frontend/ShortcodeModule.php:270
-msgid "No LINE account is linked. Only this user can link their own."
-msgstr ""
-
-#: views/users.php:47
-msgid "No LINE users recorded yet."
-msgstr ""
-
-#: src/Api/TokenManager.php:41
-msgid "No channel access token is configured. Add one under LINE > Settings > Messaging API."
-msgstr ""
-
-#: views/inbox.php:57
-msgid "No conversations yet."
-msgstr ""
-
-#: src/Admin/AdminModule.php:535
-msgid "No friends have been recorded on this site yet."
-msgstr ""
-
-#: src/Inbox/InboxModule.php:277
-msgid "No messages yet. Only messages received after this plugin was installed appear here -- LINE does not provide access to earlier chat history."
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:49
-msgid "No notification templates yet."
-msgstr ""
-
-#: src/Admin/AdminModule.php:211
-msgid "No other menus in this tab group yet"
-msgstr ""
-
-#: views/payments.php:76
-msgid "No payments yet."
-msgstr ""
-
-#: src/Bot/Flow.php:147
-msgid "No problem, that has been cancelled."
-msgstr ""
-
-#: views/richmenus.php:45
-msgid "No rich menus yet."
-msgstr ""
-
-#: views/replies.php:40
-msgid "No rules yet."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:330
-msgid "No such transaction exists."
-msgstr ""
-
-#: views/broadcast.php:54
-msgid "None"
-msgstr ""
-
-#: views/flex.php:84
-#: views/flows.php:88
-msgid "None yet."
-msgstr ""
-
-#: views/settings.php:486
-msgid "Not available on this server"
-msgstr ""
-
-#: views/users.php:76
-msgid "Not linked"
-msgstr ""
-
-#: views/settings.php:470
-msgid "Notable events"
-msgstr ""
-
-#: views/logs.php:72
-msgid "Nothing logged."
-msgstr ""
-
-#: views/notifications.php:112
-msgid "Nothing sent yet."
-msgstr ""
-
-#: views/flows.php:114
-msgid "Nothing submitted yet."
-msgstr ""
-
-#: views/logs.php:39
-msgid "Nothing yet. If you have already pressed Verify in the LINE Console and this is still empty, the signature check is rejecting deliveries, which almost always means the Messaging API channel secret is wrong."
-msgstr ""
-
-#: src/Admin/AdminModule.php:92
-#: src/Admin/AdminModule.php:93
-msgid "Notification templates"
-msgstr ""
-
-#: views/settings.php:350
-msgid "Notify on"
-msgstr ""
-
-#: src/Woo/OrderContext.php:267
-msgid "Number of items"
-msgstr ""
-
-#: views/settings.php:473
-msgid "Off"
-msgstr ""
-
-#: src/Pay/WooGateway.php:47
-msgid "Offer LINE Pay at checkout"
-msgstr ""
-
-#: views/settings.php:421
-msgid "Offer LINE sign-in on the account and checkout pages"
-msgstr ""
-
-#: views/settings.php:216
-msgid "Offers the official account while the visitor is logging in."
-msgstr ""
-
-#: views/settings.php:281
-msgid "Official account ID"
-msgstr ""
-
-#: views/richmenus.php:195
-msgid "On a phone"
-msgstr ""
-
-#: views/settings.php:391
-msgid "On status"
-msgstr ""
-
-#. translators: %s: remaining refundable amount.
-#: src/Pay/WooGateway.php:246
-msgid "Only %s remains refundable on this payment."
-msgstr ""
-
-#: src/Pay/WooGateway.php:232
-msgid "Only a captured payment can be refunded."
-msgstr ""
-
-#: views/inbox.php:38
-msgid "Only messages received after this plugin was installed appear here. LINE provides no way to read earlier chat history."
-msgstr ""
-
-#: views/settings.php:280
-msgid "Only needed when the mode above is set to long-lived."
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:125
-msgid "Only when"
-msgstr ""
-
-#: src/Admin/AdminModule.php:204
-msgid "Open a link"
-msgstr ""
-
-#: views/dashboard.php:69
-msgid "Open settings"
-msgstr ""
-
-#: views/richmenus.php:216
-msgid "Open the menu by default when the chat opens"
-msgstr ""
-
-#: src/Liff/LiffModule.php:375
-msgid "Open this page from LINE to continue."
-msgstr ""
-
-#: views/settings.php:487
-msgid "OpenSSL with AES-256-GCM is missing, so credentials are stored as plain text."
-msgstr ""
-
-#: src/Admin/AdminModule.php:325
-msgid "OpenSSL with AES-256-GCM is not available on this server, so channel secrets are stored as plain text."
-msgstr ""
-
-#: views/settings.php:332
-msgid "Optional separate LIFF app for in-app payment pages."
-msgstr ""
-
-#: views/settings.php:331
-msgid "Optional separate LIFF app for the chat shortcode."
-msgstr ""
-
-#: views/settings.php:291
-msgid "Optional. Every webhook delivery is relayed here unchanged, with its signature header, for n8n, Make or your own service."
-msgstr ""
-
-#: views/notifications.php:103
-msgid "Order"
-msgstr ""
-
-#. translators: %d: WooCommerce order id.
-#: views/payments.php:96
-msgid "Order #%d"
-msgstr ""
-
-#. translators: 1: order number, 2: status label.
-#: src/Woo/NotifyTemplates.php:463
-#: src/Woo/WooModule.php:516
-msgid "Order %1$s: %2$s"
-msgstr ""
-
-#. translators: %s: order number.
-#: src/Pay/WooGateway.php:342
-#: src/Woo/WooModule.php:435
-msgid "Order %s"
-msgstr ""
-
-#: src/Flex/FlexModule.php:264
-msgid "Order confirmed"
-msgstr ""
-
-#: views/notifications.php:95
-msgid "Order id"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:45
-msgid "Order notification"
-msgstr ""
-
-#: src/Admin/AdminModule.php:67
-#: src/Woo/NotifyTemplates.php:44
-#: views/notifications.php:17
-#: views/notifications.php:40
-#: views/settings.php:347
-msgid "Order notifications"
-msgstr ""
-
-#: views/notifications.php:45
-msgid "Order notifications are switched off, so nothing is being sent."
-msgstr ""
-
-#: src/Woo/OrderContext.php:260
-msgid "Order number"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:110
-msgid "Order statuses"
-msgstr ""
-
-#: src/Flex/FlexModule.php:254
-msgid "Order summary"
-msgstr ""
-
-#: src/Woo/TriggerRules.php:163
-msgid "Order total"
-msgstr ""
-
-#: src/Woo/OrderContext.php:265
-msgid "Order total, formatted"
-msgstr ""
-
-#: views/replies.php:141
-msgid "Package and sticker ID"
-msgstr ""
-
-#: src/Flex/FlexModule.php:137
-msgid "Passed the local checks. Connect the Messaging API channel to also validate against LINE."
-msgstr ""
-
-#: src/Admin/AdminModule.php:294
-msgid "Paste the webhook URL into the Console, enable \"Use webhook\", then press Verify."
-msgstr ""
-
-#: views/settings.php:181
-msgid "Paste this into the LINE Login channel as a Callback URL. It must match exactly, including https and any trailing path."
-msgstr ""
-
-#: views/settings.php:263
-msgid "Paste this into the Messaging API channel, turn on \"Use webhook\", then press Verify."
-msgstr ""
-
-#: views/settings.php:442
-msgid "Pay Channel ID"
-msgstr ""
-
-#: views/settings.php:443
-msgid "Pay Channel secret"
-msgstr ""
-
-#: src/Pay/PayModule.php:578
-msgid "Pay with LINE Pay"
-msgstr ""
-
-#: src/Pay/WooGateway.php:36
-#: src/Pay/WooGateway.php:60
-msgid "Pay with LINE Pay, LINE Points or a registered card."
-msgstr ""
-
-#: views/settings.php:332
-msgid "Payment LIFF ID"
-msgstr ""
-
-#: src/Pay/PayModule.php:512
-msgid "Payment link created."
-msgstr ""
-
-#: src/Woo/OrderContext.php:278
-#: src/Woo/TriggerRules.php:161
-msgid "Payment method"
-msgstr ""
-
-#. translators: 1: amount, 2: currency, 3: order reference.
-#: src/Pay/PayModule.php:268
-msgid "Payment received: %1$s %2$s (order %3$s). Thank you!"
-msgstr ""
-
-#: src/Pay/PayModule.php:549
-msgid "Payment request"
-msgstr ""
-
-#. translators: 1: item title, 2: formatted amount.
-#: src/Pay/PayModule.php:536
-msgid "Payment request: %1$s %2$s"
-msgstr ""
-
-#: src/Admin/AdminModule.php:68
-#: views/payments.php:17
-#: views/payments.php:27
-#: views/settings.php:424
-msgid "Payments"
-msgstr ""
-
-#: src/Woo/OrderContext.php:281
-msgid "Pickup store address"
-msgstr ""
-
-#: src/Woo/OrderContext.php:280
-msgid "Pickup store name"
-msgstr ""
-
-#: views/settings.php:229
-msgid "Pixels. 0 gives square corners."
-msgstr ""
-
-#: views/settings.php:231
-msgid "Pixels. 0 lets the padding decide."
-msgstr ""
-
-#: src/Bot/AutoReply.php:306
-msgid "Please choose an option:"
-msgstr ""
-
-#. translators: %s: comma-separated list of choices.
-#: src/Bot/Flow.php:410
-msgid "Please choose one of: %s"
-msgstr ""
-
-#: src/Bot/Flow.php:397
-msgid "Please reply with a date, for example 2026-03-15."
-msgstr ""
-
-#: src/Bot/Flow.php:390
-msgid "Please reply with a number."
-msgstr ""
-
-#: src/Bot/Flow.php:326
-msgid "Please reply with your answer."
-msgstr ""
-
-#: views/logs.php:59
-msgid "Plugin log"
-msgstr ""
-
-#: src/Admin/AdminModule.php:205
-msgid "Postback"
-msgstr ""
-
-#: src/Admin/AdminModule.php:210
-msgid "Postback data"
-msgstr ""
-
-#: views/flex.php:76
-#: views/settings.php:235
-msgid "Preview"
-msgstr ""
-
-#: views/replies.php:33
-#: views/replies.php:157
-msgid "Priority"
-msgstr ""
-
-#: views/settings.php:195
-msgid "Profile sync"
-msgstr ""
-
-#: views/settings.php:302
-msgid "Provider status"
-msgstr ""
-
-#: views/richmenus.php:72
-msgid "Publish"
-msgstr ""
-
-#. translators: %s: tab group name.
-#: views/richmenus.php:90
-msgid "Publish \"%s\""
-msgstr ""
-
-#: views/richmenus.php:83
-msgid "Publish a whole tab group"
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:564
-msgid "Publish this menu to LINE before making it the default."
-msgstr ""
-
-#: views/richmenus.php:39
-msgid "Published"
-msgstr ""
-
-#. translators: %d: number of menus published.
-#: src/RichMenu/RichMenuModule.php:538
-msgid "Published %d menu to LINE."
-msgid_plural "Published %d menus to LINE."
-msgstr[0] ""
-msgstr[1] ""
-
-#: src/RichMenu/RichMenuModule.php:551
-msgid "Published to LINE."
-msgstr ""
-
-#: views/richmenus.php:84
-msgid "Publishes every menu in the group in order and repoints their aliases, so the tabs stay consistent with each other."
-msgstr ""
-
-#: src/Admin/AdminModule.php:194
-msgid "Publishing to LINE..."
-msgstr ""
-
-#: views/replies.php:123
-msgid "Quick reply set"
-msgstr ""
-
-#: src/Bot/BotModule.php:226
-msgid "Quick reply set deleted."
-msgstr ""
-
-#: src/Bot/BotModule.php:215
-msgid "Quick reply set saved."
-msgstr ""
-
-#: views/replies.php:103
-msgid "Raw message JSON"
-msgstr ""
-
-#: views/logs.php:28
-msgid "Received"
-msgstr ""
-
-#: views/logs.php:24
-msgid "Recent webhook events"
-msgstr ""
-
-#: views/notifications.php:105
-msgid "Recipient"
-msgstr ""
-
-#: views/settings.php:292
-msgid "Record conversations and allow replying from WordPress"
-msgstr ""
-
-#: views/payments.php:66
-msgid "Reference"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:190
-msgid "Remove"
-msgstr ""
-
-#: src/Admin/AdminModule.php:214
-msgid "Replace the current areas with this layout?"
-msgstr ""
-
-#: views/inbox.php:39
-msgid "Replies are sent as push messages, which are billed against your channel quota."
-msgstr ""
-
-#: views/dashboard.php:102
-msgid "Replies to an inbound message are free. Push, multicast and broadcast are billed."
-msgstr ""
-
-#: views/inbox.php:99
-#: views/replies.php:32
-msgid "Reply"
-msgstr ""
-
-#: views/replies.php:95
-msgid "Reply with"
-msgstr ""
-
-#: views/settings.php:196
-msgid "Request the email scope (needs approval from LINE first)"
-msgstr ""
-
-#: views/notifications.php:107
-msgid "Result"
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:511
-msgid "Rich menu deleted."
-msgstr ""
-
-#: src/Admin/AdminModule.php:196
-msgid "Rich menu image"
-msgstr ""
-
-#: src/Api/RichMenuClient.php:58
-msgid "Rich menu images must be 1 MB or smaller."
-msgstr ""
-
-#: src/Api/RichMenuClient.php:51
-#: src/RichMenu/RichMenuModule.php:416
-msgid "Rich menu images must be JPEG or PNG."
-msgstr ""
-
-#: src/Admin/AdminModule.php:64
-#: views/richmenus.php:17
-msgid "Rich menus"
-msgstr ""
-
-#: views/settings.php:194
-msgid "Role for new accounts"
-msgstr ""
-
-#: src/Bot/BotModule.php:125
-msgid "Rule deleted."
-msgstr ""
-
-#: src/Bot/BotModule.php:114
-msgid "Rule saved."
-msgstr ""
-
-#: views/replies.php:21
-msgid "Rules are checked in order of match strength first (exact, then prefix, then pattern, then partial, then catch-all) and priority second, so a lower priority number wins between rules of equal strength."
-msgstr ""
-
-#: views/settings.php:444
-msgid "Sandbox"
-msgstr ""
-
-#: src/Admin/AdminModule.php:317
-msgid "Sandbox mode is on, so no real money moves. Turn it off when you go live."
-msgstr ""
-
-#: views/richmenus.php:228
-msgid "Save"
-msgstr ""
-
-#: views/flows.php:75
-msgid "Save flow"
-msgstr ""
-
-#: views/replies.php:169
-msgid "Save rule"
-msgstr ""
-
-#: views/flex.php:58
-msgid "Save template"
-msgstr ""
-
-#: views/settings.php:252
-msgid "Save to update the preview."
-msgstr ""
-
-#: views/flows.php:85
-msgid "Saved flows"
-msgstr ""
-
-#: views/flex.php:81
-msgid "Saved templates"
-msgstr ""
-
-#: src/Admin/AdminModule.php:191
-msgid "Saved."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:480
-msgid "Saved. Publish it to push the change to LINE."
-msgstr ""
-
-#: views/users.php:31
-msgid "Search"
-msgstr ""
-
-#: views/inbox.php:50
-msgid "Search name or message"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:48
-msgid "Search notifications"
-msgstr ""
-
-#: views/settings.php:384
-msgid "Seconds. Useful when another plugin adjusts the order right after the status changes. 0 sends immediately."
-msgstr ""
-
-#: src/Liff/LiffModule.php:328
-#: views/broadcast.php:91
-#: views/inbox.php:101
-msgid "Send"
-msgstr ""
-
-#: src/Admin/AdminModule.php:203
-msgid "Send a message"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:214
-#: views/flex.php:64
-msgid "Send a test to"
-msgstr ""
-
-#: views/payments.php:54
-msgid "Send it to (optional)"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:217
-#: views/flex.php:66
-msgid "Send test"
-msgstr ""
-
-#: views/broadcast.php:62
-msgid "Send to"
-msgstr ""
-
-#: src/Liff/LiffModule.php:303
-msgid "Send us a message and we will reply in your LINE chat."
-msgstr ""
-
-#: src/Liff/LiffModule.php:372
-msgid "Sending..."
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:319
-msgid "Sent (30 days)"
-msgstr ""
-
-#. translators: %d: number of recipients.
-#: src/Admin/AdminModule.php:558
-msgid "Sent to %d people."
-msgstr ""
-
-#: views/settings.php:287
-msgid "Sent when someone adds the account. You can use {display_name}, {site_name} and {site_url}."
-msgstr ""
-
-#. translators: %s: order number used for the preview.
-#: src/Woo/NotifyTemplates.php:538
-msgid "Sent, using order %s for the values."
-msgstr ""
-
-#: src/Inbox/InboxModule.php:203
-msgid "Sent."
-msgstr ""
-
-#: src/Flex/FlexModule.php:189
-msgid "Sent. Check the chat on your phone."
-msgstr ""
-
-#: src/Liff/LiffModule.php:373
-msgid "Sent. We will reply in your LINE chat."
-msgstr ""
-
-#: src/Frontend/ShortcodeModule.php:167
-msgid "Set the official account basic ID in the LINE settings first."
-msgstr ""
-
-#: src/Admin/AdminModule.php:70
-#: src/Admin/AdminModule.php:256
-msgid "Settings"
-msgstr ""
-
-#: views/settings.php:124
-msgid "Settings saved."
-msgstr ""
-
-#: views/dashboard.php:56
-msgid "Setup"
+#: src/Woo/OrderContext.php:274
+msgid "Shipping name"
 msgstr ""
 
 #: src/Woo/OrderContext.php:275
@@ -2078,897 +1839,33 @@ msgstr ""
 msgid "Shipping method"
 msgstr ""
 
-#: src/Woo/OrderContext.php:274
-msgid "Shipping name"
-msgstr ""
-
-#: src/Pay/WooGateway.php:331
-msgid "Shipping, fees and tax"
-msgstr ""
-
-#: views/settings.php:278
-msgid "Short-lived tokens last 15 minutes, are unlimited in number, and never need storing. A long-lived token never expires, which means a leak is unrecoverable without rotating the channel."
-msgstr ""
-
-#: views/settings.php:335
-msgid "Shortcodes"
-msgstr ""
-
-#: views/settings.php:213
-msgid "Show an option to add as a friend"
-msgstr ""
-
-#: views/settings.php:214
-msgid "Show the add-friend step prominently"
-msgstr ""
-
-#: views/flex.php:36
-msgid "Shown in the chat list and in push notifications, where the bubble cannot be drawn."
-msgstr ""
-
-#: src/Woo/WooModule.php:754
-msgid "Sign in with LINE"
-msgstr ""
-
-#: views/richmenus.php:122
-msgid "Size"
-msgstr ""
-
-#: views/payments.php:67
-msgid "Source"
-msgstr ""
-
-#: views/replies.php:100
-msgid "Start a conversation flow"
-msgstr ""
-
-#: views/flex.php:40
-msgid "Start from"
-msgstr ""
-
-#: views/richmenus.php:167
-msgid "Start from a layout:"
-msgstr ""
-
-#: views/flows.php:42
-msgid "Start when a message"
-msgstr ""
-
-#: src/Frontend/ShortcodeModule.php:238
-#: views/logs.php:31
-#: views/notifications.php:104
-#: views/payments.php:69
-msgid "Status"
-msgstr ""
-
-#: src/Woo/OrderContext.php:262
-msgid "Status name, translated"
-msgstr ""
-
-#: src/Woo/OrderContext.php:261
-msgid "Status slug"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:317
-msgid "Statuses"
-msgstr ""
-
-#. translators: %d: step number.
-#: src/Bot/BotModule.php:150
-msgid "Step %d has no question to ask."
-msgstr ""
-
-#: views/flows.php:55
-msgid "Steps"
-msgstr ""
-
-#: views/settings.php:322
-msgid "Stops the AI answering after this many replies in a day. Set to 0 for no limit -- but every reply costs money."
-msgstr ""
-
-#: views/settings.php:188
-msgid "Stored encrypted. Only the last four characters are ever shown again."
-msgstr ""
-
-#: views/flows.php:93
-#: views/flows.php:102
-msgid "Submissions"
-msgstr ""
-
-#: src/Woo/OrderContext.php:266
-msgid "Subtotal, formatted"
-msgstr ""
-
-#: src/Bot/Ai/AiResponder.php:98
-msgid "Sure -- I have passed this to a member of our team. They will reply here shortly."
-msgstr ""
-
-#: src/Admin/AdminModule.php:206
-msgid "Switch to another tab"
-msgstr ""
-
-#: views/richmenus.php:37
-#: views/richmenus.php:130
-msgid "Tab group"
-msgstr ""
-
-#: views/richmenus.php:141
-msgid "Tab order"
-msgstr ""
-
-#: src/Admin/AdminModule.php:209
-msgid "Tab to switch to"
-msgstr ""
-
-#: views/inbox.php:90
-msgid "Take over"
-msgstr ""
-
-#: src/Pay/WooGateway.php:26
-msgid "Take payments through LINE Pay. Credentials are configured under LINE > Settings > LINE Pay."
-msgstr ""
-
-#: views/settings.php:451
-msgid "Take the money as soon as the customer confirms"
-msgstr ""
-
-#: views/inbox.php:47
-msgid "Taken over by a person"
-msgstr ""
-
-#: views/richmenus.php:161
-msgid "Tappable areas"
-msgstr ""
-
-#: views/notifications.php:106
-#: views/replies.php:114
-msgid "Template"
-msgstr ""
-
-#: src/Flex/FlexModule.php:99
-msgid "Template deleted."
-msgstr ""
-
-#: views/flex.php:29
-msgid "Template name"
-msgstr ""
-
-#: src/Flex/FlexModule.php:82
-msgid "Template saved."
-msgstr ""
-
-#: views/settings.php:369
-msgid "Templates"
-msgstr ""
-
-#: src/Admin/AdminModule.php:509
-msgid "Test sent."
-msgstr ""
-
-#: views/replies.php:97
-msgid "Text"
-msgstr ""
-
-#: views/settings.php:228
-msgid "Text colour"
-msgstr ""
-
-#: src/Bot/Flow.php:229
-msgid "Thank you, we have received your details."
-msgstr ""
-
-#: src/Inbox/InboxModule.php:254
-msgid "That change is not valid."
-msgstr ""
-
-#: src/Inbox/InboxModule.php:153
-#: src/Inbox/InboxModule.php:223
-msgid "That conversation no longer exists."
-msgstr ""
-
-#: src/Liff/LiffModule.php:374
-msgid "That did not send. Please try again."
-msgstr ""
-
-#: src/Admin/AdminModule.php:192
-msgid "That did not work."
-msgstr ""
-
-#: src/Bot/Flow.php:385
-msgid "That does not look like a phone number. Please try again."
-msgstr ""
-
-#: src/Bot/Flow.php:378
-msgid "That does not look like an email address. Please try again."
-msgstr ""
-
-#: src/Liff/LiffModule.php:146
-msgid "That is a lot of messages at once. Please wait a moment."
-msgstr ""
-
-#: src/Flex/FlexModule.php:114
-#: src/Flex/FlexModule.php:178
-msgid "That is not valid JSON."
-msgstr ""
-
-#. translators: %s: JSON parser message.
-#: src/Bot/BotModule.php:75
-#: src/Flex/FlexModule.php:44
-msgid "That is not valid JSON: %s"
-msgstr ""
-
-#: src/Bot/Flow.php:371
-msgid "That looked empty. Please try again."
-msgstr ""
-
-#: src/Bot/BotModule.php:161
-msgid "That notification address is not valid."
-msgstr ""
-
-#: src/Pay/WooGateway.php:107
-msgid "That order could not be found."
-msgstr ""
-
-#: src/Bot/BotModule.php:98
-msgid "That pattern is not valid."
-msgstr ""
-
-#: src/Pay/PayModule.php:107
-#: src/Pay/PayModule.php:166
-msgid "That payment could not be found."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:77
-#: src/RichMenu/RichMenuModule.php:496
-msgid "That rich menu no longer exists."
-msgstr ""
-
-#: src/Admin/AdminModule.php:484
-msgid "That template could not be loaded."
-msgstr ""
-
-#: src/Flex/FlexModule.php:96
-msgid "That template no longer exists."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:331
-msgid "That transaction id does not belong to this merchant."
-msgstr ""
-
-#. translators: 1: section name, 2: allowed types.
-#: src/Flex/Validator.php:174
-msgid "The %1$s section must contain one of: %2$s."
-msgstr ""
-
-#: src/Bot/Ai/AiEngineProvider.php:117
-msgid "The AI returned an empty answer."
-msgstr ""
-
-#. translators: %s: settings page URL.
-#: src/Pay/WooGateway.php:67
-msgid "The Channel ID, Channel Secret and sandbox switch live on the <a href=\"%s\">LINE Pay settings screen</a>, so they are stored encrypted and shared with payment links."
-msgstr ""
-
-#: src/Login/LoginModule.php:495
-msgid "The account to link to no longer exists."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:327
-msgid "The amount is not valid for this currency."
-msgstr ""
-
-#: src/Admin/AdminModule.php:282
-msgid "The bot cannot send or receive anything until this is set."
-msgstr ""
-
-#: views/settings.php:319
-msgid "The bot id from AI Engine."
-msgstr ""
-
-#. translators: %s: location in the message.
-#: src/Flex/Validator.php:243
-msgid "The box at %s needs a contents array."
-msgstr ""
-
-#. translators: %s: location in the message.
-#: src/Flex/Validator.php:235
-msgid "The box at %s needs a layout."
-msgstr ""
-
-#: views/richmenus.php:204
-msgid "The chat bar text is drawn by LINE below the menu, not on your image. This preview shows layout only, not exact fonts or corners."
-msgstr ""
-
-#: src/Pay/PayModule.php:137
-msgid "The customer cancelled the LINE Pay payment."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:334
-msgid "The customer has insufficient balance."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:336
-msgid "The customer has not completed authentication."
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:112
-msgid "The customer is messaged when the order enters any of these statuses. Each notification is billed as a push message."
-msgstr ""
-
-#: src/Flex/Validator.php:226
-msgid "The filler component was removed by LINE. Use a box with margin, padding or offset instead."
-msgstr ""
-
-#: src/Bot/BotModule.php:137
-msgid "The flow definition is not valid JSON."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:410
-msgid "The image is larger than 1 MB, which LINE will reject."
-msgstr ""
-
-#: views/inbox.php:17
-msgid "The inbox is switched off under LINE > Settings > Messaging API."
-msgstr ""
-
-#. translators: %s: error detail.
-#: src/Pay/PayModule.php:501
-msgid "The link was created, but LINE would not deliver it: %s"
-msgstr ""
-
-#: src/Login/IdToken.php:111
-msgid "The login response came from an unexpected issuer."
-msgstr ""
-
-#: src/Login/IdToken.php:107
-msgid "The login response did not identify a user."
-msgstr ""
-
-#: src/Login/IdToken.php:130
-msgid "The login response did not match this login attempt."
-msgstr ""
-
-#: src/Login/IdToken.php:121
-msgid "The login response has expired. Please try again."
-msgstr ""
-
-#: src/Login/IdToken.php:117
-msgid "The login response was issued for a different channel."
-msgstr ""
-
-#: views/replies.php:88
-msgid "The message contains this"
-msgstr ""
-
-#. translators: %s: JSON parser message.
-#: src/Woo/NotifyTemplates.php:296
-msgid "The message is not valid JSON, so this notification will not send: %s"
-msgstr ""
-
-#: views/replies.php:89
-msgid "The message matches this pattern"
-msgstr ""
-
-#: views/replies.php:87
-msgid "The message starts with this"
-msgstr ""
-
-#: src/Pay/LinePayClient.php:328
-msgid "The payment account status does not allow this operation."
-msgstr ""
-
-#: src/Pay/PayModule.php:415
-msgid "The payment could not be recorded."
-msgstr ""
-
-#: src/Pay/WooGateway.php:146
-msgid "The payment could not be started. Please try again."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:195
-msgid "The payment request could not be encoded."
-msgstr ""
-
-#: src/Pay/PayModule.php:142
-msgid "The payment was cancelled."
-msgstr ""
-
-#: views/flex.php:20
-msgid "The preview is an approximation. Use \"Check\" to validate against LINE itself, and \"Send test\" to see the real thing in a chat."
-msgstr ""
-
-#: views/broadcast.php:77
-msgid "The recorded list only includes people this site has seen since the webhook was switched on, so it is usually smaller than the real follower count."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:326
-msgid "The request headers were not accepted. Check the Channel Secret."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:459
-msgid "The rich menu could not be saved."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:373
-msgid "The selected image could not be read from disk."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:358
-msgid "The selected image could not be read from the media library."
-msgstr ""
-
-#: views/settings.php:375
-msgid "The statuses above use a built-in card. For full control -- your own Flex design, and conditions such as payment or shipping method -- create <a href=\"%s\">notification templates</a>. When a template matches, it replaces the built-in card."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:434
-msgid "The tappable areas could not be read."
-msgstr ""
-
-#: src/Flex/FlexModule.php:76
-msgid "The template could not be saved."
-msgstr ""
-
-#: views/replies.php:86
-msgid "The whole message is exactly this"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:516
-msgid "There are no orders yet to build a preview from."
-msgstr ""
-
-#: src/Api/MessagingClient.php:302
-msgid "There is nothing to send."
-msgstr ""
-
-#: src/Login/LoginModule.php:504
-msgid "This LINE account is already linked to another user on this site."
-msgstr ""
-
-#: src/Flex/Validator.php:190
-msgid "This bubble exceeds the 30 KB limit."
-msgstr ""
-
-#: src/Flex/Validator.php:119
-msgid "This carousel exceeds the 50 KB limit. Remove bubbles or shorten the content."
-msgstr ""
-
-#. translators: %s: comma-separated list of field names.
-#: views/settings.php:148
-msgid "This does not look like a channel ID: %s. A LINE channel ID is a number, usually ten digits. If your browser filled this in for you, clear it and paste the value from the LINE Developers Console."
-msgstr ""
-
-#: src/Flex/Validator.php:208
-msgid "This layout nests too deeply."
-msgstr ""
-
-#: src/Login/LoginModule.php:141
-msgid "This link expired. Please go back and try again."
-msgstr ""
-
-#: src/Login/IdToken.php:80
-msgid "This login could not be verified. Please try again."
-msgstr ""
-
-#: src/Login/LoginModule.php:173
-msgid "This login link has expired. Please try again."
-msgstr ""
-
-#: src/Login/LoginModule.php:163
-msgid "This login request is missing its state. Please start again."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:581
-msgid "This menu is now the default for everyone."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:325
-msgid "This merchant cannot use LINE Pay right now. Contact LINE Pay support."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:324
-msgid "This merchant is not registered with LINE Pay. Check the Channel ID and whether you are pointed at sandbox or production."
-msgstr ""
-
-#: src/Pay/WooGateway.php:225
-msgid "This order has no LINE Pay transaction to refund."
-msgstr ""
-
-#: src/Pay/WooGateway.php:116
-msgid "This order has nothing to pay."
-msgstr ""
-
-#: src/Liff/LiffModule.php:192
-msgid "This page could not identify you. Reopen it from LINE."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:333
-msgid "This payment has already been captured."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:332
-msgid "This payment has already been refunded, or the refund window has closed."
-msgstr ""
-
-#: src/Pay/PayModule.php:195
-msgid "This payment is already being confirmed. Please wait a moment and refresh."
-msgstr ""
-
-#: src/Pay/LinePayClient.php:329
-msgid "This payment is already being processed."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:91
-msgid "This rich menu has no tappable areas yet."
-msgstr ""
-
-#: src/Admin/AdminModule.php:628
-msgid "This screen is missing."
-msgstr ""
-
-#: src/Liff/LiffModule.php:239
-msgid "This session belongs to a different channel."
-msgstr ""
-
-#: src/Liff/LiffModule.php:228
-msgid "This session could not be verified. Reopen the page from LINE."
-msgstr ""
-
-#: src/Login/LoginModule.php:418
-msgid "This site is not accepting new registrations through LINE. Please sign in with your existing account first, then link LINE from your profile."
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:524
-msgid "This template did not produce a valid message. Check the JSON and the placeholders."
-msgstr ""
-
-#: src/Flex/FlexModule.php:57
-msgid "This template will not send as it stands."
-msgstr ""
-
-#: views/logs.php:63
-msgid "Time"
-msgstr ""
-
-#: src/Pay/WooGateway.php:51
-msgid "Title"
-msgstr ""
-
-#: views/richmenus.php:28
-msgid "To build tabs, give several menus the same tab group and point their tab buttons at each other with a \"switch tab\" action."
-msgstr ""
-
-#: src/Flex/FlexModule.php:273
-#: src/Woo/WooModule.php:460
-msgid "Total"
+#: src/Woo/OrderContext.php:278
+#: src/Woo/TriggerRules.php:161
+msgid "Payment method"
 msgstr ""
 
 #: src/Woo/OrderContext.php:279
 msgid "Tracking number, from ECPay, RY Tools, AST or Shipment Tracking"
 msgstr ""
 
-#: views/settings.php:413
-msgid "Tracking numbers are read from ECPay, RY Tools, Advanced Shipment Tracking and WooCommerce Shipment Tracking. After the last attempt the notification is sent anyway, without the number."
+#: src/Woo/OrderContext.php:280
+msgid "Pickup store name"
 msgstr ""
 
-#: views/settings.php:388
-msgid "Tracking wait"
+#: src/Woo/OrderContext.php:281
+msgid "Pickup store address"
 msgstr ""
 
-#: views/payments.php:70
-msgid "Transaction"
+#: src/Woo/OrderContext.php:282
+msgid "Customer note"
 msgstr ""
 
-#: views/replies.php:30
-msgid "Trigger"
+#: src/Woo/OrderContext.php:283
+msgid "Link to the order (https sites only)"
 msgstr ""
 
-#: views/flows.php:50
-#: views/replies.php:79
-msgid "Trigger text"
-msgstr ""
-
-#: views/notifications.php:47
-msgid "Turn them on"
-msgstr ""
-
-#: views/logs.php:29
-msgid "Type"
-msgstr ""
-
-#: src/Admin/AdminModule.php:517
-msgid "Type SEND in the confirmation box to go ahead."
-msgstr ""
-
-#: views/broadcast.php:87
-msgid "Type SEND to confirm"
-msgstr ""
-
-#: src/Liff/LiffModule.php:302
-msgid "Type your message"
-msgstr ""
-
-#: src/Woo/WooModule.php:668
-msgid "Unlink"
-msgstr ""
-
-#: src/Frontend/ShortcodeModule.php:252
-msgid "Unlink LINE account"
-msgstr ""
-
-#: src/Woo/WooModule.php:679
-msgid "Unlink your LINE account?"
-msgstr ""
-
-#: views/settings.php:276
-msgid "Use a long-lived token I paste below"
-msgstr ""
-
-#: views/richmenus.php:223
-msgid "Use as the default menu for everyone"
-msgstr ""
-
-#: views/settings.php:444
-msgid "Use the sandbox environment (no real money moves)"
-msgstr ""
-
-#: views/settings.php:330
-msgid "Used by the LIFF shortcodes unless one is given explicitly."
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:219
-msgid "Uses the most recent order to fill in the values. Save first."
-msgstr ""
-
-#: src/Woo/WooModule.php:499
-msgid "View order"
-msgstr ""
-
-#: src/Inbox/InboxModule.php:287
-msgid "Visitor"
-msgstr ""
-
-#: views/settings.php:385
-msgid "Wait for tracking"
-msgstr ""
-
-#: src/Pay/WooGateway.php:196
-msgid "Waiting for the customer to complete payment on LINE Pay."
-msgstr ""
-
-#: views/settings.php:471
-msgid "Warnings and errors"
-msgstr ""
-
-#: views/settings.php:259
-msgid "Webhook URL"
-msgstr ""
-
-#: src/Admin/AdminModule.php:293
-msgid "Webhook has received an event"
-msgstr ""
-
-#: views/settings.php:270
-msgid "Webhook signatures are verified with this. Without it, nothing the bot receives can be trusted."
-msgstr ""
-
-#: src/Admin/AdminModule.php:287
-msgid "Webhook signing secret is the Messaging API one"
-msgstr ""
-
-#: src/Admin/AdminModule.php:288
-msgid "Webhooks are signed with the Messaging API channel secret. Falling back to the Login channel secret only works when both channels are the same, which is unusual."
-msgstr ""
-
-#: views/payments.php:45
-msgid "What is this for"
-msgstr ""
-
-#: src/Pay/WooGateway.php:53
-msgid "What the customer sees at checkout."
-msgstr ""
-
-#: views/flows.php:106
-#: views/notifications.php:102
-msgid "When"
-msgstr ""
-
-#: views/settings.php:324
-msgid "When a message contains this, the bot stops answering and the conversation is flagged for a human."
-msgstr ""
-
-#: src/Admin/AdminModule.php:201
-msgid "When tapped"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:74
-msgid "When to send"
-msgstr ""
-
-#: views/settings.php:218
-msgid "Where to send people after login. Leave blank to return them to the page they came from."
-msgstr ""
-
-#: views/settings.php:317
-msgid "Whichever chatbot you have set up in AI Engine, including its knowledge base."
-msgstr ""
-
-#: views/flows.php:107
-msgid "Who"
-msgstr ""
-
-#: views/settings.php:230
-msgid "Width"
-msgstr ""
-
-#: views/settings.php:457
-msgid "With immediate capture off, payments are only authorised. You then have to capture or void each one, and an order cancelled in WooCommerce releases its authorisation automatically."
-msgstr ""
-
-#: views/settings.php:27
-msgid "WooCommerce"
-msgstr ""
-
-#: views/notifications.php:18
-msgid "WooCommerce is not active, so there is nothing to notify about."
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:510
-msgid "WooCommerce is not active."
-msgstr ""
-
-#: views/users.php:41
-msgid "WordPress account"
-msgstr ""
-
-#: src/Admin/AdminModule.php:195
-msgid "Working..."
-msgstr ""
-
-#: src/Admin/AdminModule.php:495
-msgid "Write a message or choose a template first."
-msgstr ""
-
-#: views/inbox.php:100
-msgid "Write a reply"
-msgstr ""
-
-#: src/Inbox/InboxModule.php:147
-#: src/Liff/LiffModule.php:136
-msgid "Write something first."
-msgstr ""
-
-#: src/Login/LoginModule.php:567
-msgid "You are not signed in."
-msgstr ""
-
-#: views/replies.php:110
-msgid "You can use {display_name}, {site_name} and {site_url}."
-msgstr ""
-
-#: src/Inbox/InboxModule.php:245
-msgid "You cannot change conversations."
-msgstr ""
-
-#: src/Pay/PayModule.php:479
-msgid "You cannot create payment links."
-msgstr ""
-
-#: src/Inbox/InboxModule.php:216
-msgid "You cannot read conversations."
-msgstr ""
-
-#: src/Inbox/InboxModule.php:140
-msgid "You cannot reply to conversations."
-msgstr ""
-
-#: src/Admin/AdminModule.php:469
-msgid "You cannot send broadcasts."
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:499
-msgid "You cannot send test notifications."
-msgstr ""
-
-#: src/Login/LoginModule.php:573
-msgid "You cannot unlink another user."
-msgstr ""
-
-#: src/Bot/BotModule.php:236
-msgid "You do not have permission to change bot settings."
-msgstr ""
-
-#: src/Admin/AdminModule.php:369
-msgid "You do not have permission to change these settings."
-msgstr ""
-
-#: src/RichMenu/RichMenuModule.php:635
-msgid "You do not have permission to manage rich menus."
-msgstr ""
-
-#: src/Flex/FlexModule.php:317
-msgid "You do not have permission to manage templates."
-msgstr ""
-
-#: src/Admin/AdminModule.php:622
-msgid "You do not have permission to view this page."
-msgstr ""
-
-#: src/Woo/WooModule.php:665
-msgid "Your LINE account is linked. Order updates will be sent to you on LINE."
-msgstr ""
-
-#: src/Liff/LiffModule.php:325
-msgid "Your message"
-msgstr ""
-
-#. translators: 1: site name, 2: flow name.
-#: src/Bot/Flow.php:269
-msgid "[%1$s] New LINE submission: %2$s"
-msgstr ""
-
-#: src/Inbox/Messages.php:99
-msgid "[Audio]"
-msgstr ""
-
-#: src/Inbox/Messages.php:104
-msgid "[File]"
-msgstr ""
-
-#: src/Inbox/Messages.php:137
-msgid "[Flex]"
-msgstr ""
-
-#: src/Inbox/Messages.php:93
-msgid "[Image]"
-msgstr ""
-
-#: src/Inbox/Messages.php:113
-msgid "[Sticker]"
-msgstr ""
-
-#: src/Inbox/Messages.php:96
-msgid "[Video]"
-msgstr ""
-
-#: views/settings.php:340
-msgid "a link to your official account"
-msgstr ""
-
-#: views/settings.php:338
-msgid "a message box that posts into the inbox"
-msgstr ""
-
-#: src/Flex/Validator.php:81
-msgid "altText is limited to 400 characters."
-msgstr ""
-
-#: views/settings.php:401
-msgid "check every"
-msgstr ""
-
-#: views/flows.php:45
-msgid "contains this"
-msgstr ""
-
-#: src/Flex/Validator.php:140
-msgid "contents must be a bubble or a carousel."
-msgstr ""
-
-#: views/richmenus.php:58
-msgid "default"
-msgstr ""
-
-#: src/Woo/NotifyTemplates.php:188
-msgid "e.g. cod, flat_rate, 1000"
-msgstr ""
-
-#: src/Woo/TriggerRules.php:185
-msgid "equals"
-msgstr ""
-
-#: views/settings.php:337
-msgid "greets the visitor by their LINE name"
+#: src/Woo/TriggerRules.php:163
+msgid "Order total"
 msgstr ""
 
 #: src/Woo/TriggerRules.php:175
@@ -2976,72 +1873,1592 @@ msgstr ""
 msgid "is"
 msgstr ""
 
-#: src/Woo/TriggerRules.php:184
-msgid "is at least"
-msgstr ""
-
-#: src/Woo/TriggerRules.php:186
-msgid "is at most"
-msgstr ""
-
-#: views/flows.php:44
-msgid "is exactly this"
-msgstr ""
-
-#: src/Woo/TriggerRules.php:187
-msgid "is less than"
+#: src/Woo/TriggerRules.php:176
+#: src/Woo/TriggerRules.php:180
+msgid "is not"
 msgstr ""
 
 #: src/Woo/TriggerRules.php:183
 msgid "is more than"
 msgstr ""
 
-#: src/Woo/TriggerRules.php:176
-#: src/Woo/TriggerRules.php:180
-msgid "is not"
+#: src/Woo/TriggerRules.php:184
+msgid "is at least"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:342
-msgid "never fires"
+#: src/Woo/TriggerRules.php:185
+msgid "equals"
 msgstr ""
 
-#: views/users.php:62
-msgid "no"
+#: src/Woo/TriggerRules.php:186
+msgid "is at most"
 msgstr ""
 
-#: src/Pay/LinePayClient.php:349
-msgid "no detail given"
+#: src/Woo/TriggerRules.php:187
+msgid "is less than"
+msgstr ""
+
+#. translators: 1: number of messages, 2: order status label.
+#: src/Woo/WooModule.php:230
+#, php-format
+msgid "%1$d LINE notification sent for status: %2$s"
+msgid_plural "%1$d LINE notifications sent for status: %2$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Woo/WooModule.php:499
+msgid "View order"
+msgstr ""
+
+#: src/Woo/WooModule.php:665
+msgid "Your LINE account is linked. Order updates will be sent to you on LINE."
+msgstr ""
+
+#: src/Woo/WooModule.php:668
+msgid "Unlink"
+msgstr ""
+
+#: src/Woo/WooModule.php:679
+msgid "Unlink your LINE account?"
+msgstr ""
+
+#: src/Woo/WooModule.php:688
+msgid "Link your LINE account to get order updates in LINE and to sign in with one tap."
+msgstr ""
+
+#: src/Woo/WooModule.php:727
+msgid "Continue with LINE"
+msgstr ""
+
+#: src/Woo/WooModule.php:744
+msgid "Already shopped with us?"
+msgstr ""
+
+#: src/Woo/WooModule.php:754
+msgid "Sign in with LINE"
+msgstr ""
+
+#: views/broadcast.php:24
+#: views/flex.php:20
+#: views/flows.php:13
+#: views/replies.php:18
+msgid "Your official account"
+msgstr ""
+
+#: views/broadcast.php:40
+msgid "Broadcasts are billed per recipient and cannot be recalled. Send a test to yourself first."
+msgstr ""
+
+#. translators: %s: remaining message allowance.
+#: views/broadcast.php:45
+#, php-format
+msgid "About %s messages remain in this month allowance."
+msgstr ""
+
+#: views/broadcast.php:66
+msgid "Attach a Flex template"
+msgstr ""
+
+#: views/broadcast.php:68
+msgid "None"
+msgstr ""
+
+#: views/broadcast.php:76
+msgid "Send to"
+msgstr ""
+
+#: views/broadcast.php:78
+msgid "Just one person (a test)"
+msgstr ""
+
+#. translators: %s: number of recorded friends.
+#: views/broadcast.php:83
+#, php-format
+msgid "Friends recorded on this site (%s)"
+msgstr ""
+
+#. translators: %s: number of people a broadcast reaches.
+#: views/broadcast.php:93
+#, php-format
+msgid "Everyone who follows the account (%s)"
+msgstr ""
+
+#: views/broadcast.php:97
+msgid "Everyone who follows the account"
+msgstr ""
+
+#: views/broadcast.php:103
+msgid "The recorded list only includes people this site has seen since the webhook was switched on, so it is usually smaller than the real follower count."
+msgstr ""
+
+#: views/broadcast.php:113
+msgid "Type SEND to confirm"
+msgstr ""
+
+#: views/broadcast.php:125
+#: views/flex.php:82
+#: views/flows.php:120
+#: views/replies.php:180
+#: views/settings.php:248
+msgid "Preview"
+msgstr ""
+
+#: views/broadcast.php:127
+msgid "What every recipient gets. A broadcast is billed per person and cannot be recalled, so this is the last look you have."
+msgstr ""
+
+#: views/dashboard.php:43
+msgid "LINE users known"
+msgstr ""
+
+#: views/dashboard.php:48
+msgid "Friends of the account"
+msgstr ""
+
+#: views/dashboard.php:53
+msgid "Linked WordPress accounts"
+msgstr ""
+
+#: views/dashboard.php:58
+msgid "Conversations waiting"
+msgstr ""
+
+#: views/dashboard.php:73
+msgid "Setup"
+msgstr ""
+
+#: views/dashboard.php:82
+msgid "Fix this"
+msgstr ""
+
+#: views/dashboard.php:91
+msgid "Open settings"
+msgstr ""
+
+#: views/dashboard.php:98
+msgid "Message quota this month"
+msgstr ""
+
+#. translators: 1: messages used, 2: monthly allowance.
+#: views/dashboard.php:104
+#, php-format
+msgid "%1$s of %2$s push messages used."
+msgstr ""
+
+#. translators: %s: messages used.
+#: views/dashboard.php:118
+#, php-format
+msgid "%s push messages sent this month. This plan has no monthly cap."
+msgstr ""
+
+#: views/dashboard.php:124
+msgid "Replies to an inbound message are free. Push, multicast and broadcast are billed."
+msgstr ""
+
+#: views/flex.php:26
+msgid "The preview is an approximation. Use \"Check\" to validate against LINE itself, and \"Send test\" to see the real thing in a chat."
+msgstr ""
+
+#: views/flex.php:35
+msgid "Template name"
+msgstr ""
+
+#: views/flex.php:40
+msgid "Fallback text"
+msgstr ""
+
+#: views/flex.php:42
+msgid "Shown in the chat list and in push notifications, where the bubble cannot be drawn."
+msgstr ""
+
+#: views/flex.php:46
+msgid "Start from"
+msgstr ""
+
+#: views/flex.php:48
+msgid "Blank"
+msgstr ""
+
+#: views/flex.php:59
+msgid "Bubble or carousel JSON"
+msgstr ""
+
+#: views/flex.php:64
+msgid "Save template"
+msgstr ""
+
+#: views/flex.php:65
+msgid "Check"
+msgstr ""
+
+#: views/flex.php:66
+msgid "New template"
+msgstr ""
+
+#: views/flex.php:73
+msgid "A LINE user id, which you can copy from the LINE users screen. Push messages are billed."
+msgstr ""
+
+#: views/flex.php:84
+msgid "Drawn as the customer receives it, on a phone-width screen. A push cannot be recalled, so this and \"Send test\" are the only checks you get."
+msgstr ""
+
+#: views/flex.php:99
+msgid "Chat list and lock screen"
+msgstr ""
+
+#: views/flex.php:101
+msgid "All the customer sees until they open the chat. This is the fallback text, not the bubble."
+msgstr ""
+
+#: views/flex.php:115
+msgid "Saved templates"
+msgstr ""
+
+#: views/flex.php:118
+#: views/flows.php:139
+msgid "None yet."
+msgstr ""
+
+#: views/flex.php:123
+#: views/flows.php:145
+#: views/replies.php:60
+#: views/richmenus.php:74
+msgid "Delete"
+msgstr ""
+
+#: views/flows.php:31
+msgid "A flow asks a series of questions and stores the answers. Only one flow runs per person at a time, it expires after 30 minutes of silence, and every question offers a way to cancel."
+msgstr ""
+
+#: views/flows.php:40
+#: views/replies.php:32
+#: views/replies.php:77
+#: views/richmenus.php:36
+#: views/richmenus.php:111
+#: views/users.php:39
+msgid "Name"
+msgstr ""
+
+#: views/flows.php:45
+msgid "Start when a message"
+msgstr ""
+
+#: views/flows.php:47
+msgid "is exactly this"
+msgstr ""
+
+#: views/flows.php:48
+msgid "contains this"
+msgstr ""
+
+#: views/flows.php:53
+#: views/replies.php:82
+msgid "Trigger text"
+msgstr ""
+
+#: views/flows.php:58
+msgid "Questions"
+msgstr ""
+
+#: views/flows.php:60
+msgid "Asked one at a time, in this order. Each answer is stored under its own key, which is the column you see in submissions."
+msgstr ""
+
+#: views/flows.php:68
+msgid "Anything they type"
+msgstr ""
+
+#: views/flows.php:69
+msgid "One of these buttons"
+msgstr ""
+
+#: views/flows.php:70
+msgid "A number"
+msgstr ""
+
+#: views/flows.php:71
+msgid "A phone number"
+msgstr ""
+
+#: views/flows.php:72
+msgid "An email address"
+msgstr ""
+
+#: views/flows.php:73
+msgid "A date"
+msgstr ""
+
+#: views/flows.php:81
+msgid "+ Add a question"
+msgstr ""
+
+#: views/flows.php:88
+#: views/richmenus.php:211
+msgid "Edit the JSON directly"
+msgstr ""
+
+#: views/flows.php:92
+msgid "When they finish, say"
+msgstr ""
+
+#: views/flows.php:94
+#: views/replies.php:113
+msgid "You can use {display_name}, {site_name} and {site_url}."
+msgstr ""
+
+#: views/flows.php:98
+msgid "Email submissions to"
+msgstr ""
+
+#: views/flows.php:105
+#: views/replies.php:167
+msgid "Active"
+msgstr ""
+
+#: views/flows.php:110
+msgid "Save flow"
+msgstr ""
+
+#: views/flows.php:111
+msgid "New flow"
+msgstr ""
+
+#: views/flows.php:122
+msgid "The whole conversation, from the trigger to the last answer. Buttons are drawn where LINE puts them, under the message."
+msgstr ""
+
+#: views/flows.php:136
+msgid "Saved flows"
+msgstr ""
+
+#: views/flows.php:144
+#: views/flows.php:153
+msgid "Submissions"
+msgstr ""
+
+#: views/flows.php:157
+#: views/notifications.php:104
+msgid "When"
+msgstr ""
+
+#: views/flows.php:158
+msgid "Who"
+msgstr ""
+
+#: views/flows.php:159
+msgid "Answers"
+msgstr ""
+
+#: views/flows.php:165
+msgid "Nothing submitted yet."
+msgstr ""
+
+#: views/inbox.php:17
+msgid "The inbox is switched off under LINE > Settings > Messaging API."
+msgstr ""
+
+#: views/inbox.php:38
+msgid "Only messages received after this plugin was installed appear here. LINE provides no way to read earlier chat history."
+msgstr ""
+
+#: views/inbox.php:39
+msgid "Replies are sent as push messages, which are billed against your channel quota."
+msgstr ""
+
+#: views/inbox.php:44
+msgid "Which conversations to show"
+msgstr ""
+
+#: views/inbox.php:46
+msgid "All conversations"
+msgstr ""
+
+#: views/inbox.php:47
+msgid "Handled by the bot"
+msgstr ""
+
+#: views/inbox.php:48
+msgid "Taken over by a person"
+msgstr ""
+
+#: views/inbox.php:49
+msgid "Closed"
+msgstr ""
+
+#: views/inbox.php:51
+msgid "Search conversations"
+msgstr ""
+
+#: views/inbox.php:52
+msgid "Search name or message"
+msgstr ""
+
+#: views/inbox.php:53
+#: views/logs.php:150
+#: views/notifications.php:98
+msgid "Filter"
+msgstr ""
+
+#: views/inbox.php:59
+msgid "No conversations yet."
+msgstr ""
+
+#: views/inbox.php:97
+msgid "Choose a conversation"
+msgstr ""
+
+#: views/inbox.php:99
+msgid "Take over"
+msgstr ""
+
+#: views/inbox.php:100
+msgid "Give back to the bot"
+msgstr ""
+
+#: views/inbox.php:101
+msgid "Close"
+msgstr ""
+
+#: views/inbox.php:108
+#: views/replies.php:35
+msgid "Reply"
+msgstr ""
+
+#: views/inbox.php:109
+msgid "Write a reply"
+msgstr ""
+
+#: views/logs.php:25
+#: views/settings.php:490
+msgid "Warnings and errors"
+msgstr ""
+
+#: views/logs.php:26
+#: views/settings.php:491
+msgid "Errors only"
+msgstr ""
+
+#: views/logs.php:27
+msgid "Warnings only"
+msgstr ""
+
+#: views/logs.php:28
+msgid "Info only"
+msgstr ""
+
+#: views/logs.php:29
+msgid "Debug only"
+msgstr ""
+
+#: views/logs.php:30
+#: views/settings.php:488
+msgid "Everything"
+msgstr ""
+
+#: views/logs.php:90
+msgid "Recent webhook events"
+msgstr ""
+
+#: views/logs.php:94
+msgid "Received"
+msgstr ""
+
+#: views/logs.php:95
+msgid "Type"
+msgstr ""
+
+#: views/logs.php:96
+msgid "From"
+msgstr ""
+
+#: views/logs.php:98
+msgid "Detail"
+msgstr ""
+
+#: views/logs.php:105
+msgid "Nothing yet. If you have already pressed Verify in the LINE Console and this is still empty, the signature check is rejecting deliveries, which almost always means the Messaging API channel secret is wrong."
+msgstr ""
+
+#: views/logs.php:130
+msgid "Plugin log"
+msgstr ""
+
+#: views/logs.php:135
+msgid "Show which entries"
+msgstr ""
+
+#: views/logs.php:142
+msgid "Which area of the plugin"
+msgstr ""
+
+#: views/logs.php:144
+msgid "All areas"
+msgstr ""
+
+#. translators: 1: rows matching the filter, 2: rows kept in total.
+#: views/logs.php:156
+#, php-format
+msgid "%1$s of %2$s entries"
+msgstr ""
+
+#: views/logs.php:165
+msgid "Clear the log"
+msgstr ""
+
+#. translators: %s: number of days.
+#: views/logs.php:174
+#, php-format
+msgid "Entries are deleted automatically after %s days, which you can change under Settings > Advanced."
+msgstr ""
+
+#: views/logs.php:183
+msgid "Time"
+msgstr ""
+
+#: views/logs.php:184
+msgid "Level"
+msgstr ""
+
+#: views/logs.php:194
+msgid "Nothing matches this filter. Set it to Everything to see the rest."
+msgstr ""
+
+#: views/logs.php:196
+msgid "Nothing logged."
+msgstr ""
+
+#: views/logs.php:222
+msgid "Context"
+msgstr ""
+
+#: views/notifications.php:18
+msgid "WooCommerce is not active, so there is nothing to notify about."
+msgstr ""
+
+#: views/notifications.php:45
+msgid "Order notifications are switched off, so nothing is being sent."
+msgstr ""
+
+#: views/notifications.php:47
+msgid "Turn them on"
+msgstr ""
+
+#: views/notifications.php:56
+msgid "Delivered in the last 30 days"
+msgstr ""
+
+#: views/notifications.php:60
+msgid "Failed in the last 30 days"
+msgstr ""
+
+#: views/notifications.php:72
+msgid "Active templates"
+msgstr ""
+
+#: views/notifications.php:78
+msgid "Add a notification template"
+msgstr ""
+
+#: views/notifications.php:81
+msgid "Manage templates"
+msgstr ""
+
+#: views/notifications.php:87
+msgid "Which results to show"
+msgstr ""
+
+#: views/notifications.php:89
+msgid "All results"
+msgstr ""
+
+#: views/notifications.php:90
+msgid "Delivered"
+msgstr ""
+
+#: views/notifications.php:91
+msgid "Failed"
+msgstr ""
+
+#: views/notifications.php:92
+msgid "Never settled"
+msgstr ""
+
+#: views/notifications.php:93
+msgid "Imported, result unknown"
+msgstr ""
+
+#: views/notifications.php:97
+msgid "Order id"
+msgstr ""
+
+#: views/notifications.php:105
+msgid "Order"
+msgstr ""
+
+#: views/notifications.php:107
+msgid "Recipient"
+msgstr ""
+
+#: views/notifications.php:108
+#: views/replies.php:117
+msgid "Template"
+msgstr ""
+
+#: views/notifications.php:109
+msgid "Result"
+msgstr ""
+
+#: views/notifications.php:114
+msgid "Nothing sent yet."
+msgstr ""
+
+#: views/notifications.php:154
+msgid "Built-in card"
+msgstr ""
+
+#: views/payments.php:18
+msgid "LINE Pay is switched off under LINE > Settings > LINE Pay."
+msgstr ""
+
+#: views/payments.php:31
+msgid "LINE Pay is in sandbox mode. No real money moves."
+msgstr ""
+
+#: views/payments.php:37
+msgid "LINE Pay credentials are missing, so nothing can be charged yet."
+msgstr ""
+
+#: views/payments.php:42
+msgid "Create a payment link"
+msgstr ""
+
+#: views/payments.php:45
+msgid "What is this for"
+msgstr ""
+
+#: views/payments.php:49
+#: views/payments.php:68
+msgid "Amount"
+msgstr ""
+
+#: views/payments.php:54
+msgid "Send it to (optional)"
+msgstr ""
+
+#: views/payments.php:56
+msgid "A LINE user id. Leave blank to just get a link you can share yourself."
+msgstr ""
+
+#: views/payments.php:58
+msgid "Create link"
+msgstr ""
+
+#: views/payments.php:66
+msgid "Reference"
+msgstr ""
+
+#: views/payments.php:67
+msgid "Source"
+msgstr ""
+
+#: views/payments.php:70
+msgid "Transaction"
+msgstr ""
+
+#: views/payments.php:71
+msgid "Created"
+msgstr ""
+
+#: views/payments.php:76
+msgid "No payments yet."
+msgstr ""
+
+#. translators: %d: WooCommerce order id.
+#: views/payments.php:96
+#, php-format
+msgid "Order #%d"
+msgstr ""
+
+#. translators: %s: refunded amount.
+#: views/payments.php:122
+#, php-format
+msgid "refunded %s"
+msgstr ""
+
+#: views/replies.php:24
+msgid "Rules are checked in order of match strength first (exact, then prefix, then pattern, then partial, then catch-all) and priority second, so a lower priority number wins between rules of equal strength."
+msgstr ""
+
+#: views/replies.php:33
+msgid "Trigger"
+msgstr ""
+
+#: views/replies.php:34
+#: views/replies.php:87
+msgid "Match"
+msgstr ""
+
+#: views/replies.php:36
+#: views/replies.php:160
+msgid "Priority"
+msgstr ""
+
+#: views/replies.php:37
+msgid "Hits"
+msgstr ""
+
+#: views/replies.php:38
+msgid "Actions"
+msgstr ""
+
+#: views/replies.php:43
+msgid "No rules yet."
+msgstr ""
+
+#: views/replies.php:50
+msgid "off"
+msgstr ""
+
+#: views/replies.php:59
+#: views/richmenus.php:71
+msgid "Edit"
+msgstr ""
+
+#: views/replies.php:71
+msgid "Add or edit a rule"
+msgstr ""
+
+#: views/replies.php:89
+msgid "The whole message is exactly this"
+msgstr ""
+
+#: views/replies.php:90
+msgid "The message starts with this"
+msgstr ""
+
+#: views/replies.php:91
+msgid "The message contains this"
+msgstr ""
+
+#: views/replies.php:92
+msgid "The message matches this pattern"
+msgstr ""
+
+#: views/replies.php:93
+msgid "Anything (catch-all)"
+msgstr ""
+
+#: views/replies.php:98
+msgid "Reply with"
+msgstr ""
+
+#: views/replies.php:100
+msgid "Text"
+msgstr ""
+
+#: views/replies.php:101
+msgid "A Flex template"
+msgstr ""
+
+#: views/replies.php:102
+msgid "A quick reply set"
+msgstr ""
+
+#: views/replies.php:103
+msgid "Start a conversation flow"
+msgstr ""
+
+#: views/replies.php:104
+msgid "A sticker"
+msgstr ""
+
+#: views/replies.php:105
+msgid "An image"
+msgstr ""
+
+#: views/replies.php:106
+msgid "Raw message JSON"
+msgstr ""
+
+#: views/replies.php:126
+msgid "Quick reply set"
+msgstr ""
+
+#: views/replies.php:135
+msgid "Flow"
+msgstr ""
+
+#: views/replies.php:144
+msgid "Package and sticker ID"
+msgstr ""
+
+#: views/replies.php:149
+msgid "Image URL"
+msgstr ""
+
+#: views/replies.php:151
+msgid "Must be HTTPS, JPEG or PNG, and at most 10 MB."
+msgstr ""
+
+#: views/replies.php:155
+msgid "Message JSON"
+msgstr ""
+
+#: views/replies.php:172
+msgid "Save rule"
+msgstr ""
+
+#: views/replies.php:173
+msgid "New rule"
+msgstr ""
+
+#: views/replies.php:182
+msgid "The customer sends the trigger, the bot answers. Placeholders are filled in with sample values so you can see the sentence they actually read."
+msgstr ""
+
+#. translators: 1: full size, 2: half size.
+#: views/richmenus.php:23
+#, php-format
+msgid "Menu images must be %1$s or %2$s pixels, JPEG or PNG, and at most 1 MB."
+msgstr ""
+
+#: views/richmenus.php:28
+msgid "To build tabs, give several menus the same tab group and point their tab buttons at each other with a \"switch tab\" action."
+msgstr ""
+
+#: views/richmenus.php:37
+#: views/richmenus.php:130
+msgid "Tab group"
+msgstr ""
+
+#: views/richmenus.php:38
+msgid "Alias"
+msgstr ""
+
+#: views/richmenus.php:39
+msgid "Published"
+msgstr ""
+
+#: views/richmenus.php:45
+msgid "No rich menus yet."
+msgstr ""
+
+#: views/richmenus.php:58
+msgid "default"
 msgstr ""
 
 #: views/richmenus.php:67
 msgid "not published"
 msgstr ""
 
-#: views/replies.php:47
-msgid "off"
+#: views/richmenus.php:72
+msgid "Publish"
 msgstr ""
 
-#. translators: %s: refunded amount.
-#: views/payments.php:122
-msgid "refunded %s"
+#: views/richmenus.php:73
+msgid "Make default"
 msgstr ""
 
-#: views/settings.php:404
-msgid "seconds,"
+#: views/richmenus.php:83
+msgid "Publish a whole tab group"
 msgstr ""
 
-#: views/settings.php:339
+#: views/richmenus.php:84
+msgid "Publishes every menu in the group in order and repoints their aliases, so the tabs stay consistent with each other."
+msgstr ""
+
+#. translators: %s: tab group name.
+#: views/richmenus.php:90
+#, php-format
+msgid "Publish \"%s\""
+msgstr ""
+
+#: views/richmenus.php:116
+msgid "Chat bar label"
+msgstr ""
+
+#: views/richmenus.php:118
+msgid "At most 14 characters, shown at the bottom of the chat."
+msgstr ""
+
+#: views/richmenus.php:122
+msgid "Size"
+msgstr ""
+
+#: views/richmenus.php:124
+msgid "Full (2500 x 1686)"
+msgstr ""
+
+#: views/richmenus.php:125
+msgid "Half (2500 x 843)"
+msgstr ""
+
+#: views/richmenus.php:137
+msgid "Leave blank for a standalone menu."
+msgstr ""
+
+#: views/richmenus.php:141
+msgid "Tab order"
+msgstr ""
+
+#: views/richmenus.php:146
+msgid "Alias ID"
+msgstr ""
+
+#: views/richmenus.php:148
+msgid "Lowercase letters, digits, hyphen and underscore. Other tabs point at this. Generated automatically if left blank."
+msgstr ""
+
+#: views/richmenus.php:154
+msgid "Image"
+msgstr ""
+
+#: views/richmenus.php:156
+msgid "Choose image"
+msgstr ""
+
+#: views/richmenus.php:161
+msgid "Tappable areas"
+msgstr ""
+
+#: views/richmenus.php:163
+msgid "Drag on the image to draw an area. Click one to move, resize or set what it does. Edges snap to each other, because a one-pixel gap is invisible here and dead to the customer."
+msgstr ""
+
+#: views/richmenus.php:167
+msgid "Start from a layout:"
+msgstr ""
+
+#: views/richmenus.php:173
+msgid "Clear"
+msgstr ""
+
+#: views/richmenus.php:185
+msgid "Choose a menu image to start drawing areas."
+msgstr ""
+
+#: views/richmenus.php:195
+msgid "On a phone"
+msgstr ""
+
+#: views/richmenus.php:204
+msgid "The chat bar text is drawn by LINE below the menu, not on your image. This preview shows layout only, not exact fonts or corners."
+msgstr ""
+
+#: views/richmenus.php:209
+msgid "Tappable areas as JSON"
+msgstr ""
+
+#: views/richmenus.php:217
+msgid "Open the menu by default when the chat opens"
+msgstr ""
+
+#: views/richmenus.php:224
+msgid "Use as the default menu for everyone"
+msgstr ""
+
+#: views/richmenus.php:229
+msgid "Save"
+msgstr ""
+
+#: views/richmenus.php:230
+msgid "New menu"
+msgstr ""
+
+#: views/richmenus.php:231
+msgid "Compare with LINE"
+msgstr ""
+
+#: views/settings.php:18
+msgid "Messaging API"
+msgstr ""
+
+#: views/settings.php:19
+#: views/settings.php:333
+msgid "AI replies"
+msgstr ""
+
+#: views/settings.php:20
+msgid "LIFF"
+msgstr ""
+
+#: views/settings.php:22
+msgid "Advanced"
+msgstr ""
+
+#: views/settings.php:27
+msgid "WooCommerce"
+msgstr ""
+
+#: views/settings.php:63
+msgid "Leave unchanged to keep the stored value"
+msgstr ""
+
+#: views/settings.php:125
+msgid "LINE settings"
+msgstr ""
+
+#: views/settings.php:128
+msgid "Settings saved."
+msgstr ""
+
+#: views/settings.php:136
+msgid "LINE Login Channel ID"
+msgstr ""
+
+#: views/settings.php:137
+msgid "Messaging API Channel ID"
+msgstr ""
+
+#: views/settings.php:138
+msgid "LINE Pay Channel ID"
+msgstr ""
+
+#. translators: %s: comma-separated list of field names.
+#: views/settings.php:152
+#, php-format
+msgid "This does not look like a channel ID: %s. A LINE channel ID is a number, usually ten digits. If your browser filled this in for you, clear it and paste the value from the LINE Developers Console."
+msgstr ""
+
+#: views/settings.php:181
+msgid "Callback URL"
+msgstr ""
+
+#: views/settings.php:185
+msgid "Paste this into the LINE Login channel as a Callback URL. It must match exactly, including https and any trailing path."
+msgstr ""
+
+#: views/settings.php:191
+#: views/settings.php:282
+msgid "Channel ID"
+msgstr ""
+
+#: views/settings.php:191
+msgid "From the LINE Login channel, not the Messaging API one."
+msgstr ""
+
+#: views/settings.php:192
+#: views/settings.php:283
+msgid "Channel secret"
+msgstr ""
+
+#: views/settings.php:192
+msgid "Stored encrypted. Only the last four characters are ever shown again."
+msgstr ""
+
+#: views/settings.php:193
+msgid "New visitors"
+msgstr ""
+
+#: views/settings.php:193
+msgid "Create a WordPress account the first time someone logs in with LINE"
+msgstr ""
+
+#: views/settings.php:198
+msgid "Role for new accounts"
+msgstr ""
+
+#: views/settings.php:199
+msgid "Profile sync"
+msgstr ""
+
+#: views/settings.php:199
+msgid "Keep the WordPress display name in step with the LINE display name"
+msgstr ""
+
+#: views/settings.php:200
+msgid "Email address"
+msgstr ""
+
+#: views/settings.php:200
+msgid "Request the email scope (needs approval from LINE first)"
+msgstr ""
+
+#: views/settings.php:201
+msgid "Match by email"
+msgstr ""
+
+#: views/settings.php:201
+msgid "Link to an existing account when the email matches"
+msgstr ""
+
+#: views/settings.php:207
+msgid "Matching by email means anyone who controls a LINE account with that address can sign in as the matching WordPress user. Leave it off unless you know every LINE email on your site is verified and trusted."
+msgstr ""
+
+#: views/settings.php:214
+msgid "Invite to add the bot"
+msgstr ""
+
+#: views/settings.php:216
+msgid "Do not invite"
+msgstr ""
+
+#: views/settings.php:217
+msgid "Show an option to add as a friend"
+msgstr ""
+
+#: views/settings.php:218
+msgid "Show the add-friend step prominently"
+msgstr ""
+
+#: views/settings.php:220
+msgid "Offers the official account while the visitor is logging in."
+msgstr ""
+
+#: views/settings.php:222
+msgid "Default destination"
+msgstr ""
+
+#: views/settings.php:222
+msgid "Where to send people after login. Leave blank to return them to the page they came from."
+msgstr ""
+
+#: views/settings.php:226
+msgid "Login button"
+msgstr ""
+
+#: views/settings.php:230
+msgid "Button text"
+msgstr ""
+
+#: views/settings.php:230
+msgid "Leave blank to use the shortcode label, or the default wording."
+msgstr ""
+
+#: views/settings.php:233
+msgid "Background"
+msgstr ""
+
+#: views/settings.php:238
+msgid "LINE requires #06C755 with white text on the login button. Changing it can fail channel review."
+msgstr ""
+
+#: views/settings.php:241
+msgid "Text colour"
+msgstr ""
+
+#: views/settings.php:241
+msgid "LINE requires #FFFFFF."
+msgstr ""
+
+#: views/settings.php:242
+msgid "Corner radius"
+msgstr ""
+
+#: views/settings.php:242
+msgid "Pixels. 0 gives square corners."
+msgstr ""
+
+#: views/settings.php:243
+msgid "Width"
+msgstr ""
+
+#: views/settings.php:243
+msgid "For example 100%, 240px, or blank to fit the text."
+msgstr ""
+
+#: views/settings.php:244
+msgid "Minimum height"
+msgstr ""
+
+#: views/settings.php:244
+msgid "Pixels. 0 lets the padding decide."
+msgstr ""
+
+#: views/settings.php:265
+msgid "Save to update the preview."
+msgstr ""
+
+#: views/settings.php:272
+msgid "Webhook URL"
+msgstr ""
+
+#: views/settings.php:276
+msgid "Paste this into the Messaging API channel, turn on \"Use webhook\", then press Verify."
+msgstr ""
+
+#: views/settings.php:282
+msgid "From the Messaging API channel."
+msgstr ""
+
+#: views/settings.php:283
+msgid "Webhook signatures are verified with this. Without it, nothing the bot receives can be trusted."
+msgstr ""
+
+#: views/settings.php:286
+msgid "Access token"
+msgstr ""
+
+#: views/settings.php:288
+msgid "Issue short-lived tokens automatically (recommended)"
+msgstr ""
+
+#: views/settings.php:289
+msgid "Use a long-lived token I paste below"
+msgstr ""
+
+#: views/settings.php:291
+msgid "Short-lived tokens last 15 minutes, are unlimited in number, and never need storing. A long-lived token never expires, which means a leak is unrecoverable without rotating the channel."
+msgstr ""
+
+#: views/settings.php:295
+msgid "Long-lived token"
+msgstr ""
+
+#: views/settings.php:296
+msgid "Never expires, so treat it like a password. Rotate the channel if it leaks."
+msgstr ""
+
+#: views/settings.php:300
+msgid "Official account ID"
+msgstr ""
+
+#: views/settings.php:300
+msgid "For example @moksa. Used by the add-friend shortcode."
+msgstr ""
+
+#: views/settings.php:303
+msgid "Greeting message"
+msgstr ""
+
+#: views/settings.php:306
+msgid "Sent when someone adds the account. You can use {display_name}, {site_name} and {site_url}."
+msgstr ""
+
+#: views/settings.php:310
+msgid "Forward events to"
+msgstr ""
+
+#: views/settings.php:310
+msgid "Optional. Every webhook delivery is relayed here unchanged, with its signature header, for n8n, Make or your own service."
+msgstr ""
+
+#: views/settings.php:311
+msgid "Record conversations and allow replying from WordPress"
+msgstr ""
+
+#: views/settings.php:321
+msgid "Provider status"
+msgstr ""
+
+#: views/settings.php:326
+msgid "AI Engine is not active"
+msgstr ""
+
+#: views/settings.php:327
+msgid "Install and activate AI Engine, then configure a chatbot in it. AI replies stay switched off until then."
+msgstr ""
+
+#: views/settings.php:333
+msgid "Let the AI answer messages no rule or flow handled"
+msgstr ""
+
+#: views/settings.php:336
+msgid "Chatbot"
+msgstr ""
+
+#: views/settings.php:336
+msgid "Whichever chatbot you have set up in AI Engine, including its knowledge base."
+msgstr ""
+
+#: views/settings.php:338
+msgid "Chatbot ID"
+msgstr ""
+
+#: views/settings.php:338
+msgid "The bot id from AI Engine."
+msgstr ""
+
+#: views/settings.php:341
+msgid "Daily reply limit"
+msgstr ""
+
+#: views/settings.php:341
+msgid "Stops the AI answering after this many replies in a day. Set to 0 for no limit -- but every reply costs money."
+msgstr ""
+
+#: views/settings.php:342
+msgid "Maximum reply length"
+msgstr ""
+
+#: views/settings.php:342
+msgid "Answers longer than this are truncated. LINE hard-limits a text message at 5000 characters."
+msgstr ""
+
+#: views/settings.php:343
+msgid "Hand-off keyword"
+msgstr ""
+
+#: views/settings.php:343
+msgid "When a message contains this, the bot stops answering and the conversation is flagged for a human."
+msgstr ""
+
+#: views/settings.php:349
+msgid "Default LIFF ID"
+msgstr ""
+
+#: views/settings.php:349
+msgid "Used by the LIFF shortcodes unless one is given explicitly."
+msgstr ""
+
+#: views/settings.php:350
+msgid "Chat LIFF ID"
+msgstr ""
+
+#: views/settings.php:350
+msgid "Optional separate LIFF app for the chat shortcode."
+msgstr ""
+
+#: views/settings.php:351
+msgid "Payment LIFF ID"
+msgstr ""
+
+#: views/settings.php:351
+msgid "Optional separate LIFF app for in-app payment pages."
+msgstr ""
+
+#: views/settings.php:354
+msgid "Shortcodes"
+msgstr ""
+
+#: views/settings.php:356
+msgid "greets the visitor by their LINE name"
+msgstr ""
+
+#: views/settings.php:357
+msgid "a message box that posts into the inbox"
+msgstr ""
+
+#: views/settings.php:358
 msgid "the sign-in button"
 msgstr ""
 
-#: views/settings.php:410
-msgid "times"
+#: views/settings.php:359
+msgid "a link to your official account"
+msgstr ""
+
+#: views/settings.php:366
+msgid "Message the customer in LINE when their order status changes"
+msgstr ""
+
+#: views/settings.php:369
+msgid "Notify on"
+msgstr ""
+
+#: views/settings.php:383
+msgid "Each notification is a push message and is billed. The customer only hears about a given order and status once, however many times the status is set."
+msgstr ""
+
+#: views/settings.php:388
+msgid "Templates"
+msgstr ""
+
+#. translators: %s: URL of the notification templates screen.
+#: views/settings.php:394
+#, php-format
+msgid "The statuses above use a built-in card. For full control -- your own Flex design, and conditions such as payment or shipping method -- create <a href=\"%s\">notification templates</a>. When a template matches, it replaces the built-in card."
+msgstr ""
+
+#: views/settings.php:403
+msgid "Delay before sending"
+msgstr ""
+
+#: views/settings.php:403
+msgid "Seconds. Useful when another plugin adjusts the order right after the status changes. 0 sends immediately."
+msgstr ""
+
+#: views/settings.php:404
+msgid "Wait for tracking"
+msgstr ""
+
+#: views/settings.php:404
+msgid "Hold the shipping notification until the tracking number appears"
 msgstr ""
 
 #: views/settings.php:407
+msgid "Tracking wait"
+msgstr ""
+
+#: views/settings.php:410
+msgid "On status"
+msgstr ""
+
+#: views/settings.php:420
+msgid "check every"
+msgstr ""
+
+#: views/settings.php:423
+msgid "seconds,"
+msgstr ""
+
+#: views/settings.php:426
 msgid "up to"
 msgstr ""
 
-#: views/users.php:60
+#: views/settings.php:429
+msgid "times"
+msgstr ""
+
+#: views/settings.php:432
+msgid "Tracking numbers are read from ECPay, RY Tools, Advanced Shipment Tracking and WooCommerce Shipment Tracking. After the last attempt the notification is sent anyway, without the number."
+msgstr ""
+
+#: views/settings.php:438
+msgid "Keep notification history for"
+msgstr ""
+
+#: views/settings.php:438
+msgid "Days. Set to 0 to keep it indefinitely."
+msgstr ""
+
+#: views/settings.php:439
+msgid "My Account tab"
+msgstr ""
+
+#: views/settings.php:439
+msgid "Add a LINE tab where customers can link and unlink their account"
+msgstr ""
+
+#: views/settings.php:440
+msgid "Login buttons"
+msgstr ""
+
+#: views/settings.php:440
+msgid "Offer LINE sign-in on the account and checkout pages"
+msgstr ""
+
+#. translators: %s: LINE Pay settings tab URL.
+#: views/settings.php:449
+#, php-format
+msgid "LINE Pay is configured on the <a href=\"%s\">LINE Pay tab</a>, and the gateway is switched on under WooCommerce > Settings > Payments."
+msgstr ""
+
+#: views/settings.php:460
+msgid "Enable LINE Pay for WooCommerce and payment links"
+msgstr ""
+
+#: views/settings.php:461
+msgid "Pay Channel ID"
+msgstr ""
+
+#: views/settings.php:461
+msgid "From the LINE Pay merchant console, not the Developers Console."
+msgstr ""
+
+#: views/settings.php:462
+msgid "Pay Channel secret"
+msgstr ""
+
+#: views/settings.php:463
+msgid "Sandbox"
+msgstr ""
+
+#: views/settings.php:463
+msgid "Use the sandbox environment (no real money moves)"
+msgstr ""
+
+#: views/settings.php:466
+msgid "Currency"
+msgstr ""
+
+#: views/settings.php:468
+msgid "Must match both your LINE Pay merchant currency and the WooCommerce store currency, or the gateway hides itself at checkout."
+msgstr ""
+
+#: views/settings.php:470
+msgid "Capture immediately"
+msgstr ""
+
+#: views/settings.php:470
+msgid "Take the money as soon as the customer confirms"
+msgstr ""
+
+#: views/settings.php:476
+msgid "With immediate capture off, payments are only authorised. You then have to capture or void each one, and an order cancelled in WooCommerce releases its authorisation automatically."
+msgstr ""
+
+#: views/settings.php:486
+msgid "Log level"
+msgstr ""
+
+#: views/settings.php:489
+msgid "Notable events"
+msgstr ""
+
+#: views/settings.php:492
+msgid "Off"
+msgstr ""
+
+#: views/settings.php:495
+msgid "Keep logs for"
+msgstr ""
+
+#: views/settings.php:495
+msgid "Days. Older rows are deleted daily."
+msgstr ""
+
+#: views/settings.php:496
+msgid "Keep conversations for"
+msgstr ""
+
+#: views/settings.php:496
+msgid "Days. Set to 0 to keep messages forever."
+msgstr ""
+
+#: views/settings.php:499
+msgid "Encryption"
+msgstr ""
+
+#: views/settings.php:503
+msgid "Keys are derived from this site's WordPress salts, so a database dump alone cannot reveal them. Changing the salts in wp-config.php makes stored credentials unreadable and they will need re-entering."
+msgstr ""
+
+#: views/settings.php:505
+msgid "Not available on this server"
+msgstr ""
+
+#: views/settings.php:506
+msgid "OpenSSL with AES-256-GCM is missing, so credentials are stored as plain text."
+msgstr ""
+
+#: views/users.php:30
+msgid "Search LINE users"
+msgstr ""
+
+#: views/users.php:31
+msgid "Name, LINE id or email"
+msgstr ""
+
+#: views/users.php:32
+msgid "Search"
+msgstr ""
+
+#: views/users.php:41
+msgid "Friend"
+msgstr ""
+
+#: views/users.php:42
+msgid "WordPress account"
+msgstr ""
+
+#: views/users.php:43
+msgid "Last seen"
+msgstr ""
+
+#: views/users.php:48
+msgid "No LINE users recorded yet."
+msgstr ""
+
+#: views/users.php:74
 msgid "yes"
+msgstr ""
+
+#: views/users.php:76
+msgid "no"
+msgstr ""
+
+#: views/users.php:90
+msgid "Not linked"
 msgstr ""

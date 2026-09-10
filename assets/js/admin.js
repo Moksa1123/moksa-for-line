@@ -185,6 +185,10 @@
 			$form[0].reset();
 			$form.find('input[name=id]').val('0');
 			$form.removeClass('is-editing');
+
+			// form.reset() restores the textarea's original markup value, which
+			// is the worked example, so the cards have to be re-read from it.
+			$(document).trigger('moksa:flow-loaded');
 		});
 
 		$('[data-moksa-load-flow]').on('click', function () {
@@ -205,6 +209,10 @@
 			} catch (e) {
 				$form.find('textarea[name=definition]').val(flow.definition);
 			}
+
+			// The step cards read from that textarea, so they have to be told
+			// it changed, or a loaded flow shows the previous one's questions.
+			$(document).trigger('moksa:flow-loaded');
 		});
 
 		$('[data-moksa-delete-flow]').on('click', function () {

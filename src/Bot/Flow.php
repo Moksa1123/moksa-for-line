@@ -406,9 +406,10 @@ class Flow extends Repository {
 				}
 
 				return sprintf(
-					/* translators: %s: comma-separated list of choices. */
+					/* translators: %s: list of choices, joined with the separator below. */
 					__( 'Please choose one of: %s', 'moksa-line' ),
-					implode( ', ', $choices )
+					/* translators: separator between items in a list, including any trailing space. Chinese uses a full-width enumeration comma with no space. */
+					implode( _x( ', ', 'list separator', 'moksa-line' ), $choices )
 				);
 
 			default:

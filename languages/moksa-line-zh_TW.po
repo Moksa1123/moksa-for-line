@@ -1,0 +1,104 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Moksa LINE Suite 1.0.0\n"
+"Report-Msgid-Bugs-To: https://moksaweb.com/\n"
+"PO-Revision-Date: 2026-09-10 02:45+0000\n"
+"Last-Translator: Moksa <hello@moksaweb.com>\n"
+"Language-Team: Chinese (Taiwan)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Domain: moksa-line\n"
+
+msgid "A visitor completed \"%s\" on LINE."
+msgstr "有訪客在 LINE 上完成了「%s」。"
+
+msgid "Add us on LINE"
+msgstr "加入 LINE 好友"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Display name"
+msgstr "顯示名稱"
+
+msgid "Hello, %s"
+msgstr "%s 您好"
+
+msgid "LINE account"
+msgstr "LINE 帳號"
+
+msgid "LINE user id"
+msgstr "LINE 使用者 ID"
+
+msgid "Link my LINE account"
+msgstr "連結我的 LINE 帳號"
+
+msgid "Log in with LINE"
+msgstr "使用 LINE 登入"
+
+msgid "No problem, that has been cancelled."
+msgstr "好的，已經幫您取消了。"
+
+msgid "Open this page from LINE to continue."
+msgstr "請從 LINE 開啟這個頁面才能繼續。"
+
+msgid "Order %1$s: %2$s"
+msgstr "訂單 %1$s：%2$s"
+
+msgid "Order %s"
+msgstr "訂單 %s"
+
+msgid "Please choose an option:"
+msgstr "請選擇一個項目："
+
+msgid "Please choose one of: %s"
+msgstr "請從這些選項中選一個：%s"
+
+msgid "Please reply with a date, for example 2026-03-15."
+msgstr "請回覆日期，例如 2026-03-15。"
+
+msgid "Please reply with a number."
+msgstr "請回覆數字。"
+
+msgid "Please reply with your answer."
+msgstr "請直接回覆您的答案。"
+
+msgid "Sending..."
+msgstr "傳送中…"
+
+msgid "Sent. We will reply in your LINE chat."
+msgstr "已送出，我們會在 LINE 對話中回覆您。"
+
+msgid "Thank you, we have received your details."
+msgstr "謝謝您，我們已經收到您的資料。"
+
+msgid "That did not send. Please try again."
+msgstr "沒有送出成功，請再試一次。"
+
+msgid "That does not look like a phone number. Please try again."
+msgstr "這看起來不像電話號碼，請再回覆一次。"
+
+msgid "That does not look like an email address. Please try again."
+msgstr "這看起來不像 Email，請再回覆一次。"
+
+msgid "That looked empty. Please try again."
+msgstr "內容是空的，請再回覆一次。"
+
+msgid "Total"
+msgstr "合計"
+
+msgid "Unlink LINE account"
+msgstr "解除 LINE 帳號連結"
+
+msgid "View order"
+msgstr "查看訂單"
+
+msgid "[%1$s] New LINE submission: %2$s"
+msgstr "[%1$s] 新的 LINE 表單回覆：%2$s"
+
+msgctxt "list separator"
+msgid ", "
+msgstr "、"

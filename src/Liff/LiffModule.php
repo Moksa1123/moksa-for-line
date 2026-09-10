@@ -368,6 +368,7 @@ class LiffModule {
 				'sessionUrl' => rest_url( self::NAMESPACE_V1 . '/liff/session' ),
 				'messageUrl' => rest_url( self::NAMESPACE_V1 . '/liff/message' ),
 				'strings'    => array(
+					/* translators: %s: the visitor's LINE display name. */
 					'greeting'  => __( 'Hello, %s', 'moksa-line' ),
 					'sending'   => __( 'Sending...', 'moksa-line' ),
 					'sent'      => __( 'Sent. We will reply in your LINE chat.', 'moksa-line' ),
