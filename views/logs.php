@@ -30,6 +30,15 @@ $levels = array(
 	'all'      => __( 'Everything', 'moksa-line' ),
 );
 
+// The word shown on each row. The raw column value was printed instead, so a
+// screen otherwise in the site's language listed "error" and "warning".
+$level_labels = array(
+	'error'   => __( 'Error', 'moksa-line' ),
+	'warning' => __( 'Warning', 'moksa-line' ),
+	'info'    => __( 'Info', 'moksa-line' ),
+	'debug'   => __( 'Debug', 'moksa-line' ),
+);
+
 // phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only filters.
 $level   = isset( $_GET['level'] ) ? sanitize_key( wp_unslash( $_GET['level'] ) ) : 'problems';
 $level   = isset( $levels[ $level ] ) ? $level : 'problems';
@@ -221,7 +230,7 @@ $retention = max( 1, (int) Options::get( 'log_retention_days' ) );
 					<td class="moksa-log-time"><?php echo esc_html( mysql2date( 'Y-m-d H:i:s', get_date_from_gmt( (string) $log->created_at ) ) ); ?></td>
 					<td>
 						<span class="moksa-pill moksa-pill--<?php echo esc_attr( 'error' === $log->level ? 'bad' : ( 'warning' === $log->level ? 'warn' : 'ok' ) ); ?>">
-							<?php echo esc_html( (string) $log->level ); ?>
+							<?php echo esc_html( $level_labels[ (string) $log->level ] ?? (string) $log->level ); ?>
 						</span>
 					</td>
 					<td><?php echo esc_html( (string) $log->channel ); ?></td>

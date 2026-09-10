@@ -193,7 +193,10 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				$checkbox( 'auto_register', __( 'New visitors', 'moksa-line' ), __( 'Create a WordPress account the first time someone logs in with LINE', 'moksa-line' ) );
 				// Administrator is deliberately absent: a self-service login
 				// flow must not be able to mint administrators.
-				$roles = wp_roles()->get_names();
+				// get_names() returns the raw English role names. Core keeps the
+				// translations behind translate_user_role(), so without it the
+				// only English words on this screen were the role choices.
+				$roles = array_map( 'translate_user_role', wp_roles()->get_names() );
 				unset( $roles['administrator'] );
 				$select( 'new_user_role', __( 'Role for new accounts', 'moksa-line' ), $roles );
 				$checkbox( 'sync_profile', __( 'Profile sync', 'moksa-line' ), __( 'Keep the WordPress display name in step with the LINE display name', 'moksa-line' ) );
@@ -291,7 +294,7 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				$field( 'messaging_secret', __( 'Channel secret', 'moksa-line' ), __( 'Webhook signatures are verified with this. Without it, nothing the bot receives can be trusted.', 'moksa-line' ), 'password' );
 				$select(
 					'token_mode',
-					__( 'Access token', 'moksa-line' ),
+					__( 'Channel access token', 'moksa-line' ),
 					array(
 						'stateless'  => __( 'Issue short-lived tokens automatically (recommended)', 'moksa-line' ),
 						'long_lived' => __( 'Use a long-lived token I paste below', 'moksa-line' ),

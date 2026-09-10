@@ -41,6 +41,42 @@ class AutoReply {
 	}
 
 	/**
+	 * How each match type reads to a person.
+	 *
+	 * Shared with the edit form so the list and the form can never drift: the
+	 * list was printing the raw column value, so a screen that is otherwise
+	 * entirely in the site's language had "exact" and "partial" in it.
+	 *
+	 * @return array<string,string>
+	 */
+	public static function match_labels(): array {
+		return array(
+			'exact'   => __( 'The whole message is exactly this', 'moksa-line' ),
+			'prefix'  => __( 'The message starts with this', 'moksa-line' ),
+			'partial' => __( 'The message contains this', 'moksa-line' ),
+			'regex'   => __( 'The message matches this pattern', 'moksa-line' ),
+			'any'     => __( 'Anything (catch-all)', 'moksa-line' ),
+		);
+	}
+
+	/**
+	 * How each reply type reads to a person.
+	 *
+	 * @return array<string,string>
+	 */
+	public static function reply_labels(): array {
+		return array(
+			'text'        => __( 'Text', 'moksa-line' ),
+			'flex'        => __( 'A Flex template', 'moksa-line' ),
+			'quick_reply' => __( 'A quick reply set', 'moksa-line' ),
+			'flow'        => __( 'Start a conversation flow', 'moksa-line' ),
+			'sticker'     => __( 'A sticker', 'moksa-line' ),
+			'image'       => __( 'An image', 'moksa-line' ),
+			'raw'         => __( 'Raw message JSON', 'moksa-line' ),
+		);
+	}
+
+	/**
 	 * Every active rule, best candidates first.
 	 *
 	 * @return array

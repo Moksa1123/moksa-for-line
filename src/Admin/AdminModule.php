@@ -339,7 +339,7 @@ class AdminModule {
 					'actionLabel'  => __( 'Label', 'moksa-line' ),
 					'actionMessage' => __( 'Send a message', 'moksa-line' ),
 					'actionUri'    => __( 'Open a link', 'moksa-line' ),
-					'actionPostback' => __( 'Postback', 'moksa-line' ),
+					'actionPostback' => __( 'Send a hidden command (postback)', 'moksa-line' ),
 					'actionSwitch' => __( 'Switch to another tab', 'moksa-line' ),
 					'actionUriValue' => __( 'Link', 'moksa-line' ),
 					'actionText'   => __( 'Message the customer sends', 'moksa-line' ),

@@ -3017,3 +3017,21 @@ msgstr "LINE Pay 目前是關閉的，所以不會進行任何收款，這裡也
 
 msgid "Turn it on in the LINE Pay settings"
 msgstr "到 LINE Pay 設定裡開啟"
+
+msgid "Send a hidden command (postback)"
+msgstr "傳送隱藏指令（Postback）"
+
+msgid "Error"
+msgstr "錯誤"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Info"
+msgstr "資訊"
+
+msgid "Debug"
+msgstr "除錯"
+
+msgid "Channel access token"
+msgstr "Channel access token"

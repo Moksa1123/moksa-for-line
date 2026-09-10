@@ -14,6 +14,10 @@ defined( 'ABSPATH' ) || exit;
 
 $rules = AutoReply::all();
 
+// The same labels the edit form uses, so the two can never disagree.
+$match_labels = AutoReply::match_labels();
+$reply_labels = AutoReply::reply_labels();
+
 $basic_id     = ltrim( trim( (string) \Moksa\Line\Support\Options::get( 'bot_basic_id' ) ), '@' );
 $account_name = '' !== $basic_id ? '@' . $basic_id : __( 'Your official account', 'moksa-line' );
 
@@ -79,8 +83,8 @@ $held = \Moksa\Line\Support\Options::get( 'inbox_enabled' )
 								<?php endif; ?>
 							</td>
 							<td><code><?php echo esc_html( (string) $rule->keyword ); ?></code></td>
-							<td><?php echo esc_html( (string) $rule->match_type ); ?></td>
-							<td><?php echo esc_html( (string) $rule->reply_type ); ?></td>
+							<td><?php echo esc_html( $match_labels[ (string) $rule->match_type ] ?? (string) $rule->match_type ); ?></td>
+							<td><?php echo esc_html( $reply_labels[ (string) $rule->reply_type ] ?? (string) $rule->reply_type ); ?></td>
 							<td><?php echo esc_html( (string) (int) $rule->priority ); ?></td>
 							<td><?php echo esc_html( number_format_i18n( (int) $rule->hit_count ) ); ?></td>
 							<td>
@@ -114,24 +118,18 @@ $held = \Moksa\Line\Support\Options::get( 'inbox_enabled' )
 				<p>
 					<label for="moksa-rule-match"><?php esc_html_e( 'Match', 'moksa-line' ); ?></label>
 					<select id="moksa-rule-match" name="match_type" class="widefat">
-						<option value="exact"><?php esc_html_e( 'The whole message is exactly this', 'moksa-line' ); ?></option>
-						<option value="prefix"><?php esc_html_e( 'The message starts with this', 'moksa-line' ); ?></option>
-						<option value="partial"><?php esc_html_e( 'The message contains this', 'moksa-line' ); ?></option>
-						<option value="regex"><?php esc_html_e( 'The message matches this pattern', 'moksa-line' ); ?></option>
-						<option value="any"><?php esc_html_e( 'Anything (catch-all)', 'moksa-line' ); ?></option>
+						<?php foreach ( $match_labels as $key => $label ) : ?>
+							<option value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></option>
+						<?php endforeach; ?>
 					</select>
 				</p>
 
 				<p>
 					<label for="moksa-rule-type"><?php esc_html_e( 'Reply with', 'moksa-line' ); ?></label>
 					<select id="moksa-rule-type" name="reply_type" class="widefat" data-moksa-rule-type>
-						<option value="text"><?php esc_html_e( 'Text', 'moksa-line' ); ?></option>
-						<option value="flex"><?php esc_html_e( 'A Flex template', 'moksa-line' ); ?></option>
-						<option value="quick_reply"><?php esc_html_e( 'A quick reply set', 'moksa-line' ); ?></option>
-						<option value="flow"><?php esc_html_e( 'Start a conversation flow', 'moksa-line' ); ?></option>
-						<option value="sticker"><?php esc_html_e( 'A sticker', 'moksa-line' ); ?></option>
-						<option value="image"><?php esc_html_e( 'An image', 'moksa-line' ); ?></option>
-						<option value="raw"><?php esc_html_e( 'Raw message JSON', 'moksa-line' ); ?></option>
+						<?php foreach ( $reply_labels as $key => $label ) : ?>
+							<option value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></option>
+						<?php endforeach; ?>
 					</select>
 				</p>
 
