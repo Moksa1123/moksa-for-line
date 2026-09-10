@@ -2932,3 +2932,20 @@ msgstr "請先填好 Messaging API 頻道資訊。"
 
 msgid "Paste the webhook URL into the Console, enable \"Use webhook\", then press Verify. \"Check what LINE has\" on the Messaging API tab reports whether that worked."
 msgstr "把 Webhook 網址貼到 Console，打開「Use webhook」，然後按 Verify。Messaging API 分頁上的「查看 LINE 那邊的設定」會告訴你到底成功了沒有。"
+
+msgid "LINE has %1$s rich menu and %2$s aliases."
+msgid_plural "LINE has %1$s rich menus and %2$s aliases."
+msgstr[0] "LINE 上有 %1$s 個圖文選單、%2$s 個別名。"
+
+msgid "This site tracks %s."
+msgid_plural "This site tracks %s."
+msgstr[0] "這個網站記錄了 %s 個。"
+
+msgid "Only on LINE: %s"
+msgstr "只存在於 LINE：%s"
+
+msgid "Comparison complete."
+msgstr "比對完成。"
+
+msgid "Only on LINE: %1$s (%2$s)"
+msgstr "只存在於 LINE：%1$s（%2$s）"

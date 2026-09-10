@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-10 07:25+0000\n"
+"POT-Creation-Date: 2026-09-10 07:44+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -726,7 +726,7 @@ msgstr ""
 msgid "Choose a conversation"
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:367
+#: src/RichMenu/RichMenuModule.php:372
 msgid "Choose a menu image first. LINE requires one, 2500px wide and either 1686px or 843px tall."
 msgstr ""
 
@@ -779,6 +779,10 @@ msgstr ""
 
 #: views/richmenus.php:234
 msgid "Compare with LINE"
+msgstr ""
+
+#: src/RichMenu/RichMenuModule.php:734
+msgid "Comparison complete."
 msgstr ""
 
 #: src/Woo/NotifyTemplates.php:318
@@ -849,7 +853,7 @@ msgid "Could not reach LINE to verify this session."
 msgstr ""
 
 #: src/Imagemap/ImagemapImages.php:86
-#: src/RichMenu/RichMenuModule.php:411
+#: src/RichMenu/RichMenuModule.php:416
 msgid "Could not read the image dimensions."
 msgstr ""
 
@@ -935,7 +939,7 @@ msgid "Default destination"
 msgstr ""
 
 #. translators: %s: rich menu name.
-#: src/RichMenu/RichMenuModule.php:668
+#: src/RichMenu/RichMenuModule.php:675
 msgid "Default menu: %s, which matches this site."
 msgstr ""
 
@@ -1577,11 +1581,18 @@ msgid "LINE did not return an authorization code."
 msgstr ""
 
 #. translators: 1: required width, 2: required height, 3: actual width, 4: actual height.
-#: src/RichMenu/RichMenuModule.php:417
+#: src/RichMenu/RichMenuModule.php:422
 msgid "LINE expects %1$d x %2$d pixels for this menu size; this image is %3$d x %4$d."
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:664
+#. translators: 1: number of rich menus, 2: number of aliases.
+#: src/RichMenu/RichMenuModule.php:695
+msgid "LINE has %1$s rich menu and %2$s aliases."
+msgid_plural "LINE has %1$s rich menus and %2$s aliases."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/RichMenu/RichMenuModule.php:671
 msgid "LINE has no default menu, so everyone falls back to whatever the Official Account Manager holds."
 msgstr ""
 
@@ -1624,7 +1635,7 @@ msgid "LINE requires #FFFFFF."
 msgstr ""
 
 #. translators: %s: rich menu name or id.
-#: src/RichMenu/RichMenuModule.php:674
+#: src/RichMenu/RichMenuModule.php:681
 msgid "LINE serves %s as the default, which is not what this site has marked. Set the default again here to line them up."
 msgstr ""
 
@@ -2141,6 +2152,16 @@ msgstr ""
 msgid "Only messages received after this plugin was installed appear here. LINE provides no way to read earlier chat history."
 msgstr ""
 
+#. translators: 1: rich menu name, 2: rich menu id.
+#: src/RichMenu/RichMenuModule.php:714
+msgid "Only on LINE: %1$s (%2$s)"
+msgstr ""
+
+#. translators: %s: rich menu id.
+#: src/RichMenu/RichMenuModule.php:720
+msgid "Only on LINE: %s"
+msgstr ""
+
 #: src/Woo/NotifyTemplates.php:125
 msgid "Only when"
 msgstr ""
@@ -2421,7 +2442,7 @@ msgstr ""
 msgid "Publish a whole tab group"
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:597
+#: src/RichMenu/RichMenuModule.php:604
 msgid "Publish this menu to LINE before making it the default."
 msgstr ""
 
@@ -2430,13 +2451,13 @@ msgid "Published"
 msgstr ""
 
 #. translators: %d: number of menus published.
-#: src/RichMenu/RichMenuModule.php:571
+#: src/RichMenu/RichMenuModule.php:578
 msgid "Published %d menu to LINE."
 msgid_plural "Published %d menus to LINE."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/RichMenu/RichMenuModule.php:584
+#: src/RichMenu/RichMenuModule.php:591
 msgid "Published to LINE."
 msgstr ""
 
@@ -2549,11 +2570,11 @@ msgstr ""
 msgid "Result"
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:544
+#: src/RichMenu/RichMenuModule.php:551
 msgid "Rich menu deleted."
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:538
+#: src/RichMenu/RichMenuModule.php:545
 msgid "Rich menu deleted. That was the default, so until you make another menu the default, customers see whatever the LINE Official Account Manager holds -- or no menu at all."
 msgstr ""
 
@@ -2566,7 +2587,7 @@ msgid "Rich menu images must be 1 MB or smaller."
 msgstr ""
 
 #: src/Api/RichMenuClient.php:51
-#: src/RichMenu/RichMenuModule.php:434
+#: src/RichMenu/RichMenuModule.php:439
 msgid "Rich menu images must be JPEG or PNG."
 msgstr ""
 
@@ -2648,7 +2669,7 @@ msgstr ""
 msgid "Saved."
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:498
+#: src/RichMenu/RichMenuModule.php:503
 msgid "Saved. Publish it to push the change to LINE."
 msgstr ""
 
@@ -3119,7 +3140,7 @@ msgid "That payment could not be found."
 msgstr ""
 
 #: src/RichMenu/RichMenuModule.php:77
-#: src/RichMenu/RichMenuModule.php:514
+#: src/RichMenu/RichMenuModule.php:519
 msgid "That rich menu no longer exists."
 msgstr ""
 
@@ -3263,7 +3284,7 @@ msgstr ""
 msgid "The flow definition is not valid JSON."
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:428
+#: src/RichMenu/RichMenuModule.php:433
 msgid "The image is larger than 1 MB, which LINE will reject."
 msgstr ""
 
@@ -3385,15 +3406,15 @@ msgstr ""
 msgid "The request headers were not accepted. Check the Channel Secret."
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:477
+#: src/RichMenu/RichMenuModule.php:482
 msgid "The rich menu could not be saved."
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:391
+#: src/RichMenu/RichMenuModule.php:396
 msgid "The selected image could not be read from disk."
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:376
+#: src/RichMenu/RichMenuModule.php:381
 msgid "The selected image could not be read from the media library."
 msgstr ""
 
@@ -3402,7 +3423,7 @@ msgid "The statuses above use a built-in card. For full control -- your own Flex
 msgstr ""
 
 #: src/Imagemap/ImagemapModule.php:203
-#: src/RichMenu/RichMenuModule.php:452
+#: src/RichMenu/RichMenuModule.php:457
 msgid "The tappable areas could not be read."
 msgstr ""
 
@@ -3515,7 +3536,7 @@ msgstr ""
 msgid "This login request is missing its state. Please start again."
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:614
+#: src/RichMenu/RichMenuModule.php:621
 msgid "This menu is now the default for everyone."
 msgstr ""
 
@@ -3582,6 +3603,13 @@ msgstr ""
 #: views/imagemaps.php:33
 msgid "This site is served over plain HTTP. LINE only fetches imagemap images over HTTPS, so an imagemap from this site would arrive blank."
 msgstr ""
+
+#. translators: %s: number of rich menus tracked by this site.
+#: src/RichMenu/RichMenuModule.php:701
+msgid "This site tracks %s."
+msgid_plural "This site tracks %s."
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/Woo/NotifyTemplates.php:524
 msgid "This template did not produce a valid message. Check the JSON and the placeholders."
@@ -3967,7 +3995,7 @@ msgstr ""
 msgid "You do not have permission to manage imagemaps."
 msgstr ""
 
-#: src/RichMenu/RichMenuModule.php:698
+#: src/RichMenu/RichMenuModule.php:746
 msgid "You do not have permission to manage rich menus."
 msgstr ""
 

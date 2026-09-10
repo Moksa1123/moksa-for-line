@@ -15,7 +15,12 @@
 (function ($) {
 	'use strict';
 
-	var strings = (window.moksaLine && window.moksaLine.strings) || {};
+	// Filled in at DOM ready, not here. wp_localize_script attaches moksaLine
+	// to the admin handle, and this file is one of that handle's dependencies,
+	// so it is printed BEFORE that data exists. Reading it at load time left
+	// this object permanently empty, and every string in the area editor fell
+	// back to its English default on a site running entirely in Chinese.
+	var strings = {};
 
 	/** Areas smaller than this are effectively untappable. */
 	var MIN_AREA = 8;
@@ -808,6 +813,8 @@
 	// --- Bootstrap --------------------------------------------------------------
 
 	$(function () {
+		strings = (window.moksaLine && window.moksaLine.strings) || {};
+
 		$('[data-moksa-area-editor]').each(function () {
 			var editor = new AreaEditor(this);
 

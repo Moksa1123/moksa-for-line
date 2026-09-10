@@ -683,14 +683,55 @@ class RichMenuModule extends Repository {
 			);
 		}
 
+		// Built here rather than in JavaScript: assembled there, these lines were
+		// concatenated English and never reached a translator, so the panel came
+		// out half Chinese and half English on a site running in Chinese.
+		$remote_count = count( (array) ( $remote['richmenus'] ?? array() ) );
+		$alias_count  = is_wp_error( $aliases ) ? 0 : count( (array) ( $aliases['aliases'] ?? array() ) );
+
+		$lines = array(
+			sprintf(
+				/* translators: 1: number of rich menus, 2: number of aliases. */
+				_n( 'LINE has %1$s rich menu and %2$s aliases.', 'LINE has %1$s rich menus and %2$s aliases.', $remote_count, 'moksa-line' ),
+				number_format_i18n( $remote_count ),
+				number_format_i18n( $alias_count )
+			),
+			sprintf(
+				/* translators: %s: number of rich menus tracked by this site. */
+				_n( 'This site tracks %s.', 'This site tracks %s.', count( $known ), 'moksa-line' ),
+				number_format_i18n( count( $known ) )
+			),
+			$default_note,
+		);
+
+		// Orphans routinely share a name -- five menus all called "Moksa Default
+		// Menu" is what an older plugin leaves behind -- so the id has to be
+		// there, or the list cannot be acted on at all.
+		foreach ( $orphans as $orphan ) {
+			$lines[] = '' !== $orphan['name']
+				? sprintf(
+					/* translators: 1: rich menu name, 2: rich menu id. */
+					__( 'Only on LINE: %1$s (%2$s)', 'moksa-line' ),
+					$orphan['name'],
+					$orphan['id']
+				)
+				: sprintf(
+					/* translators: %s: rich menu id. */
+					__( 'Only on LINE: %s', 'moksa-line' ),
+					$orphan['id']
+				);
+		}
+
 		wp_send_json_success(
 			array(
-				'remote_count'  => count( (array) ( $remote['richmenus'] ?? array() ) ),
+				'remote_count'  => $remote_count,
 				'local_count'   => count( $known ),
-				'alias_count'   => is_wp_error( $aliases ) ? 0 : count( (array) ( $aliases['aliases'] ?? array() ) ),
+				'alias_count'   => $alias_count,
 				'orphans'       => $orphans,
 				'default_note'  => $default_note,
 				'default_ok'    => $line_default === $local_default,
+				'lines'         => $lines,
+				'message'       => __( 'Comparison complete.', 'moksa-line' ),
 			)
 		);
 	}

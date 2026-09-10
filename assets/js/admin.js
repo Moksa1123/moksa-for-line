@@ -701,20 +701,7 @@
 			feedback($form, strings.working, 'busy');
 
 			post('richmenu_sync', {}).then(function (result) {
-				var lines = [
-					'LINE has ' + result.remote_count + ' rich menus and ' + result.alias_count + ' aliases.',
-					'This site tracks ' + result.local_count + '.'
-				];
-
-				if (result.default_note) {
-					lines.push(result.default_note);
-				}
-
-				(result.orphans || []).forEach(function (orphan) {
-					lines.push('Only on LINE: ' + (orphan.name || orphan.id));
-				});
-
-				feedback($form, 'Comparison complete.', 'ok', lines);
+				feedback($form, result.message, result.default_ok ? 'ok' : 'warn', result.lines);
 			}, function (error) {
 				feedback($form, error.message, 'bad');
 			});
