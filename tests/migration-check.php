@@ -16,6 +16,23 @@ global $wpdb;
 $prefix  = $wpdb->prefix . 'moksa_line_';
 $collate = $wpdb->get_charset_collate();
 
+/*
+ * This drops every table this plugin owns. The docblock has always said to run
+ * it only on a throwaway site, and that was not enough: the identical warning
+ * sat on notify-check, which was given a real guard, while this one -- the more
+ * destructive of the two -- was left with only a comment. Run against a site
+ * holding real conversations it destroys every message, and LINE offers no way
+ * to read chat history back.
+ */
+if ( 'production' === wp_get_environment_type() && ! defined( 'MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
+	echo "REFUSED: this site reports WP_ENVIRONMENT_TYPE=production.\n";
+	echo "It DROPS every moksa_line_* table, including recorded conversations and\n";
+	echo "messages, which cannot be recovered -- LINE does not expose chat history.\n";
+	echo "If this really is a throwaway site, set WP_ENVIRONMENT_TYPE, or define\n";
+	echo "MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.\n";
+	return;
+}
+
 echo "== Tearing down and recreating a 1.4.0 install ==\n";
 
 foreach ( Moksa\Line\Support\Migrator::table_keys() as $t ) {

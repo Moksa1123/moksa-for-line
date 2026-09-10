@@ -211,6 +211,13 @@ class AdminModule {
 				'strings' => array(
 					'saved'        => __( 'Saved.', 'moksa-line' ),
 					'copied'       => __( 'Copied', 'moksa-line' ),
+					// The inbox updates a conversation's state without reloading,
+					// so it needs the same words the server-rendered pill uses.
+					'conversationStatus' => array(
+						'bot'    => __( 'bot', 'moksa-line' ),
+						'human'  => __( 'human', 'moksa-line' ),
+						'closed' => __( 'closed', 'moksa-line' ),
+					),
 					/* translators: %d: number of cards in the carousel. */
 					'carouselCount' => __( '%d cards. The customer swipes sideways to reach the rest.', 'moksa-line' ),
 					'cardTitle'    => __( 'Headline', 'moksa-line' ),

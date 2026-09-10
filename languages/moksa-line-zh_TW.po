@@ -2598,8 +2598,14 @@ msgstr "一個把訊息送進收件匣的輸入框"
 msgid "altText is limited to 1500 characters."
 msgstr "altText 上限為 1500 字。"
 
+msgid "bot"
+msgstr "機器人"
+
 msgid "check every"
 msgstr "每隔"
+
+msgid "closed"
+msgstr "已結束"
 
 msgid "contains this"
 msgstr "包含這段文字"
@@ -2618,6 +2624,9 @@ msgstr "等於"
 
 msgid "greets the visitor by their LINE name"
 msgstr "用訪客的 LINE 名稱打招呼"
+
+msgid "human"
+msgstr "真人"
 
 msgid "images missing"
 msgstr "缺少圖片檔"

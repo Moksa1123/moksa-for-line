@@ -76,12 +76,33 @@ class MessagingClient {
 			$body['notificationDisabled'] = true;
 		}
 
-		return Client::request(
+		$result = Client::request(
 			'POST',
 			'/message/push',
 			$body,
 			array( 'retry_key' => isset( $options['retry_key'] ) ? $options['retry_key'] : wp_generate_uuid4() )
 		);
+
+		// Every path that messages one person goes through here -- order
+		// notifications, payment receipts, the Flex and imagemap tests. Only the
+		// bot's own replies do not, because those use a reply token. Without
+		// this the inbox held one half of the conversation: what the customer
+		// said, and no sign of anything the shop had sent them.
+		//
+		// A caller that records the send itself, with detail this cannot know
+		// such as which agent sent it, passes record => false.
+		if ( ! is_wp_error( $result ) && ( ! isset( $options['record'] ) || false !== $options['record'] ) ) {
+			/**
+			 * Fires after a message is pushed to one user.
+			 *
+			 * @param array  $messages Sent message objects.
+			 * @param string $to       LINE user id.
+			 * @param array  $options  Options the caller passed.
+			 */
+			do_action( 'moksa_line_pushed', $messages, $to, $options );
+		}
+
+		return $result;
 	}
 
 	/**

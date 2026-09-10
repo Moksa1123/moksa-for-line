@@ -34,6 +34,7 @@ class InboxModule {
 
 		add_action( 'moksa_line_inbound_message', array( $this, 'record_inbound' ), 10, 2 );
 		add_action( 'moksa_line_replied', array( $this, 'record_bot_reply' ), 10, 3 );
+		add_action( 'moksa_line_pushed', array( $this, 'record_push' ), 10, 2 );
 		add_action( 'moksa_line_event_follow', array( $this, 'on_follow' ), 10, 2 );
 
 		add_action( 'wp_ajax_moksa_line_inbox_send', array( $this, 'ajax_send' ) );
@@ -119,6 +120,46 @@ class InboxModule {
 	}
 
 	/**
+	 * Store anything pushed to one customer.
+	 *
+	 * An order notification or a payment receipt is part of that conversation
+	 * as far as the customer is concerned, so it belongs in the thread an agent
+	 * reads before replying. Recorded only for people already known to the
+	 * inbox -- a push to an id this site has never seen should not conjure a
+	 * conversation out of nothing.
+	 *
+	 * @param array  $messages     Sent message objects.
+	 * @param string $line_user_id Recipient.
+	 */
+	public function record_push( array $messages, string $line_user_id ): void {
+		if ( '' === $line_user_id || ! Options::get( 'inbox_enabled' ) ) {
+			return;
+		}
+
+		$conversation = Conversations::find( $line_user_id );
+
+		if ( ! $conversation ) {
+			return;
+		}
+
+		$body = Messages::describe_outbound( $messages );
+
+		Messages::record(
+			array(
+				'conversation_id' => (int) $conversation->id,
+				'line_user_id'    => $line_user_id,
+				'direction'       => 'out',
+				'message_type'    => isset( $messages[0]['type'] ) ? (string) $messages[0]['type'] : 'text',
+				'body'            => $body,
+				'payload'         => $messages,
+				'sender_kind'     => 'bot',
+			)
+		);
+
+		Conversations::touch( $line_user_id, $body, false );
+	}
+
+	/**
 	 * Open a conversation as soon as someone adds the bot.
 	 *
 	 * @param array  $event        Webhook event.
@@ -156,7 +197,7 @@ class InboxModule {
 		$line_user_id = (string) $conversation->line_user_id;
 		$messages     = array( MessagingClient::text( $text ) );
 
-		$result = MessagingClient::push( $line_user_id, $messages );
+		$result = MessagingClient::push( $line_user_id, $messages, array( 'record' => false ) );
 
 		$failed = is_wp_error( $result );
 

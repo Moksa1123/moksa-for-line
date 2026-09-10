@@ -31,6 +31,13 @@ $list = Conversations::paginate(
 	)
 );
 ?>
+<?php
+$status_labels = array(
+	'bot'    => __( 'bot', 'moksa-line' ),
+	'human'  => __( 'human', 'moksa-line' ),
+	'closed' => __( 'closed', 'moksa-line' ),
+);
+?>
 <div class="wrap moksa-line-wrap">
 	<h1><?php esc_html_e( 'Inbox', 'moksa-line' ); ?></h1>
 
@@ -80,8 +87,9 @@ $list = Conversations::paginate(
 						</span>
 						<span class="moksa-conv__preview"><?php echo esc_html( (string) $conversation->last_message_preview ); ?></span>
 						<span class="moksa-conv__meta">
+							<?php // The same words the take-over buttons set without a reload, so the pill does not change language when clicked. ?>
 							<span class="moksa-pill moksa-pill--<?php echo esc_attr( 'human' === $conversation->status ? 'warn' : ( 'closed' === $conversation->status ? 'bad' : 'ok' ) ); ?>">
-								<?php echo esc_html( (string) $conversation->status ); ?>
+								<?php echo esc_html( $status_labels[ (string) $conversation->status ] ?? (string) $conversation->status ); ?>
 							</span>
 							<?php if ( $conversation->last_message_at ) : ?>
 								<?php echo esc_html( mysql2date( 'Y-m-d H:i', get_date_from_gmt( (string) $conversation->last_message_at ) ) ); ?>

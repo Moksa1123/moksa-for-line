@@ -798,6 +798,31 @@
 			$thread.scrollTop($thread.prop('scrollHeight'));
 		}
 
+		/**
+		 * Reflect a conversation's handling state everywhere it is shown.
+		 *
+		 * The button for the state you are already in is disabled rather than
+		 * hidden: a row of buttons that changes length as you click it is how
+		 * you end up pressing the wrong one.
+		 */
+		function showStatus(status) {
+			$actions.find('button').each(function () {
+				var $button = $(this);
+				var isCurrent = $button.data('moksa-status') === status;
+
+				$button.prop('disabled', isCurrent).toggleClass('is-current', isCurrent);
+			});
+
+			var $pill = $('.moksa-conv.is-active').find('.moksa-conv__meta .moksa-pill');
+
+			if ($pill.length) {
+				$pill
+					.removeClass('moksa-pill--ok moksa-pill--warn moksa-pill--bad')
+					.addClass('human' === status ? 'moksa-pill--warn' : ('closed' === status ? 'moksa-pill--bad' : 'moksa-pill--ok'))
+					.text((strings.conversationStatus || {})[status] || status);
+			}
+		}
+
 		$('.moksa-conv').on('click', function () {
 			var $conv = $(this);
 
@@ -812,6 +837,7 @@
 				$reply.prop('hidden', false);
 				$actions.prop('hidden', false);
 				$conv.find('.moksa-conv__unread').remove();
+				showStatus(result.status);
 				scrollToLatest();
 			}, function (error) {
 				$thread.html('<p class="moksa-feedback__message moksa-feedback__message--bad">'
@@ -842,13 +868,26 @@
 			});
 		});
 
+		// This used to reload the whole page on success, which closed the very
+		// conversation you had just taken over -- press the button, and the
+		// screen empties. Nothing was shown in the meantime either, and a
+		// failure did nothing at all. It updates in place now.
 		$actions.on('click', 'button', function () {
 			if (!current) {
 				return;
 			}
 
-			post('inbox_status', { conversation_id: current, status: $(this).data('moksa-status') }).then(function () {
-				window.location.reload();
+			var $button = $(this);
+			var wanted = $button.data('moksa-status');
+			var $all = $actions.find('button');
+
+			$all.prop('disabled', true);
+
+			post('inbox_status', { conversation_id: current, status: wanted }).then(function (result) {
+				showStatus(result.status || wanted);
+			}, function (error) {
+				$all.prop('disabled', false);
+				window.alert(error.message);
 			});
 		});
 	}
