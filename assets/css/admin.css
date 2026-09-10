@@ -6,6 +6,83 @@
 	--moksa-green: #06c755;
 	--moksa-border: #dcdcde;
 	--moksa-muted: #646970;
+	/* One ceiling for every form control on these screens. See below. */
+	--moksa-field-max: 560px;
+}
+
+/*
+ * WordPress caps every select at 400px. A select.widefat therefore stops short
+ * while the text input directly above it stretches to the whole column -- on a
+ * wide screen that is a 750px input over a 400px dropdown, and every form in
+ * this plugin had that ragged right edge. Giving both the same ceiling lines
+ * them up and stops a single-line field growing to a width nobody can scan.
+ *
+ * Scoped to form controls on purpose: table.widefat is a full-width data table
+ * and must not be capped.
+ */
+.moksa-line-wrap input.widefat,
+.moksa-line-wrap select.widefat,
+.moksa-line-wrap textarea.widefat {
+	max-width: var(--moksa-field-max);
+}
+
+/*
+ * Settings rows. A bare <select> is shrink-to-fit, so the dropdowns came out at
+ * whatever their longest option happened to measure -- 128px next to 206px next
+ * to a 350px text input, a different right edge on nearly every row. Giving
+ * them the width core already gives .regular-text leaves two deliberate widths
+ * on the screen instead of five accidental ones.
+ */
+.moksa-line-wrap .form-table select {
+	width: 350px;
+	max-width: 100%;
+}
+
+/*
+ * The copy-to-clipboard URL boxes sit in the same column as the text inputs, so
+ * they take the same width and wrap rather than running 180px past everything
+ * else on the row.
+ */
+.moksa-line-wrap .form-table .moksa-copyable {
+	width: 350px;
+}
+
+/*
+ * A colour input is a swatch, not a text field. Sharing .regular-text with the
+ * text inputs stretched it to 350px of flat colour.
+ */
+.moksa-line-wrap input[type="color"].regular-text {
+	width: 64px;
+	height: 32px;
+	padding: 2px;
+	vertical-align: middle;
+}
+
+/*
+ * Core caps .description at about 476px, which is narrower than the field it
+ * describes. The help text therefore wrapped a line earlier than the input
+ * above it and regularly left a single character stranded on its own line.
+ */
+.moksa-line-wrap .description {
+	max-width: var(--moksa-field-max);
+}
+
+/*
+ * Inside the flow, card and template editors a control fills the card it sits
+ * in. The field ceiling above is for top-level forms; applying it here left a
+ * prompt box visibly narrower than the two fields directly beneath it.
+ */
+.moksa-line-wrap .moksa-flow-step__label .widefat,
+.moksa-line-wrap .moksa-card-fields__label .widefat,
+.moksa-line-wrap .moksa-tpl-field .widefat {
+	max-width: none;
+}
+
+/* JSON and code want the column they are given. */
+.moksa-line-wrap textarea.code,
+.moksa-line-wrap input.code,
+.moksa-line-wrap .moksa-area-json {
+	max-width: none;
 }
 
 /*
@@ -564,6 +641,7 @@
 
 .moksa-card-fields__label input,
 .moksa-card-fields__label textarea {
+	display: block;
 	margin-top: 3px;
 	font-weight: 400;
 	color: #1d2327;
@@ -614,6 +692,7 @@
 .moksa-tpl-field input,
 .moksa-tpl-field textarea,
 .moksa-tpl-field select {
+	display: block;
 	margin-top: 3px;
 	font-weight: 400;
 	color: #1d2327;
@@ -926,9 +1005,16 @@
 	color: var(--moksa-muted);
 }
 
+/*
+ * These editors wrap each control in its label. The control only sat under the
+ * label text because .widefat made it 100% wide and left no room beside it --
+ * so the moment a control is narrower than its container it jumps up onto the
+ * label's line. Stacking is the intent, so say so rather than leaning on width.
+ */
 .moksa-flow-step__label textarea,
 .moksa-flow-step__label input,
 .moksa-flow-step__label select {
+	display: block;
 	margin-top: 3px;
 	font-weight: 400;
 	color: #1d2327;
@@ -1148,10 +1234,18 @@
 .moksa-inbox__empty,
 .moksa-inbox__messages .moksa-inbox-empty {
 	color: #fff;
+	margin: 0;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
 }
 
 .moksa-msg {
-	max-width: 70%;
+	/* 70% of a 1250px pane is an 880px line of chat. A percentage alone reads
+	   fine in a narrow column and falls apart on a wide screen, so cap it. */
+	max-width: min(70%, 560px);
 	margin-bottom: 12px;
 	padding: 8px 12px;
 	border-radius: 12px;

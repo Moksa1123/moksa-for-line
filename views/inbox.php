@@ -110,7 +110,9 @@ $status_labels = array(
 				</span>
 			</div>
 
-			<div class="moksa-inbox__messages" data-moksa-thread></div>
+			<div class="moksa-inbox__messages" data-moksa-thread>
+				<p class="moksa-inbox-empty"><?php esc_html_e( 'Pick a conversation on the left to read it and reply.', 'moksa-line' ); ?></p>
+			</div>
 
 			<?php // The picker sits above the composer so opening it does not push the send button off screen. ?>
 			<div class="moksa-stickers" data-moksa-sticker-picker hidden>

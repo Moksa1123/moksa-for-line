@@ -111,7 +111,7 @@ if ( TokenManager::is_configured() ) {
 
 		<p data-moksa-broadcast-target>
 			<label for="moksa-broadcast-user"><?php esc_html_e( 'LINE user id', 'moksa-line' ); ?></label>
-			<input type="text" id="moksa-broadcast-user" name="line_user_id" class="regular-text" placeholder="U1234..." />
+			<input type="text" id="moksa-broadcast-user" name="line_user_id" class="widefat" placeholder="U1234..." />
 		</p>
 
 		<p data-moksa-broadcast-confirm hidden>

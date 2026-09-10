@@ -43,7 +43,7 @@ $rows = Payments::recent( 100 );
 		<form data-moksa-pay-link>
 			<p>
 				<label for="moksa-pay-title"><?php esc_html_e( 'What is this for', 'moksa-line' ); ?></label>
-				<input type="text" id="moksa-pay-title" name="title" class="regular-text" required />
+				<input type="text" id="moksa-pay-title" name="title" class="widefat" required />
 			</p>
 			<p>
 				<label for="moksa-pay-amount"><?php esc_html_e( 'Amount', 'moksa-line' ); ?></label>
@@ -52,7 +52,7 @@ $rows = Payments::recent( 100 );
 			</p>
 			<p>
 				<label for="moksa-pay-user"><?php esc_html_e( 'Send it to (optional)', 'moksa-line' ); ?></label>
-				<input type="text" id="moksa-pay-user" name="line_user_id" class="regular-text" placeholder="U1234..." />
+				<input type="text" id="moksa-pay-user" name="line_user_id" class="widefat" placeholder="U1234..." />
 				<span class="description"><?php esc_html_e( 'A LINE user id. Leave blank to just get a link you can share yourself.', 'moksa-line' ); ?></span>
 			</p>
 			<p><button type="submit" class="button button-primary"><?php esc_html_e( 'Create link', 'moksa-line' ); ?></button></p>

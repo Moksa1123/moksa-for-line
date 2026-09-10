@@ -2956,3 +2956,6 @@ msgstr[0] "目前有 %s 個對話由真人接手中。這些規則對它們完�
 
 msgid "Open the inbox"
 msgstr "開啟收件匣"
+
+msgid "Pick a conversation on the left to read it and reply."
+msgstr "在左邊選一則對話，就能閱讀並回覆。"

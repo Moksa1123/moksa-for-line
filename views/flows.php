@@ -105,7 +105,7 @@ $example  = array(
 
 				<p>
 					<label for="moksa-flow-email"><?php esc_html_e( 'Email submissions to', 'moksa-line' ); ?></label>
-					<input type="email" id="moksa-flow-email" name="notify_email" class="regular-text" />
+					<input type="email" id="moksa-flow-email" name="notify_email" class="widefat" />
 				</p>
 
 				<p>
