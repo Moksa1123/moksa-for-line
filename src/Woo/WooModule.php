@@ -466,7 +466,7 @@ class WooModule {
 				array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line' ), 'size' => 'sm', 'color' => '#888888' ),
 				array(
 					'type'   => 'text',
-					'text'   => wp_strip_all_tags( (string) $order->get_formatted_order_total() ),
+					'text'   => OrderContext::clean_money( (string) $order->get_formatted_order_total() ),
 					'size'   => 'sm',
 					'align'  => 'end',
 					'weight' => 'bold',

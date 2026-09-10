@@ -12,6 +12,7 @@
 namespace Moksa\Line\Woo;
 
 use Moksa\Line\Api\MessagingClient;
+use Moksa\Line\Support\Options;
 use Moksa\Line\Flex\Validator;
 use Moksa\Line\Support\Logger;
 
@@ -34,6 +35,7 @@ class NotifyTemplates {
 		add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'column' ), 10, 2 );
 
 		add_action( 'wp_ajax_moksa_line_notify_test', array( $this, 'ajax_test' ) );
+		add_action( 'wp_ajax_moksa_line_notify_preview', array( $this, 'ajax_preview' ) );
 	}
 
 	public function register_post_type(): void {
@@ -82,6 +84,15 @@ class NotifyTemplates {
 			'moksa-notify-content',
 			__( 'Message', 'moksa-line' ),
 			array( $this, 'render_content' ),
+			self::POST_TYPE,
+			'normal',
+			'high'
+		);
+
+		add_meta_box(
+			'moksa-notify-preview',
+			__( 'Preview', 'moksa-line' ),
+			array( $this, 'render_preview' ),
 			self::POST_TYPE,
 			'normal',
 			'high'
@@ -224,20 +235,69 @@ class NotifyTemplates {
 	}
 
 	/**
+	 * The message as the customer will receive it.
+	 *
+	 * Built from a real order, because the whole point of this screen is the
+	 * placeholders, and a preview showing {order_number} rather than an order
+	 * number tells you nothing about whether the message reads well.
+	 */
+	public function render_preview(): void {
+		$basic_id = ltrim( trim( (string) Options::get( 'bot_basic_id' ) ), '@' );
+		?>
+		<div class="moksa-notify-preview" data-moksa-notify-preview>
+			<p class="description">
+				<?php esc_html_e( 'Drawn from your most recent order, so the values are real ones.', 'moksa-line' ); ?>
+			</p>
+
+			<?php // data-line-preview marks a deliberate imitation of another product's UI. ?>
+			<div class="moksa-phone-chat" data-line-preview>
+				<div class="moksa-phone-chat__bar">
+					<span class="moksa-phone-chat__dot"></span>
+					<?php echo esc_html( '' !== $basic_id ? '@' . $basic_id : __( 'Your official account', 'moksa-line' ) ); ?>
+				</div>
+				<div class="moksa-phone-chat__body">
+					<span class="moksa-phone-chat__avatar" aria-hidden="true"></span>
+					<div class="moksa-flex-preview" data-moksa-notify-preview-body></div>
+				</div>
+			</div>
+
+			<p>
+				<button type="button" class="button" data-moksa-notify-refresh><?php esc_html_e( 'Refresh the preview', 'moksa-line' ); ?></button>
+				<span class="description" data-moksa-notify-preview-note></span>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Placeholder reference.
 	 */
 	public function render_params(): void {
-		echo '<p class="description">' . esc_html__( 'Click to copy.', 'moksa-line' ) . '</p><ul class="moksa-params">';
+		?>
+		<p class="description">
+			<?php esc_html_e( 'Click any of these to copy it. The value beside it is what it resolves to for your most recent order, so an empty one is a value your shop does not fill in.', 'moksa-line' ); ?>
+		</p>
 
-		foreach ( OrderContext::documented() as $placeholder => $description ) {
-			printf(
-				'<li><code class="moksa-copyable">%s</code><br /><span class="description">%s</span></li>',
-				esc_html( $placeholder ),
-				esc_html( $description )
-			);
-		}
-
-		echo '</ul>';
+		<div class="moksa-params" data-moksa-params>
+			<?php foreach ( OrderContext::documented_groups() as $group => $placeholders ) : ?>
+				<h4 class="moksa-params__group"><?php echo esc_html( $group ); ?></h4>
+				<ul class="moksa-params__list">
+					<?php foreach ( $placeholders as $placeholder => $description ) : ?>
+						<li class="moksa-param">
+							<?php // A button, not a <code>: the old one could not be reached by keyboard. ?>
+							<button type="button" class="moksa-copyable moksa-param__key"
+								data-moksa-copy="<?php echo esc_attr( $placeholder ); ?>"
+								title="<?php esc_attr_e( 'Copy', 'moksa-line' ); ?>">
+								<code><?php echo esc_html( $placeholder ); ?></code>
+							</button>
+							<span class="moksa-param__desc"><?php echo esc_html( $description ); ?></span>
+							<span class="moksa-param__value" data-moksa-param-value="<?php echo esc_attr( $placeholder ); ?>"></span>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endforeach; ?>
+		</div>
+		<?php
 	}
 
 	/**
@@ -488,6 +548,62 @@ class NotifyTemplates {
 	}
 
 	// --- Test send -------------------------------------------------------------
+
+	/**
+	 * Build the message for a real order and hand it back unsent.
+	 *
+	 * Sends nothing and costs nothing, which is the difference between this and
+	 * the test button. Until now the only way to see what a template produced
+	 * was to push it to a phone, so every rewording cost a message.
+	 */
+	public function ajax_preview(): void {
+		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You cannot preview notifications.', 'moksa-line' ) ), 403 );
+		}
+
+		if ( ! function_exists( 'wc_get_orders' ) ) {
+			wp_send_json_error( array( 'message' => __( 'WooCommerce is not active.', 'moksa-line' ) ) );
+		}
+
+		$orders = wc_get_orders( array( 'limit' => 1, 'orderby' => 'date', 'order' => 'DESC' ) );
+
+		if ( empty( $orders ) ) {
+			wp_send_json_error( array( 'message' => __( 'There are no orders yet to build a preview from.', 'moksa-line' ) ) );
+		}
+
+		$order       = $orders[0];
+		$template_id = isset( $_POST['template_id'] ) ? (int) $_POST['template_id'] : 0;
+		$message     = self::render( $template_id, $order, (string) $order->get_status() );
+
+		// Every documented placeholder as it resolves for this order, so the
+		// reference can show real values rather than descriptions alone.
+		$context = OrderContext::placeholders( $order, (string) $order->get_status() );
+		$values  = array();
+
+		// placeholders() is already keyed with the braces on, the same way the
+		// documented list is.
+		foreach ( array_keys( OrderContext::documented() ) as $placeholder ) {
+			$value                  = isset( $context[ $placeholder ] ) ? $context[ $placeholder ] : '';
+			$values[ $placeholder ] = is_scalar( $value ) ? (string) $value : '';
+		}
+
+		wp_send_json_success(
+			array(
+				'message'      => $message,
+				'values'       => $values,
+				'order_number' => (string) $order->get_order_number(),
+				'note'         => null === $message
+					? __( 'This template does not produce a valid message yet.', 'moksa-line' )
+					: sprintf(
+						/* translators: %s: order number the preview was built from. */
+						__( 'Using order %s.', 'moksa-line' ),
+						(string) $order->get_order_number()
+					),
+			)
+		);
+	}
 
 	/**
 	 * Send a template to one LINE user, filled in from the most recent order.

@@ -266,18 +266,9 @@ class ProductCards {
 	 * @param mixed $amount Price.
 	 */
 	private static function money( $amount ): string {
-		if ( '' === $amount || null === $amount ) {
-			return '';
-		}
-
-		$formatted = wp_strip_all_tags( (string) wc_price( (float) $amount ) );
-		$formatted = html_entity_decode( $formatted, ENT_QUOTES, 'UTF-8' );
-
-		// wc_price() separates the symbol from the number with a non-breaking
-		// space, which reads as a stray character in some LINE clients.
-		$formatted = str_replace( "Â ", ' ', $formatted );
-
-		return trim( preg_replace( '/\s+/u', ' ', $formatted ) );
+		// One implementation, shared with the order notifications: the
+		// entity-encoded currency bug appeared separately in both.
+		return OrderContext::money( $amount );
 	}
 
 	/**

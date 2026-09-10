@@ -54,6 +54,41 @@ class OrderContext {
 	);
 
 	/**
+	 * Make a WooCommerce price string readable in a chat.
+	 *
+	 * wc_price() returns markup whose currency symbol is HTML entities.
+	 * Stripping the tags leaves those entities behind, so an order total went
+	 * out to customers as "&#78;&#84;&#36;1,000" instead of "NT$1,000" -- in
+	 * the notification, in the order card, and in the {total} placeholder.
+	 *
+	 * @param string $formatted Output of wc_price() or get_formatted_order_total().
+	 * @return string
+	 */
+	public static function clean_money( string $formatted ): string {
+		$text = html_entity_decode( wp_strip_all_tags( $formatted ), ENT_QUOTES, 'UTF-8' );
+
+		// wc_price() separates the symbol from the number with a non-breaking
+		// space, which reads as a stray character in some LINE clients.
+		$text = str_replace( "\xc2\xa0", ' ', $text );
+
+		return trim( (string) preg_replace( '/\s+/u', ' ', $text ) );
+	}
+
+	/**
+	 * Format an amount and clean it in one step.
+	 *
+	 * @param float|string $amount Raw amount.
+	 * @return string
+	 */
+	public static function money( $amount ): string {
+		if ( '' === $amount || null === $amount ) {
+			return '';
+		}
+
+		return self::clean_money( (string) wc_price( (float) $amount ) );
+	}
+
+	/**
 	 * Build the replacement map for an order.
 	 *
 	 * @param \WC_Order $order  Order.
@@ -79,8 +114,8 @@ class OrderContext {
 			'order_status'      => $status,
 			'status_label'      => wc_get_order_status_name( $status ),
 			'order_date'        => $order->get_date_created() ? $order->get_date_created()->date_i18n( 'Y-m-d' ) : '',
-			'total'             => wp_strip_all_tags( (string) $order->get_formatted_order_total() ),
-			'order_subtotal'    => wp_strip_all_tags( (string) wc_price( (float) $order->get_subtotal() ) ),
+			'total'             => self::clean_money( (string) $order->get_formatted_order_total() ),
+			'order_subtotal'    => self::money( (float) $order->get_subtotal() ),
 			'items_count'       => (string) $order->get_item_count(),
 			'order_items_nums'  => (string) $order->get_item_count(),
 			'order_items'       => self::item_list( $order ),
@@ -251,12 +286,65 @@ class OrderContext {
 	}
 
 	/**
+	 * The same placeholders, in the groups a person looks for them in.
+	 *
+	 * A flat list of twenty-four is a list you read once and then hunt through.
+	 * The groups are also where another plugin's values land: anything added
+	 * through the moksa_line_order_placeholders filter and described through
+	 * moksa_line_documented_placeholders appears under "From other plugins",
+	 * so a shop can see what its own extensions provide without reading code.
+	 *
+	 * @return array<string,array<string,string>> Group label => placeholder => description.
+	 */
+	public static function documented_groups(): array {
+		$groups = array(
+			__( 'The order', 'moksa-line' )     => array(
+				'{order_number}', '{order_status}', '{status_label}', '{status_color}',
+				'{order_date}', '{total}', '{order_subtotal}', '{items_count}', '{order_items}',
+				'{view_order_url}',
+			),
+			__( 'The customer', 'moksa-line' )  => array(
+				'{customer_full_name}', '{customer_email}', '{billing_name}',
+				'{billing_phone}', '{billing_address}', '{customer_note}',
+			),
+			__( 'Delivery', 'moksa-line' )      => array(
+				'{shipping_name}', '{shipping_address}', '{shipping_city}',
+				'{shipping_method}', '{tracking_number}', '{store_name}', '{store_address}',
+			),
+			__( 'Payment', 'moksa-line' )       => array(
+				'{payment_method}',
+			),
+		);
+
+		$documented = self::documented();
+		$out        = array();
+		$placed     = array();
+
+		foreach ( $groups as $label => $keys ) {
+			foreach ( $keys as $key ) {
+				if ( isset( $documented[ $key ] ) ) {
+					$out[ $label ][ $key ] = $documented[ $key ];
+					$placed[ $key ]        = true;
+				}
+			}
+		}
+
+		$extra = array_diff_key( $documented, $placed );
+
+		if ( $extra ) {
+			$out[ __( 'From other plugins', 'moksa-line' ) ] = $extra;
+		}
+
+		return $out;
+	}
+
+	/**
 	 * Every placeholder, for the editor's reference panel.
 	 *
 	 * @return array<string,string> Placeholder => description.
 	 */
 	public static function documented(): array {
-		return array(
+		$documented = array(
 			'{order_number}'       => __( 'Order number', 'moksa-line' ),
 			'{order_status}'       => __( 'Status slug', 'moksa-line' ),
 			'{status_label}'       => __( 'Status name, translated', 'moksa-line' ),
@@ -282,5 +370,17 @@ class OrderContext {
 			'{customer_note}'      => __( 'Customer note', 'moksa-line' ),
 			'{view_order_url}'     => __( 'Link to the order (https sites only)', 'moksa-line' ),
 		);
+
+		/**
+		 * Describe placeholders added by other plugins.
+		 *
+		 * A plugin adding values through moksa_line_order_placeholders could
+		 * substitute them but had no way to say what they were, so they were
+		 * invisible to whoever was writing the message. Describe them here and
+		 * they appear in the reference beside the built-in ones.
+		 *
+		 * @param array<string,string> $documented Placeholder => description.
+		 */
+		return (array) apply_filters( 'moksa_line_documented_placeholders', $documented );
 	}
 }

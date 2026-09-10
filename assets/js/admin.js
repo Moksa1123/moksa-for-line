@@ -1754,6 +1754,58 @@
 		});
 	}
 
+	/**
+	 * The order-notification editor: preview the built message, and show what
+	 * each placeholder resolves to for a real order.
+	 */
+	function bindNotifyPreview() {
+		var $panel = $('[data-moksa-notify-preview]');
+
+		if (!$panel.length) {
+			return;
+		}
+
+		var $body = $panel.find('[data-moksa-notify-preview-body]');
+		var $note = $panel.find('[data-moksa-notify-preview-note]');
+
+		function templateId() {
+			return parseInt($('#post_ID').val(), 10) || 0;
+		}
+
+		function refresh() {
+			$note.text(strings.working || '');
+
+			post('notify_preview', { template_id: templateId() }).then(function (result) {
+				$note.text(result.note || '');
+				$body.empty();
+
+				if (!result.message) {
+					return;
+				}
+
+				// A template can be Flex or plain text, and the editor is the
+				// one place both shapes turn up.
+				if ('flex' === result.message.type && result.message.contents && window.MoksaFlexRenderer) {
+					window.MoksaFlexRenderer.render(result.message.contents, $body);
+				} else if (result.message.text) {
+					$body.append($('<div class="moksa-bubble"></div>').text(result.message.text));
+				}
+
+				$.each(result.values || {}, function (placeholder, value) {
+					$panel.closest('body')
+						.find('[data-moksa-param-value="' + placeholder.replace(/"/g, '') + '"]')
+						.text(value)
+						.toggleClass('is-empty', '' === value);
+				});
+			}, function (error) {
+				$note.text(error.message);
+			});
+		}
+
+		$panel.on('click', '[data-moksa-notify-refresh]', refresh);
+		refresh();
+	}
+
 	function bindWebhookCheck() {
 		var $scope = $('[data-moksa-webhook]').closest('td');
 
@@ -1837,6 +1889,7 @@
 		bindCopy();
 		bindImagemaps();
 		bindTemplates();
+		bindNotifyPreview();
 		bindWebhookCheck();
 		bindClearLogs();
 		bindReplyPreview();

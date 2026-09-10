@@ -3038,3 +3038,36 @@ msgstr "Channel access token"
 
 msgid "You can use {display_name}, {site_name}, {site_url}, and the field name of any answer -- {name} for a step stored as name."
 msgstr "可以使用 {display_name}、{site_name}、{site_url}，以及任何一題的欄位名稱——例如存成 name 的那題就用 {name}。"
+
+msgid "Drawn from your most recent order, so the values are real ones."
+msgstr "取自你最近一筆訂單，所以這些值都是真的。"
+
+msgid "Refresh the preview"
+msgstr "重新整理預覽"
+
+msgid "Click any of these to copy it. The value beside it is what it resolves to for your most recent order, so an empty one is a value your shop does not fill in."
+msgstr "點任何一個就會複製。旁邊顯示的是它在你最近一筆訂單上實際的值，所以空白就表示你的店沒有填這個資料。"
+
+msgid "This template does not produce a valid message yet."
+msgstr "這個範本目前還產生不出有效的訊息。"
+
+msgid "Using order %s."
+msgstr "使用訂單 %s 的資料。"
+
+msgid "You cannot preview notifications."
+msgstr "你沒有預覽通知的權限。"
+
+msgid "The order"
+msgstr "訂單"
+
+msgid "The customer"
+msgstr "客人"
+
+msgid "Delivery"
+msgstr "配送"
+
+msgid "Payment"
+msgstr "付款"
+
+msgid "From other plugins"
+msgstr "來自其他外掛"
