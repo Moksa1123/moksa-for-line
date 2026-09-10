@@ -7,7 +7,7 @@
 
 namespace Moksa\Line\Admin;
 
-use Moksa\Line\Bot\Ai\AiEngineProvider;
+use Moksa\Line\Bot\Ai\Providers;
 use Moksa\Line\Inbox\Conversations;
 use Moksa\Line\Support\Migrator;
 use Moksa\Line\Support\Options;
@@ -398,17 +398,23 @@ class AdminModule {
 		);
 
 		if ( Options::get( 'ai_enabled' ) ) {
-			$provider = new AiEngineProvider();
+			$provider = Providers::make();
 
-			// Two distinct failures needing two different fixes: the plugin is
-			// missing, or it is installed with no API key. One message for both
-			// sends half the readers to the wrong place.
+			// Three outcomes with three different fixes: no provider chosen, the
+			// provider is missing, or it is present but has no credentials. One
+			// message for all three sends most readers to the wrong place.
+			if ( ! $provider ) {
+				$hint = __( 'AI replies are switched on but no AI service is selected.', 'moksa-line' );
+			} elseif ( ! $provider->installed() ) {
+				$hint = __( 'AI replies are switched on, but the selected AI service is not available on this site.', 'moksa-line' );
+			} else {
+				$hint = __( 'The AI service is present but has no provider connected yet, so it cannot answer anything.', 'moksa-line' );
+			}
+
 			$items[] = array(
-				'done'  => $provider->is_available(),
+				'done'  => $provider && $provider->is_available(),
 				'label' => __( 'AI provider available', 'moksa-line' ),
-				'hint'  => $provider->installed()
-					? __( 'AI Engine is active but has no AI service with an API key, so it cannot answer anything yet. Add one under Meow Apps > AI Engine > Settings.', 'moksa-line' )
-					: __( 'AI replies are switched on, but AI Engine is not active on this site.', 'moksa-line' ),
+				'hint'  => $hint,
 				'fix'   => $tab( 'ai' ),
 			);
 		}

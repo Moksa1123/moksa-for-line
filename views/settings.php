@@ -6,7 +6,7 @@
  */
 
 use Moksa\Line\Admin\AdminModule;
-use Moksa\Line\Bot\Ai\AiEngineProvider;
+use Moksa\Line\Bot\Ai\Providers;
 use Moksa\Line\Login\LoginModule;
 use Moksa\Line\Support\Options;
 use Moksa\Line\Webhook\WebhookModule;
@@ -314,21 +314,38 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 			<?php elseif ( 'ai' === $current ) : ?>
 
 				<?php
-				// Three states, not two. "Installed" and "ready" are different
-				// questions with different answers: AI Engine with no API key
-				// is present, lists its chatbots, and cannot answer a word.
-				$provider  = new AiEngineProvider();
-				$installed = $provider->installed();
-				$ready     = $provider->is_available();
+				$selected  = (string) Options::get( 'ai_provider' );
+				$provider  = Providers::make();
+				$installed = $provider && $provider->installed();
+				$ready     = $provider && $provider->is_available();
+
+				$select( 'ai_provider', __( 'AI service', 'moksa-line' ), Providers::choices(), __( 'The WordPress AI Client is part of WordPress itself from version 7.0, so nothing needs installing to use it. It still needs a provider connected before it can answer.', 'moksa-line' ) );
 				?>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Provider status', 'moksa-line' ); ?></th>
 					<td>
-						<?php if ( $ready ) : ?>
+						<?php
+						// Three states, not two. "Present" and "ready" are
+						// different questions: a service can be installed,
+						// list its options, and still answer nothing because
+						// no credentials have been connected to it.
+						?>
+						<?php if ( ! $provider ) : ?>
+							<span class="moksa-pill moksa-pill--warn"><?php esc_html_e( 'No AI service selected', 'moksa-line' ); ?></span>
+						<?php elseif ( $ready ) : ?>
 							<span class="moksa-pill moksa-pill--ok"><?php echo esc_html( $provider->label() ); ?></span>
 						<?php elseif ( $installed ) : ?>
 							<span class="moksa-pill moksa-pill--warn"><?php echo esc_html( $provider->label() ); ?></span>
-							<p class="description"><?php esc_html_e( 'AI Engine is active but has no AI service with an API key, so it cannot answer anything yet. Add one under Meow Apps > AI Engine > Settings.', 'moksa-line' ); ?></p>
+							<p class="description">
+								<?php if ( 'core' === $selected ) : ?>
+									<?php esc_html_e( 'WordPress has the AI Client but no provider is connected, so it cannot answer anything yet. Install the AI plugin from WordPress.org and connect a provider there.', 'moksa-line' ); ?>
+								<?php else : ?>
+									<?php esc_html_e( 'AI Engine is active but has no AI service with an API key, so it cannot answer anything yet. Add one under Meow Apps > AI Engine > Settings.', 'moksa-line' ); ?>
+								<?php endif; ?>
+							</p>
+						<?php elseif ( 'core' === $selected ) : ?>
+							<span class="moksa-pill moksa-pill--warn"><?php esc_html_e( 'This WordPress has no AI Client', 'moksa-line' ); ?></span>
+							<p class="description"><?php esc_html_e( 'The AI Client ships with WordPress 7.0 and later. On an older WordPress, choose AI Engine instead or upgrade.', 'moksa-line' ); ?></p>
 						<?php else : ?>
 							<span class="moksa-pill moksa-pill--warn"><?php esc_html_e( 'AI Engine is not active', 'moksa-line' ); ?></span>
 							<p class="description"><?php esc_html_e( 'Install and activate AI Engine, then configure a chatbot in it. AI replies stay switched off until then.', 'moksa-line' ); ?></p>
@@ -339,12 +356,15 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				<?php
 				$checkbox( 'ai_enabled', __( 'AI replies', 'moksa-line' ), __( 'Let the AI answer messages no rule or flow handled', 'moksa-line' ) );
 
-				// The chatbot list only needs AI Engine present, not keyed, so
-				// the bot can be chosen while the key is still being sorted out.
-				if ( $installed ) {
-					$select( 'ai_bot_id', __( 'Chatbot', 'moksa-line' ), $provider->chatbots(), __( 'Whichever chatbot you have set up in AI Engine, including its knowledge base.', 'moksa-line' ) );
-				} else {
-					$field( 'ai_bot_id', __( 'Chatbot ID', 'moksa-line' ), __( 'The bot id from AI Engine.', 'moksa-line' ) );
+				// A chatbot with its own persona and knowledge base is an AI
+				// Engine idea; the core client has no equivalent, so the field
+				// is only offered where it means something.
+				if ( 'ai_engine' === $selected ) {
+					if ( $installed && method_exists( $provider, 'chatbots' ) ) {
+						$select( 'ai_bot_id', __( 'Chatbot', 'moksa-line' ), $provider->chatbots(), __( 'Whichever chatbot you have set up in AI Engine, including its knowledge base.', 'moksa-line' ) );
+					} else {
+						$field( 'ai_bot_id', __( 'Chatbot ID', 'moksa-line' ), __( 'The bot id from AI Engine.', 'moksa-line' ) );
+					}
 				}
 
 				$field( 'ai_daily_cap', __( 'Daily reply limit', 'moksa-line' ), __( 'Stops the AI answering after this many replies in a day. Set to 0 for no limit -- but every reply costs money.', 'moksa-line' ), 'number' );

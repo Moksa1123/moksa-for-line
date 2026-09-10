@@ -159,6 +159,9 @@ msgstr "uri action 必須指向 https://、tel: 或 LINE 的 URL scheme。"
 msgid "A visitor completed \"%s\" on LINE."
 msgstr "有訪客在 LINE 上完成了「%s」。"
 
+msgid "AI Engine (Meow Apps)"
+msgstr "AI Engine（Meow Apps）"
+
 msgid "AI Engine has no AI service with an API key yet. Add one under Meow Apps > AI Engine > Settings."
 msgstr "AI Engine 還沒有任何帶 API 金鑰的 AI 服務。請到 Meow Apps > AI Engine > Settings 新增一組。"
 
@@ -171,14 +174,23 @@ msgstr "AI Engine 沒有啟用"
 msgid "AI Engine is not active on this site."
 msgstr "這個站台沒有啟用 AI Engine。"
 
+msgid "AI features are switched off for this site."
+msgstr "這個站台已關閉 AI 功能。"
+
 msgid "AI provider available"
 msgstr "AI 服務可用"
 
 msgid "AI replies"
 msgstr "AI 回覆"
 
-msgid "AI replies are switched on, but AI Engine is not active on this site."
-msgstr "AI 回覆已開啟，但這個站台並沒有啟用 AI Engine。"
+msgid "AI replies are switched on but no AI service is selected."
+msgstr "AI 回覆已開啟，但還沒有選擇要用哪個 AI 服務。"
+
+msgid "AI replies are switched on, but the selected AI service is not available on this site."
+msgstr "AI 回覆已開啟，但所選的 AI 服務在這個站台上並不存在。"
+
+msgid "AI service"
+msgstr "AI 服務"
 
 msgid "About %s messages remain in this month allowance."
 msgstr "本月額度大約還剩 %s 則訊息。"
@@ -266,6 +278,9 @@ msgstr "圖片"
 
 msgid "Answer"
 msgstr "答案類型"
+
+msgid "Answer in the language the customer used. Keep it short: this is a chat message, not an article."
+msgstr "請使用客人所用的語言回答。回覆要簡短：這是聊天訊息，不是文章。"
 
 msgid "Answers"
 msgstr "答案"
@@ -765,6 +780,9 @@ msgstr "命中次數"
 msgid "Hold the shipping notification until the tracking number appears"
 msgstr "先壓著出貨通知，等到物流單號出現再送"
 
+msgid "If you do not know something, say so and offer to pass it to a person. Never invent prices, stock or delivery dates."
+msgstr "不知道的事就直說，並提議轉給真人處理。絕對不要自行編造價格、庫存或到貨日期。"
+
 msgid "Image"
 msgstr "圖片"
 
@@ -1133,6 +1151,12 @@ msgstr "新增範本"
 
 msgid "New visitors"
 msgstr "新訪客"
+
+msgid "No AI provider is connected yet. Install the AI plugin from WordPress.org and connect a provider, or add one another way."
+msgstr "還沒有接上任何 AI 供應商。請從 WordPress.org 安裝「AI」外掛並在裡面連接一個供應商，或用其他方式註冊一個。"
+
+msgid "No AI service selected"
+msgstr "尚未選擇 AI 服務"
 
 msgid "No LIFF ID has been configured yet."
 msgstr "還沒有設定 LIFF ID。"
@@ -1893,11 +1917,20 @@ msgstr "這個交易 ID 不屬於這個商店。"
 msgid "The %1$s section must contain one of: %2$s."
 msgstr "%1$s 區段必須包含下列其中之一：%2$s。"
 
+msgid "The AI Client ships with WordPress 7.0 and later. On an older WordPress, choose AI Engine instead or upgrade."
+msgstr "AI Client 從 WordPress 7.0 起才內建。如果是更舊的版本，請改選 AI Engine，或升級 WordPress。"
+
 msgid "The AI returned an empty answer."
 msgstr "AI 回傳了空白的答案。"
 
+msgid "The AI service is present but has no provider connected yet, so it cannot answer anything."
+msgstr "AI 服務在，但還沒有接上任何供應商，所以目前什麼都答不出來。"
+
 msgid "The Channel ID, Channel Secret and sandbox switch live on the <a href=\"%s\">LINE Pay settings screen</a>, so they are stored encrypted and shared with payment links."
 msgstr "Channel ID、Channel Secret 與沙盒開關都在 <a href=\"%s\">LINE Pay 設定頁</a>，會加密儲存，並與收款連結共用。"
+
+msgid "The WordPress AI Client is part of WordPress itself from version 7.0, so nothing needs installing to use it. It still needs a provider connected before it can answer."
+msgstr "WordPress AI Client 從 7.0 起就是 WordPress 本身的一部分，不必另外安裝任何東西。但它仍然要先接上一個供應商才能回答。"
 
 msgid "The account to link to no longer exists."
 msgstr "要連結的帳號已經不存在了。"
@@ -1928,6 +1961,9 @@ msgstr "客人的餘額不足。"
 
 msgid "The customer has not completed authentication."
 msgstr "客人尚未完成驗證。"
+
+msgid "The customer is called %s."
+msgstr "這位客人的稱呼是 %s。"
 
 msgid "The customer is messaged when the order enters any of these statuses. Each notification is billed as a push message."
 msgstr "訂單進入這些狀態的任何一個時，就會發訊息給客人。每則通知都會以推播訊息計費。"
@@ -2042,6 +2078,12 @@ msgstr "這幾欄涵蓋最常見的卡片。其他的（多幾列、顏色、更
 
 msgid "This LINE account is already linked to another user on this site."
 msgstr "這個 LINE 帳號已經連結到本站的另一位使用者。"
+
+msgid "This WordPress does not have the AI Client. It ships with WordPress 7.0 and later."
+msgstr "這個 WordPress 沒有 AI Client。它從 WordPress 7.0 起才內建。"
+
+msgid "This WordPress has no AI Client"
+msgstr "這個 WordPress 沒有 AI Client"
 
 msgid "This bubble exceeds the 30 KB limit."
 msgstr "這個 bubble 超過 30 KB 上限。"
@@ -2295,8 +2337,20 @@ msgstr "WooCommerce 沒有啟用，因此沒有可以通知的內容。"
 msgid "WooCommerce is not active."
 msgstr "WooCommerce 沒有啟用。"
 
+msgid "WordPress AI (built into WordPress 7.0 and later)"
+msgstr "WordPress AI（WordPress 7.0 起內建）"
+
+msgid "WordPress AI Client"
+msgstr "WordPress AI Client"
+
+msgid "WordPress AI Client (WordPress %s)"
+msgstr "WordPress AI Client（WordPress %s）"
+
 msgid "WordPress account"
 msgstr "WordPress 帳號"
+
+msgid "WordPress has the AI Client but no provider is connected, so it cannot answer anything yet. Install the AI plugin from WordPress.org and connect a provider there."
+msgstr "WordPress 有 AI Client，但還沒接上任何供應商，所以目前什麼都答不出來。請從 WordPress.org 安裝「AI」外掛，在裡面連接一個供應商。"
 
 msgid "Working..."
 msgstr "處理中…"
@@ -2309,6 +2363,9 @@ msgstr "輸入回覆內容"
 
 msgid "Write something first."
 msgstr "請先輸入內容。"
+
+msgid "You are a customer service assistant for %s, replying inside LINE."
+msgstr "你是 %s 的客服助理，正在 LINE 裡回覆客人。"
 
 msgid "You are not signed in."
 msgstr "你尚未登入。"

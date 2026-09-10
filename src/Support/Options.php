@@ -75,7 +75,7 @@ class Options {
 
 			// --- AI ----------------------------------------------------------------
 			'ai_enabled'           => array( 'type' => 'bool', 'default' => false ),
-			'ai_provider'          => array( 'type' => 'enum', 'default' => 'ai_engine', 'enum' => array( 'ai_engine', 'none' ) ),
+			'ai_provider'          => array( 'type' => 'enum', 'default' => 'core', 'enum' => array( 'core', 'ai_engine', 'none' ) ),
 			'ai_bot_id'            => array( 'type' => 'string', 'default' => 'default' ),
 			'ai_fallback_only'     => array( 'type' => 'bool', 'default' => true ),
 			'ai_max_chars'         => array( 'type' => 'int', 'default' => 1800 ),

@@ -42,11 +42,7 @@ class AiResponder {
 			return null;
 		}
 
-		$provider = null;
-
-		if ( 'ai_engine' === Options::get( 'ai_provider' ) ) {
-			$provider = new AiEngineProvider();
-		}
+		$provider = Providers::make();
 
 		/**
 		 * Swap in a different AI provider.
