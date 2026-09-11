@@ -222,7 +222,63 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 					),
 					__( 'Offers the official account while the visitor is logging in.', 'moksa-line' )
 				);
-				$field( 'login_redirect', __( 'Default destination', 'moksa-line' ), __( 'Where to send people after login. Leave blank to return them to the page they came from.', 'moksa-line' ), 'url' );
+				?>
+
+				<?php
+				// A URL typed from memory is a URL with a typo in it, and the
+				// symptom -- everyone landing on a 404 after signing in -- does
+				// not point back at this field. The pages are right here, so
+				// offer them; the text box stays for anything not on the list.
+				$destination = (string) Options::get( 'login_redirect' );
+				$choices     = array();
+
+				if ( function_exists( 'wc_get_page_permalink' ) ) {
+					foreach ( array( 'myaccount' => __( 'My account', 'moksa-line' ), 'shop' => __( 'Shop', 'moksa-line' ), 'cart' => __( 'Cart', 'moksa-line' ) ) as $wc_page => $wc_label ) {
+						$wc_url = wc_get_page_permalink( $wc_page );
+
+						if ( $wc_url ) {
+							$choices[ $wc_url ] = $wc_label;
+						}
+					}
+				}
+
+				$choices[ home_url( '/' ) ] = __( 'Home page', 'moksa-line' );
+
+				foreach ( get_pages( array( 'sort_column' => 'menu_order,post_title', 'number' => 100 ) ) as $page_option ) {
+					$page_url = get_permalink( $page_option );
+
+					if ( $page_url && ! isset( $choices[ $page_url ] ) ) {
+						$choices[ $page_url ] = $page_option->post_title;
+					}
+				}
+
+				$is_listed = '' !== $destination && isset( $choices[ $destination ] );
+				$mode      = '' === $destination ? 'back' : ( $is_listed ? 'page' : 'custom' );
+				?>
+				<tr>
+					<th scope="row"><label for="moksa-login-destination"><?php esc_html_e( 'Default destination', 'moksa-line' ); ?></label></th>
+					<td>
+						<select id="moksa-login-destination" class="widefat" data-moksa-destination>
+							<option value="back" <?php selected( $mode, 'back' ); ?>><?php esc_html_e( 'Back to the page they came from', 'moksa-line' ); ?></option>
+							<?php foreach ( $choices as $choice_url => $choice_label ) : ?>
+								<option value="<?php echo esc_attr( $choice_url ); ?>" <?php selected( $destination, $choice_url ); ?>>
+									<?php echo esc_html( $choice_label ); ?>
+								</option>
+							<?php endforeach; ?>
+							<option value="custom" <?php selected( $mode, 'custom' ); ?>><?php esc_html_e( 'Another address...', 'moksa-line' ); ?></option>
+						</select>
+
+						<p class="description"><?php esc_html_e( 'Where to send people after they sign in with LINE.', 'moksa-line' ); ?></p>
+
+						<p data-moksa-destination-custom<?php echo 'custom' === $mode ? '' : ' hidden'; ?>>
+							<label for="moksa-login_redirect" class="screen-reader-text"><?php esc_html_e( 'Address to send people to', 'moksa-line' ); ?></label>
+							<input type="url" id="moksa-login_redirect" name="moksa_line[login_redirect]"
+								value="<?php echo esc_attr( $destination ); ?>" class="widefat"
+								placeholder="https://" autocomplete="off" data-moksa-destination-url />
+						</p>
+					</td>
+				</tr>
+				<?php
 				?>
 
 				<tr>

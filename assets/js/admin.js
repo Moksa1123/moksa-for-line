@@ -1758,6 +1758,38 @@
 	 * The order-notification editor: preview the built message, and show what
 	 * each placeholder resolves to for a real order.
 	 */
+	/**
+	 * The post-login destination: a list of pages, with a box for anything else.
+	 *
+	 * The select is the control; the text input is what is actually submitted,
+	 * so picking a page writes its URL there rather than adding a second
+	 * setting that could disagree with the first.
+	 */
+	function bindDestination() {
+		var $select = $('[data-moksa-destination]');
+
+		if (!$select.length) {
+			return;
+		}
+
+		var $custom = $('[data-moksa-destination-custom]');
+		var $url = $('[data-moksa-destination-url]');
+
+		$select.on('change', function () {
+			var choice = $select.val();
+
+			if ('custom' === choice) {
+				$custom.prop('hidden', false);
+				$url.trigger('focus');
+				return;
+			}
+
+			$custom.prop('hidden', true);
+			// "Back to the page they came from" is the empty value.
+			$url.val('back' === choice ? '' : choice);
+		});
+	}
+
 	function bindNotifyPreview() {
 		var $panel = $('[data-moksa-notify-preview]');
 
@@ -1889,6 +1921,7 @@
 		bindCopy();
 		bindImagemaps();
 		bindTemplates();
+		bindDestination();
 		bindNotifyPreview();
 		bindWebhookCheck();
 		bindClearLogs();

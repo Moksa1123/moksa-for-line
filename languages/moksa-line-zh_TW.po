@@ -3138,3 +3138,27 @@ msgstr "去填寫"
 
 msgid "Those buttons are switched on but nothing is drawn yet: signing in with LINE needs the LINE Login channel, which has no credentials."
 msgstr "這些按鈕是開啟的，但目前什麼都畫不出來：用 LINE 登入需要 LINE Login 頻道，而那邊還沒有填入憑證。"
+
+msgid "Back to the page they came from"
+msgstr "回到他們原本的頁面"
+
+msgid "Another address..."
+msgstr "其他網址…"
+
+msgid "Where to send people after they sign in with LINE."
+msgstr "用 LINE 登入之後要把人帶到哪裡。"
+
+msgid "Address to send people to"
+msgstr "要導向的網址"
+
+msgid "My account"
+msgstr "我的帳戶"
+
+msgid "Shop"
+msgstr "商店"
+
+msgid "Cart"
+msgstr "購物車"
+
+msgid "Home page"
+msgstr "首頁"
