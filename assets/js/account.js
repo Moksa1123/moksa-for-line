@@ -44,9 +44,14 @@
 
 			var $button = $(this);
 
+			// Both labels, not just the confirm one: the dialog falls back to the
+			// admin string bag for anything it is not given, and that object
+			// does not exist on the front end -- so Cancel stayed in English
+			// next to two translated buttons.
 			ask(t('confirmUnlink', 'Unlink your LINE account?'), {
 				danger: true,
-				confirmLabel: t('unlinkAction', 'Unlink')
+				confirmLabel: t('unlinkAction', 'Unlink'),
+				cancelLabel: t('confirmNo', 'Cancel')
 			}).then(function (confirmed) {
 				if (!confirmed) {
 					return;

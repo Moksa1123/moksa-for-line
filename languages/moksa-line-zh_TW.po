@@ -3093,3 +3093,42 @@ msgstr "要解除 LINE 帳號連結嗎？解除後就不會再透過 LINE 收到
 msgctxt "confirmation button"
 msgid "Unlink"
 msgstr "解除連結"
+
+msgid "LINE account"
+msgstr "LINE 帳號"
+
+msgid "Connected"
+msgstr "已連結"
+
+msgid "Not connected"
+msgstr "尚未連結"
+
+msgid "Linked since %s"
+msgstr "自 %s 起連結"
+
+msgid "Order updates are sent to you on LINE."
+msgstr "訂單更新會透過 LINE 通知你。"
+
+msgid "You have not added the official account as a friend yet, so those messages cannot reach you."
+msgstr "你還沒有把官方帳號加入好友，所以這些訊息送不到你手上。"
+
+msgid "Add as a friend"
+msgstr "加入好友"
+
+msgid "You can sign in with LINE instead of a password."
+msgstr "你可以用 LINE 登入，不必輸入密碼。"
+
+msgid "Link your LINE account to:"
+msgstr "連結 LINE 帳號之後可以："
+
+msgid "Get a message in LINE when your order is placed and when it ships."
+msgstr "訂單成立和出貨時，直接在 LINE 收到通知。"
+
+msgid "Sign in with one tap next time, without a password."
+msgstr "下次一鍵登入，不用記密碼。"
+
+msgid "Your LINE account"
+msgstr "你的 LINE 帳號"
+
+msgid "If you have not added the official account as a friend, those messages cannot reach you."
+msgstr "如果你還沒有把官方帳號加入好友，這些訊息會送不到你手上。"

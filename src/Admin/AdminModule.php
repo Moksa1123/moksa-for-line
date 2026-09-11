@@ -144,10 +144,19 @@ class AdminModule {
 
 		wp_enqueue_media();
 
+		// The dialog's styles moved out of admin.css so the account page can use
+		// them too; admin.css depends on them rather than carrying them.
+		wp_enqueue_style(
+			'moksa-line-confirm',
+			MOKSA_LINE_URL . 'assets/css/confirm.css',
+			array(),
+			self::asset_version( 'assets/css/confirm.css' )
+		);
+
 		wp_enqueue_style(
 			'moksa-line-admin',
 			MOKSA_LINE_URL . 'assets/css/admin.css',
-			array(),
+			array( 'moksa-line-confirm' ),
 			self::asset_version( 'assets/css/admin.css' )
 		);
 

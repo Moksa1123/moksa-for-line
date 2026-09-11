@@ -282,6 +282,14 @@ class Dispatcher {
 		Users::upsert(
 			$line_user_id,
 			array(
+				// LINE answers a profile lookup only for someone who has added
+				// the account, so a successful fetch is proof of friendship.
+				// The flag used to be set by the follow event alone, which means
+				// anyone who added the account before this webhook existed was
+				// recorded as not a friend for good -- and the account screen
+				// then told them so, wrongly. followed_at is deliberately left
+				// alone: we know they are a friend, not when they became one.
+				'is_friend'      => 1,
 				'display_name'   => isset( $profile['displayName'] ) ? sanitize_text_field( (string) $profile['displayName'] ) : '',
 				'picture_url'    => isset( $profile['pictureUrl'] ) ? esc_url_raw( (string) $profile['pictureUrl'] ) : '',
 				'status_message' => isset( $profile['statusMessage'] ) ? sanitize_text_field( (string) $profile['statusMessage'] ) : '',

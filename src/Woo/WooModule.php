@@ -679,22 +679,10 @@ class WooModule {
 	 * and did nothing for every customer, silently.
 	 */
 	private static function enqueue_account_assets(): void {
+		// The strings and the ajax URL ride along from where the script is
+		// registered; enqueuing is all this has to do.
+		wp_enqueue_style( 'moksa-line-confirm' );
 		wp_enqueue_script( 'moksa-line-account' );
-
-		wp_localize_script(
-			'moksa-line-account',
-			'moksaLineAccount',
-			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'strings' => array(
-					'confirmUnlink' => __( 'Unlink your LINE account? You will stop getting order updates in LINE.', 'moksa-line' ),
-					'unlinkAction'  => _x( 'Unlink', 'confirmation button', 'moksa-line' ),
-					'confirmYes'    => __( 'Yes, do it', 'moksa-line' ),
-					'confirmNo'     => __( 'Cancel', 'moksa-line' ),
-					'failed'        => __( 'That did not work.', 'moksa-line' ),
-				),
-			)
-		);
 	}
 
 	/**
@@ -702,50 +690,127 @@ class WooModule {
 	 */
 	public function render_account_page(): void {
 		$record = Users::by_wp_id( get_current_user_id() );
+		$linked = $record && '' !== (string) $record->line_user_id;
 
 		wp_enqueue_style( 'moksa-line-front' );
+		self::enqueue_account_assets();
 
-		if ( $record && '' !== (string) $record->line_user_id ) {
-			printf(
-				'<div class="moksa-line-profile">%s<span class="moksa-line-profile__name">%s</span></div>',
-				'' !== (string) $record->picture_url
-					? sprintf(
-						'<img class="moksa-line-profile__avatar" src="%s" alt="" width="48" height="48" loading="lazy" />',
-						esc_url( (string) $record->picture_url )
-					)
-					: '',
-				esc_html( (string) $record->display_name )
-			);
+		$basic_id  = ltrim( trim( (string) Options::get( 'bot_basic_id' ) ), '@' );
+		$friend_url = '' !== $basic_id ? 'https://line.me/R/ti/p/' . rawurlencode( '@' . $basic_id ) : '';
+		?>
+		<div class="moksa-account">
+			<div class="moksa-account__head">
+				<span class="moksa-account__mark" aria-hidden="true">LINE</span>
+				<span class="moksa-account__title"><?php esc_html_e( 'LINE account', 'moksa-line' ); ?></span>
+				<span class="moksa-account__state moksa-account__state--<?php echo $linked ? 'on' : 'off'; ?>">
+					<?php echo esc_html( $linked ? __( 'Connected', 'moksa-line' ) : __( 'Not connected', 'moksa-line' ) ); ?>
+				</span>
+			</div>
 
-			printf(
-				'<p>%s</p><p><button type="button" class="button" data-moksa-line-unlink="%d" data-nonce="%s">%s</button></p>',
-				esc_html__( 'Your LINE account is linked. Order updates will be sent to you on LINE.', 'moksa-line' ),
-				(int) get_current_user_id(),
-				esc_attr( wp_create_nonce( 'moksa_line_link' ) ),
-				esc_html__( 'Unlink', 'moksa-line' )
-			);
+			<?php if ( $linked ) : ?>
+				<div class="moksa-account__who">
+					<?php if ( '' !== (string) $record->picture_url ) : ?>
+						<img class="moksa-account__avatar" src="<?php echo esc_url( (string) $record->picture_url ); ?>"
+							alt="" width="56" height="56" loading="lazy" />
+					<?php else : ?>
+						<span class="moksa-account__avatar moksa-account__avatar--blank" aria-hidden="true">
+							<?php echo esc_html( mb_substr( (string) $record->display_name, 0, 1 ) ); ?>
+						</span>
+					<?php endif; ?>
 
-			self::enqueue_account_assets();
+					<span class="moksa-account__identity">
+						<?php
+						// LINE does not always give a display name -- an account
+						// with no profile set comes back blank -- and an empty
+						// strong tag beside an avatar reads as a broken card.
+						$shown_name = trim( (string) $record->display_name );
+						?>
+						<strong class="moksa-account__name">
+							<?php echo esc_html( '' !== $shown_name ? $shown_name : __( 'Your LINE account', 'moksa-line' ) ); ?>
+						</strong>
+						<?php if ( '' !== (string) $record->created_at ) : ?>
+							<span class="moksa-account__since">
+								<?php
+								printf(
+									/* translators: %s: the date the account was linked. */
+									esc_html__( 'Linked since %s', 'moksa-line' ),
+									esc_html( mysql2date( get_option( 'date_format' ), get_date_from_gmt( (string) $record->created_at ) ) )
+								);
+								?>
+							</span>
+						<?php endif; ?>
+					</span>
+				</div>
 
-			return;
-		}
+				<ul class="moksa-account__facts">
+					<li class="moksa-account__fact moksa-account__fact--yes">
+						<?php esc_html_e( 'Order updates are sent to you on LINE.', 'moksa-line' ); ?>
+					</li>
 
-		printf(
-			'<p>%s</p><p><a class="moksa-line-button" href="%s">%s</a></p>',
-			esc_html__( 'Link your LINE account to get order updates in LINE and to sign in with one tap.', 'moksa-line' ),
-			esc_url(
-				add_query_arg(
-					array(
-						'action'      => 'moksa_line_start',
-						'link'        => 1,
-						'_wpnonce'    => wp_create_nonce( 'moksa_line_link' ),
-						'redirect_to' => rawurlencode( wc_get_account_endpoint_url( self::ENDPOINT ) ),
-					),
-					admin_url( 'admin-ajax.php' )
-				)
-			),
-			esc_html__( 'Link my LINE account', 'moksa-line' )
-		);
+					<?php
+					// Being linked is not enough: LINE refuses a message to
+					// someone who has not added the account, so an unlinked
+					// friend status is a notification that will never arrive.
+					if ( ! (int) $record->is_friend ) :
+						?>
+						<li class="moksa-account__fact moksa-account__fact--no">
+							<?php
+							// Phrased as a condition, not a statement of fact.
+							// The flag is only as good as the events we have
+							// seen: someone who added the account before this
+							// site had a webhook is recorded as not a friend,
+							// and telling them otherwise is worse than silence.
+							esc_html_e( 'If you have not added the official account as a friend, those messages cannot reach you.', 'moksa-line' );
+							?>
+							<?php if ( '' !== $friend_url ) : ?>
+								<a class="moksa-line-button moksa-line-button--small" href="<?php echo esc_url( $friend_url ); ?>"
+									target="_blank" rel="noopener nofollow"><?php esc_html_e( 'Add as a friend', 'moksa-line' ); ?></a>
+							<?php endif; ?>
+						</li>
+					<?php endif; ?>
+
+					<li class="moksa-account__fact moksa-account__fact--yes">
+						<?php esc_html_e( 'You can sign in with LINE instead of a password.', 'moksa-line' ); ?>
+					</li>
+				</ul>
+
+				<div class="moksa-account__actions">
+					<button type="button" class="moksa-account__unlink"
+						data-moksa-line-unlink="<?php echo esc_attr( (string) get_current_user_id() ); ?>"
+						data-nonce="<?php echo esc_attr( wp_create_nonce( 'moksa_line_link' ) ); ?>">
+						<?php esc_html_e( 'Unlink', 'moksa-line' ); ?>
+					</button>
+				</div>
+			<?php else : ?>
+				<p class="moksa-account__lead"><?php esc_html_e( 'Link your LINE account to:', 'moksa-line' ); ?></p>
+
+				<ul class="moksa-account__facts">
+					<li class="moksa-account__fact moksa-account__fact--yes">
+						<?php esc_html_e( 'Get a message in LINE when your order is placed and when it ships.', 'moksa-line' ); ?>
+					</li>
+					<li class="moksa-account__fact moksa-account__fact--yes">
+						<?php esc_html_e( 'Sign in with one tap next time, without a password.', 'moksa-line' ); ?>
+					</li>
+				</ul>
+
+				<div class="moksa-account__actions">
+					<a class="moksa-line-button" href="<?php
+						echo esc_url(
+							add_query_arg(
+								array(
+									'action'      => 'moksa_line_start',
+									'link'        => 1,
+									'_wpnonce'    => wp_create_nonce( 'moksa_line_link' ),
+									'redirect_to' => rawurlencode( wc_get_account_endpoint_url( self::ENDPOINT ) ),
+								),
+								admin_url( 'admin-ajax.php' )
+							)
+						);
+					?>"><?php esc_html_e( 'Link my LINE account', 'moksa-line' ); ?></a>
+				</div>
+			<?php endif; ?>
+		</div>
+		<?php
 	}
 
 	// --- Login buttons -----------------------------------------------------------------

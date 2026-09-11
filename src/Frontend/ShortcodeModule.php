@@ -40,6 +40,14 @@ class ShortcodeModule {
 			\Moksa\Line\Admin\AdminModule::asset_version( 'assets/css/front.css' )
 		);
 
+		// The dialog's own styles, shared with the admin screens.
+		wp_register_style(
+			'moksa-line-confirm',
+			MOKSA_LINE_URL . 'assets/css/confirm.css',
+			array(),
+			\Moksa\Line\Admin\AdminModule::asset_version( 'assets/css/confirm.css' )
+		);
+
 		// The confirmation dialog is shared with the admin screens. The account
 		// page needs it, and used to get it by loading the whole admin bundle.
 		wp_register_script(
@@ -56,6 +64,25 @@ class ShortcodeModule {
 			array( 'jquery', 'moksa-line-confirm' ),
 			\Moksa\Line\Admin\AdminModule::asset_version( 'assets/js/account.js' ),
 			true
+		);
+
+		// Attached here rather than where the panel renders. The account page
+		// draws inside the page content, and by then this script's tag can
+		// already have been printed -- so the data never reached it and every
+		// string in the unlink dialog fell back to its English default.
+		wp_localize_script(
+			'moksa-line-account',
+			'moksaLineAccount',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'strings' => array(
+					'confirmUnlink' => __( 'Unlink your LINE account? You will stop getting order updates in LINE.', 'moksa-line' ),
+					'unlinkAction'  => _x( 'Unlink', 'confirmation button', 'moksa-line' ),
+					'confirmYes'    => __( 'Yes, do it', 'moksa-line' ),
+					'confirmNo'     => __( 'Cancel', 'moksa-line' ),
+					'failed'        => __( 'That did not work.', 'moksa-line' ),
+				),
+			)
 		);
 	}
 
