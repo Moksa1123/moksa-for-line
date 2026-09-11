@@ -109,6 +109,41 @@ check( (string) $order->get_order_number() === $values['{order_number}'], 'order
 check( false !== strpos( $values['{order_items}'], 'Notify Widget x2' ), 'item list rendered', $values['{order_items}'] );
 check( 'Notify Buyer' === $values['{customer_full_name}'], 'customer name resolved' );
 check( '#06C755' === $values['{status_color}'], 'completed uses the green' );
+
+// Money went out to customers as "&#78;&#84;&#36;1,000": wp_strip_all_tags()
+// removes wc_price()'s markup but leaves its HTML entities behind.
+check(
+	false === strpos( $values['{total}'], '&#' ),
+	'the total is readable rather than HTML entities',
+	$values['{total}']
+);
+check(
+	false === strpos( $values['{order_subtotal}'], '&#' ),
+	'and so is the subtotal',
+	$values['{order_subtotal}']
+);
+check(
+	false !== strpos( $values['{total}'], '1,000' ),
+	'the total still carries the amount',
+	$values['{total}']
+);
+
+// A general sweep rather than only the two fields known to have been wrong:
+// anything that reaches a LINE message and still carries HTML entities shows
+// them to the customer literally.
+$entity_values = array();
+
+foreach ( $values as $name => $value ) {
+	if ( preg_match( '/&#[0-9]+;|&[a-z]+;/i', (string) $value ) ) {
+		$entity_values[] = $name;
+	}
+}
+
+check(
+	array() === $entity_values,
+	'no placeholder value carries HTML entities',
+	implode( ', ', $entity_values )
+);
 check( '#FF334B' === OrderContext::placeholders( $order, 'cancelled' )['{status_color}'], 'cancelled uses the red' );
 
 echo "\n== JSON safety ==\n";
