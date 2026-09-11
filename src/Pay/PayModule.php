@@ -19,6 +19,7 @@ use Moksa\Line\Support\Options;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
+use Moksa\Line\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -480,14 +481,12 @@ class PayModule {
 		}
 
 		$amount  = isset( $_POST['amount'] ) ? (float) $_POST['amount'] : 0;
-		$title   = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
-		$send_to = isset( $_POST['line_user_id'] ) ? sanitize_text_field( wp_unslash( $_POST['line_user_id'] ) ) : '';
+		$title   = Ajax::text( 'title' );
+		$send_to = Ajax::text( 'line_user_id' );
 
 		$link = self::create_link( $amount, $title, $send_to );
 
-		if ( is_wp_error( $link ) ) {
-			wp_send_json_error( array( 'message' => $link->get_error_message() ) );
-		}
+		Ajax::bail( $link );
 
 		if ( '' !== $send_to ) {
 			$sent = MessagingClient::push( $send_to, array( self::payment_bubble( $title, $amount, $link['url'] ) ) );

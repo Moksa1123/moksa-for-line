@@ -17,6 +17,7 @@ use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Options;
 use Moksa\Line\Webhook\Dispatcher;
+use Moksa\Line\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -181,10 +182,10 @@ class InboxModule {
 			wp_send_json_error( array( 'message' => __( 'You cannot reply to conversations.', 'moksa-line' ) ), 403 );
 		}
 
-		$conversation_id = isset( $_POST['conversation_id'] ) ? (int) $_POST['conversation_id'] : 0;
+		$conversation_id = Ajax::int( 'conversation_id' );
 		$text            = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
-		$package_id      = isset( $_POST['sticker_package'] ) ? sanitize_text_field( wp_unslash( $_POST['sticker_package'] ) ) : '';
-		$sticker_id      = isset( $_POST['sticker_id'] ) ? sanitize_text_field( wp_unslash( $_POST['sticker_id'] ) ) : '';
+		$package_id      = Ajax::text( 'sticker_package' );
+		$sticker_id      = Ajax::text( 'sticker_id' );
 		$is_sticker      = '' !== $package_id && '' !== $sticker_id;
 
 		if ( ! $is_sticker && '' === trim( $text ) ) {
@@ -265,7 +266,7 @@ class InboxModule {
 			wp_send_json_error( array( 'message' => __( 'You cannot read conversations.', 'moksa-line' ) ), 403 );
 		}
 
-		$conversation_id = isset( $_POST['conversation_id'] ) ? (int) $_POST['conversation_id'] : 0;
+		$conversation_id = Ajax::int( 'conversation_id' );
 		$conversation    = Conversations::find_by_id( $conversation_id );
 
 		if ( ! $conversation ) {
@@ -294,8 +295,8 @@ class InboxModule {
 			wp_send_json_error( array( 'message' => __( 'You cannot change conversations.', 'moksa-line' ) ), 403 );
 		}
 
-		$conversation_id = isset( $_POST['conversation_id'] ) ? (int) $_POST['conversation_id'] : 0;
-		$status          = isset( $_POST['status'] ) ? sanitize_key( wp_unslash( $_POST['status'] ) ) : '';
+		$conversation_id = Ajax::int( 'conversation_id' );
+		$status          = Ajax::key( 'status' );
 
 		$conversation = Conversations::find_by_id( $conversation_id );
 

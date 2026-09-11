@@ -15,7 +15,7 @@ namespace Moksa\Line\Imagemap;
 
 use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Data\Imagemaps;
-use Moksa\Line\Support\Logger;
+use Moksa\Line\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -192,10 +192,10 @@ class ImagemapModule {
 	public function ajax_save(): void {
 		$this->guard();
 
-		$id      = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
-		$name    = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
-		$alt     = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : '';
-		$image   = isset( $_POST['image_attachment_id'] ) ? (int) $_POST['image_attachment_id'] : 0;
+		$id      = Ajax::int( 'id' );
+		$name    = Ajax::text( 'name' );
+		$alt     = Ajax::text( 'alt_text' );
+		$image   = Ajax::int( 'image_attachment_id' );
 		$raw     = isset( $_POST['areas'] ) ? wp_unslash( $_POST['areas'] ) : '[]'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitised -- JSON, decoded below.
 		$decoded = json_decode( (string) $raw, true );
 
@@ -271,11 +271,17 @@ class ImagemapModule {
 	public function ajax_delete(): void {
 		$this->guard();
 
-		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
+		$id = Ajax::int( 'id' );
 
+		// The derived images go first either way -- they are worth clearing up
+		// even for a row that has already gone -- but the row is what decides
+		// whether anything was actually deleted.
 		if ( $id > 0 ) {
 			ImagemapImages::delete( $id );
-			Imagemaps::delete( $id );
+		}
+
+		if ( $id <= 0 || ! Imagemaps::delete( $id ) ) {
+			wp_send_json_error( array( 'message' => __( 'That imagemap no longer exists.', 'moksa-line' ) ), 404 );
 		}
 
 		wp_send_json_success( array( 'message' => __( 'Imagemap deleted.', 'moksa-line' ) ) );
@@ -287,8 +293,8 @@ class ImagemapModule {
 	public function ajax_send_test(): void {
 		$this->guard();
 
-		$id     = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
-		$target = isset( $_POST['line_user_id'] ) ? sanitize_text_field( wp_unslash( $_POST['line_user_id'] ) ) : '';
+		$id     = Ajax::int( 'id' );
+		$target = Ajax::text( 'line_user_id' );
 
 		if ( '' === $target ) {
 			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line' ) ) );
@@ -302,25 +308,16 @@ class ImagemapModule {
 
 		$message = self::message( $row );
 
-		if ( is_wp_error( $message ) ) {
-			wp_send_json_error( array( 'message' => $message->get_error_message() ) );
-		}
+		Ajax::bail( $message );
 
 		$result = MessagingClient::push( $target, array( $message ) );
 
-		if ( is_wp_error( $result ) ) {
-			Logger::capture( $result, 'Could not send an imagemap test', 'imagemap' );
-			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
-		}
+		Ajax::bail( $result, 'Could not send an imagemap test', 'imagemap' );
 
 		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-line' ) ) );
 	}
 
 	private function guard(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage imagemaps.', 'moksa-line' ) ), 403 );
-		}
+		Ajax::guard( __( 'You do not have permission to manage imagemaps.', 'moksa-line' ) );
 	}
 }

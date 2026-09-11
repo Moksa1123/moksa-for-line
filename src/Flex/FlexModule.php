@@ -16,6 +16,7 @@ use Moksa\Line\Data\Flex;
 use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Woo\ProductCards;
 use Moksa\Line\Api\TokenManager;
+use Moksa\Line\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -36,7 +37,7 @@ class FlexModule {
 	public function ajax_products(): void {
 		$this->guard();
 
-		$search = isset( $_POST['search'] ) ? sanitize_text_field( wp_unslash( $_POST['search'] ) ) : '';
+		$search = Ajax::text( 'search' );
 
 		wp_send_json_success( array( 'products' => ProductCards::search( $search ) ) );
 	}
@@ -55,9 +56,7 @@ class FlexModule {
 
 		$contents = ProductCards::carousel( $ids );
 
-		if ( is_wp_error( $contents ) ) {
-			wp_send_json_error( array( 'message' => $contents->get_error_message() ) );
-		}
+		Ajax::bail( $contents );
 
 		// Built cards go through the same validator as hand-written ones. If
 		// this plugin can generate something LINE would refuse, the shop should
@@ -93,7 +92,7 @@ class FlexModule {
 			);
 		}
 
-		$alt_text = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : '';
+		$alt_text = Ajax::text( 'alt_text' );
 		$problems = Validator::check_message( MessagingClient::flex( $alt_text, $decoded ) );
 
 		if ( ! empty( $problems ) ) {
@@ -107,10 +106,10 @@ class FlexModule {
 
 		$id = Flex::save(
 			array(
-				'id'       => isset( $_POST['id'] ) ? (int) $_POST['id'] : 0,
-				'name'     => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+				'id'       => Ajax::int( 'id' ),
+				'name'     => Ajax::text( 'name' ),
 				'alt_text' => $alt_text,
-				'category' => isset( $_POST['category'] ) ? sanitize_text_field( wp_unslash( $_POST['category'] ) ) : '',
+				'category' => Ajax::text( 'category' ),
 				// Re-encode from the decoded structure so what is stored is
 				// always canonical JSON, whatever the editor sent.
 				'contents' => wp_json_encode( $decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ),
@@ -135,9 +134,9 @@ class FlexModule {
 	public function ajax_delete(): void {
 		$this->guard();
 
-		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
+		$id = Ajax::int( 'id' );
 
-		if ( ! Flex::delete( $id ) ) {
+		if ( $id <= 0 || ! Flex::delete( $id ) ) {
 			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-line' ) ), 404 );
 		}
 
@@ -211,7 +210,7 @@ class FlexModule {
 	public function ajax_send_test(): void {
 		$this->guard();
 
-		$line_user_id = isset( $_POST['line_user_id'] ) ? sanitize_text_field( wp_unslash( $_POST['line_user_id'] ) ) : '';
+		$line_user_id = Ajax::text( 'line_user_id' );
 
 		if ( '' === $line_user_id ) {
 			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line' ) ) );
@@ -227,9 +226,7 @@ class FlexModule {
 
 		$result = MessagingClient::push( $line_user_id, array( MessagingClient::flex( $alt_text, $decoded ) ) );
 
-		if ( is_wp_error( $result ) ) {
-			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
-		}
+		Ajax::bail( $result );
 
 		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-line' ) ) );
 	}
@@ -362,10 +359,6 @@ class FlexModule {
 	 * Shared nonce and capability check.
 	 */
 	private function guard(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage templates.', 'moksa-line' ) ), 403 );
-		}
+		Ajax::guard( __( 'You do not have permission to manage templates.', 'moksa-line' ) );
 	}
 }

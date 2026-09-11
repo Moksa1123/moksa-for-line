@@ -1126,16 +1126,6 @@
 	line-height: 1.5;
 }
 
-.moksa-context {
-	display: block;
-	max-width: 420px;
-	max-height: 60px;
-	overflow: auto;
-	font-size: 11px;
-	white-space: pre-wrap;
-	word-break: break-all;
-}
-
 /* Inbox ------------------------------------------------------------------ */
 
 .moksa-inbox {

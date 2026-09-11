@@ -21,6 +21,7 @@ use Moksa\Line\Data\QuickReplies;
 use Moksa\Line\Inbox\Conversations;
 use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Support\Options;
+use Moksa\Line\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -86,7 +87,7 @@ class BotModule {
 			$reply_data = sanitize_text_field( (string) $reply_data );
 		}
 
-		$keyword    = isset( $_POST['keyword'] ) ? sanitize_text_field( wp_unslash( $_POST['keyword'] ) ) : '';
+		$keyword    = Ajax::text( 'keyword' );
 		$match_type = isset( $_POST['match_type'] ) ? sanitize_key( wp_unslash( $_POST['match_type'] ) ) : 'exact';
 
 		if ( 'any' !== $match_type && '' === trim( $keyword ) ) {
@@ -100,13 +101,13 @@ class BotModule {
 
 		$id = AutoReply::save(
 			array(
-				'id'         => isset( $_POST['id'] ) ? (int) $_POST['id'] : 0,
-				'name'       => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+				'id'         => Ajax::int( 'id' ),
+				'name'       => Ajax::text( 'name' ),
 				'keyword'    => $keyword,
 				'match_type' => $match_type,
 				'reply_type' => $reply_type,
 				'reply_data' => $reply_data,
-				'priority'   => isset( $_POST['priority'] ) ? (int) $_POST['priority'] : 10,
+				'priority'   => Ajax::int( 'priority', 10 ),
 				'is_active'  => ! empty( $_POST['is_active'] ),
 			)
 		);
@@ -120,7 +121,7 @@ class BotModule {
 	public function ajax_delete_rule(): void {
 		$this->guard();
 
-		AutoReply::delete( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
+		AutoReply::delete( Ajax::int( 'id' ) );
 
 		wp_send_json_success( array( 'message' => __( 'Rule deleted.', 'moksa-line' ) ) );
 	}
@@ -163,10 +164,10 @@ class BotModule {
 
 		$id = Flow::save(
 			array(
-				'id'            => isset( $_POST['id'] ) ? (int) $_POST['id'] : 0,
-				'name'          => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+				'id'            => Ajax::int( 'id' ),
+				'name'          => Ajax::text( 'name' ),
 				'trigger_type'  => isset( $_POST['trigger_type'] ) && 'contains' === $_POST['trigger_type'] ? 'contains' : 'keyword',
-				'trigger_value' => isset( $_POST['trigger_value'] ) ? sanitize_text_field( wp_unslash( $_POST['trigger_value'] ) ) : '',
+				'trigger_value' => Ajax::text( 'trigger_value' ),
 				'definition'    => wp_json_encode( $definition, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ),
 				'notify_email'  => $email,
 				'is_active'     => ! empty( $_POST['is_active'] ) ? 1 : 0,
@@ -182,7 +183,7 @@ class BotModule {
 	public function ajax_delete_flow(): void {
 		$this->guard();
 
-		Flow::delete( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
+		Flow::delete( Ajax::int( 'id' ) );
 
 		wp_send_json_success( array( 'message' => __( 'Flow deleted.', 'moksa-line' ) ) );
 	}
@@ -205,8 +206,8 @@ class BotModule {
 
 		$id = QuickReplies::save(
 			array(
-				'id'        => isset( $_POST['id'] ) ? (int) $_POST['id'] : 0,
-				'name'      => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
+				'id'        => Ajax::int( 'id' ),
+				'name'      => Ajax::text( 'name' ),
 				'items'     => wp_json_encode( $items, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ),
 				'is_active' => 1,
 			)
@@ -221,7 +222,7 @@ class BotModule {
 	public function ajax_delete_quick_reply(): void {
 		$this->guard();
 
-		QuickReplies::delete( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
+		QuickReplies::delete( Ajax::int( 'id' ) );
 
 		wp_send_json_success( array( 'message' => __( 'Quick reply set deleted.', 'moksa-line' ) ) );
 	}
@@ -230,11 +231,7 @@ class BotModule {
 	 * Shared nonce and capability check.
 	 */
 	private function guard(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to change bot settings.', 'moksa-line' ) ), 403 );
-		}
+		Ajax::guard( __( 'You do not have permission to change bot settings.', 'moksa-line' ) );
 	}
 
 	/**

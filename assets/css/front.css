@@ -15,8 +15,18 @@
  * background. Off, the browser picks the nearest weight it really has.
  */
 .moksa-line-button,
+.moksa-line-notice,
+.moksa-liff,
 .moksa-account,
 .moksa-account * {
+	/*
+	 * LINE's green and the monospace stack, named once. There were two names
+	 * for the green in this file and a third in the counter page's sheet,
+	 * which is how one of them ends up a shade out from the others.
+	 */
+	--moksa-green: #06c755;
+	--moksa-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
 	font-synthesis-weight: none;
 	font-synthesis: none;
 }
@@ -29,8 +39,6 @@
  * choice of ours to correct.
  */
 .moksa-line-button {
-	--moksa-green: #06c755;
-
 	/* Colour is the only thing the settings screen can change, and it arrives
 	   as a custom property inline. Unset means the default here wins. */
 	background: var(--moksa-line-button-bg, var(--moksa-green));
@@ -159,7 +167,7 @@
 
 .moksa-liff__send {
 	align-self: flex-start;
-	background: var(--moksa-line-button-bg, #06c755);
+	background: var(--moksa-line-button-bg, var(--moksa-green));
 	color: var(--moksa-line-button-fg, #fff);
 	border: 0;
 	border-radius: 6px;
@@ -238,8 +246,6 @@
  * screenshot of wp-admin dropped into a shop.
  */
 .moksa-account {
-	--moksa-line-green: #06c755;
-
 	/* Edges and muted text as a proportion of whatever colour the theme is
 	   already using, with a plain fallback for browsers without color-mix. */
 	--moksa-edge: rgba(128, 128, 128, 0.28);
@@ -269,7 +275,7 @@
 	height: 24px;
 	padding: 0 8px;
 	border-radius: 5px;
-	background: var(--moksa-line-green);
+	background: var(--moksa-green);
 	color: #fff;
 	font-size: 0.8em;
 	font-weight: 700;
@@ -304,7 +310,7 @@
  * everywhere, and "connected" does not need to be green to say so.
  */
 .moksa-account__state--on::before {
-	background: var(--moksa-line-green);
+	background: var(--moksa-green);
 }
 
 .moksa-account__state--off {
@@ -332,7 +338,7 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	background: var(--moksa-line-green);
+	background: var(--moksa-green);
 	color: #fff;
 	font-size: 1.4em;
 	font-weight: 600;
@@ -549,7 +555,7 @@
 .moksa-account__zoom-code {
 	margin: 12px 0 0;
 	color: #1d2327;
-	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	font-family: var(--moksa-mono);
 	font-size: 15px;
 	letter-spacing: 0.14em;
 	text-align: center;
@@ -581,7 +587,7 @@
 	/* Grouped in fives and spaced out: this string gets read across a counter
 	   and typed by someone who is not looking at it. Monospace is not a style
 	   choice here -- it is what keeps 0 and O apart. */
-	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	font-family: var(--moksa-mono);
 	font-size: 1em;
 	letter-spacing: 0.14em;
 	text-align: center;

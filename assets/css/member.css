@@ -14,6 +14,7 @@
 	--scan-surface: #fff;
 	--scan-ground: #f3f4f6;
 	--scan-line-green: #06c755;
+	--scan-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 	--scan-good: #06863b;
 	--scan-warn: #8a3b00;
 	--scan-bad: #b32d2e;
@@ -254,7 +255,7 @@ body.moksa-scan-body {
 
 .moksa-scan__code {
 	margin: 0;
-	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	font-family: var(--scan-mono);
 	font-size: 18px;
 	letter-spacing: 0.12em;
 	overflow-wrap: anywhere;
@@ -329,7 +330,7 @@ body.moksa-scan-body {
 	border-radius: 10px;
 	background: #fff;
 	color: var(--scan-ink);
-	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	font-family: var(--scan-mono);
 	/* 16px or larger, or iOS zooms the page in the moment it is focused and
 	   the staff member is left scrolling sideways. */
 	font-size: 18px;

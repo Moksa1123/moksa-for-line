@@ -15,6 +15,7 @@ use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Support\Options;
 use Moksa\Line\Flex\Validator;
 use Moksa\Line\Support\Logger;
+use Moksa\Line\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -327,7 +328,7 @@ class NotifyTemplates {
 			return;
 		}
 
-		$nonce = isset( $_POST['moksa_line_notify_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['moksa_line_notify_nonce'] ) ) : '';
+		$nonce = Ajax::text( 'moksa_line_notify_nonce' );
 
 		if ( ! wp_verify_nonce( $nonce, 'moksa_line_notify_save' ) ) {
 			return;
@@ -590,7 +591,7 @@ class NotifyTemplates {
 		}
 
 		$order       = $orders[0];
-		$template_id = isset( $_POST['template_id'] ) ? (int) $_POST['template_id'] : 0;
+		$template_id = Ajax::int( 'template_id' );
 		$message     = self::render( $template_id, $order, (string) $order->get_status() );
 
 		// Every documented placeholder as it resolves for this order, so the
@@ -631,8 +632,8 @@ class NotifyTemplates {
 			wp_send_json_error( array( 'message' => __( 'You cannot send test notifications.', 'moksa-line' ) ), 403 );
 		}
 
-		$template_id  = isset( $_POST['template_id'] ) ? (int) $_POST['template_id'] : 0;
-		$line_user_id = isset( $_POST['line_user_id'] ) ? sanitize_text_field( wp_unslash( $_POST['line_user_id'] ) ) : '';
+		$template_id  = Ajax::int( 'template_id' );
+		$line_user_id = Ajax::text( 'line_user_id' );
 
 		if ( '' === $line_user_id ) {
 			wp_send_json_error( array( 'message' => __( 'Enter a LINE user id to send the test to.', 'moksa-line' ) ) );
@@ -659,9 +660,7 @@ class NotifyTemplates {
 
 		$result = MessagingClient::push( $line_user_id, array( $message ) );
 
-		if ( is_wp_error( $result ) ) {
-			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
-		}
+		Ajax::bail( $result );
 
 		wp_send_json_success(
 			array(

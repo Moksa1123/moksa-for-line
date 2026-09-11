@@ -19,6 +19,7 @@ use Moksa\Line\Data\Repository;
 use Moksa\Line\Api\RichMenuClient;
 use Moksa\Line\Support\Logger;
 use WP_Error;
+use Moksa\Line\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -458,19 +459,19 @@ class RichMenuModule extends Repository {
 		}
 
 		$size  = isset( $_POST['size'] ) && 'half' === $_POST['size'] ? 'half' : 'full';
-		$group = isset( $_POST['tab_group'] ) ? sanitize_text_field( wp_unslash( $_POST['tab_group'] ) ) : '';
+		$group = Ajax::text( 'tab_group' );
 
 		$id = self::save(
 			array(
-				'id'                  => isset( $_POST['id'] ) ? (int) $_POST['id'] : 0,
-				'name'                => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
-				'chat_bar_text'       => isset( $_POST['chat_bar_text'] ) ? sanitize_text_field( wp_unslash( $_POST['chat_bar_text'] ) ) : '',
+				'id'                  => Ajax::int( 'id' ),
+				'name'                => Ajax::text( 'name' ),
+				'chat_bar_text'       => Ajax::text( 'chat_bar_text' ),
 				'size'                => $size,
 				'selected'            => empty( $_POST['selected'] ) ? 0 : 1,
 				'areas'               => wp_json_encode( self::normalize_areas( $areas, $size ) ),
-				'image_attachment_id' => isset( $_POST['image_attachment_id'] ) ? (int) $_POST['image_attachment_id'] : 0,
+				'image_attachment_id' => Ajax::int( 'image_attachment_id' ),
 				'tab_group'           => $group,
-				'tab_order'           => isset( $_POST['tab_order'] ) ? (int) $_POST['tab_order'] : 0,
+				'tab_order'           => Ajax::int( 'tab_order' ),
 				'is_default'          => empty( $_POST['is_default'] ) ? 0 : 1,
 				'alias_id'            => isset( $_POST['alias_id'] )
 					? RichMenuClient::sanitize_alias_id( sanitize_text_field( wp_unslash( $_POST['alias_id'] ) ) )
@@ -512,7 +513,7 @@ class RichMenuModule extends Repository {
 	public function ajax_delete(): void {
 		$this->guard();
 
-		$id  = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
+		$id  = Ajax::int( 'id' );
 		$row = self::find( $id );
 
 		if ( ! $row ) {
@@ -557,7 +558,7 @@ class RichMenuModule extends Repository {
 	public function ajax_publish(): void {
 		$this->guard();
 
-		$group = isset( $_POST['tab_group'] ) ? sanitize_text_field( wp_unslash( $_POST['tab_group'] ) ) : '';
+		$group = Ajax::text( 'tab_group' );
 
 		if ( '' !== $group ) {
 			$report = self::publish_group( $group );
@@ -582,11 +583,9 @@ class RichMenuModule extends Repository {
 			);
 		}
 
-		$result = self::publish( isset( $_POST['id'] ) ? (int) $_POST['id'] : 0 );
+		$result = self::publish( Ajax::int( 'id' ) );
 
-		if ( is_wp_error( $result ) ) {
-			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
-		}
+		Ajax::bail( $result );
 
 		wp_send_json_success( array( 'message' => __( 'Published to LINE.', 'moksa-line' ) ) );
 	}
@@ -597,7 +596,7 @@ class RichMenuModule extends Repository {
 	public function ajax_set_default(): void {
 		$this->guard();
 
-		$id  = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
+		$id  = Ajax::int( 'id' );
 		$row = self::find( $id );
 
 		if ( ! $row || '' === (string) $row->richmenu_id ) {
@@ -606,9 +605,7 @@ class RichMenuModule extends Repository {
 
 		$result = RichMenuClient::set_default( (string) $row->richmenu_id );
 
-		if ( is_wp_error( $result ) ) {
-			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
-		}
+		Ajax::bail( $result );
 
 		global $wpdb;
 		$table = self::table();
@@ -629,9 +626,7 @@ class RichMenuModule extends Repository {
 
 		$remote = RichMenuClient::all();
 
-		if ( is_wp_error( $remote ) ) {
-			wp_send_json_error( array( 'message' => $remote->get_error_message() ) );
-		}
+		Ajax::bail( $remote );
 
 		$aliases = RichMenuClient::all_aliases();
 		$known   = array();
@@ -740,10 +735,6 @@ class RichMenuModule extends Repository {
 	 * Shared nonce and capability check for the AJAX handlers.
 	 */
 	private function guard(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage rich menus.', 'moksa-line' ) ), 403 );
-		}
+		Ajax::guard( __( 'You do not have permission to manage rich menus.', 'moksa-line' ) );
 	}
 }

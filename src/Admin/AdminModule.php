@@ -12,6 +12,7 @@ use Moksa\Line\Bot\Ai\Providers;
 use Moksa\Line\Inbox\Conversations;
 use Moksa\Line\Support\Migrator;
 use Moksa\Line\Support\Options;
+use Moksa\Line\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -655,9 +656,7 @@ class AdminModule {
 
 		$current = MessagingClient::webhook_endpoint();
 
-		if ( is_wp_error( $current ) ) {
-			wp_send_json_error( array( 'message' => $current->get_error_message() ) );
-		}
+		Ajax::bail( $current );
 
 		$ours    = \Moksa\Line\Webhook\WebhookModule::endpoint_url();
 		$matches = untrailingslashit( $current['endpoint'] ) === untrailingslashit( $ours );
@@ -736,9 +735,7 @@ class AdminModule {
 		$ours   = \Moksa\Line\Webhook\WebhookModule::endpoint_url();
 		$result = MessagingClient::set_webhook_endpoint( $ours );
 
-		if ( is_wp_error( $result ) ) {
-			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
-		}
+		Ajax::bail( $result );
 
 		wp_send_json_success(
 			array(
@@ -808,8 +805,8 @@ class AdminModule {
 			wp_send_json_error( array( 'message' => __( 'You cannot resend notifications.', 'moksa-line' ) ), 403 );
 		}
 
-		$order_id = isset( $_POST['order_id'] ) ? (int) $_POST['order_id'] : 0;
-		$status   = isset( $_POST['status'] ) ? sanitize_key( wp_unslash( $_POST['status'] ) ) : '';
+		$order_id = Ajax::int( 'order_id' );
+		$status   = Ajax::key( 'status' );
 
 		if ( $order_id <= 0 || '' === $status ) {
 			wp_send_json_error( array( 'message' => __( 'That row does not name an order and a status to resend.', 'moksa-line' ) ) );
@@ -844,8 +841,8 @@ class AdminModule {
 
 		$mode     = isset( $_POST['mode'] ) ? sanitize_key( wp_unslash( $_POST['mode'] ) ) : 'test';
 		$body     = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
-		$flex_id  = isset( $_POST['flex_id'] ) ? (int) $_POST['flex_id'] : 0;
-		$target   = isset( $_POST['line_user_id'] ) ? sanitize_text_field( wp_unslash( $_POST['line_user_id'] ) ) : '';
+		$flex_id  = Ajax::int( 'flex_id' );
+		$target   = Ajax::text( 'line_user_id' );
 
 		$messages = array();
 
@@ -875,16 +872,14 @@ class AdminModule {
 
 			$result = \Moksa\Line\Api\MessagingClient::push( $target, $messages );
 
-			if ( is_wp_error( $result ) ) {
-				wp_send_json_error( array( 'message' => $result->get_error_message() ) );
-			}
+			Ajax::bail( $result );
 
 			wp_send_json_success( array( 'message' => __( 'Test sent.', 'moksa-line' ) ) );
 		}
 
 		// Sending to everyone needs the operator to type the confirmation word,
 		// because there is no undo and it costs one message per friend.
-		$confirmation = isset( $_POST['confirm'] ) ? sanitize_text_field( wp_unslash( $_POST['confirm'] ) ) : '';
+		$confirmation = Ajax::text( 'confirm' );
 
 		if ( 'SEND' !== strtoupper( $confirmation ) ) {
 			wp_send_json_error( array( 'message' => __( 'Type SEND in the confirmation box to go ahead.', 'moksa-line' ) ) );
@@ -893,9 +888,7 @@ class AdminModule {
 		if ( 'all' === $mode ) {
 			$result = \Moksa\Line\Api\MessagingClient::broadcast( $messages );
 
-			if ( is_wp_error( $result ) ) {
-				wp_send_json_error( array( 'message' => $result->get_error_message() ) );
-			}
+			Ajax::bail( $result );
 
 			wp_send_json_success( array( 'message' => __( 'Broadcast sent to every friend of the account.', 'moksa-line' ) ) );
 		}

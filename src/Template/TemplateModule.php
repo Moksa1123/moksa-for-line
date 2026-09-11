@@ -11,7 +11,7 @@ use Moksa\Line\Api\Client;
 use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Api\TokenManager;
 use Moksa\Line\Data\Templates;
-use Moksa\Line\Support\Logger;
+use Moksa\Line\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -50,9 +50,9 @@ class TemplateModule {
 	public function ajax_save(): void {
 		$this->guard();
 
-		$id       = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
-		$name     = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
-		$alt_text = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : '';
+		$id       = Ajax::int( 'id' );
+		$name     = Ajax::text( 'name' );
+		$alt_text = Ajax::text( 'alt_text' );
 		$decoded  = $this->decoded_definition();
 
 		if ( '' === trim( $name ) ) {
@@ -161,8 +161,8 @@ class TemplateModule {
 	public function ajax_send_test(): void {
 		$this->guard();
 
-		$id     = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
-		$target = isset( $_POST['line_user_id'] ) ? sanitize_text_field( wp_unslash( $_POST['line_user_id'] ) ) : '';
+		$id     = Ajax::int( 'id' );
+		$target = Ajax::text( 'line_user_id' );
 
 		if ( '' === $target ) {
 			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line' ) ) );
@@ -180,10 +180,7 @@ class TemplateModule {
 			array( TemplateMessages::message( (string) $row->alt_text, $definition ) )
 		);
 
-		if ( is_wp_error( $result ) ) {
-			Logger::capture( $result, 'Could not send a template test', 'template' );
-			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
-		}
+		Ajax::bail( $result, 'Could not send a template test', 'template' );
 
 		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-line' ) ) );
 	}
@@ -194,10 +191,13 @@ class TemplateModule {
 	public function ajax_delete(): void {
 		$this->guard();
 
-		$id = isset( $_POST['id'] ) ? (int) $_POST['id'] : 0;
+		$id = Ajax::int( 'id' );
 
-		if ( $id > 0 ) {
-			Templates::delete( $id );
+		// Reporting "deleted" for a row that was not there tells somebody
+		// looking at a stale list that they fixed something. The Flex handler
+		// next door already got this right; these two did not.
+		if ( $id <= 0 || ! Templates::delete( $id ) ) {
+			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-line' ) ), 404 );
 		}
 
 		wp_send_json_success( array( 'message' => __( 'Template deleted.', 'moksa-line' ) ) );
@@ -221,10 +221,6 @@ class TemplateModule {
 	}
 
 	private function guard(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You do not have permission to manage templates.', 'moksa-line' ) ), 403 );
-		}
+		Ajax::guard( __( 'You do not have permission to manage templates.', 'moksa-line' ) );
 	}
 }
