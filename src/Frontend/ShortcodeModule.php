@@ -80,6 +80,8 @@ class ShortcodeModule {
 					'unlinkAction'  => _x( 'Unlink', 'confirmation button', 'moksa-line' ),
 					'confirmYes'    => __( 'Yes, do it', 'moksa-line' ),
 					'confirmNo'     => __( 'Cancel', 'moksa-line' ),
+					'confirmReissue' => __( 'Replace your membership card? The code you have now will stop working.', 'moksa-line' ),
+					'reissueAction'  => _x( 'Replace it', 'confirmation button', 'moksa-line' ),
 					'failed'        => __( 'That did not work.', 'moksa-line' ),
 				),
 			)

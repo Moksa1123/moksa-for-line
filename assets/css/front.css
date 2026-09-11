@@ -357,3 +357,123 @@
 		align-items: stretch;
 	}
 }
+
+/* --- Membership card ------------------------------------------------------
+ *
+ * The QR is the whole point of this block, so it gets the light, high-contrast
+ * surface a camera wants even where the theme around it is dark. Everything
+ * else is arranged around keeping that square unobstructed.
+ */
+.moksa-card {
+	/* The same width as the LINE panel above it. Two stacked cards that do not
+	   line up read as two unrelated things bolted onto the page. */
+	max-width: 560px;
+	margin: 18px 0 0;
+	border: 1px solid #e2e4e7;
+	border-radius: 10px;
+	background: #fff;
+	overflow: hidden;
+}
+
+.moksa-card__head {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 18px;
+	border-bottom: 1px solid #eceef0;
+	background: #fafbfc;
+}
+
+.moksa-card__title {
+	font-weight: 600;
+	font-size: 14px;
+	color: #1d2327;
+}
+
+.moksa-card__lead {
+	margin: 16px 18px 0;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #3c434a;
+}
+
+/* A white bed under the code, so a dark theme cannot invert it into
+   something no scanner will read. */
+.moksa-card__qr {
+	display: flex;
+	justify-content: center;
+	margin: 14px 18px 0;
+	padding: 10px;
+	border-radius: 8px;
+	background: #fff;
+}
+
+.moksa-card__qr svg {
+	display: block;
+	width: 200px;
+	height: auto;
+	max-width: 100%;
+}
+
+.moksa-card__code {
+	display: block;
+	width: auto;
+	margin: 12px 18px 0;
+	padding: 10px 12px;
+	border: 1px dashed #d5d7da;
+	border-radius: 8px;
+	background: #fff;
+	color: #1d2327;
+	/* Grouped in fives and spaced out: this string gets read across a counter
+	   and typed by someone who is not looking at it. */
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	font-size: 15px;
+	letter-spacing: 0.14em;
+	text-align: center;
+	cursor: pointer;
+}
+
+.moksa-card__code:hover,
+.moksa-card__code:focus-visible {
+	border-color: #06c755;
+}
+
+.moksa-card__code.is-copied {
+	border-style: solid;
+	border-color: #06863b;
+	color: #06863b;
+}
+
+.moksa-card__hint {
+	margin: 8px 18px 0;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #646970;
+}
+
+.moksa-card__actions {
+	padding: 12px 18px 18px;
+}
+
+.moksa-card__reissue {
+	padding: 7px 14px;
+	border: 1px solid #d5d7da;
+	border-radius: 6px;
+	background: #fff;
+	color: #646970;
+	font: inherit;
+	font-size: 13px;
+	line-height: 1.4;
+	cursor: pointer;
+}
+
+.moksa-card__reissue:hover,
+.moksa-card__reissue:focus-visible {
+	border-color: #b32d2e;
+	color: #b32d2e;
+}
+
+.moksa-card__reissue[disabled] {
+	opacity: 0.6;
+	cursor: default;
+}

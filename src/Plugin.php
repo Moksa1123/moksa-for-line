@@ -84,6 +84,7 @@ final class Plugin {
 			'template' => Template\TemplateModule::class,
 			'liff'     => Liff\LiffModule::class,
 			'shortcode' => Frontend\ShortcodeModule::class,
+			'member'   => Member\MemberModule::class,
 			'admin'    => Admin\AdminModule::class,
 		);
 

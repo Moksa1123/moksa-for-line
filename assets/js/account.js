@@ -78,6 +78,46 @@
 			});
 		});
 
+		// Replacing the card is the way out of a shared screenshot: the old
+		// code stops working the moment a new one is issued, so it is worth
+		// asking first.
+		$(document).on('click', '[data-moksa-line-reissue]', function (event) {
+			event.preventDefault();
+
+			var $button = $(this);
+
+			ask(t('confirmReissue', 'Replace your membership card? The code you have now will stop working.'), {
+				danger: true,
+				confirmLabel: t('reissueAction', 'Replace it'),
+				cancelLabel: t('confirmNo', 'Cancel')
+			}).then(function (confirmed) {
+				if (!confirmed) {
+					return;
+				}
+
+				$button.prop('disabled', true);
+
+				$.post(settings.ajaxUrl, {
+					action: 'moksa_line_member_reissue',
+					nonce: $button.data('nonce')
+				}).then(function (response) {
+					if (response && response.success) {
+						// The QR is rendered server-side, so the page has to
+						// come back for it -- redrawing it here would mean a
+						// second encoder in JavaScript.
+						window.location.reload();
+						return;
+					}
+
+					$button.prop('disabled', false);
+					say((response && response.data && response.data.message) || t('failed', 'That did not work.'));
+				}, function () {
+					$button.prop('disabled', false);
+					say(t('failed', 'That did not work.'));
+				});
+			});
+		});
+
 		// The membership code is the one thing on this page a shop assistant
 		// reads off the screen, so make it easy to hand over.
 		$(document).on('click', '[data-moksa-member-code]', function () {

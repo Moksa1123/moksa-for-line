@@ -3166,3 +3166,129 @@ msgstr "首頁"
 msgctxt "linked-since date"
 msgid "F j, Y"
 msgstr "Y年n月j日"
+
+msgid "Member card"
+msgstr "會員卡"
+
+msgid "Verified member"
+msgstr "已驗證會員"
+
+msgid "Member since %s"
+msgstr "%s 起成為會員"
+
+msgid "No LINE account linked."
+msgstr "尚未連結 LINE 帳號。"
+
+msgid "Linked as %s"
+msgstr "已連結：%s"
+
+msgid "Linked"
+msgstr "已連結"
+
+msgid "We have not seen them add the official account, so LINE messages may not reach them."
+msgstr "我們沒有看到他加入官方帳號好友，LINE 訊息可能送不到。"
+
+msgid "Orders"
+msgstr "訂單"
+
+msgid "Placed"
+msgstr "訂單數"
+
+msgid "Spent"
+msgstr "消費金額"
+
+msgid "No orders yet."
+msgstr "還沒有訂單。"
+
+msgid "Member code"
+msgstr "會員代碼"
+
+msgid "All orders"
+msgstr "全部訂單"
+
+msgid "Message on LINE"
+msgstr "用 LINE 聯絡"
+
+msgid "Edit member"
+msgstr "編輯會員"
+
+msgid "Scan another"
+msgstr "掃下一位"
+
+msgid "This card can only be read by staff. Sign in to see it."
+msgstr "這張卡只有店員看得到內容，請先登入。"
+
+msgid "Staff sign-in"
+msgstr "店員登入"
+
+msgid "Go to the shop"
+msgstr "前往商店"
+
+msgid "Find a member"
+msgstr "查詢會員"
+
+msgid "No member has that code. Check the characters and try again."
+msgstr "沒有會員使用這組代碼，請再確認一次。"
+
+msgid "That card is not valid. It may have been replaced by a newer one."
+msgstr "這張卡已失效，可能已經換成新的了。"
+
+msgid "That card belongs to an account that no longer exists."
+msgstr "這張卡的帳號已經不存在了。"
+
+msgid "Look up"
+msgstr "查詢"
+
+msgid "ABCDE FGHJK MNPQR STVWX"
+msgstr "ABCDE FGHJK MNPQR STVWX"
+
+msgid "Letters only as they are printed. I, L and O are not used -- read those as 1, 1 and 0."
+msgstr "依照卡片上的字元輸入。代碼不使用 I、L、O，看到時請當成 1、1、0。"
+
+msgid "Membership card"
+msgstr "會員卡"
+
+msgid "Show this at the counter and we will find your account."
+msgstr "在櫃檯出示這張卡，我們就能找到你的帳號。"
+
+msgid "Your member code"
+msgstr "你的會員代碼"
+
+msgid "Copy your member code"
+msgstr "複製你的會員代碼"
+
+msgid "If the camera will not read it, read the code out instead."
+msgstr "如果相機掃不到，直接念出代碼也可以。"
+
+msgid "Replace this card"
+msgstr "更換這張卡"
+
+msgid "Your old card no longer works. This one does."
+msgstr "舊的卡片已失效，這張才是有效的。"
+
+msgid "Replace your membership card? The code you have now will stop working."
+msgstr "要更換會員卡嗎？你現在這組代碼會立刻失效。"
+
+msgid "Show customers a card with a QR code that staff can scan at the counter"
+msgstr "讓顧客看到會員卡 QR Code，店員可以在櫃檯掃描"
+
+msgid "Counter lookup"
+msgstr "櫃檯查詢"
+
+msgid "Staff scan a card with any phone camera. When the camera will not read it, they can type the code the customer reads out:"
+msgstr "店員用任何手機相機掃描會員卡。掃不到的時候，可以請顧客念出代碼，在這裡輸入："
+
+msgid "Both pages are staff-only: anyone else who opens a card sees a sign-in prompt and nothing about the customer."
+msgstr "這兩個頁面只有店員能看：其他人打開會員卡只會看到登入畫面，看不到顧客資料。"
+
+msgctxt "member-since date"
+msgid "F j, Y"
+msgstr "Y年n月j日"
+
+msgctxt "confirmation button"
+msgid "Replace it"
+msgstr "更換"
+
+msgctxt "order date"
+msgid "F j, Y"
+msgstr "Y年n月j日"

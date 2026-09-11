@@ -816,7 +816,12 @@ class WooModule {
 				</div>
 			<?php endif; ?>
 		</div>
+
 		<?php
+		// The card is not conditional on being linked: it identifies the
+		// customer at the counter, which is just as useful for someone who
+		// signs in with a password.
+		\Moksa\Line\Member\MemberModule::render_customer_card( get_current_user_id() );
 	}
 
 	// --- Login buttons -----------------------------------------------------------------

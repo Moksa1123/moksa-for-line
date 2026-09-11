@@ -97,6 +97,7 @@ class Options {
 			'woo_notify_statuses'  => array( 'type' => 'json', 'default' => array( 'processing', 'completed' ) ),
 			'woo_login_buttons'    => array( 'type' => 'bool', 'default' => true ),
 			'woo_account_tab'      => array( 'type' => 'bool', 'default' => true ),
+			'member_card'          => array( 'type' => 'bool', 'default' => true ),
 			// Seconds to wait before notifying, so a status set by an
 			// automation has settled before the customer hears about it.
 			'woo_notify_delay'     => array( 'type' => 'int', 'default' => 0 ),

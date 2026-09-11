@@ -1,0 +1,364 @@
+/*
+ * The counter page: what a member of staff sees after scanning a card.
+ *
+ * This document has no theme behind it, so everything it needs is here. It is
+ * read one-handed, at arm's length, on a phone that may be in a shop with the
+ * lights up -- which is why the type is large, the hit targets are finger-sized
+ * and nothing depends on colour alone.
+ */
+
+:root {
+	--scan-ink: #1d2327;
+	--scan-quiet: #646970;
+	--scan-line: #e2e4e7;
+	--scan-surface: #fff;
+	--scan-ground: #f3f4f6;
+	--scan-line-green: #06c755;
+	--scan-good: #06863b;
+	--scan-warn: #8a3b00;
+	--scan-bad: #b32d2e;
+	--scan-tint: rgba(6, 199, 85, 0.14);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body.moksa-scan-body {
+	margin: 0;
+	padding: 16px;
+	background: var(--scan-ground);
+	color: var(--scan-ink);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC",
+		"Microsoft JhengHei", Roboto, sans-serif;
+	font-size: 16px;
+	line-height: 1.6;
+	-webkit-text-size-adjust: 100%;
+}
+
+.moksa-scan {
+	max-width: 520px;
+	margin: 0 auto;
+}
+
+.moksa-scan__head {
+	margin-bottom: 12px;
+}
+
+/*
+ * White on LINE green is 2.26:1, which LINE requires for its own sign-in button
+ * and which has no business being used for a badge of ours. Tinted ground with
+ * the darker green on top says the same thing and can actually be read.
+ */
+.moksa-scan__badge {
+	display: inline-block;
+	padding: 4px 12px;
+	border-radius: 999px;
+	background: var(--scan-tint);
+	color: var(--scan-good);
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+}
+
+/* --- Who they are -------------------------------------------------------- */
+
+.moksa-scan__who {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 18px;
+	border: 1px solid var(--scan-line);
+	border-radius: 12px;
+	background: var(--scan-surface);
+}
+
+.moksa-scan__avatar {
+	flex: 0 0 auto;
+	width: 72px;
+	height: 72px;
+	border-radius: 50%;
+	object-fit: cover;
+	background: var(--scan-ground);
+}
+
+.moksa-scan__avatar--blank {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--scan-quiet);
+	font-size: 30px;
+	font-weight: 600;
+}
+
+.moksa-scan__identity {
+	min-width: 0;
+}
+
+.moksa-scan__name {
+	margin: 0;
+	font-size: 22px;
+	line-height: 1.3;
+	/* A long name has to wrap rather than push the card sideways. */
+	overflow-wrap: anywhere;
+}
+
+.moksa-scan__meta {
+	margin: 2px 0 0;
+	color: var(--scan-quiet);
+	font-size: 14px;
+	overflow-wrap: anywhere;
+}
+
+/* --- Blocks -------------------------------------------------------------- */
+
+.moksa-scan__block {
+	margin-top: 12px;
+	padding: 16px 18px;
+	border: 1px solid var(--scan-line);
+	border-radius: 12px;
+	background: var(--scan-surface);
+}
+
+.moksa-scan__heading {
+	margin: 0 0 8px;
+	color: var(--scan-quiet);
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.moksa-scan__state {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+/* The dot carries the same meaning as the colour, for anyone who cannot
+   separate the two. */
+.moksa-scan__state::before {
+	content: "\25CF";
+	margin-right: 8px;
+}
+
+.moksa-scan__state--on {
+	color: var(--scan-good);
+}
+
+.moksa-scan__state--off {
+	color: var(--scan-quiet);
+}
+
+.moksa-scan__note {
+	margin: 6px 0 0;
+	color: var(--scan-warn);
+	font-size: 14px;
+}
+
+.moksa-scan__error {
+	margin: 0 0 12px;
+	padding: 10px 14px;
+	border-radius: 8px;
+	background: #fdecec;
+	color: var(--scan-bad);
+	font-size: 15px;
+}
+
+/* --- Orders -------------------------------------------------------------- */
+
+.moksa-scan__stats {
+	display: flex;
+	gap: 24px;
+	margin: 0 0 10px;
+}
+
+.moksa-scan__stat dt {
+	color: var(--scan-quiet);
+	font-size: 12px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.moksa-scan__stat dd {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 600;
+}
+
+.moksa-scan__orders {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.moksa-scan__order + .moksa-scan__order {
+	border-top: 1px solid var(--scan-line);
+}
+
+.moksa-scan__order a {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	gap: 2px 10px;
+	padding: 10px 0;
+	color: inherit;
+	text-decoration: none;
+}
+
+.moksa-scan__order-number {
+	font-weight: 600;
+}
+
+.moksa-scan__order-status {
+	color: var(--scan-quiet);
+	font-size: 14px;
+}
+
+.moksa-scan__order-total {
+	grid-row: 1;
+	grid-column: 3;
+	font-weight: 600;
+	text-align: right;
+}
+
+.moksa-scan__order-date {
+	grid-column: 1 / -1;
+	color: var(--scan-quiet);
+	font-size: 13px;
+}
+
+/* --- The code ------------------------------------------------------------ */
+
+.moksa-scan__code {
+	margin: 0;
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	font-size: 18px;
+	letter-spacing: 0.12em;
+	overflow-wrap: anywhere;
+}
+
+/* --- Actions ------------------------------------------------------------- */
+
+.moksa-scan__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 14px;
+}
+
+/* Finger-sized, because this is tapped while holding a phone in one hand and
+   a customer's order in the other. */
+.moksa-scan__action {
+	flex: 1 1 auto;
+	min-height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 18px;
+	border-radius: 10px;
+	background: var(--scan-ink);
+	/* Ink on ground, both of which flip with the scheme -- so this stays
+	   readable in dark mode without a second rule that has to be kept in
+	   step with the first. */
+	color: var(--scan-ground);
+	font-size: 15px;
+	font-weight: 600;
+	text-align: center;
+	text-decoration: none;
+}
+
+.moksa-scan__action--quiet {
+	background: var(--scan-surface);
+	border: 1px solid var(--scan-line);
+	color: var(--scan-quiet);
+	font-weight: 500;
+}
+
+/* --- The lookup form ----------------------------------------------------- */
+
+.moksa-scan--gate,
+.moksa-scan--lookup {
+	padding: 22px 18px;
+	border: 1px solid var(--scan-line);
+	border-radius: 12px;
+	background: var(--scan-surface);
+	margin-top: 24px;
+}
+
+.moksa-scan--gate .moksa-scan__note,
+.moksa-scan--lookup .moksa-scan__note {
+	color: var(--scan-quiet);
+}
+
+.moksa-scan__form {
+	display: grid;
+	gap: 8px;
+	margin: 14px 0;
+}
+
+.moksa-scan__form label {
+	color: var(--scan-quiet);
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.moksa-scan__form input {
+	min-height: 52px;
+	padding: 12px 14px;
+	border: 1px solid var(--scan-line);
+	border-radius: 10px;
+	background: #fff;
+	color: var(--scan-ink);
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	/* 16px or larger, or iOS zooms the page in the moment it is focused and
+	   the staff member is left scrolling sideways. */
+	font-size: 18px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.moksa-scan__form input:focus-visible {
+	border-color: var(--scan-line-green);
+	outline: 2px solid rgba(6, 199, 85, 0.35);
+	outline-offset: 1px;
+}
+
+.moksa-scan__form button {
+	min-height: 48px;
+	border: 0;
+	border-radius: 10px;
+	background: var(--scan-ink);
+	color: var(--scan-ground);
+	font: inherit;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--scan-ink: #e9ebed;
+		--scan-quiet: #a7abb0;
+		--scan-line: #35383d;
+		--scan-surface: #1f2226;
+		--scan-ground: #141619;
+		--scan-good: #3fca7a;
+		--scan-warn: #e3a45f;
+		--scan-bad: #f08a8b;
+		--scan-tint: rgba(63, 202, 122, 0.16);
+	}
+
+	/* The actions deliberately keep the neutral treatment here. LINE's green
+	   is reserved for LINE's own controls, and painting "All orders" with it
+	   would be both off-brand and a false signal about what the button does. */
+	.moksa-scan__form input,
+	.moksa-scan__avatar {
+		background: #17191c;
+	}
+
+	.moksa-scan__error {
+		background: #3a1f20;
+	}
+}

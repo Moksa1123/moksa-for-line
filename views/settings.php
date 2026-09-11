@@ -534,7 +534,27 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				$field( 'woo_history_days', __( 'Keep notification history for', 'moksa-line' ), __( 'Days. Set to 0 to keep it indefinitely.', 'moksa-line' ), 'number' );
 				$checkbox( 'woo_account_tab', __( 'My Account tab', 'moksa-line' ), __( 'Add a LINE tab where customers can link and unlink their account', 'moksa-line' ) );
 				$checkbox( 'woo_login_buttons', __( 'Login buttons', 'moksa-line' ), __( 'Offer LINE sign-in on the account and checkout pages', 'moksa-line' ) );
+				$checkbox( 'member_card', __( 'Membership card', 'moksa-line' ), __( 'Show customers a card with a QR code that staff can scan at the counter', 'moksa-line' ) );
 				?>
+
+				<?php if ( Options::get( 'member_card' ) ) : ?>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Counter lookup', 'moksa-line' ); ?></th>
+						<td>
+							<p class="description">
+								<?php esc_html_e( 'Staff scan a card with any phone camera. When the camera will not read it, they can type the code the customer reads out:', 'moksa-line' ); ?>
+							</p>
+							<p>
+								<a href="<?php echo esc_url( home_url( '/' . \Moksa\Line\Member\MemberModule::SLUG . '/' ) ); ?>" target="_blank" rel="noopener">
+									<?php echo esc_html( home_url( '/' . \Moksa\Line\Member\MemberModule::SLUG . '/' ) ); ?>
+								</a>
+							</p>
+							<p class="description">
+								<?php esc_html_e( 'Both pages are staff-only: anyone else who opens a card sees a sign-in prompt and nothing about the customer.', 'moksa-line' ); ?>
+							</p>
+						</td>
+					</tr>
+				<?php endif; ?>
 
 				<?php
 				// Switching this on with no LINE Login channel behind it draws
