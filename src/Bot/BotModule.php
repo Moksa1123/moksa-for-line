@@ -121,7 +121,11 @@ class BotModule {
 	public function ajax_delete_rule(): void {
 		$this->guard();
 
-		AutoReply::delete( Ajax::int( 'id' ) );
+		$id = Ajax::int( 'id' );
+
+		if ( $id <= 0 || ! AutoReply::delete( $id ) ) {
+			wp_send_json_error( array( 'message' => __( 'That rule no longer exists.', 'moksa-line' ) ), 404 );
+		}
 
 		wp_send_json_success( array( 'message' => __( 'Rule deleted.', 'moksa-line' ) ) );
 	}
@@ -183,7 +187,13 @@ class BotModule {
 	public function ajax_delete_flow(): void {
 		$this->guard();
 
-		Flow::delete( Ajax::int( 'id' ) );
+		$id = Ajax::int( 'id' );
+
+		// "Deleted." for a row that was never there tells somebody looking at
+		// a stale list that they have just fixed something.
+		if ( $id <= 0 || ! Flow::delete( $id ) ) {
+			wp_send_json_error( array( 'message' => __( 'That flow no longer exists.', 'moksa-line' ) ), 404 );
+		}
 
 		wp_send_json_success( array( 'message' => __( 'Flow deleted.', 'moksa-line' ) ) );
 	}
@@ -222,7 +232,11 @@ class BotModule {
 	public function ajax_delete_quick_reply(): void {
 		$this->guard();
 
-		QuickReplies::delete( Ajax::int( 'id' ) );
+		$id = Ajax::int( 'id' );
+
+		if ( $id <= 0 || ! QuickReplies::delete( $id ) ) {
+			wp_send_json_error( array( 'message' => __( 'That quick reply set no longer exists.', 'moksa-line' ) ), 404 );
+		}
 
 		wp_send_json_success( array( 'message' => __( 'Quick reply set deleted.', 'moksa-line' ) ) );
 	}

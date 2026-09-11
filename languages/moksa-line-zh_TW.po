@@ -3333,3 +3333,18 @@ msgstr "點一下放大"
 msgctxt "dialog button"
 msgid "Close"
 msgstr "關閉"
+
+msgid "That flow no longer exists."
+msgstr "這個對話流程已經不存在了。"
+
+msgid "That quick reply set no longer exists."
+msgstr "這組快速回覆已經不存在了。"
+
+msgid "That rule no longer exists."
+msgstr "這條規則已經不存在了。"
+
+msgid "Give the rich menu a name."
+msgstr "請為這個圖文選單命名。"
+
+msgid "LINE could not complete this login. Please try again."
+msgstr "LINE 無法完成這次登入，請再試一次。"

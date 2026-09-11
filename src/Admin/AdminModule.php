@@ -745,12 +745,11 @@ class AdminModule {
 	}
 
 	private function webhook_guard(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+		Ajax::guard( __( 'You cannot change the webhook settings.', 'moksa-line' ) );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot change the webhook settings.', 'moksa-line' ) ), 403 );
-		}
-
+		// The extra one: there is no point asking LINE anything without the
+		// credentials to ask with, and "unauthorised" would be the wrong thing
+		// to say about it.
 		if ( ! \Moksa\Line\Api\TokenManager::is_configured() ) {
 			wp_send_json_error( array( 'message' => __( 'Fill in the Messaging API channel first.', 'moksa-line' ) ) );
 		}

@@ -156,8 +156,11 @@ check(
 	strpos( $plugin_source, '$secret . $path . $query_string . $nonce, $secret' ) !== false,
 	'GET signs secret + path + query string + nonce'
 );
+// Single quotes, deliberately. In double quotes PHP substitutes $json for
+// nothing, the haystack becomes "'body'    => ", and the file contains that
+// whatever it sends -- so this check passed without checking anything.
 check(
-	strpos( $plugin_source, "'body'    => $json" ) !== false || strpos( $plugin_source, '\'body\'    => $json' ) !== false,
+	false !== strpos( $plugin_source, '\'body\'    => $json,' ),
 	'the signed bytes are the bytes sent'
 );
 check( strlen( $reference ) === 44, 'a v3 signature is 44 base64 characters' );

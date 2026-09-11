@@ -460,11 +460,19 @@ class RichMenuModule extends Repository {
 
 		$size  = isset( $_POST['size'] ) && 'half' === $_POST['size'] ? 'half' : 'full';
 		$group = Ajax::text( 'tab_group' );
+		$name  = Ajax::text( 'name' );
+
+		// The editor marks this field required, which is not the same as it
+		// being required: posting nothing at all saved a nameless menu that
+		// then sat in the list with a blank row where its name should be.
+		if ( '' === trim( $name ) ) {
+			wp_send_json_error( array( 'message' => __( 'Give the rich menu a name.', 'moksa-line' ) ) );
+		}
 
 		$id = self::save(
 			array(
 				'id'                  => Ajax::int( 'id' ),
-				'name'                => Ajax::text( 'name' ),
+				'name'                => $name,
 				'chat_bar_text'       => Ajax::text( 'chat_bar_text' ),
 				'size'                => $size,
 				'selected'            => empty( $_POST['selected'] ) ? 0 : 1,

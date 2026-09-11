@@ -312,9 +312,13 @@ class LoginModule {
 
 			Logger::error( 'Token exchange rejected', array( 'detail' => $detail ), 'login' );
 
+			// The page this lands on is the one a customer is looking at, and
+			// telling them to check a Channel Secret is both useless to them
+			// and a description of our own setup. The detail is in the log
+			// above, which is where the person who can act on it will look.
 			return new WP_Error(
 				'moksa_line_token_rejected',
-				__( 'LINE rejected this login. Check the Channel ID, Channel Secret and Callback URL.', 'moksa-line' )
+				__( 'LINE could not complete this login. Please try again.', 'moksa-line' )
 			);
 		}
 
