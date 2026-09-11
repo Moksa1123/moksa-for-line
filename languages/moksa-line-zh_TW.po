@@ -3329,3 +3329,13 @@ msgstr "在按鈕與表單之間畫一條寫著「或」的分隔線"
 msgctxt "between the LINE button and the login form"
 msgid "or"
 msgstr "或"
+
+msgid "Show the code larger"
+msgstr "把代碼放大顯示"
+
+msgid "Tap to enlarge"
+msgstr "點一下放大"
+
+msgctxt "dialog button"
+msgid "Close"
+msgstr "關閉"

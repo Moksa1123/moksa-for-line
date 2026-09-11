@@ -890,7 +890,7 @@ class WooModule {
 		wp_enqueue_style( 'moksa-line-front' );
 
 		printf(
-			'<div class="woocommerce-info moksa-line-checkout-prompt">%s <a class="moksa-line-button moksa-line-button--small" href="%s">%s</a></div>',
+			'<div class="woocommerce-info moksa-line-checkout-prompt"><span>%s</span> <a class="moksa-line-button moksa-line-button--small" href="%s"%s>%s</a></div>',
 			esc_html__( 'Already shopped with us?', 'moksa-line' ),
 			esc_url(
 				add_query_arg(
@@ -901,6 +901,7 @@ class WooModule {
 					admin_url( 'admin-ajax.php' )
 				)
 			),
+			ShortcodeModule::style_attribute(),
 			esc_html__( 'Sign in with LINE', 'moksa-line' )
 		);
 	}

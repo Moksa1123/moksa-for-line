@@ -522,7 +522,18 @@ class MemberModule {
 			<h3 class="moksa-account__subhead"><?php esc_html_e( 'Membership card', 'moksa-line' ); ?></h3>
 			<p class="moksa-account__lead"><?php esc_html_e( 'Show this at the counter and we will find your account.', 'moksa-line' ); ?></p>
 
-			<div class="moksa-account__qr"><?php echo $svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built here, no input in it. ?></div>
+			<?php
+			// A button, because it does something: the code sits inside a page
+			// with the shop's own header and footer around it, and a counter
+			// scanner wants it big and surrounded by white. Tapping opens
+			// exactly that. Without JavaScript it is an inert button next to a
+			// code that is already scannable, which is the right way round.
+			?>
+			<button type="button" class="moksa-account__qr" data-moksa-qr-zoom
+				aria-label="<?php esc_attr_e( 'Show the code larger', 'moksa-line' ); ?>">
+				<?php echo $svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built here, no input in it. ?>
+				<span class="moksa-account__qr-hint"><?php esc_html_e( 'Tap to enlarge', 'moksa-line' ); ?></span>
+			</button>
 
 			<button type="button" class="moksa-account__code" data-moksa-member-code="<?php echo esc_attr( $code ); ?>"
 				title="<?php esc_attr_e( 'Copy your member code', 'moksa-line' ); ?>">

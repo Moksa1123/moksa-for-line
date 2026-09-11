@@ -82,6 +82,11 @@ class ShortcodeModule {
 					'confirmNo'     => __( 'Cancel', 'moksa-line' ),
 					'confirmReissue' => __( 'Replace your membership card? The code you have now will stop working.', 'moksa-line' ),
 					'reissueAction'  => _x( 'Replace it', 'confirmation button', 'moksa-line' ),
+					'copied'        => __( 'Copied', 'moksa-line' ),
+					// Context, because "Close" is already translated elsewhere
+					// in this plugin as ending a conversation in the inbox,
+					// which is what the dialog's button ended up saying.
+					'close'         => _x( 'Close', 'dialog button', 'moksa-line' ),
 					'failed'        => __( 'That did not work.', 'moksa-line' ),
 				),
 			)
