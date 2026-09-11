@@ -647,6 +647,34 @@ class WooModule {
 	}
 
 	/**
+	 * Scripts for the LINE panel on the account page.
+	 *
+	 * This used to enqueue assets/js/admin.js -- the whole admin bundle, with
+	 * every inbox, rich menu and Flex binding in it -- on a customer-facing
+	 * page, to get one unlink button. When that file gained a dependency on the
+	 * confirmation dialog, which the front end never loaded, the button threw
+	 * and did nothing for every customer, silently.
+	 */
+	private static function enqueue_account_assets(): void {
+		wp_enqueue_script( 'moksa-line-account' );
+
+		wp_localize_script(
+			'moksa-line-account',
+			'moksaLineAccount',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'strings' => array(
+					'confirmUnlink' => __( 'Unlink your LINE account? You will stop getting order updates in LINE.', 'moksa-line' ),
+					'unlinkAction'  => _x( 'Unlink', 'confirmation button', 'moksa-line' ),
+					'confirmYes'    => __( 'Yes, do it', 'moksa-line' ),
+					'confirmNo'     => __( 'Cancel', 'moksa-line' ),
+					'failed'        => __( 'That did not work.', 'moksa-line' ),
+				),
+			)
+		);
+	}
+
+	/**
 	 * Render the LINE tab.
 	 */
 	public function render_account_page(): void {
@@ -674,17 +702,7 @@ class WooModule {
 				esc_html__( 'Unlink', 'moksa-line' )
 			);
 
-			// The unlink control needs the admin script's handler.
-			wp_enqueue_script( 'moksa-line-admin', MOKSA_LINE_URL . 'assets/js/admin.js', array( 'jquery' ), MOKSA_LINE_VERSION, true );
-			wp_localize_script(
-				'moksa-line-admin',
-				'moksaLine',
-				array(
-					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-					'nonce'   => wp_create_nonce( 'moksa_line_admin' ),
-					'strings' => array( 'confirmDelete' => __( 'Unlink your LINE account?', 'moksa-line' ) ),
-				)
-			);
+			self::enqueue_account_assets();
 
 			return;
 		}

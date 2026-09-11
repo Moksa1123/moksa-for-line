@@ -39,6 +39,24 @@ class ShortcodeModule {
 			array(),
 			\Moksa\Line\Admin\AdminModule::asset_version( 'assets/css/front.css' )
 		);
+
+		// The confirmation dialog is shared with the admin screens. The account
+		// page needs it, and used to get it by loading the whole admin bundle.
+		wp_register_script(
+			'moksa-line-confirm',
+			MOKSA_LINE_URL . 'assets/js/confirm.js',
+			array( 'jquery' ),
+			\Moksa\Line\Admin\AdminModule::asset_version( 'assets/js/confirm.js' ),
+			true
+		);
+
+		wp_register_script(
+			'moksa-line-account',
+			MOKSA_LINE_URL . 'assets/js/account.js',
+			array( 'jquery', 'moksa-line-confirm' ),
+			\Moksa\Line\Admin\AdminModule::asset_version( 'assets/js/account.js' ),
+			true
+		);
 	}
 
 	/**

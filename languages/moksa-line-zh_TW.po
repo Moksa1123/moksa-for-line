@@ -3086,3 +3086,10 @@ msgstr "說明"
 
 msgid "On your latest order"
 msgstr "最近一筆訂單的值"
+
+msgid "Unlink your LINE account? You will stop getting order updates in LINE."
+msgstr "要解除 LINE 帳號連結嗎？解除後就不會再透過 LINE 收到訂單更新。"
+
+msgctxt "confirmation button"
+msgid "Unlink"
+msgstr "解除連結"
