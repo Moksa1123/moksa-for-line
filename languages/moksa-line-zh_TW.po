@@ -3071,3 +3071,9 @@ msgstr "付款"
 
 msgid "From other plugins"
 msgstr "來自其他外掛"
+
+msgid "E-invoice number, from Moksa for WooCommerce"
+msgstr "電子發票號碼，來自 Moksa for WooCommerce"
+
+msgid "Payment transaction number, from Moksa for WooCommerce"
+msgstr "金流交易序號，來自 Moksa for WooCommerce"

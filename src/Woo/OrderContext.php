@@ -54,6 +54,57 @@ class OrderContext {
 	);
 
 	/**
+	 * Values that Moksa for WooCommerce holds for an order.
+	 *
+	 * It normalises the invoice, tracking and transaction numbers across every
+	 * provider it supports -- ECPay, NewebPay, PAYUNi, SmilePay and the rest --
+	 * behind one accessor. Calling that is the right coupling: copying its key
+	 * list here would mean a provider it adds next month silently returns
+	 * nothing on this side, and its list is already longer than the one below.
+	 *
+	 * Absent plugin, absent keys: every value is simply empty.
+	 *
+	 * @param \WC_Order $order Order.
+	 * @return array<string,string> Placeholder name (no braces) => value.
+	 */
+	private static function moksa_for_woocommerce( $order ): array {
+		$lookup = '\\Moksafowo\\Modules\\OrderLookup\\SearchableKeys';
+		$keys   = '\\Moksafowo\\Order\\Meta\\Keys';
+
+		if ( ! class_exists( $lookup ) || ! method_exists( $lookup, 'field_value' ) ) {
+			return array();
+		}
+
+		$values = array(
+			'invoice_number'     => (string) call_user_func( array( $lookup, 'field_value' ), $order, 'invoice' ),
+			'transaction_number' => (string) call_user_func( array( $lookup, 'field_value' ), $order, 'payment' ),
+		);
+
+		// Its tracking number is more thorough than ours, so prefer it and keep
+		// ours as the fallback for shops running a different logistics plugin.
+		$tracking = (string) call_user_func( array( $lookup, 'field_value' ), $order, 'shipping' );
+
+		if ( '' !== $tracking ) {
+			$values['tracking_number'] = $tracking;
+		}
+
+		if ( class_exists( $keys ) && defined( $keys . '::SHIPPING_CVS_STORE_NAME' ) ) {
+			$store_name    = trim( (string) $order->get_meta( constant( $keys . '::SHIPPING_CVS_STORE_NAME' ) ) );
+			$store_address = trim( (string) $order->get_meta( constant( $keys . '::SHIPPING_CVS_STORE_ADDRESS' ) ) );
+
+			if ( '' !== $store_name ) {
+				$values['store_name'] = $store_name;
+			}
+
+			if ( '' !== $store_address ) {
+				$values['store_address'] = $store_address;
+			}
+		}
+
+		return $values;
+	}
+
+	/**
 	 * Make a WooCommerce price string readable in a chat.
 	 *
 	 * wc_price() returns markup whose currency symbol is HTML entities.
@@ -144,6 +195,10 @@ class OrderContext {
 		 * @param \WC_Order $order  Order.
 		 * @param string    $status Status slug.
 		 */
+		// Anything another Moksa plugin already knows about this order, before
+		// the filter so a site can still override any of it.
+		$values = array_merge( $values, self::moksa_for_woocommerce( $order ) );
+
 		$values = apply_filters( 'moksa_line_order_placeholders', $values, $order, $status );
 
 		$map = array();
@@ -312,7 +367,7 @@ class OrderContext {
 				'{shipping_method}', '{tracking_number}', '{store_name}', '{store_address}',
 			),
 			__( 'Payment', 'moksa-line' )       => array(
-				'{payment_method}',
+				'{payment_method}', '{transaction_number}', '{invoice_number}',
 			),
 		);
 
@@ -367,6 +422,8 @@ class OrderContext {
 			'{tracking_number}'    => __( 'Tracking number, from ECPay, RY Tools, AST or Shipment Tracking', 'moksa-line' ),
 			'{store_name}'         => __( 'Pickup store name', 'moksa-line' ),
 			'{store_address}'      => __( 'Pickup store address', 'moksa-line' ),
+			'{invoice_number}'     => __( 'E-invoice number, from Moksa for WooCommerce', 'moksa-line' ),
+			'{transaction_number}' => __( 'Payment transaction number, from Moksa for WooCommerce', 'moksa-line' ),
 			'{customer_note}'      => __( 'Customer note', 'moksa-line' ),
 			'{view_order_url}'     => __( 'Link to the order (https sites only)', 'moksa-line' ),
 		);

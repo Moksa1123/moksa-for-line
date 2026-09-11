@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-10 19:41+0000\n"
+"POT-Creation-Date: 2026-09-11 02:20+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -221,7 +221,7 @@ msgstr ""
 msgid "A carousel needs at least one card."
 msgstr ""
 
-#: src/Woo/OrderContext.php:351
+#: src/Woo/OrderContext.php:406
 msgid "A colour matching the status"
 msgstr ""
 
@@ -554,15 +554,15 @@ msgstr ""
 msgid "Banner image"
 msgstr ""
 
-#: src/Woo/OrderContext.php:361
+#: src/Woo/OrderContext.php:416
 msgid "Billing address"
 msgstr ""
 
-#: src/Woo/OrderContext.php:359
+#: src/Woo/OrderContext.php:414
 msgid "Billing name"
 msgstr ""
 
-#: src/Woo/OrderContext.php:360
+#: src/Woo/OrderContext.php:415
 msgid "Billing phone"
 msgstr ""
 
@@ -911,15 +911,15 @@ msgstr ""
 msgid "Currency"
 msgstr ""
 
-#: src/Woo/OrderContext.php:358
+#: src/Woo/OrderContext.php:413
 msgid "Customer email"
 msgstr ""
 
-#: src/Woo/OrderContext.php:357
+#: src/Woo/OrderContext.php:412
 msgid "Customer name"
 msgstr ""
 
-#: src/Woo/OrderContext.php:370
+#: src/Woo/OrderContext.php:427
 msgid "Customer note"
 msgstr ""
 
@@ -931,7 +931,7 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: src/Woo/OrderContext.php:352
+#: src/Woo/OrderContext.php:407
 msgid "Date the order was placed"
 msgstr ""
 
@@ -1010,7 +1010,7 @@ msgstr ""
 msgid "Delivered to %1$d, failed for %2$d. %3$s"
 msgstr ""
 
-#: src/Woo/OrderContext.php:310
+#: src/Woo/OrderContext.php:365
 msgid "Delivery"
 msgstr ""
 
@@ -1065,6 +1065,10 @@ msgstr ""
 #: src/Admin/AdminModule.php:269
 #: src/Admin/AdminModule.php:283
 msgid "Duplicate"
+msgstr ""
+
+#: src/Woo/OrderContext.php:425
+msgid "E-invoice number, from Moksa for WooCommerce"
 msgstr ""
 
 #: views/settings.php:423
@@ -1297,7 +1301,7 @@ msgstr ""
 msgid "From"
 msgstr ""
 
-#: src/Woo/OrderContext.php:335
+#: src/Woo/OrderContext.php:390
 msgid "From other plugins"
 msgstr ""
 
@@ -1766,7 +1770,7 @@ msgstr ""
 msgid "Link to an existing account when the email matches"
 msgstr ""
 
-#: src/Woo/OrderContext.php:371
+#: src/Woo/OrderContext.php:428
 msgid "Link to the order (https sites only)"
 msgstr ""
 
@@ -1783,7 +1787,7 @@ msgstr ""
 msgid "Linked to %s."
 msgstr ""
 
-#: src/Woo/OrderContext.php:356
+#: src/Woo/OrderContext.php:411
 msgid "List of items and quantities"
 msgstr ""
 
@@ -2148,7 +2152,7 @@ msgstr ""
 msgid "Notify on"
 msgstr ""
 
-#: src/Woo/OrderContext.php:355
+#: src/Woo/OrderContext.php:410
 msgid "Number of items"
 msgstr ""
 
@@ -2309,7 +2313,7 @@ msgstr ""
 msgid "Order notifications are switched off, so nothing is being sent."
 msgstr ""
 
-#: src/Woo/OrderContext.php:348
+#: src/Woo/OrderContext.php:403
 #: views/notifications.php:95
 msgid "Order number"
 msgstr ""
@@ -2326,7 +2330,7 @@ msgstr ""
 msgid "Order total"
 msgstr ""
 
-#: src/Woo/OrderContext.php:353
+#: src/Woo/OrderContext.php:408
 msgid "Order total, formatted"
 msgstr ""
 
@@ -2373,7 +2377,7 @@ msgstr ""
 msgid "Pay with LINE Pay, LINE Points or a registered card."
 msgstr ""
 
-#: src/Woo/OrderContext.php:314
+#: src/Woo/OrderContext.php:369
 msgid "Payment"
 msgstr ""
 
@@ -2385,7 +2389,7 @@ msgstr ""
 msgid "Payment link created."
 msgstr ""
 
-#: src/Woo/OrderContext.php:366
+#: src/Woo/OrderContext.php:421
 #: src/Woo/TriggerRules.php:161
 msgid "Payment method"
 msgstr ""
@@ -2404,6 +2408,10 @@ msgstr ""
 msgid "Payment request: %1$s %2$s"
 msgstr ""
 
+#: src/Woo/OrderContext.php:426
+msgid "Payment transaction number, from Moksa for WooCommerce"
+msgstr ""
+
 #: src/Admin/AdminModule.php:75
 #: views/payments.php:21
 #: views/payments.php:37
@@ -2420,11 +2428,11 @@ msgstr ""
 msgid "Pick up to %d products and they become cards you can then edit. Prices, images and links come from the catalogue."
 msgstr ""
 
-#: src/Woo/OrderContext.php:369
+#: src/Woo/OrderContext.php:424
 msgid "Pickup store address"
 msgstr ""
 
-#: src/Woo/OrderContext.php:368
+#: src/Woo/OrderContext.php:423
 msgid "Pickup store name"
 msgstr ""
 
@@ -2896,20 +2904,20 @@ msgstr ""
 msgid "Setup"
 msgstr ""
 
-#: src/Woo/OrderContext.php:363
+#: src/Woo/OrderContext.php:418
 msgid "Shipping address"
 msgstr ""
 
-#: src/Woo/OrderContext.php:364
+#: src/Woo/OrderContext.php:419
 msgid "Shipping city"
 msgstr ""
 
-#: src/Woo/OrderContext.php:365
+#: src/Woo/OrderContext.php:420
 #: src/Woo/TriggerRules.php:162
 msgid "Shipping method"
 msgstr ""
 
-#: src/Woo/OrderContext.php:362
+#: src/Woo/OrderContext.php:417
 msgid "Shipping name"
 msgstr ""
 
@@ -2985,11 +2993,11 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: src/Woo/OrderContext.php:350
+#: src/Woo/OrderContext.php:405
 msgid "Status name, translated"
 msgstr ""
 
-#: src/Woo/OrderContext.php:349
+#: src/Woo/OrderContext.php:404
 msgid "Status slug"
 msgstr ""
 
@@ -3024,7 +3032,7 @@ msgstr ""
 msgid "Submissions"
 msgstr ""
 
-#: src/Woo/OrderContext.php:354
+#: src/Woo/OrderContext.php:409
 msgid "Subtotal, formatted"
 msgstr ""
 
@@ -3336,7 +3344,7 @@ msgstr ""
 msgid "The chat bar text is drawn by LINE below the menu, not on your image. This preview shows layout only, not exact fonts or corners."
 msgstr ""
 
-#: src/Woo/OrderContext.php:306
+#: src/Woo/OrderContext.php:361
 msgid "The customer"
 msgstr ""
 
@@ -3450,7 +3458,7 @@ msgstr ""
 msgid "The message starts with this"
 msgstr ""
 
-#: src/Woo/OrderContext.php:301
+#: src/Woo/OrderContext.php:356
 msgid "The order"
 msgstr ""
 
@@ -3735,7 +3743,7 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: src/Woo/OrderContext.php:367
+#: src/Woo/OrderContext.php:422
 msgid "Tracking number, from ECPay, RY Tools, AST or Shipment Tracking"
 msgstr ""
 
