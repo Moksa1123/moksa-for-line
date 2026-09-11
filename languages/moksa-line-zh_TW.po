@@ -3132,3 +3132,9 @@ msgstr "你的 LINE 帳號"
 
 msgid "If you have not added the official account as a friend, those messages cannot reach you."
 msgstr "如果你還沒有把官方帳號加入好友，這些訊息會送不到你手上。"
+
+msgid "Fill them in"
+msgstr "去填寫"
+
+msgid "Those buttons are switched on but nothing is drawn yet: signing in with LINE needs the LINE Login channel, which has no credentials."
+msgstr "這些按鈕是開啟的，但目前什麼都畫不出來：用 LINE 登入需要 LINE Login 頻道，而那邊還沒有填入憑證。"

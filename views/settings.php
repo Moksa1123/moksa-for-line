@@ -479,6 +479,27 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				$checkbox( 'woo_account_tab', __( 'My Account tab', 'moksa-line' ), __( 'Add a LINE tab where customers can link and unlink their account', 'moksa-line' ) );
 				$checkbox( 'woo_login_buttons', __( 'Login buttons', 'moksa-line' ), __( 'Offer LINE sign-in on the account and checkout pages', 'moksa-line' ) );
 				?>
+
+				<?php
+				// Switching this on with no LINE Login channel behind it draws
+				// nothing at all: the button is correctly hidden when it cannot
+				// work, but from here that looks like the setting is broken.
+				if ( Options::get( 'woo_login_buttons' ) && '' === (string) Options::get( 'channel_id' ) ) :
+					?>
+					<tr>
+						<th scope="row"></th>
+						<td>
+							<div class="notice notice-warning inline">
+								<p>
+									<?php esc_html_e( 'Those buttons are switched on but nothing is drawn yet: signing in with LINE needs the LINE Login channel, which has no credentials.', 'moksa-line' ); ?>
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . AdminModule::SLUG . '-settings&tab=general' ) ); ?>"><?php esc_html_e( 'Fill them in', 'moksa-line' ); ?></a>
+								</p>
+							</div>
+						</td>
+					</tr>
+					<?php
+				endif;
+				?>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Payments', 'moksa-line' ); ?></th>
 					<td>

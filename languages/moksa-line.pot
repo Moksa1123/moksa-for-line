@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-11 03:47+0000\n"
+"POT-Creation-Date: 2026-09-11 03:53+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -661,7 +661,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: views/settings.php:510
+#: views/settings.php:531
 msgid "Capture immediately"
 msgstr ""
 
@@ -912,11 +912,11 @@ msgid "Credentials"
 msgstr ""
 
 #: src/Admin/AdminModule.php:503
-#: views/settings.php:542
+#: views/settings.php:563
 msgid "Credentials are encrypted at rest"
 msgstr ""
 
-#: views/settings.php:506
+#: views/settings.php:527
 msgid "Currency"
 msgstr ""
 
@@ -944,7 +944,7 @@ msgstr ""
 msgid "Date the order was placed"
 msgstr ""
 
-#: views/settings.php:535
+#: views/settings.php:556
 msgid "Days. Older rows are deleted daily."
 msgstr ""
 
@@ -952,7 +952,7 @@ msgstr ""
 msgid "Days. Set to 0 to keep it indefinitely."
 msgstr ""
 
-#: views/settings.php:536
+#: views/settings.php:557
 msgid "Days. Set to 0 to keep messages forever."
 msgstr ""
 
@@ -1121,11 +1121,11 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-#: views/settings.php:500
+#: views/settings.php:521
 msgid "Enable LINE Pay for WooCommerce and payment links"
 msgstr ""
 
-#: views/settings.php:539
+#: views/settings.php:560
 msgid "Encryption"
 msgstr ""
 
@@ -1154,7 +1154,7 @@ msgid "Error"
 msgstr ""
 
 #: views/logs.php:26
-#: views/settings.php:531
+#: views/settings.php:552
 msgid "Errors only"
 msgstr ""
 
@@ -1180,7 +1180,7 @@ msgid "Everyone who follows the account (%s)"
 msgstr ""
 
 #: views/logs.php:30
-#: views/settings.php:528
+#: views/settings.php:549
 msgid "Everything"
 msgstr ""
 
@@ -1222,6 +1222,10 @@ msgstr ""
 
 #: src/Admin/AdminModule.php:758
 msgid "Fill in the Messaging API channel first."
+msgstr ""
+
+#: views/settings.php:495
+msgid "Fill them in"
 msgstr ""
 
 #: views/inbox.php:60
@@ -1318,7 +1322,7 @@ msgstr ""
 msgid "From the LINE Login channel, not the Messaging API one."
 msgstr ""
 
-#: views/settings.php:501
+#: views/settings.php:522
 msgid "From the LINE Pay merchant console, not the Developers Console."
 msgstr ""
 
@@ -1470,11 +1474,11 @@ msgstr ""
 msgid "Just one person (a test)"
 msgstr ""
 
-#: views/settings.php:536
+#: views/settings.php:557
 msgid "Keep conversations for"
 msgstr ""
 
-#: views/settings.php:535
+#: views/settings.php:556
 msgid "Keep logs for"
 msgstr ""
 
@@ -1490,7 +1494,7 @@ msgstr ""
 msgid "Keep the WordPress display name in step with the LINE display name"
 msgstr ""
 
-#: views/settings.php:543
+#: views/settings.php:564
 msgid "Keys are derived from this site's WordPress salts, so a database dump alone cannot reveal them. Changing the salts in wp-config.php makes stored credentials unreadable and they will need re-entering."
 msgstr ""
 
@@ -1534,7 +1538,7 @@ msgstr ""
 #: src/Pay/WooGateway.php:35
 #: src/Pay/WooGateway.php:54
 #: views/settings.php:21
-#: views/settings.php:500
+#: views/settings.php:521
 msgid "LINE Pay"
 msgstr ""
 
@@ -1571,7 +1575,7 @@ msgstr ""
 msgid "LINE Pay had an internal error. Try again shortly."
 msgstr ""
 
-#: views/settings.php:489
+#: views/settings.php:510
 msgid "LINE Pay is configured on the <a href=\"%s\">LINE Pay tab</a>, and the gateway is switched on under WooCommerce > Settings > Payments."
 msgstr ""
 
@@ -1823,7 +1827,7 @@ msgstr ""
 msgid "Log in with LINE"
 msgstr ""
 
-#: views/settings.php:526
+#: views/settings.php:547
 msgid "Log level"
 msgstr ""
 
@@ -1970,7 +1974,7 @@ msgstr ""
 msgid "Must be HTTPS, JPEG or PNG, and at most 10 MB."
 msgstr ""
 
-#: views/settings.php:508
+#: views/settings.php:529
 msgid "Must match both your LINE Pay merchant currency and the WooCommerce store currency, or the gateway hides itself at checkout."
 msgstr ""
 
@@ -2127,7 +2131,7 @@ msgstr ""
 msgid "None yet."
 msgstr ""
 
-#: views/settings.php:545
+#: views/settings.php:566
 msgid "Not available on this server"
 msgstr ""
 
@@ -2139,7 +2143,7 @@ msgstr ""
 msgid "Not linked"
 msgstr ""
 
-#: views/settings.php:529
+#: views/settings.php:550
 msgid "Notable events"
 msgstr ""
 
@@ -2184,7 +2188,7 @@ msgstr ""
 msgid "Number of items"
 msgstr ""
 
-#: views/settings.php:532
+#: views/settings.php:553
 msgid "Off"
 msgstr ""
 
@@ -2280,7 +2284,7 @@ msgstr ""
 msgid "Open this page from LINE to continue."
 msgstr ""
 
-#: views/settings.php:546
+#: views/settings.php:567
 msgid "OpenSSL with AES-256-GCM is missing, so credentials are stored as plain text."
 msgstr ""
 
@@ -2396,11 +2400,11 @@ msgstr ""
 msgid "Paste this into the Messaging API channel, turn on \"Use webhook\", then press Verify."
 msgstr ""
 
-#: views/settings.php:501
+#: views/settings.php:522
 msgid "Pay Channel ID"
 msgstr ""
 
-#: views/settings.php:502
+#: views/settings.php:523
 msgid "Pay Channel secret"
 msgstr ""
 
@@ -2451,7 +2455,7 @@ msgstr ""
 #: src/Admin/AdminModule.php:75
 #: views/payments.php:21
 #: views/payments.php:37
-#: views/settings.php:483
+#: views/settings.php:504
 msgid "Payments"
 msgstr ""
 
@@ -2740,7 +2744,7 @@ msgstr ""
 msgid "Sally"
 msgstr ""
 
-#: views/settings.php:503
+#: views/settings.php:524
 msgid "Sandbox"
 msgstr ""
 
@@ -3105,7 +3109,7 @@ msgstr ""
 msgid "Take payments through LINE Pay. Credentials are configured under LINE > Settings > LINE Pay."
 msgstr ""
 
-#: views/settings.php:510
+#: views/settings.php:531
 msgid "Take the money as soon as the customer confirms"
 msgstr ""
 
@@ -3767,6 +3771,10 @@ msgstr ""
 msgid "This template will not send as it stands."
 msgstr ""
 
+#: views/settings.php:494
+msgid "Those buttons are switched on but nothing is drawn yet: signing in with LINE needs the LINE Login channel, which has no credentials."
+msgstr ""
+
 #: views/logs.php:203
 msgid "Time"
 msgstr ""
@@ -3866,7 +3874,7 @@ msgstr ""
 msgid "Use as the default menu for everyone"
 msgstr ""
 
-#: views/settings.php:503
+#: views/settings.php:524
 msgid "Use the sandbox environment (no real money moves)"
 msgstr ""
 
@@ -3912,7 +3920,7 @@ msgid "Warning"
 msgstr ""
 
 #: views/logs.php:25
-#: views/settings.php:530
+#: views/settings.php:551
 msgid "Warnings and errors"
 msgstr ""
 
@@ -4034,7 +4042,7 @@ msgstr ""
 msgid "With an image or a title, the text is limited to %d characters."
 msgstr ""
 
-#: views/settings.php:516
+#: views/settings.php:537
 msgid "With immediate capture off, payments are only authorised. You then have to capture or void each one, and an order cancelled in WooCommerce releases its authorisation automatically."
 msgstr ""
 
