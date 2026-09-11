@@ -63,13 +63,21 @@ body.moksa-scan-body {
 
 /* --- Who they are -------------------------------------------------------- */
 
+/*
+ * One card, not four.
+ *
+ * Each part used to be its own rounded box with its own border and its own gap
+ * -- four cards for one person, which is a lot of furniture to read past when
+ * somebody is standing at the counter waiting. They share a surface now, with
+ * a hairline between the parts.
+ */
 .moksa-scan__who {
 	display: flex;
 	align-items: center;
 	gap: 14px;
 	padding: 18px;
 	border: 1px solid var(--scan-line);
-	border-radius: 12px;
+	border-radius: 12px 12px 0 0;
 	background: var(--scan-surface);
 }
 
@@ -113,11 +121,16 @@ body.moksa-scan-body {
 /* --- Blocks -------------------------------------------------------------- */
 
 .moksa-scan__block {
-	margin-top: 12px;
+	/* Pulled up by a pixel so the card above and this one share one line
+	   rather than drawing two next to each other. */
+	margin-top: -1px;
 	padding: 16px 18px;
 	border: 1px solid var(--scan-line);
-	border-radius: 12px;
 	background: var(--scan-surface);
+}
+
+.moksa-scan__block:last-of-type {
+	border-radius: 0 0 12px 12px;
 }
 
 .moksa-scan__heading {

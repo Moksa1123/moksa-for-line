@@ -76,18 +76,18 @@ class ShortcodeModule {
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'strings' => array(
-					'confirmUnlink' => __( 'Unlink your LINE account? You will stop getting order updates in LINE.', 'moksa-line' ),
+					'confirmUnlink' => __( 'Unlink your LINE account? Order updates will stop coming to LINE', 'moksa-line' ),
 					'unlinkAction'  => _x( 'Unlink', 'confirmation button', 'moksa-line' ),
 					'confirmYes'    => __( 'Yes, do it', 'moksa-line' ),
 					'confirmNo'     => __( 'Cancel', 'moksa-line' ),
-					'confirmReissue' => __( 'Replace your membership card? The code you have now will stop working.', 'moksa-line' ),
+					'confirmReissue' => __( 'Replace your membership card? The code you have now stops working', 'moksa-line' ),
 					'reissueAction'  => _x( 'Replace it', 'confirmation button', 'moksa-line' ),
 					'copied'        => __( 'Copied', 'moksa-line' ),
 					// Context, because "Close" is already translated elsewhere
 					// in this plugin as ending a conversation in the inbox,
 					// which is what the dialog's button ended up saying.
 					'close'         => _x( 'Close', 'dialog button', 'moksa-line' ),
-					'failed'        => __( 'That did not work.', 'moksa-line' ),
+					'failed'        => __( 'That did not work', 'moksa-line' ),
 				),
 			)
 		);
@@ -115,7 +115,7 @@ class ShortcodeModule {
 
 		if ( '' === (string) Options::get( 'channel_id' ) ) {
 			return current_user_can( 'manage_options' )
-				? '<p class="moksa-line-notice moksa-line-notice--warn">' . esc_html__( 'LINE Login is not configured yet.', 'moksa-line' ) . '</p>'
+				? '<p class="moksa-line-notice moksa-line-notice--warn">' . esc_html__( 'LINE Login is not set up yet', 'moksa-line' ) . '</p>'
 				: '';
 		}
 
@@ -214,7 +214,7 @@ class ShortcodeModule {
 
 		if ( '' === $basic_id ) {
 			return current_user_can( 'manage_options' )
-				? '<p class="moksa-line-notice moksa-line-notice--warn">' . esc_html__( 'Set the official account basic ID in the LINE settings first.', 'moksa-line' ) . '</p>'
+				? '<p class="moksa-line-notice moksa-line-notice--warn">' . esc_html__( 'Set the official account basic ID in the LINE settings first', 'moksa-line' ) . '</p>'
 				: '';
 		}
 
@@ -292,7 +292,7 @@ class ShortcodeModule {
 							<?php
 							printf(
 								/* translators: %s: LINE display name. */
-								esc_html__( 'Linked to %s.', 'moksa-line' ),
+								esc_html__( 'Linked to %s', 'moksa-line' ),
 								'<strong>' . esc_html( (string) $record->display_name ) . '</strong>'
 							);
 							?>
@@ -317,7 +317,7 @@ class ShortcodeModule {
 						?>
 						"><?php esc_html_e( 'Link my LINE account', 'moksa-line' ); ?></a>
 					<?php else : ?>
-						<p><?php esc_html_e( 'No LINE account is linked. Only this user can link their own.', 'moksa-line' ); ?></p>
+						<p><?php esc_html_e( 'No LINE account is linked. Only this user can link their own', 'moksa-line' ); ?></p>
 					<?php endif; ?>
 				</td>
 			</tr>

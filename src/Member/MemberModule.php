@@ -149,7 +149,7 @@ class MemberModule {
 					exit;
 				}
 
-				$this->render_lookup( __( 'No member has that code. Check the characters and try again.', 'moksa-line' ) );
+				$this->render_lookup( __( 'No member has that code. Check it and try again', 'moksa-line' ) );
 				exit;
 			}
 
@@ -161,7 +161,7 @@ class MemberModule {
 
 		if ( $user_id <= 0 ) {
 			status_header( 404 );
-			$this->render_lookup( __( 'That card is not valid. It may have been replaced by a newer one.', 'moksa-line' ) );
+			$this->render_lookup( __( 'That card is not valid. It may have been replaced', 'moksa-line' ) );
 			exit;
 		}
 
@@ -191,7 +191,7 @@ class MemberModule {
 
 		if ( ! $user ) {
 			status_header( 404 );
-			$this->render_lookup( __( 'That card belongs to an account that no longer exists.', 'moksa-line' ) );
+			$this->render_lookup( __( 'That account no longer exists', 'moksa-line' ) );
 
 			return;
 		}
@@ -221,7 +221,7 @@ class MemberModule {
 						<?php
 						printf(
 							/* translators: %s: the date the customer registered. */
-							esc_html__( 'Member since %s', 'moksa-line' ),
+							esc_html__( 'Joined %s', 'moksa-line' ),
 							esc_html(
 								mysql2date(
 									/* translators: date format for "Member since", see https://www.php.net/manual/datetime.format.php -- translate it to whatever reads naturally in your language, not literally. */
@@ -291,7 +291,7 @@ class MemberModule {
 			<h2 class="moksa-scan__heading"><?php esc_html_e( 'LINE', 'moksa-line' ); ?></h2>
 
 			<?php if ( ! $linked ) : ?>
-				<p class="moksa-scan__state moksa-scan__state--off"><?php esc_html_e( 'No LINE account linked.', 'moksa-line' ); ?></p>
+				<p class="moksa-scan__state moksa-scan__state--off"><?php esc_html_e( 'No LINE account linked', 'moksa-line' ); ?></p>
 			<?php else : ?>
 				<p class="moksa-scan__state moksa-scan__state--on">
 					<?php
@@ -307,7 +307,7 @@ class MemberModule {
 				</p>
 
 				<?php if ( ! (int) $record->is_friend ) : ?>
-					<p class="moksa-scan__note moksa-scan__note--warn"><?php esc_html_e( 'We have not seen them add the official account, so LINE messages may not reach them.', 'moksa-line' ); ?></p>
+					<p class="moksa-scan__note moksa-scan__note--warn"><?php esc_html_e( 'Not seen as a friend of the official account, so LINE messages may not arrive', 'moksa-line' ); ?></p>
 				<?php endif; ?>
 			<?php endif; ?>
 		</section>
@@ -357,7 +357,7 @@ class MemberModule {
 			</dl>
 
 			<?php if ( empty( $orders ) ) : ?>
-				<p class="moksa-scan__note"><?php esc_html_e( 'No orders yet.', 'moksa-line' ); ?></p>
+				<p class="moksa-scan__note"><?php esc_html_e( 'No orders yet', 'moksa-line' ); ?></p>
 			<?php else : ?>
 				<ul class="moksa-scan__orders">
 					<?php foreach ( $orders as $order ) : ?>
@@ -410,7 +410,7 @@ class MemberModule {
 		?>
 		<main class="moksa-scan moksa-scan--gate">
 			<h1 class="moksa-scan__name"><?php esc_html_e( 'Member card', 'moksa-line' ); ?></h1>
-			<p class="moksa-scan__note"><?php esc_html_e( 'This card can only be read by staff. Sign in to see it.', 'moksa-line' ); ?></p>
+			<p class="moksa-scan__note"><?php esc_html_e( 'Only staff can read this card. Sign in to see it', 'moksa-line' ); ?></p>
 
 			<nav class="moksa-scan__actions">
 				<a class="moksa-scan__action" href="<?php echo esc_url( wp_login_url( $here ) ); ?>">
@@ -448,7 +448,7 @@ class MemberModule {
 				<button type="submit"><?php esc_html_e( 'Look up', 'moksa-line' ); ?></button>
 			</form>
 
-			<p class="moksa-scan__note"><?php esc_html_e( 'Letters only as they are printed. I, L and O are not used -- read those as 1, 1 and 0.', 'moksa-line' ); ?></p>
+			<p class="moksa-scan__note"><?php esc_html_e( 'The code has no I, L or O -- read those as 1, 1 and 0', 'moksa-line' ); ?></p>
 		</main>
 		<?php
 		$this->close();
@@ -520,7 +520,7 @@ class MemberModule {
 		?>
 		<section class="moksa-account__section moksa-account__card">
 			<h3 class="moksa-account__subhead"><?php esc_html_e( 'Membership card', 'moksa-line' ); ?></h3>
-			<p class="moksa-account__lead"><?php esc_html_e( 'Show this at the counter and we will find your account.', 'moksa-line' ); ?></p>
+			<p class="moksa-account__lead"><?php esc_html_e( 'Show this at the counter and we will find you', 'moksa-line' ); ?></p>
 
 			<?php
 			// A button, because it does something: the code sits inside a page
@@ -540,7 +540,7 @@ class MemberModule {
 				<?php echo esc_html( MemberCard::grouped( $code ) ); ?>
 			</button>
 
-			<p class="moksa-account__hint"><?php esc_html_e( 'If the camera will not read it, read the code out instead.', 'moksa-line' ); ?></p>
+			<p class="moksa-account__hint"><?php esc_html_e( 'If the camera will not read it, read the code out', 'moksa-line' ); ?></p>
 
 			<div class="moksa-account__actions">
 				<button type="button" class="moksa-account__quiet"
@@ -564,14 +564,14 @@ class MemberModule {
 		$user_id = get_current_user_id();
 
 		if ( $user_id <= 0 ) {
-			wp_send_json_error( array( 'message' => __( 'You are not signed in.', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You are not signed in', 'moksa-line' ) ), 403 );
 		}
 
 		MemberCard::issue( $user_id );
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Your old card no longer works. This one does.', 'moksa-line' ),
+				'message' => __( 'The old code has stopped working. This one is yours now', 'moksa-line' ),
 			)
 		);
 	}

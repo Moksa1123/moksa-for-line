@@ -307,7 +307,7 @@ msgid "All the customer sees until they open the chat. This is the fallback text
 msgstr "客人點開聊天室之前只會看到這些。這是備援文字，不是卡片。"
 
 msgid "Already shopped with us?"
-msgstr "已經是我們的顧客了嗎？"
+msgstr "以前買過嗎？"
 
 msgid "Amount"
 msgstr "金額"
@@ -1002,8 +1002,8 @@ msgstr "已連接 LINE Login 頻道"
 msgid "LINE Login is not configured on this site yet."
 msgstr "這個站台還沒有設定 LINE Login。"
 
-msgid "LINE Login is not configured yet."
-msgstr "LINE Login 還沒設定完成。"
+msgid "LINE Login is not set up yet"
+msgstr "LINE 登入還沒設定完成"
 
 msgid "LINE Login, Messaging API bot, Flex Message builder, tabbed rich menus, customer-service inbox, AI replies and LINE Pay for WordPress and WooCommerce."
 msgstr "為 WordPress 與 WooCommerce 打造的 LINE Login、Messaging API 機器人、Flex 訊息編輯器、分頁圖文選單、客服收件匣、AI 回覆與 LINE Pay。"
@@ -1155,8 +1155,8 @@ msgstr "等級"
 msgid "Link"
 msgstr "連結"
 
-msgid "Link my LINE account"
-msgstr "連結我的 LINE 帳號"
+msgid "Link my account"
+msgstr "連結 LINE 帳號"
 
 msgid "Link to an existing account when the email matches"
 msgstr "Email 相符時連結到既有帳號"
@@ -1170,8 +1170,8 @@ msgstr "連結 LINE 帳號，就能在 LINE 收到訂單更新，也能一鍵登
 msgid "Linked WordPress accounts"
 msgstr "已連結的 WordPress 帳號"
 
-msgid "Linked to %s."
-msgstr "已連結到 %s。"
+msgid "Linked to %s"
+msgstr "已連結到 %s"
 
 msgid "List of items and quantities"
 msgstr "商品與數量清單"
@@ -1335,8 +1335,8 @@ msgstr "尚未選擇 AI 服務"
 msgid "No LIFF ID has been configured yet."
 msgstr "還沒有設定 LIFF ID。"
 
-msgid "No LINE account is linked. Only this user can link their own."
-msgstr "沒有連結任何 LINE 帳號。只有這位使用者本人能連結自己的帳號。"
+msgid "No LINE account is linked. Only this user can link their own"
+msgstr "沒有連結 LINE 帳號。只有本人能連結"
 
 msgid "No LINE users recorded yet."
 msgstr "還沒有記錄到任何 LINE 使用者。"
@@ -1905,8 +1905,8 @@ msgstr "已送出，請在手機的聊天室確認。"
 msgid "Sent. We will reply in your LINE chat."
 msgstr "已送出，我們會在 LINE 對話中回覆您。"
 
-msgid "Set the official account basic ID in the LINE settings first."
-msgstr "請先到 LINE 設定裡填入官方帳號的基本 ID。"
+msgid "Set the official account basic ID in the LINE settings first"
+msgstr "請先在 LINE 設定填入官方帳號基本 ID"
 
 msgid "Settings"
 msgstr "設定"
@@ -2097,8 +2097,8 @@ msgstr "這則對話已經不存在了。"
 msgid "That did not send. Please try again."
 msgstr "沒有送出成功，請再試一次。"
 
-msgid "That did not work."
-msgstr "沒有成功。"
+msgid "That did not work"
+msgstr "沒有成功，請再試一次"
 
 msgid "That does not look like a phone number. Please try again."
 msgstr "這看起來不像電話號碼，請再回覆一次。"
@@ -2685,8 +2685,8 @@ msgstr "好"
 msgid "You are a customer service assistant for %s, replying inside LINE."
 msgstr "你是 %s 的客服助理，正在 LINE 裡回覆客人。"
 
-msgid "You are not signed in."
-msgstr "你尚未登入。"
+msgid "You are not signed in"
+msgstr "你還沒登入"
 
 msgid "You can use {display_name}, {site_name} and {site_url}."
 msgstr "可以使用 {display_name}、{site_name} 和 {site_url}。"
@@ -3006,9 +3006,6 @@ msgstr "%s 訊息"
 msgid "Handled"
 msgstr "已處理"
 
-msgid "Failed"
-msgstr "失敗"
-
 msgid "Waiting"
 msgstr "等待中"
 
@@ -3087,15 +3084,12 @@ msgstr "說明"
 msgid "On your latest order"
 msgstr "最近一筆訂單的值"
 
-msgid "Unlink your LINE account? You will stop getting order updates in LINE."
-msgstr "要解除 LINE 帳號連結嗎？解除後就不會再透過 LINE 收到訂單更新。"
+msgid "Unlink your LINE account? Order updates will stop coming to LINE"
+msgstr "要解除連結嗎？解除後就不會再收到 LINE 訂單通知"
 
 msgctxt "confirmation button"
 msgid "Unlink"
 msgstr "解除連結"
-
-msgid "LINE account"
-msgstr "LINE 帳號"
 
 msgid "Connected"
 msgstr "已連結"
@@ -3104,10 +3098,10 @@ msgid "Not connected"
 msgstr "尚未連結"
 
 msgid "Linked since %s"
-msgstr "自 %s 起連結"
+msgstr "%s 連結"
 
-msgid "Order updates are sent to you on LINE."
-msgstr "訂單更新會透過 LINE 通知你。"
+msgid "Order updates come to you on LINE"
+msgstr "訂單有進度會用 LINE 通知你"
 
 msgid "You have not added the official account as a friend yet, so those messages cannot reach you."
 msgstr "你還沒有把官方帳號加入好友，所以這些訊息送不到你手上。"
@@ -3115,23 +3109,23 @@ msgstr "你還沒有把官方帳號加入好友，所以這些訊息送不到你
 msgid "Add as a friend"
 msgstr "加入好友"
 
-msgid "You can sign in with LINE instead of a password."
-msgstr "你可以用 LINE 登入，不必輸入密碼。"
+msgid "You can sign in with LINE instead of a password"
+msgstr "可以用 LINE 登入，不用打密碼"
 
-msgid "Link your LINE account to:"
-msgstr "連結 LINE 帳號之後可以："
+msgid "Link your account to:"
+msgstr "連結之後可以："
 
-msgid "Get a message in LINE when your order is placed and when it ships."
-msgstr "訂單成立和出貨時，直接在 LINE 收到通知。"
+msgid "Hear about your order in LINE, from checkout to delivery"
+msgstr "下單、出貨都用 LINE 通知你"
 
-msgid "Sign in with one tap next time, without a password."
-msgstr "下次一鍵登入，不用記密碼。"
+msgid "Sign in with one tap next time"
+msgstr "下次用 LINE 一鍵登入"
 
 msgid "Your LINE account"
 msgstr "你的 LINE 帳號"
 
-msgid "If you have not added the official account as a friend, those messages cannot reach you."
-msgstr "如果你還沒有把官方帳號加入好友，這些訊息會送不到你手上。"
+msgid "They cannot reach you until you add the official account as a friend"
+msgstr "還沒加好友的話，訊息會送不到"
 
 msgid "Fill them in"
 msgstr "去填寫"
@@ -3173,11 +3167,11 @@ msgstr "會員卡"
 msgid "Verified member"
 msgstr "已驗證會員"
 
-msgid "Member since %s"
-msgstr "%s 起成為會員"
+msgid "Joined %s"
+msgstr "%s 加入"
 
-msgid "No LINE account linked."
-msgstr "尚未連結 LINE 帳號。"
+msgid "No LINE account linked"
+msgstr "沒有連結 LINE"
 
 msgid "Linked as %s"
 msgstr "已連結：%s"
@@ -3185,8 +3179,8 @@ msgstr "已連結：%s"
 msgid "Linked"
 msgstr "已連結"
 
-msgid "We have not seen them add the official account, so LINE messages may not reach them."
-msgstr "我們沒有看到他加入官方帳號好友，LINE 訊息可能送不到。"
+msgid "Not seen as a friend of the official account, so LINE messages may not arrive"
+msgstr "沒看到他加好友，LINE 訊息可能送不到"
 
 msgid "Orders"
 msgstr "訂單"
@@ -3197,8 +3191,8 @@ msgstr "訂單數"
 msgid "Spent"
 msgstr "消費金額"
 
-msgid "No orders yet."
-msgstr "還沒有訂單。"
+msgid "No orders yet"
+msgstr "還沒有訂單"
 
 msgid "Member code"
 msgstr "會員代碼"
@@ -3215,8 +3209,8 @@ msgstr "編輯會員"
 msgid "Scan another"
 msgstr "掃下一位"
 
-msgid "This card can only be read by staff. Sign in to see it."
-msgstr "這張卡只有店員看得到內容，請先登入。"
+msgid "Only staff can read this card. Sign in to see it"
+msgstr "這張卡只有店員能看，請先登入"
 
 msgid "Staff sign-in"
 msgstr "店員登入"
@@ -3227,14 +3221,14 @@ msgstr "前往商店"
 msgid "Find a member"
 msgstr "查詢會員"
 
-msgid "No member has that code. Check the characters and try again."
-msgstr "沒有會員使用這組代碼，請再確認一次。"
+msgid "No member has that code. Check it and try again"
+msgstr "查不到這組代碼，再確認一次"
 
-msgid "That card is not valid. It may have been replaced by a newer one."
-msgstr "這張卡已失效，可能已經換成新的了。"
+msgid "That card is not valid. It may have been replaced"
+msgstr "這張卡已失效，可能換過新的了"
 
-msgid "That card belongs to an account that no longer exists."
-msgstr "這張卡的帳號已經不存在了。"
+msgid "That account no longer exists"
+msgstr "這個帳號已經不存在了"
 
 msgid "Look up"
 msgstr "查詢"
@@ -3242,14 +3236,14 @@ msgstr "查詢"
 msgid "ABCDE FGHJK MNPQR STVWX"
 msgstr "ABCDE FGHJK MNPQR STVWX"
 
-msgid "Letters only as they are printed. I, L and O are not used -- read those as 1, 1 and 0."
-msgstr "依照卡片上的字元輸入。代碼不使用 I、L、O，看到時請當成 1、1、0。"
+msgid "The code has no I, L or O -- read those as 1, 1 and 0"
+msgstr "代碼沒有 I、L、O，看到請當成 1、1、0"
 
 msgid "Membership card"
 msgstr "會員卡"
 
-msgid "Show this at the counter and we will find your account."
-msgstr "在櫃檯出示這張卡，我們就能找到你的帳號。"
+msgid "Show this at the counter and we will find you"
+msgstr "在櫃檯出示，店員就能找到你的帳號"
 
 msgid "Your member code"
 msgstr "你的會員代碼"
@@ -3257,17 +3251,17 @@ msgstr "你的會員代碼"
 msgid "Copy your member code"
 msgstr "複製你的會員代碼"
 
-msgid "If the camera will not read it, read the code out instead."
-msgstr "如果相機掃不到，直接念出代碼也可以。"
+msgid "If the camera will not read it, read the code out"
+msgstr "掃不到的話，念代碼給店員也可以"
 
 msgid "Replace this card"
 msgstr "更換這張卡"
 
-msgid "Your old card no longer works. This one does."
-msgstr "舊的卡片已失效，這張才是有效的。"
+msgid "The old code has stopped working. This one is yours now"
+msgstr "舊的代碼已失效，這張是新的"
 
-msgid "Replace your membership card? The code you have now will stop working."
-msgstr "要更換會員卡嗎？你現在這組代碼會立刻失效。"
+msgid "Replace your membership card? The code you have now stops working"
+msgstr "要換一張新的嗎？現在這組代碼會立刻失效"
 
 msgid "Show customers a card with a QR code that staff can scan at the counter"
 msgstr "讓顧客看到會員卡 QR Code，店員可以在櫃檯掃描"

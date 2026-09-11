@@ -756,7 +756,7 @@ class WooModule {
 
 				<ul class="moksa-account__facts">
 					<li class="moksa-account__fact moksa-account__fact--yes">
-						<?php esc_html_e( 'Order updates are sent to you on LINE.', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Order updates come to you on LINE', 'moksa-line' ); ?>
 					</li>
 
 					<?php
@@ -772,7 +772,7 @@ class WooModule {
 							// seen: someone who added the account before this
 							// site had a webhook is recorded as not a friend,
 							// and telling them otherwise is worse than silence.
-							esc_html_e( 'If you have not added the official account as a friend, those messages cannot reach you.', 'moksa-line' );
+							esc_html_e( 'They cannot reach you until you add the official account as a friend', 'moksa-line' );
 							?>
 							<?php if ( '' !== $friend_url ) : ?>
 								<a class="moksa-line-button moksa-line-button--small" href="<?php echo esc_url( $friend_url ); ?>"
@@ -782,7 +782,7 @@ class WooModule {
 					<?php endif; ?>
 
 					<li class="moksa-account__fact moksa-account__fact--yes">
-						<?php esc_html_e( 'You can sign in with LINE instead of a password.', 'moksa-line' ); ?>
+						<?php esc_html_e( 'You can sign in with LINE instead of a password', 'moksa-line' ); ?>
 					</li>
 				</ul>
 
@@ -794,14 +794,14 @@ class WooModule {
 					</button>
 				</div>
 			<?php else : ?>
-				<p class="moksa-account__lead"><?php esc_html_e( 'Link your LINE account to:', 'moksa-line' ); ?></p>
+				<p class="moksa-account__lead"><?php esc_html_e( 'Link your account to:', 'moksa-line' ); ?></p>
 
 				<ul class="moksa-account__facts">
 					<li class="moksa-account__fact moksa-account__fact--yes">
-						<?php esc_html_e( 'Get a message in LINE when your order is placed and when it ships.', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Hear about your order in LINE, from checkout to delivery', 'moksa-line' ); ?>
 					</li>
 					<li class="moksa-account__fact moksa-account__fact--yes">
-						<?php esc_html_e( 'Sign in with one tap next time, without a password.', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Sign in with one tap next time', 'moksa-line' ); ?>
 					</li>
 				</ul>
 
@@ -818,7 +818,7 @@ class WooModule {
 								admin_url( 'admin-ajax.php' )
 							)
 						);
-					?>"><?php esc_html_e( 'Link my LINE account', 'moksa-line' ); ?></a>
+					?>"><?php esc_html_e( 'Link my account', 'moksa-line' ); ?></a>
 				</div>
 			<?php endif; ?>
 

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-11T06:32:23+00:00\n"
+"POT-Creation-Date: 2026-09-11T07:19:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: moksa-line\n"
@@ -130,6 +130,7 @@ msgid "Saved."
 msgstr ""
 
 #: src/Admin/AdminModule.php:244
+#: src/Frontend/ShortcodeModule.php:85
 msgid "Copied"
 msgstr ""
 
@@ -436,7 +437,6 @@ msgid "\"%1$s\" has a contrast ratio of %2$s against its background; %3$s is the
 msgstr ""
 
 #: src/Admin/AdminModule.php:328
-#: src/Frontend/ShortcodeModule.php:85
 msgid "That did not work."
 msgstr ""
 
@@ -1380,7 +1380,7 @@ msgid "A uri action must point at https://, tel: or a LINE URL scheme."
 msgstr ""
 
 #: src/Frontend/ShortcodeModule.php:79
-msgid "Unlink your LINE account? You will stop getting order updates in LINE."
+msgid "Unlink your LINE account? Order updates will stop coming to LINE"
 msgstr ""
 
 #: src/Frontend/ShortcodeModule.php:80
@@ -1389,7 +1389,7 @@ msgid "Unlink"
 msgstr ""
 
 #: src/Frontend/ShortcodeModule.php:83
-msgid "Replace your membership card? The code you have now will stop working."
+msgid "Replace your membership card? The code you have now stops working"
 msgstr ""
 
 #: src/Frontend/ShortcodeModule.php:84
@@ -1397,30 +1397,39 @@ msgctxt "confirmation button"
 msgid "Replace it"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:99
+#: src/Frontend/ShortcodeModule.php:89
+msgctxt "dialog button"
+msgid "Close"
+msgstr ""
+
+#: src/Frontend/ShortcodeModule.php:90
+msgid "That did not work"
+msgstr ""
+
+#: src/Frontend/ShortcodeModule.php:104
 #: views/settings.php:345
 msgid "Log in with LINE"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:113
-msgid "LINE Login is not configured yet."
+#: src/Frontend/ShortcodeModule.php:118
+msgid "LINE Login is not set up yet"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:200
+#: src/Frontend/ShortcodeModule.php:205
 msgid "Add us on LINE"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:212
-msgid "Set the official account basic ID in the LINE settings first."
+#: src/Frontend/ShortcodeModule.php:217
+msgid "Set the official account basic ID in the LINE settings first"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:280
+#: src/Frontend/ShortcodeModule.php:285
 #: src/Woo/WooModule.php:608
 #: src/Woo/WooModule.php:710
 msgid "LINE account"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:283
+#: src/Frontend/ShortcodeModule.php:288
 #: views/logs.php:106
 #: views/notifications.php:106
 #: views/payments.php:79
@@ -1428,22 +1437,21 @@ msgid "Status"
 msgstr ""
 
 #. translators: %s: LINE display name.
-#: src/Frontend/ShortcodeModule.php:290
+#: src/Frontend/ShortcodeModule.php:295
 #, php-format
-msgid "Linked to %s."
+msgid "Linked to %s"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:297
+#: src/Frontend/ShortcodeModule.php:302
 msgid "Unlink LINE account"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:313
-#: src/Woo/WooModule.php:821
+#: src/Frontend/ShortcodeModule.php:318
 msgid "Link my LINE account"
 msgstr ""
 
-#: src/Frontend/ShortcodeModule.php:315
-msgid "No LINE account is linked. Only this user can link their own."
+#: src/Frontend/ShortcodeModule.php:320
+msgid "No LINE account is linked. Only this user can link their own"
 msgstr ""
 
 #: src/Imagemap/ImagemapImages.php:77
@@ -1771,7 +1779,6 @@ msgid "This LINE account is already linked to another user on this site."
 msgstr ""
 
 #: src/Login/LoginModule.php:567
-#: src/Member/MemberModule.php:556
 msgid "You are not signed in."
 msgstr ""
 
@@ -1789,15 +1796,15 @@ msgid "LINE Login"
 msgstr ""
 
 #: src/Member/MemberModule.php:152
-msgid "No member has that code. Check the characters and try again."
+msgid "No member has that code. Check it and try again"
 msgstr ""
 
 #: src/Member/MemberModule.php:164
-msgid "That card is not valid. It may have been replaced by a newer one."
+msgid "That card is not valid. It may have been replaced"
 msgstr ""
 
 #: src/Member/MemberModule.php:194
-msgid "That card belongs to an account that no longer exists."
+msgid "That account no longer exists"
 msgstr ""
 
 #: src/Member/MemberModule.php:203
@@ -1813,7 +1820,7 @@ msgstr ""
 #. translators: %s: the date the customer registered.
 #: src/Member/MemberModule.php:224
 #, php-format
-msgid "Member since %s"
+msgid "Joined %s"
 msgstr ""
 
 #. translators: date format for "Member since", see https://www.php.net/manual/datetime.format.php -- translate it to whatever reads naturally in your language, not literally.
@@ -1844,7 +1851,7 @@ msgid "Scan another"
 msgstr ""
 
 #: src/Member/MemberModule.php:294
-msgid "No LINE account linked."
+msgid "No LINE account linked"
 msgstr ""
 
 #. translators: %s: the member's LINE display name.
@@ -1858,7 +1865,7 @@ msgid "Linked"
 msgstr ""
 
 #: src/Member/MemberModule.php:310
-msgid "We have not seen them add the official account, so LINE messages may not reach them."
+msgid "Not seen as a friend of the official account, so LINE messages may not arrive"
 msgstr ""
 
 #: src/Member/MemberModule.php:340
@@ -1874,7 +1881,7 @@ msgid "Spent"
 msgstr ""
 
 #: src/Member/MemberModule.php:360
-msgid "No orders yet."
+msgid "No orders yet"
 msgstr ""
 
 #. translators: date format for an order in the member card, see https://www.php.net/manual/datetime.format.php -- translate it to whatever reads naturally in your language, not literally.
@@ -1884,7 +1891,7 @@ msgid "F j, Y"
 msgstr ""
 
 #: src/Member/MemberModule.php:413
-msgid "This card can only be read by staff. Sign in to see it."
+msgid "Only staff can read this card. Sign in to see it"
 msgstr ""
 
 #: src/Member/MemberModule.php:417
@@ -1909,7 +1916,7 @@ msgid "Look up"
 msgstr ""
 
 #: src/Member/MemberModule.php:451
-msgid "Letters only as they are printed. I, L and O are not used -- read those as 1, 1 and 0."
+msgid "The code has no I, L or O -- read those as 1, 1 and 0"
 msgstr ""
 
 #: src/Member/MemberModule.php:522
@@ -1918,23 +1925,35 @@ msgid "Membership card"
 msgstr ""
 
 #: src/Member/MemberModule.php:523
-msgid "Show this at the counter and we will find your account."
+msgid "Show this at the counter and we will find you"
 msgstr ""
 
-#: src/Member/MemberModule.php:528
+#: src/Member/MemberModule.php:533
+msgid "Show the code larger"
+msgstr ""
+
+#: src/Member/MemberModule.php:535
+msgid "Tap to enlarge"
+msgstr ""
+
+#: src/Member/MemberModule.php:539
 msgid "Copy your member code"
 msgstr ""
 
-#: src/Member/MemberModule.php:532
-msgid "If the camera will not read it, read the code out instead."
+#: src/Member/MemberModule.php:543
+msgid "If the camera will not read it, read the code out"
 msgstr ""
 
-#: src/Member/MemberModule.php:538
+#: src/Member/MemberModule.php:549
 msgid "Replace this card"
 msgstr ""
 
-#: src/Member/MemberModule.php:563
-msgid "Your old card no longer works. This one does."
+#: src/Member/MemberModule.php:567
+msgid "You are not signed in"
+msgstr ""
+
+#: src/Member/MemberModule.php:574
+msgid "The old code has stopped working. This one is yours now"
 msgstr ""
 
 #: src/Pay/LinePayClient.php:154
@@ -2960,11 +2979,11 @@ msgid "F j, Y"
 msgstr ""
 
 #: src/Woo/WooModule.php:759
-msgid "Order updates are sent to you on LINE."
+msgid "Order updates come to you on LINE"
 msgstr ""
 
 #: src/Woo/WooModule.php:775
-msgid "If you have not added the official account as a friend, those messages cannot reach you."
+msgid "They cannot reach you until you add the official account as a friend"
 msgstr ""
 
 #: src/Woo/WooModule.php:779
@@ -2972,7 +2991,7 @@ msgid "Add as a friend"
 msgstr ""
 
 #: src/Woo/WooModule.php:785
-msgid "You can sign in with LINE instead of a password."
+msgid "You can sign in with LINE instead of a password"
 msgstr ""
 
 #: src/Woo/WooModule.php:793
@@ -2980,15 +2999,19 @@ msgid "Unlink"
 msgstr ""
 
 #: src/Woo/WooModule.php:797
-msgid "Link your LINE account to:"
+msgid "Link your account to:"
 msgstr ""
 
 #: src/Woo/WooModule.php:801
-msgid "Get a message in LINE when your order is placed and when it ships."
+msgid "Hear about your order in LINE, from checkout to delivery"
 msgstr ""
 
 #: src/Woo/WooModule.php:804
-msgid "Sign in with one tap next time, without a password."
+msgid "Sign in with one tap next time"
+msgstr ""
+
+#: src/Woo/WooModule.php:821
+msgid "Link my account"
 msgstr ""
 
 #: src/Woo/WooModule.php:856
@@ -3004,7 +3027,7 @@ msgstr ""
 msgid "Already shopped with us?"
 msgstr ""
 
-#: src/Woo/WooModule.php:904
+#: src/Woo/WooModule.php:905
 msgid "Sign in with LINE"
 msgstr ""
 

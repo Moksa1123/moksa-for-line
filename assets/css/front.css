@@ -516,25 +516,33 @@
  * scanner wants the quiet zone to keep going past the edge of the code, and a
  * shop's header showing through the backdrop is exactly what stops it working.
  */
+/*
+ * The dialog sizes to its contents; the code inside sizes to the room left
+ * over. Sizing the box first and the code at 100% of it put the close button
+ * below the fold of a scrolling dialog on a phone held sideways -- where 92vh
+ * is about 330 pixels and the code, the characters and the button do not fit
+ * in it together.
+ */
 .moksa-account__zoom {
-	/* An explicit width, not a maximum: a dialog is fit-content by default, so
-	   the code at width:100% of a box that sizes to the code stays exactly the
-	   size it already was. */
-	width: min(92vw, 92vh);
-	max-width: min(92vw, 92vh);
+	max-width: 92vw;
+	max-height: 92vh;
 	padding: 20px;
 	border: 0;
 	border-radius: 12px;
 	background: #fff;
+	overflow: auto;
 }
 
 .moksa-account__zoom::backdrop {
 	background: rgba(255, 255, 255, 0.97);
 }
 
+/* Whichever is smaller: the width of the screen, or what is left of its
+   height once the characters and the button have had theirs. */
 .moksa-account__zoom svg {
 	display: block;
-	width: 100%;
+	width: min(calc(92vw - 40px), calc(92vh - 160px));
+	min-width: 150px;
 	height: auto;
 }
 
@@ -615,12 +623,17 @@
 }
 
 @media (max-width: 480px) {
+	/*
+	 * A long name wraps to two or three lines on a narrow screen, and an
+	 * avatar centred against that sits oddly low.
+	 *
+	 * There used to be a rule here stacking the action buttons full width as
+	 * well. It never did anything: this theme sets `width: fit-content` on
+	 * every button, which is a definite cross size, and a flex item with one
+	 * of those cannot be stretched. The row only ever holds a single button
+	 * anyway, so the rule was answering a question nobody asked.
+	 */
 	.moksa-account__who {
 		align-items: flex-start;
-	}
-
-	.moksa-account__actions {
-		flex-direction: column;
-		align-items: stretch;
 	}
 }
