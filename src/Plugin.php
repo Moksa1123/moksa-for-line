@@ -185,6 +185,10 @@ final class Plugin {
 		wp_clear_scheduled_hook( 'moksa_line_daily_maintenance' );
 		wp_clear_scheduled_hook( 'moksa_line_process_events' );
 
+		// So that re-activating rebuilds the account endpoint's rule rather
+		// than trusting a flag from a previous install.
+		delete_option( 'moksa_line_account_endpoint' );
+
 		flush_rewrite_rules();
 	}
 }

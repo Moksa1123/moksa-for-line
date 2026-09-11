@@ -608,10 +608,33 @@ class WooModule {
 	// --- My Account -----------------------------------------------------------------
 
 	/**
-	 * Add the endpoint rewrite.
+	 * Add the endpoint rewrite, and make sure it is actually in the rules.
 	 */
 	public function add_endpoint(): void {
 		add_rewrite_endpoint( self::ENDPOINT, EP_ROOT | EP_PAGES );
+		self::flush_endpoint_once();
+	}
+
+	/**
+	 * Rebuild the rewrite rules the first time this endpoint is registered.
+	 *
+	 * add_rewrite_endpoint() only declares the endpoint; it does nothing until
+	 * the rules are rebuilt. Activation flushes them, but this tab is behind a
+	 * setting, so it is usually switched on long after that -- and then the
+	 * endpoint is a registered query var with no rule behind it, which is a 404
+	 * on /my-account/line-account/ for good, until somebody happens to re-save
+	 * the permalink settings. It was in exactly that state on a site where the
+	 * tab had been on for weeks.
+	 *
+	 * Flushing is expensive, so it happens once and then the flag says so.
+	 */
+	private static function flush_endpoint_once(): void {
+		if ( self::ENDPOINT === get_option( 'moksa_line_account_endpoint' ) ) {
+			return;
+		}
+
+		flush_rewrite_rules( false );
+		update_option( 'moksa_line_account_endpoint', self::ENDPOINT, false );
 	}
 
 	/**
