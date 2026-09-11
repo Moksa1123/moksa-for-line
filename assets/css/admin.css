@@ -1983,82 +1983,92 @@ input[type="color"] {
 
 /* Order notification placeholders ---------------------------------------- */
 
-.moksa-params__group {
-	margin: 14px 0 6px;
+.moksa-params {
+	margin-top: 8px;
+}
+
+.moksa-params__col-key {
+	width: 220px;
+}
+
+.moksa-params__col-value {
+	width: 34%;
+}
+
+/* A group heading that still belongs to the table. */
+.moksa-params tbody .moksa-params__group th {
+	padding: 10px 10px 6px;
+	border-top: 1px solid var(--moksa-border);
+	background: #f6f7f7;
 	font-size: 12px;
 	font-weight: 600;
-	text-transform: none;
 	color: var(--moksa-muted);
+	text-align: left;
 }
 
-.moksa-params__group:first-child {
-	margin-top: 0;
+.moksa-params tbody:first-of-type .moksa-params__group th {
+	border-top: 0;
 }
 
-.moksa-params__list {
-	margin: 0;
-	display: flex;
-	flex-direction: column;
+/* A button, so it is reachable by keyboard; styled so it reads as a token. */
+.moksa-line-wrap .moksa-param__key,
+.moksa-params .moksa-param__key {
+	display: inline-flex;
+	align-items: center;
 	gap: 6px;
-}
-
-.moksa-param {
-	display: grid;
-	grid-template-columns: minmax(0, auto) 1fr;
-	align-items: baseline;
-	gap: 2px 8px;
-	margin: 0;
-	padding: 6px 8px;
-	border: 1px solid transparent;
-	border-radius: 4px;
-}
-
-.moksa-param:hover {
-	border-color: var(--moksa-border);
-	background: #f6f7f7;
-}
-
-/* A button, so it is reachable by keyboard; styled so it does not read as one. */
-.moksa-line-wrap .moksa-param__key {
-	padding: 1px 5px;
+	max-width: 100%;
+	padding: 2px 7px;
 	border: 1px solid var(--moksa-border);
-	border-radius: 3px;
+	border-radius: 4px;
 	background: #fff;
 	cursor: pointer;
 	font: inherit;
-	line-height: 1.5;
+	line-height: 1.6;
 }
 
-.moksa-line-wrap .moksa-param__key code {
+.moksa-params .moksa-param__key code {
 	background: none;
 	padding: 0;
 	font-size: 12px;
+	color: #1d2327;
 }
 
-.moksa-line-wrap .moksa-param__key:hover,
-.moksa-line-wrap .moksa-param__key:focus {
-	border-color: var(--moksa-green);
-}
-
-.moksa-param__desc {
+.moksa-params .moksa-param__copy {
+	color: var(--moksa-muted);
 	font-size: 12px;
+}
+
+.moksa-params .moksa-param__key:hover,
+.moksa-params .moksa-param__key:focus {
+	border-color: var(--moksa-green);
+	background: #f2fbf5;
+}
+
+.moksa-params .moksa-param__key.is-copied {
+	border-color: var(--moksa-green);
+	background: var(--moksa-green);
+}
+
+.moksa-params .moksa-param__key.is-copied code,
+.moksa-params .moksa-param__key.is-copied .moksa-param__copy {
+	color: #fff;
+}
+
+.moksa-params .moksa-param__desc {
 	color: var(--moksa-muted);
 }
 
-/* What it resolves to for a real order. */
-.moksa-param__value {
-	grid-column: 1 / -1;
+.moksa-params .moksa-param__value {
+	font-family: Consolas, Monaco, monospace;
 	font-size: 12px;
 	color: #1d2327;
 	word-break: break-word;
 }
 
-.moksa-param__value:empty {
-	display: none;
-}
-
-.moksa-param__value.is-empty::before {
-	content: attr(data-empty-label);
+/* An empty value is an answer too, so say so rather than leaving a gap. */
+.moksa-params .moksa-param__value:empty::before {
+	content: "—";
+	color: #a7aaad;
 }
 
 .moksa-notify-preview .moksa-phone-chat {

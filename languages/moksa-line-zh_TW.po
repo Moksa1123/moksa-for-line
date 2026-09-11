@@ -3077,3 +3077,12 @@ msgstr "電子發票號碼，來自 Moksa for WooCommerce"
 
 msgid "Payment transaction number, from Moksa for WooCommerce"
 msgstr "金流交易序號，來自 Moksa for WooCommerce"
+
+msgid "Click a name to copy it. The last column is what it resolves to for your most recent order, so a blank one is a value your shop does not fill in."
+msgstr "點名稱就會複製。最後一欄是它在你最近一筆訂單上的值，空白就表示你的店沒有填這個資料。"
+
+msgid "What it is"
+msgstr "說明"
+
+msgid "On your latest order"
+msgstr "最近一筆訂單的值"

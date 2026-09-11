@@ -98,12 +98,16 @@ class NotifyTemplates {
 			'high'
 		);
 
+		// Not in the sidebar. Twenty-six rows of name, description and value do
+		// not fit 279px: the descriptions were clipped mid-word and every entry
+		// took three lines inside a box that then had to scroll.
 		add_meta_box(
 			'moksa-notify-params',
 			__( 'Available values', 'moksa-line' ),
 			array( $this, 'render_params' ),
 			self::POST_TYPE,
-			'side'
+			'normal',
+			'low'
 		);
 	}
 
@@ -275,28 +279,40 @@ class NotifyTemplates {
 	public function render_params(): void {
 		?>
 		<p class="description">
-			<?php esc_html_e( 'Click any of these to copy it. The value beside it is what it resolves to for your most recent order, so an empty one is a value your shop does not fill in.', 'moksa-line' ); ?>
+			<?php esc_html_e( 'Click a name to copy it. The last column is what it resolves to for your most recent order, so a blank one is a value your shop does not fill in.', 'moksa-line' ); ?>
 		</p>
 
-		<div class="moksa-params" data-moksa-params>
+		<table class="widefat striped moksa-params" data-moksa-params>
+			<thead>
+				<tr>
+					<th scope="col" class="moksa-params__col-key"><?php esc_html_e( 'Name', 'moksa-line' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'What it is', 'moksa-line' ); ?></th>
+					<th scope="col" class="moksa-params__col-value"><?php esc_html_e( 'On your latest order', 'moksa-line' ); ?></th>
+				</tr>
+			</thead>
 			<?php foreach ( OrderContext::documented_groups() as $group => $placeholders ) : ?>
-				<h4 class="moksa-params__group"><?php echo esc_html( $group ); ?></h4>
-				<ul class="moksa-params__list">
+				<tbody>
+					<tr class="moksa-params__group">
+						<th colspan="3" scope="colgroup"><?php echo esc_html( $group ); ?></th>
+					</tr>
 					<?php foreach ( $placeholders as $placeholder => $description ) : ?>
-						<li class="moksa-param">
-							<?php // A button, not a <code>: the old one could not be reached by keyboard. ?>
-							<button type="button" class="moksa-copyable moksa-param__key"
-								data-moksa-copy="<?php echo esc_attr( $placeholder ); ?>"
-								title="<?php esc_attr_e( 'Copy', 'moksa-line' ); ?>">
-								<code><?php echo esc_html( $placeholder ); ?></code>
-							</button>
-							<span class="moksa-param__desc"><?php echo esc_html( $description ); ?></span>
-							<span class="moksa-param__value" data-moksa-param-value="<?php echo esc_attr( $placeholder ); ?>"></span>
-						</li>
+						<tr>
+							<td>
+								<?php // A button, not a <code>: the old one could not be reached by keyboard. ?>
+								<button type="button" class="moksa-copyable moksa-param__key"
+									data-moksa-copy="<?php echo esc_attr( $placeholder ); ?>"
+									title="<?php esc_attr_e( 'Copy', 'moksa-line' ); ?>">
+									<code><?php echo esc_html( $placeholder ); ?></code>
+									<span class="moksa-param__copy" aria-hidden="true">⧉</span>
+								</button>
+							</td>
+							<td class="moksa-param__desc"><?php echo esc_html( $description ); ?></td>
+							<td class="moksa-param__value" data-moksa-param-value="<?php echo esc_attr( $placeholder ); ?>"></td>
+						</tr>
 					<?php endforeach; ?>
-				</ul>
+				</tbody>
 			<?php endforeach; ?>
-		</div>
+		</table>
 		<?php
 	}
 

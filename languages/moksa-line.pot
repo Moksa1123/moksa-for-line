@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-11 02:20+0000\n"
+"POT-Creation-Date: 2026-09-11 02:45+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -89,7 +89,7 @@ msgid "%d cards. The customer swipes sideways to reach the rest."
 msgstr ""
 
 #. translators: %d: number of conditions.
-#: src/Woo/NotifyTemplates.php:414
+#: src/Woo/NotifyTemplates.php:430
 msgid "%d condition"
 msgid_plural "%d conditions"
 msgstr[0] ""
@@ -135,7 +135,7 @@ msgstr ""
 msgid "+ Add a question"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:171
+#: src/Woo/NotifyTemplates.php:175
 msgid "-- choose --"
 msgstr ""
 
@@ -149,7 +149,7 @@ msgstr ""
 msgid "A %s component needs a url."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:219
+#: src/Woo/NotifyTemplates.php:223
 msgid "A Flex Message bubble or carousel, as JSON. Values in braces are replaced with the order's details before sending."
 msgstr ""
 
@@ -390,7 +390,7 @@ msgstr ""
 msgid "Add at least one quick reply button."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:152
+#: src/Woo/NotifyTemplates.php:156
 msgid "Add condition"
 msgstr ""
 
@@ -492,7 +492,7 @@ msgstr ""
 msgid "Answers longer than this are truncated. LINE hard-limits a text message at 5000 characters."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:417
+#: src/Woo/NotifyTemplates.php:433
 msgid "Any order"
 msgstr ""
 
@@ -538,7 +538,7 @@ msgstr ""
 msgid "Auto replies"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:103
+#: src/Woo/NotifyTemplates.php:106
 msgid "Available values"
 msgstr ""
 
@@ -786,8 +786,8 @@ msgstr ""
 msgid "Cleared %s entries."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:278
-msgid "Click any of these to copy it. The value beside it is what it resolves to for your most recent order, so an empty one is a value your shop does not fill in."
+#: src/Woo/NotifyTemplates.php:282
+msgid "Click a name to copy it. The last column is what it resolves to for your most recent order, so a blank one is a value your shop does not fill in."
 msgstr ""
 
 #: views/inbox.php:109
@@ -806,7 +806,7 @@ msgstr ""
 msgid "Comparison complete."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:378
+#: src/Woo/NotifyTemplates.php:394
 msgid "Conditions"
 msgstr ""
 
@@ -840,7 +840,7 @@ msgstr ""
 msgid "Copied"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:290
+#: src/Woo/NotifyTemplates.php:304
 msgid "Copy"
 msgstr ""
 
@@ -1058,7 +1058,7 @@ msgstr ""
 msgid "Drawn as the customer receives it. The exact fonts and corners are LINE's, not this preview's."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:249
+#: src/Woo/NotifyTemplates.php:253
 msgid "Drawn from your most recent order, so the values are real ones."
 msgstr ""
 
@@ -1121,7 +1121,7 @@ msgid "Encryption"
 msgstr ""
 
 #: src/Admin/AdminModule.php:864
-#: src/Woo/NotifyTemplates.php:622
+#: src/Woo/NotifyTemplates.php:638
 msgid "Enter a LINE user id to send the test to."
 msgstr ""
 
@@ -1157,7 +1157,7 @@ msgstr ""
 msgid "Every card must be built the same way: all with an image or none, all with a title or none, and the same number of buttons. LINE refuses a carousel whose cards disagree."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:138
+#: src/Woo/NotifyTemplates.php:142
 msgid "Every condition must hold. Leave empty to send for every order that reaches those statuses."
 msgstr ""
 
@@ -1955,6 +1955,7 @@ msgstr ""
 msgid "My Account tab"
 msgstr ""
 
+#: src/Woo/NotifyTemplates.php:288
 #: views/flows.php:48
 #: views/imagemaps.php:48
 #: views/replies.php:64
@@ -2184,6 +2185,10 @@ msgstr ""
 msgid "On status"
 msgstr ""
 
+#: src/Woo/NotifyTemplates.php:290
+msgid "On your latest order"
+msgstr ""
+
 #: views/imagemaps.php:21
 msgid "One banner image the customer taps. The regions are invisible to them, so draw them on the image rather than guessing coordinates."
 msgstr ""
@@ -2224,7 +2229,7 @@ msgstr ""
 msgid "Only on LINE: %s"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:136
+#: src/Woo/NotifyTemplates.php:140
 msgid "Only when"
 msgstr ""
 
@@ -2278,7 +2283,7 @@ msgid "Order #%d"
 msgstr ""
 
 #. translators: 1: order number, 2: status label.
-#: src/Woo/NotifyTemplates.php:523
+#: src/Woo/NotifyTemplates.php:539
 #: src/Woo/WooModule.php:522
 msgid "Order %1$s: %2$s"
 msgstr ""
@@ -2318,7 +2323,7 @@ msgstr ""
 msgid "Order number"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:121
+#: src/Woo/NotifyTemplates.php:125
 msgid "Order statuses"
 msgstr ""
 
@@ -2600,11 +2605,11 @@ msgstr ""
 msgid "Reference"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:265
+#: src/Woo/NotifyTemplates.php:269
 msgid "Refresh the preview"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:201
+#: src/Woo/NotifyTemplates.php:205
 msgid "Remove"
 msgstr ""
 
@@ -2812,7 +2817,7 @@ msgstr ""
 msgid "Send a sticker"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:225
+#: src/Woo/NotifyTemplates.php:229
 #: views/flex.php:121
 #: views/imagemaps.php:120
 #: views/templates.php:99
@@ -2828,7 +2833,7 @@ msgstr ""
 msgid "Send it to (optional)"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:228
+#: src/Woo/NotifyTemplates.php:232
 #: views/flex.php:123
 #: views/imagemaps.php:122
 #: views/templates.php:101
@@ -2851,7 +2856,7 @@ msgstr ""
 msgid "Sending..."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:379
+#: src/Woo/NotifyTemplates.php:395
 msgid "Sent (30 days)"
 msgstr ""
 
@@ -2869,7 +2874,7 @@ msgid "Sent when someone adds the account. You can use {display_name}, {site_nam
 msgstr ""
 
 #. translators: %s: order number used for the preview.
-#: src/Woo/NotifyTemplates.php:654
+#: src/Woo/NotifyTemplates.php:670
 msgid "Sent, using order %s for the values."
 msgstr ""
 
@@ -3001,7 +3006,7 @@ msgstr ""
 msgid "Status slug"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:377
+#: src/Woo/NotifyTemplates.php:393
 msgid "Statuses"
 msgstr ""
 
@@ -3365,7 +3370,7 @@ msgstr ""
 msgid "The customer is called %s."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:123
+#: src/Woo/NotifyTemplates.php:127
 msgid "The customer is messaged when the order enters any of these statuses. Each notification is billed as a push message."
 msgstr ""
 
@@ -3446,7 +3451,7 @@ msgid "The message contains this"
 msgstr ""
 
 #. translators: %s: JSON parser message.
-#: src/Woo/NotifyTemplates.php:356
+#: src/Woo/NotifyTemplates.php:372
 msgid "The message is not valid JSON, so this notification will not send: %s"
 msgstr ""
 
@@ -3560,8 +3565,8 @@ msgstr ""
 msgid "Their answer"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:573
-#: src/Woo/NotifyTemplates.php:632
+#: src/Woo/NotifyTemplates.php:589
+#: src/Woo/NotifyTemplates.php:648
 msgid "There are no orders yet to build a preview from."
 msgstr ""
 
@@ -3713,11 +3718,11 @@ msgid_plural "This site tracks %s."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Woo/NotifyTemplates.php:640
+#: src/Woo/NotifyTemplates.php:656
 msgid "This template did not produce a valid message. Check the JSON and the placeholders."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:598
+#: src/Woo/NotifyTemplates.php:614
 msgid "This template does not produce a valid message yet."
 msgstr ""
 
@@ -3833,12 +3838,12 @@ msgstr ""
 msgid "Used by the LIFF shortcodes unless one is given explicitly."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:230
+#: src/Woo/NotifyTemplates.php:234
 msgid "Uses the most recent order to fill in the values. Save first."
 msgstr ""
 
 #. translators: %s: order number the preview was built from.
-#: src/Woo/NotifyTemplates.php:601
+#: src/Woo/NotifyTemplates.php:617
 msgid "Using order %s."
 msgstr ""
 
@@ -3913,6 +3918,10 @@ msgstr ""
 
 #: views/payments.php:55
 msgid "What is this for"
+msgstr ""
+
+#: src/Woo/NotifyTemplates.php:289
+msgid "What it is"
 msgstr ""
 
 #: views/flows.php:22
@@ -4006,8 +4015,8 @@ msgid "WooCommerce is not active, so there is nothing to notify about."
 msgstr ""
 
 #: src/Admin/AdminModule.php:810
-#: src/Woo/NotifyTemplates.php:567
-#: src/Woo/NotifyTemplates.php:626
+#: src/Woo/NotifyTemplates.php:583
+#: src/Woo/NotifyTemplates.php:642
 msgid "WooCommerce is not active."
 msgstr ""
 
@@ -4090,7 +4099,7 @@ msgstr ""
 msgid "You cannot create payment links."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:563
+#: src/Woo/NotifyTemplates.php:579
 msgid "You cannot preview notifications."
 msgstr ""
 
@@ -4110,7 +4119,7 @@ msgstr ""
 msgid "You cannot send broadcasts."
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:615
+#: src/Woo/NotifyTemplates.php:631
 msgid "You cannot send test notifications."
 msgstr ""
 
@@ -4151,7 +4160,7 @@ msgstr ""
 msgid "Your message"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:256
+#: src/Woo/NotifyTemplates.php:260
 #: views/broadcast.php:24
 #: views/flex.php:20
 #: views/flows.php:13
@@ -4252,7 +4261,7 @@ msgstr ""
 msgid "default"
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:199
+#: src/Woo/NotifyTemplates.php:203
 msgid "e.g. cod, flat_rate, 1000"
 msgstr ""
 
@@ -4308,7 +4317,7 @@ msgctxt "list separator"
 msgid ", "
 msgstr ""
 
-#: src/Woo/NotifyTemplates.php:402
+#: src/Woo/NotifyTemplates.php:418
 msgid "never fires"
 msgstr ""
 
