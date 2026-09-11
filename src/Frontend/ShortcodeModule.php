@@ -115,7 +115,7 @@ class ShortcodeModule {
 
 		if ( '' === (string) Options::get( 'channel_id' ) ) {
 			return current_user_can( 'manage_options' )
-				? '<p class="moksa-line-notice">' . esc_html__( 'LINE Login is not configured yet.', 'moksa-line' ) . '</p>'
+				? '<p class="moksa-line-notice moksa-line-notice--warn">' . esc_html__( 'LINE Login is not configured yet.', 'moksa-line' ) . '</p>'
 				: '';
 		}
 
@@ -214,7 +214,7 @@ class ShortcodeModule {
 
 		if ( '' === $basic_id ) {
 			return current_user_can( 'manage_options' )
-				? '<p class="moksa-line-notice">' . esc_html__( 'Set the official account basic ID in the LINE settings first.', 'moksa-line' ) . '</p>'
+				? '<p class="moksa-line-notice moksa-line-notice--warn">' . esc_html__( 'Set the official account basic ID in the LINE settings first.', 'moksa-line' ) . '</p>'
 				: '';
 		}
 

@@ -6,6 +6,22 @@
  */
 
 /*
+ * Never let the browser invent a weight this font does not have.
+ *
+ * A site whose heading font ships 300, 400 and 500 -- which is what Noto Sans
+ * TC arrives as here -- and a rule of ours asking for 600 gets synthetic bold:
+ * the 500 outlines smeared sideways. On Latin text it passes; on a character
+ * like 繼 the strokes close up and the whole word looks dirty against a solid
+ * background. Off, the browser picks the nearest weight it really has.
+ */
+.moksa-line-button,
+.moksa-account,
+.moksa-account * {
+	font-synthesis-weight: none;
+	font-synthesis: none;
+}
+
+/*
  * White on #06C755 measures 2.26:1, below the 4.5:1 a contrast checker wants,
  * and it stays that way on purpose. LINE's login button guidelines state that
  * "Only the following colors can be used for the LINE Login button" and list
@@ -30,7 +46,6 @@
 	justify-content: center;
 	gap: 8px;
 	padding: 10px 18px;
-	font-weight: 600;
 	line-height: 1.2;
 	text-decoration: none;
 	box-sizing: border-box;
@@ -89,10 +104,24 @@
 }
 
 /*
- * The colour is in the edge, not a fill. A pale amber panel only works if the
- * text on it is dark, and on a dark theme the text is not.
+ * An aside. Neutral by default, because most of what goes in one is neutral:
+ * the shop's own "you are already signed in" message came out in a caution box
+ * with an amber rule down the side, which is a strange thing to tell somebody
+ * who has done nothing wrong.
  */
-.moksa-line-notice,
+.moksa-line-notice {
+	padding: 8px 12px;
+	border-left: 3px solid rgba(128, 128, 128, 0.28);
+	border-left-color: color-mix(in srgb, currentColor 22%, transparent);
+}
+
+/*
+ * Amber is for the ones that really are a problem -- both of which only an
+ * administrator ever sees. The colour is in the edge rather than a fill: a
+ * pale amber panel only works if the text on it is dark, and on a dark theme
+ * the text is not.
+ */
+.moksa-line-notice--warn,
 .moksa-liff__notice {
 	padding: 8px 12px;
 	border-left: 4px solid #dba617;

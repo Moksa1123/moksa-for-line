@@ -307,7 +307,7 @@ class MemberModule {
 				</p>
 
 				<?php if ( ! (int) $record->is_friend ) : ?>
-					<p class="moksa-scan__note"><?php esc_html_e( 'We have not seen them add the official account, so LINE messages may not reach them.', 'moksa-line' ); ?></p>
+					<p class="moksa-scan__note moksa-scan__note--warn"><?php esc_html_e( 'We have not seen them add the official account, so LINE messages may not reach them.', 'moksa-line' ); ?></p>
 				<?php endif; ?>
 			<?php endif; ?>
 		</section>

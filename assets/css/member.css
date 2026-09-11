@@ -150,10 +150,20 @@ body.moksa-scan-body {
 	color: var(--scan-quiet);
 }
 
+/*
+ * An aside, in the page's quiet colour. It used to be amber for everything,
+ * which meant "no orders yet" -- an ordinary fact about a new customer --
+ * arrived at the counter looking like something had gone wrong.
+ */
 .moksa-scan__note {
 	margin: 6px 0 0;
-	color: var(--scan-warn);
+	color: var(--scan-quiet);
 	font-size: 14px;
+}
+
+/* Amber is for the one note that really is a problem. */
+.moksa-scan__note--warn {
+	color: var(--scan-warn);
 }
 
 .moksa-scan__error {
@@ -283,11 +293,6 @@ body.moksa-scan-body {
 	border-radius: 12px;
 	background: var(--scan-surface);
 	margin-top: 24px;
-}
-
-.moksa-scan--gate .moksa-scan__note,
-.moksa-scan--lookup .moksa-scan__note {
-	color: var(--scan-quiet);
 }
 
 .moksa-scan__form {
