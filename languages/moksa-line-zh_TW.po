@@ -3162,3 +3162,7 @@ msgstr "購物車"
 
 msgid "Home page"
 msgstr "首頁"
+
+msgctxt "linked-since date"
+msgid "F j, Y"
+msgstr "Y年n月j日"

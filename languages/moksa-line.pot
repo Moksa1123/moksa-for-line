@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moksa LINE Suite 1.0.0\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\n"
-"POT-Creation-Date: 2026-09-11 05:18+0000\n"
+"POT-Creation-Date: 2026-09-11 05:31+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -382,7 +382,7 @@ msgstr ""
 msgid "Add a notification template"
 msgstr ""
 
-#: src/Woo/WooModule.php:767
+#: src/Woo/WooModule.php:773
 msgid "Add as a friend"
 msgstr ""
 
@@ -454,7 +454,7 @@ msgstr ""
 msgid "All the customer sees until they open the chat. This is the fallback text, not the bubble."
 msgstr ""
 
-#: src/Woo/WooModule.php:856
+#: src/Woo/WooModule.php:862
 msgid "Already shopped with us?"
 msgstr ""
 
@@ -848,7 +848,7 @@ msgstr ""
 msgid "Context"
 msgstr ""
 
-#: src/Woo/WooModule.php:839
+#: src/Woo/WooModule.php:845
 msgid "Continue with LINE"
 msgstr ""
 
@@ -1350,7 +1350,7 @@ msgstr ""
 msgid "Full (2500 x 1686)"
 msgstr ""
 
-#: src/Woo/WooModule.php:789
+#: src/Woo/WooModule.php:795
 msgid "Get a message in LINE when your order is placed and when it ships."
 msgstr ""
 
@@ -1419,7 +1419,7 @@ msgstr ""
 msgid "If you do not know something, say so and offer to pass it to a person. Never invent prices, stock or delivery dates."
 msgstr ""
 
-#: src/Woo/WooModule.php:763
+#: src/Woo/WooModule.php:769
 msgid "If you have not added the official account as a friend, those messages cannot reach you."
 msgstr ""
 
@@ -1804,7 +1804,7 @@ msgid "Link"
 msgstr ""
 
 #: src/Frontend/ShortcodeModule.php:313
-#: src/Woo/WooModule.php:809
+#: src/Woo/WooModule.php:815
 msgid "Link my LINE account"
 msgstr ""
 
@@ -1816,7 +1816,7 @@ msgstr ""
 msgid "Link to the order (https sites only)"
 msgstr ""
 
-#: src/Woo/WooModule.php:785
+#: src/Woo/WooModule.php:791
 msgid "Link your LINE account to:"
 msgstr ""
 
@@ -2394,7 +2394,7 @@ msgstr ""
 msgid "Order total, formatted"
 msgstr ""
 
-#: src/Woo/WooModule.php:747
+#: src/Woo/WooModule.php:753
 msgid "Order updates are sent to you on LINE."
 msgstr ""
 
@@ -3025,11 +3025,11 @@ msgstr ""
 msgid "Shown in the chat list and in push notifications, where the image cannot be drawn."
 msgstr ""
 
-#: src/Woo/WooModule.php:866
+#: src/Woo/WooModule.php:872
 msgid "Sign in with LINE"
 msgstr ""
 
-#: src/Woo/WooModule.php:792
+#: src/Woo/WooModule.php:798
 msgid "Sign in with one tap next time, without a password."
 msgstr ""
 
@@ -3869,7 +3869,7 @@ msgstr ""
 msgid "Type your message"
 msgstr ""
 
-#: src/Woo/WooModule.php:781
+#: src/Woo/WooModule.php:787
 msgid "Unlink"
 msgstr ""
 
@@ -4148,7 +4148,7 @@ msgstr ""
 msgid "You are not signed in."
 msgstr ""
 
-#: src/Woo/WooModule.php:773
+#: src/Woo/WooModule.php:779
 msgid "You can sign in with LINE instead of a password."
 msgstr ""
 
@@ -4392,6 +4392,12 @@ msgstr ""
 #: src/Woo/TriggerRules.php:176
 #: src/Woo/TriggerRules.php:180
 msgid "is not"
+msgstr ""
+
+#. translators: date format for "Linked since", see https://www.php.net/manual/datetime.format.php -- translate it to whatever reads naturally in your language, not literally.
+#: src/Woo/WooModule.php:740
+msgctxt "linked-since date"
+msgid "F j, Y"
 msgstr ""
 
 #: src/Bot/Flow.php:444

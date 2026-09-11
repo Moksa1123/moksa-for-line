@@ -734,7 +734,13 @@ class WooModule {
 								printf(
 									/* translators: %s: the date the account was linked. */
 									esc_html__( 'Linked since %s', 'moksa-line' ),
-									esc_html( mysql2date( get_option( 'date_format' ), get_date_from_gmt( (string) $record->created_at ) ) )
+									esc_html(
+										mysql2date(
+											/* translators: date format for "Linked since", see https://www.php.net/manual/datetime.format.php -- translate it to whatever reads naturally in your language, not literally. */
+											_x( 'F j, Y', 'linked-since date', 'moksa-line' ),
+											get_date_from_gmt( (string) $record->created_at )
+										)
+									)
 								);
 								?>
 							</span>
