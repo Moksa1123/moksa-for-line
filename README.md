@@ -108,6 +108,9 @@ classes, so it runs anywhere PHP does. It needs the `openssl` and `mbstring`
 extensions; without them the encryption checks fail even though the plugin
 itself degrades gracefully.
 
+The rest run inside WordPress, against a site you do not mind changing. None
+of them send a LINE message, so none of them cost message quota.
+
 ```bash
 # Against a throwaway WordPress install: rebuild a 1.4.0-shaped database and
 # assert the migrator carries everything across without loss or double-encryption
@@ -115,8 +118,37 @@ wp eval-file tests/migration-check.php
 
 # Needs WooCommerce. Exercises the order notification pipeline: placeholders,
 # JSON safety, rule evaluation, template selection, dispatch, history,
-# the duplicate guard, the tracking wait and the retry budget.
+# the duplicate guard, the tracking wait and the retry budget. Also asserts no
+# placeholder value carries HTML entities, which is how order totals once
+# reached customers as "&#78;&#84;&#36;1,000".
 wp eval-file tests/notify-check.php
+
+# Drives a conversation flow from its trigger to its stored submission:
+# every transition, what is stored under which key, a refused answer that does
+# not lose the customer's place, and the cancel word. This exists because every
+# answer was once read as a validation failure, so no flow reached its second
+# question and nothing in the admin showed it.
+wp eval-file tests/flow-check.php
+
+# Cuts an imagemap into the five widths LINE fetches and checks each one is
+# exactly that wide, is a JPEG, keeps its aspect ratio and is under LINE's
+# 1 MB limit, and that the base URL carries no file extension.
+wp eval-file tests/imagemap-check.php
+
+# Stubs Moksa for WooCommerce's two entry points under the exact namespaces it
+# uses, so the invoice, tracking and transaction numbers can be verified here
+# without installing it.
+wp eval-file tests/moksafowo-bridge-check.php
+```
+
+Each of those five refuses to run when `wp_get_environment_type()` says
+`production`, because they write to the database and WordPress defaults to
+`production` when `WP_ENVIRONMENT_TYPE` is unset. Set that constant on your
+test site, or define `MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS` in `wp-config.php`,
+and they run. The guard exists because one of them was once run against a site
+holding real data.
+
+```bash
 
 # Regenerate the translation template after changing any user-facing string
 php bin/make-pot.php
