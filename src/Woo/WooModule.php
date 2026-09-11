@@ -16,6 +16,7 @@ use Moksa\Line\Data\Users;
 use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Login\LoginModule;
 use Moksa\Line\Support\Logger;
+use Moksa\Line\Frontend\ShortcodeModule;
 use Moksa\Line\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
@@ -60,8 +61,13 @@ class WooModule {
 		}
 
 		if ( Options::get( 'woo_login_buttons' ) ) {
-			add_action( 'woocommerce_login_form_start', array( $this, 'render_login_button' ) );
-			add_action( 'woocommerce_register_form_start', array( $this, 'render_login_button' ) );
+			// Above the form or below it, as configured. WooCommerce gives us a
+			// hook at each end, so this is a choice of hook rather than CSS
+			// order -- which keeps the tab order matching what people see.
+			$above = 'below' !== Options::get( 'button_position' );
+
+			add_action( $above ? 'woocommerce_login_form_start' : 'woocommerce_login_form_end', array( $this, 'render_login_button' ) );
+			add_action( $above ? 'woocommerce_register_form_start' : 'woocommerce_register_form_end', array( $this, 'render_login_button' ) );
 			add_action( 'woocommerce_before_checkout_form', array( $this, 'render_checkout_prompt' ), 5 );
 		}
 	}
@@ -815,13 +821,19 @@ class WooModule {
 					?>"><?php esc_html_e( 'Link my LINE account', 'moksa-line' ); ?></a>
 				</div>
 			<?php endif; ?>
-		</div>
 
+			<?php
+			// Inside the panel, not a second card beside it: linking and the
+			// membership code are two things about one account, and stacking
+			// them as separate boxes made the page look like two plugins.
+			//
+			// Not conditional on being linked, either -- the code identifies
+			// the customer at the counter, which is just as useful for someone
+			// who signs in with a password.
+			\Moksa\Line\Member\MemberModule::render_customer_card( get_current_user_id() );
+			?>
+		</div>
 		<?php
-		// The card is not conditional on being linked: it identifies the
-		// customer at the counter, which is just as useful for someone who
-		// signs in with a password.
-		\Moksa\Line\Member\MemberModule::render_customer_card( get_current_user_id() );
 	}
 
 	// --- Login buttons -----------------------------------------------------------------
@@ -836,8 +848,18 @@ class WooModule {
 
 		wp_enqueue_style( 'moksa-line-front' );
 
-		printf(
-			'<p class="moksa-line-woo-login"><a class="moksa-line-button" href="%s">%s</a></p>',
+		$position = 'below' !== Options::get( 'button_position' ) ? 'above' : 'below';
+		$label    = trim( (string) Options::get( 'button_text' ) );
+		$divider  = Options::get( 'button_divider' )
+			? sprintf(
+				'<p class="moksa-line-divider" aria-hidden="true"><span>%s</span></p>',
+				esc_html_x( 'or', 'between the LINE button and the login form', 'moksa-line' )
+			)
+			: '';
+
+		$button = sprintf(
+			'<p class="moksa-line-woo-login"><a class="moksa-line-button%1$s" href="%2$s"%3$s rel="nofollow">%4$s</a></p>',
+			esc_attr( ShortcodeModule::align_class() ),
 			esc_url(
 				add_query_arg(
 					array(
@@ -847,8 +869,13 @@ class WooModule {
 					admin_url( 'admin-ajax.php' )
 				)
 			),
-			esc_html__( 'Continue with LINE', 'moksa-line' )
+			ShortcodeModule::style_attribute(),
+			esc_html( '' !== $label ? $label : __( 'Continue with LINE', 'moksa-line' ) )
 		);
+
+		// The rule goes between the two things it separates, whichever way
+		// round they are.
+		echo wp_kses_post( 'above' === $position ? $button . $divider : $divider . $button );
 	}
 
 	/**

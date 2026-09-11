@@ -15,13 +15,15 @@
 .moksa-line-button {
 	--moksa-green: #06c755;
 
-	/* Each of these can be overridden per-site from the settings screen, which
-	   emits the custom property inline. Unset means the default here wins. */
+	/* Colour is the only thing the settings screen can change, and it arrives
+	   as a custom property inline. Unset means the default here wins. */
 	background: var(--moksa-line-button-bg, var(--moksa-green));
 	color: var(--moksa-line-button-fg, #fff);
-	border-radius: var(--moksa-line-button-radius, 6px);
-	width: var(--moksa-line-button-width, auto);
-	min-height: var(--moksa-line-button-height, auto);
+
+	/* Shape and type are the theme's. These were settings once; a shop that
+	   used them got one control that matched nothing else on the page. */
+	border-radius: 6px;
+	font: inherit;
 
 	display: inline-flex;
 	align-items: center;
@@ -58,8 +60,9 @@
 	font-size: 1.125em;
 }
 
+/* Outlined rather than filled, over whatever the page's own background is. */
 .moksa-line-button--friend {
-	background: #fff;
+	background: transparent;
 	color: var(--moksa-line-button-bg, var(--moksa-green));
 	border: 2px solid var(--moksa-line-button-bg, var(--moksa-green));
 }
@@ -67,7 +70,7 @@
 .moksa-line-button--friend:hover,
 .moksa-line-button--friend:focus {
 	filter: none;
-	background: #f2fdf6;
+	background: rgba(6, 199, 85, 0.1);
 	color: var(--moksa-line-button-bg, var(--moksa-green));
 }
 
@@ -85,10 +88,15 @@
 	border-radius: 50%;
 }
 
-.moksa-line-notice {
+/*
+ * The colour is in the edge, not a fill. A pale amber panel only works if the
+ * text on it is dark, and on a dark theme the text is not.
+ */
+.moksa-line-notice,
+.moksa-liff__notice {
 	padding: 8px 12px;
-	background: #fcf4e4;
 	border-left: 4px solid #dba617;
+	background: rgba(219, 166, 23, 0.08);
 }
 
 /* LIFF widgets ----------------------------------------------------------- */
@@ -107,7 +115,7 @@
 }
 
 .moksa-liff__status {
-	color: #666;
+	opacity: 0.7;
 }
 
 .moksa-liff__form {
@@ -122,11 +130,12 @@
 
 .moksa-liff__send {
 	align-self: flex-start;
-	background: #06c755;
-	color: #fff;
+	background: var(--moksa-line-button-bg, #06c755);
+	color: var(--moksa-line-button-fg, #fff);
 	border: 0;
 	border-radius: 6px;
 	padding: 10px 20px;
+	font: inherit;
 	font-weight: 600;
 	cursor: pointer;
 }
@@ -134,12 +143,6 @@
 .moksa-liff__send:disabled {
 	opacity: 0.6;
 	cursor: default;
-}
-
-.moksa-liff__notice {
-	padding: 8px 12px;
-	background: #fcf4e4;
-	border-left: 4px solid #dba617;
 }
 
 .moksa-line-woo-login {
@@ -150,24 +153,68 @@
 	margin-left: 8px;
 }
 
+/* Placement ------------------------------------------------------------- */
+
+/*
+ * Where the login button sits, which is the only thing about it worth a
+ * setting. Its size, corners and type come from the page it lands on.
+ */
+.moksa-line-button--center {
+	display: flex;
+	margin-inline: auto;
+}
+
+.moksa-line-button--full {
+	display: flex;
+	width: 100%;
+}
+
+/*
+ * The rule between the button and the form. The word sits on the line rather
+ * than beside it, so it reads as one divider at any width.
+ */
+.moksa-line-divider {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 16px 0;
+	opacity: 0.65;
+}
+
+.moksa-line-divider::before,
+.moksa-line-divider::after {
+	content: "";
+	flex: 1 1 auto;
+	height: 1px;
+	/* currentColor, so the rule is whatever the surrounding text is -- there is
+	   no grey here that a dark theme would turn into an invisible line. */
+	background: currentColor;
+	opacity: 0.35;
+}
+
 /* The LINE panel on the account page ------------------------------------ */
 
 /*
- * A theme's own button and heading styles land on this page, so everything
- * here sets what it needs rather than inheriting. The unlink control was a
- * plain .button, which on a dark theme rendered as a heavy black slab with
- * more visual weight than anything else on the screen -- for the one action
- * that undoes the connection.
+ * This panel lives inside somebody else's theme, and the theme wins. Nothing
+ * here sets a background, a text colour, a font or a size: it borrows all four
+ * from the page, and spends its own colours only where a colour carries
+ * meaning -- the LINE mark, connected or not, and a warning.
+ *
+ * It used to paint itself white with #1d2327 text at 14px, which looked like a
+ * screenshot of wp-admin dropped into a shop.
  */
 .moksa-account {
+	--moksa-line-green: #06c755;
+
+	/* Edges and muted text as a proportion of whatever colour the theme is
+	   already using, with a plain fallback for browsers without color-mix. */
+	--moksa-edge: rgba(128, 128, 128, 0.28);
+	--moksa-edge: color-mix(in srgb, currentColor 22%, transparent);
+
 	max-width: 560px;
-	border: 1px solid #e3e5e8;
+	border: 1px solid var(--moksa-edge);
 	border-radius: 10px;
-	background: #fff;
-	color: #1d2327;
 	overflow: hidden;
-	font-size: 14px;
-	line-height: 1.6;
 }
 
 .moksa-account__head {
@@ -175,10 +222,11 @@
 	align-items: center;
 	gap: 10px;
 	padding: 14px 18px;
-	border-bottom: 1px solid #e3e5e8;
-	background: #fafbfc;
+	border-bottom: 1px solid var(--moksa-edge);
 }
 
+/* LINE's mark, in LINE's green. The one colour on this panel that is not
+   ours to decide. */
 .moksa-account__mark {
 	display: inline-flex;
 	align-items: center;
@@ -187,9 +235,9 @@
 	height: 24px;
 	padding: 0 8px;
 	border-radius: 5px;
-	background: #06c755;
+	background: var(--moksa-line-green);
 	color: #fff;
-	font-size: 12px;
+	font-size: 0.8em;
 	font-weight: 700;
 	letter-spacing: 0.04em;
 }
@@ -204,8 +252,7 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
-	font-size: 13px;
-	color: #646970;
+	font-size: 0.9em;
 }
 
 .moksa-account__state::before {
@@ -216,12 +263,18 @@
 	background: currentColor;
 }
 
-.moksa-account__state--on {
-	color: #06863b;
+/*
+ * The dot carries the state; the words stay whatever colour the theme uses. A
+ * green that reads well on this theme's near-white measures 4.48:1 against it
+ * and disappears on a dark one -- there is no single green that is safe
+ * everywhere, and "connected" does not need to be green to say so.
+ */
+.moksa-account__state--on::before {
+	background: var(--moksa-line-green);
 }
 
 .moksa-account__state--off {
-	color: #8c8f94;
+	opacity: 0.6;
 }
 
 .moksa-account__who {
@@ -237,7 +290,7 @@
 	height: 56px;
 	border-radius: 50%;
 	object-fit: cover;
-	background: #f0f0f1;
+	background: var(--moksa-edge);
 }
 
 /* No picture on the record: the initial reads better than an empty circle. */
@@ -245,9 +298,9 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	background: #06c755;
+	background: var(--moksa-line-green);
 	color: #fff;
-	font-size: 22px;
+	font-size: 1.4em;
 	font-weight: 600;
 }
 
@@ -259,18 +312,22 @@
 }
 
 .moksa-account__name {
-	font-size: 16px;
 	font-weight: 600;
 	word-break: break-word;
 }
 
 .moksa-account__since {
-	font-size: 13px;
-	color: #646970;
+	font-size: 0.9em;
+	opacity: 0.7;
 }
 
 .moksa-account__lead {
 	margin: 0;
+	padding: 0;
+}
+
+.moksa-account__who + .moksa-account__lead,
+.moksa-account__head + .moksa-account__lead {
 	padding: 18px 18px 0;
 }
 
@@ -278,6 +335,12 @@
 	margin: 0;
 	padding: 0 18px 4px;
 	list-style: none;
+}
+
+/* Only when it follows the lead paragraph; after the avatar row the section
+   already has all the space it needs. */
+.moksa-account__lead + .moksa-account__facts {
+	padding-top: 12px;
 }
 
 .moksa-account__fact {
@@ -299,18 +362,21 @@
 
 .moksa-account__fact--yes::before {
 	content: "\2713";
-	color: #06863b;
 }
 
-/* Linked but not a friend means the messages cannot be delivered at all, so
-   it is the one thing on this card that has to look like a problem. */
+/*
+ * Linked but not a friend means the messages cannot be delivered at all, so it
+ * is the one thing here that has to look like a problem. The colour sits in the
+ * rule down the side rather than in the sentence, which leaves the sentence as
+ * readable as everything around it whatever the theme is.
+ */
 .moksa-account__fact--no {
-	color: #8a3b00;
+	padding: 2px 0 2px 12px;
+	border-left: 3px solid #dba617;
 }
 
 .moksa-account__fact--no::before {
-	content: "!";
-	color: #b26200;
+	content: none;
 }
 
 .moksa-account__actions {
@@ -321,30 +387,108 @@
 }
 
 /*
- * Quiet by default and only red on approach: undoing the connection should be
- * findable without being the loudest thing on the page.
+ * Quiet by default and only coloured on approach: undoing a connection or
+ * replacing a card should be findable without being the loudest thing on the
+ * page. Transparent over the theme's own background, with its own text colour,
+ * so it cannot become a black slab on a dark theme the way a bare .button did.
  */
+.moksa-account__quiet,
 .moksa-account__unlink {
 	padding: 7px 14px;
-	border: 1px solid #d5d7da;
+	border: 1px solid var(--moksa-edge);
 	border-radius: 6px;
-	background: #fff;
-	color: #646970;
+	background: transparent;
+	color: inherit;
 	font: inherit;
-	font-size: 13px;
+	font-size: 0.9em;
 	line-height: 1.4;
+	opacity: 0.8;
 	cursor: pointer;
 }
 
+.moksa-account__quiet:hover,
+.moksa-account__quiet:focus-visible,
 .moksa-account__unlink:hover,
 .moksa-account__unlink:focus-visible {
-	border-color: #b32d2e;
-	color: #b32d2e;
+	border-color: currentColor;
+	opacity: 1;
 }
 
+.moksa-account__quiet[disabled],
 .moksa-account__unlink[disabled] {
-	opacity: 0.6;
+	opacity: 0.5;
 	cursor: default;
+}
+
+/* The membership card, inside the panel ---------------------------------- */
+
+.moksa-account__section {
+	padding: 18px;
+	border-top: 1px solid var(--moksa-edge);
+}
+
+.moksa-account__section .moksa-account__actions {
+	padding: 12px 0 0;
+}
+
+.moksa-account__subhead {
+	margin: 0 0 6px;
+	font-size: 1em;
+	font-weight: 600;
+}
+
+/*
+ * No white bed under the code: the SVG paints its own white ground, so the
+ * square is black-on-white whatever the theme does around it.
+ */
+.moksa-account__qr {
+	display: flex;
+	justify-content: center;
+	margin-top: 14px;
+}
+
+.moksa-account__qr svg {
+	display: block;
+	width: 200px;
+	height: auto;
+	max-width: 100%;
+	border-radius: 4px;
+}
+
+.moksa-account__code {
+	display: block;
+	width: 100%;
+	margin-top: 12px;
+	padding: 10px 12px;
+	border: 1px dashed var(--moksa-edge);
+	border-radius: 8px;
+	background: transparent;
+	color: inherit;
+	/* Grouped in fives and spaced out: this string gets read across a counter
+	   and typed by someone who is not looking at it. Monospace is not a style
+	   choice here -- it is what keeps 0 and O apart. */
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	font-size: 1em;
+	letter-spacing: 0.14em;
+	text-align: center;
+	cursor: pointer;
+}
+
+.moksa-account__code:hover,
+.moksa-account__code:focus-visible {
+	border-color: currentColor;
+}
+
+.moksa-account__code.is-copied {
+	border-style: solid;
+	border-color: #06863b;
+	color: #06863b;
+}
+
+.moksa-account__hint {
+	margin: 8px 0 0;
+	font-size: 0.85em;
+	opacity: 0.7;
 }
 
 @media (max-width: 480px) {
@@ -356,124 +500,4 @@
 		flex-direction: column;
 		align-items: stretch;
 	}
-}
-
-/* --- Membership card ------------------------------------------------------
- *
- * The QR is the whole point of this block, so it gets the light, high-contrast
- * surface a camera wants even where the theme around it is dark. Everything
- * else is arranged around keeping that square unobstructed.
- */
-.moksa-card {
-	/* The same width as the LINE panel above it. Two stacked cards that do not
-	   line up read as two unrelated things bolted onto the page. */
-	max-width: 560px;
-	margin: 18px 0 0;
-	border: 1px solid #e2e4e7;
-	border-radius: 10px;
-	background: #fff;
-	overflow: hidden;
-}
-
-.moksa-card__head {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	padding: 14px 18px;
-	border-bottom: 1px solid #eceef0;
-	background: #fafbfc;
-}
-
-.moksa-card__title {
-	font-weight: 600;
-	font-size: 14px;
-	color: #1d2327;
-}
-
-.moksa-card__lead {
-	margin: 16px 18px 0;
-	font-size: 14px;
-	line-height: 1.6;
-	color: #3c434a;
-}
-
-/* A white bed under the code, so a dark theme cannot invert it into
-   something no scanner will read. */
-.moksa-card__qr {
-	display: flex;
-	justify-content: center;
-	margin: 14px 18px 0;
-	padding: 10px;
-	border-radius: 8px;
-	background: #fff;
-}
-
-.moksa-card__qr svg {
-	display: block;
-	width: 200px;
-	height: auto;
-	max-width: 100%;
-}
-
-.moksa-card__code {
-	display: block;
-	width: auto;
-	margin: 12px 18px 0;
-	padding: 10px 12px;
-	border: 1px dashed #d5d7da;
-	border-radius: 8px;
-	background: #fff;
-	color: #1d2327;
-	/* Grouped in fives and spaced out: this string gets read across a counter
-	   and typed by someone who is not looking at it. */
-	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-	font-size: 15px;
-	letter-spacing: 0.14em;
-	text-align: center;
-	cursor: pointer;
-}
-
-.moksa-card__code:hover,
-.moksa-card__code:focus-visible {
-	border-color: #06c755;
-}
-
-.moksa-card__code.is-copied {
-	border-style: solid;
-	border-color: #06863b;
-	color: #06863b;
-}
-
-.moksa-card__hint {
-	margin: 8px 18px 0;
-	font-size: 12px;
-	line-height: 1.5;
-	color: #646970;
-}
-
-.moksa-card__actions {
-	padding: 12px 18px 18px;
-}
-
-.moksa-card__reissue {
-	padding: 7px 14px;
-	border: 1px solid #d5d7da;
-	border-radius: 6px;
-	background: #fff;
-	color: #646970;
-	font: inherit;
-	font-size: 13px;
-	line-height: 1.4;
-	cursor: pointer;
-}
-
-.moksa-card__reissue:hover,
-.moksa-card__reissue:focus-visible {
-	border-color: #b32d2e;
-	color: #b32d2e;
-}
-
-.moksa-card__reissue[disabled] {
-	opacity: 0.6;
-	cursor: default;
 }

@@ -3292,3 +3292,40 @@ msgstr "更換"
 msgctxt "order date"
 msgid "F j, Y"
 msgstr "Y年n月j日"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Above the login form"
+msgstr "登入表單上方"
+
+msgid "Below the login form"
+msgstr "登入表單下方"
+
+msgid "Where the button sits on the account and checkout pages."
+msgstr "按鈕要放在帳戶頁與結帳頁的哪個位置。"
+
+msgid "Alignment"
+msgstr "對齊"
+
+msgid "Follow the form"
+msgstr "跟著表單"
+
+msgid "Centred"
+msgstr "置中"
+
+msgid "Full width"
+msgstr "滿版寬度"
+
+msgid "Everything else about the shape -- corners, height, type -- comes from your theme, so the button matches the page it is on."
+msgstr "其餘外觀（圓角、高度、字體）一律交給佈景主題決定，按鈕才會和所在的頁面一致。"
+
+msgid "Divider"
+msgstr "分隔線"
+
+msgid "Draw a line with \"or\" between the button and the form"
+msgstr "在按鈕與表單之間畫一條寫著「或」的分隔線"
+
+msgctxt "between the LINE button and the login form"
+msgid "or"
+msgstr "或"

@@ -147,20 +147,20 @@ class ShortcodeModule {
 	}
 
 	/**
-	 * The configured appearance, as custom properties.
+	 * The configured colours, as custom properties.
 	 *
-	 * Emitted as variables rather than a wall of inline declarations, so the
-	 * stylesheet still owns layout and a theme can still override it. An option
-	 * left at its default contributes nothing, and the stylesheet decides.
+	 * Colour is the only thing this plugin sets on the button. Shape, width and
+	 * type belong to the theme -- they used to be settings, and every site that
+	 * touched them ended up with one control that matched nothing around it.
+	 *
+	 * An option left at its default contributes nothing and the stylesheet
+	 * decides, which is also how a theme keeps the upper hand.
 	 */
 	public static function style_attribute(): string {
 		$declarations = array();
 
 		$background = trim( (string) Options::get( 'button_bg_color' ) );
 		$foreground = trim( (string) Options::get( 'button_text_color' ) );
-		$radius     = (int) Options::get( 'button_border_radius' );
-		$width      = trim( (string) Options::get( 'button_width' ) );
-		$height     = (int) Options::get( 'button_height' );
 
 		if ( '' !== $background && preg_match( '/^#[0-9a-f]{3,8}$/i', $background ) ) {
 			$declarations[] = '--moksa-line-button-bg:' . $background;
@@ -170,25 +170,23 @@ class ShortcodeModule {
 			$declarations[] = '--moksa-line-button-fg:' . $foreground;
 		}
 
-		if ( $radius >= 0 ) {
-			$declarations[] = '--moksa-line-button-radius:' . $radius . 'px';
-		}
-
-		// A width may legitimately be 100%, 12rem or auto, so it is matched
-		// against a shape rather than assumed to be pixels.
-		if ( '' !== $width && preg_match( '/^\d+(\.\d+)?(px|%|rem|em)$|^auto$/', $width ) ) {
-			$declarations[] = '--moksa-line-button-width:' . $width;
-		}
-
-		if ( $height > 0 ) {
-			$declarations[] = '--moksa-line-button-height:' . $height . 'px';
-		}
-
 		if ( empty( $declarations ) ) {
 			return '';
 		}
 
 		return ' style="' . esc_attr( implode( ';', $declarations ) ) . '"';
+	}
+
+	/**
+	 * The class that positions a login button, from the placement settings.
+	 *
+	 * @return string A class attribute value, always with a leading space when
+	 *                it is not empty.
+	 */
+	public static function align_class(): string {
+		$align = (string) Options::get( 'button_align' );
+
+		return in_array( $align, array( 'center', 'full' ), true ) ? ' moksa-line-button--' . $align : '';
 	}
 
 	/**

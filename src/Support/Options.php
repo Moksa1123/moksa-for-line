@@ -49,9 +49,14 @@ class Options {
 			'button_text'          => array( 'type' => 'string', 'default' => '' ),
 			'button_bg_color'      => array( 'type' => 'string', 'default' => '#06C755' ),
 			'button_text_color'    => array( 'type' => 'string', 'default' => '#FFFFFF' ),
-			'button_border_radius' => array( 'type' => 'int', 'default' => 6 ),
-			'button_width'         => array( 'type' => 'string', 'default' => '' ),
-			'button_height'        => array( 'type' => 'int', 'default' => 0 ),
+
+			// Where the button sits, not what it looks like. Corner radius,
+			// width and height used to be settings here; they belonged to the
+			// theme, and a shop that set them ended up with one button that
+			// matched nothing else on the page.
+			'button_position'      => array( 'type' => 'enum', 'default' => 'above', 'enum' => array( 'above', 'below' ) ),
+			'button_align'         => array( 'type' => 'enum', 'default' => 'start', 'enum' => array( 'start', 'center', 'full' ) ),
+			'button_divider'       => array( 'type' => 'bool', 'default' => true ),
 			'request_email'        => array( 'type' => 'bool', 'default' => false ),
 			// Merging by email lets anyone who controls a LINE account with a
 			// matching address take over the WordPress account, so it is off

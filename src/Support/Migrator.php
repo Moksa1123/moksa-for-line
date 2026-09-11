@@ -25,7 +25,7 @@ class Migrator {
 	 * plugin can ship many releases without the tables changing, and this only
 	 * moves when they do.
 	 */
-	const DB_VERSION = '1.0.3';
+	const DB_VERSION = '1.0.4';
 
 	/**
 	 * Run dbDelta when the stored version is behind the code version.
@@ -461,6 +461,21 @@ class Migrator {
 			if ( Options::get( $new_key ) === $default ) {
 				Options::set( $new_key, $legacy_value );
 			}
+		}
+
+		// 2b. The login button's shape is the theme's business now: corner
+		//     radius, width and height are gone as settings. A shop that had
+		//     stretched the button to the full width meant something by it, so
+		//     that one choice carries over to the alignment setting that
+		//     replaced it. The rest simply stop applying.
+		$legacy_width = get_option( Options::PREFIX . 'button_width', '' );
+
+		if ( is_string( $legacy_width ) && '100%' === trim( $legacy_width ) && 'start' === Options::get( 'button_align' ) ) {
+			Options::set( 'button_align', 'full' );
+		}
+
+		foreach ( array( 'button_border_radius', 'button_width', 'button_height' ) as $retired ) {
+			delete_option( Options::PREFIX . $retired );
 		}
 
 		// 3. The old auto-reply table used reply_content; the code wrote

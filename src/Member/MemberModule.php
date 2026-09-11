@@ -518,30 +518,27 @@ class MemberModule {
 			return;
 		}
 		?>
-		<div class="moksa-card">
-			<div class="moksa-card__head">
-				<span class="moksa-card__title"><?php esc_html_e( 'Membership card', 'moksa-line' ); ?></span>
-			</div>
+		<section class="moksa-account__section moksa-account__card">
+			<h3 class="moksa-account__subhead"><?php esc_html_e( 'Membership card', 'moksa-line' ); ?></h3>
+			<p class="moksa-account__lead"><?php esc_html_e( 'Show this at the counter and we will find your account.', 'moksa-line' ); ?></p>
 
-			<p class="moksa-card__lead"><?php esc_html_e( 'Show this at the counter and we will find your account.', 'moksa-line' ); ?></p>
+			<div class="moksa-account__qr"><?php echo $svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built here, no input in it. ?></div>
 
-			<div class="moksa-card__qr"><?php echo $svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built here, no input in it. ?></div>
-
-			<button type="button" class="moksa-card__code" data-moksa-member-code="<?php echo esc_attr( $code ); ?>"
+			<button type="button" class="moksa-account__code" data-moksa-member-code="<?php echo esc_attr( $code ); ?>"
 				title="<?php esc_attr_e( 'Copy your member code', 'moksa-line' ); ?>">
 				<?php echo esc_html( MemberCard::grouped( $code ) ); ?>
 			</button>
 
-			<p class="moksa-card__hint"><?php esc_html_e( 'If the camera will not read it, read the code out instead.', 'moksa-line' ); ?></p>
+			<p class="moksa-account__hint"><?php esc_html_e( 'If the camera will not read it, read the code out instead.', 'moksa-line' ); ?></p>
 
-			<div class="moksa-card__actions">
-				<button type="button" class="moksa-card__reissue"
+			<div class="moksa-account__actions">
+				<button type="button" class="moksa-account__quiet"
 					data-moksa-line-reissue="<?php echo esc_attr( (string) $user_id ); ?>"
 					data-nonce="<?php echo esc_attr( wp_create_nonce( 'moksa_line_member' ) ); ?>">
 					<?php esc_html_e( 'Replace this card', 'moksa-line' ); ?>
 				</button>
 			</div>
-		</div>
+		</section>
 		<?php
 	}
 

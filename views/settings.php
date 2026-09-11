@@ -298,9 +298,34 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 					'color'
 				);
 				$field( 'button_text_color', __( 'Text colour', 'moksa-line' ), __( 'LINE requires #FFFFFF.', 'moksa-line' ), 'color' );
-				$field( 'button_border_radius', __( 'Corner radius', 'moksa-line' ), __( 'Pixels. 0 gives square corners.', 'moksa-line' ), 'number' );
-				$field( 'button_width', __( 'Width', 'moksa-line' ), __( 'For example 100%, 240px, or blank to fit the text.', 'moksa-line' ) );
-				$field( 'button_height', __( 'Minimum height', 'moksa-line' ), __( 'Pixels. 0 lets the padding decide.', 'moksa-line' ), 'number' );
+
+				// Placement, not appearance. Corner radius, width and height
+				// were settings here until it became clear what they produced:
+				// one button on the page shaped unlike every other, because the
+				// theme was never consulted. Size and type now come from the
+				// theme, and these decide where the button goes.
+				$select(
+					'button_position',
+					__( 'Position', 'moksa-line' ),
+					array(
+						'above' => __( 'Above the login form', 'moksa-line' ),
+						'below' => __( 'Below the login form', 'moksa-line' ),
+					),
+					__( 'Where the button sits on the account and checkout pages.', 'moksa-line' )
+				);
+
+				$select(
+					'button_align',
+					__( 'Alignment', 'moksa-line' ),
+					array(
+						'start'  => __( 'Follow the form', 'moksa-line' ),
+						'center' => __( 'Centred', 'moksa-line' ),
+						'full'   => __( 'Full width', 'moksa-line' ),
+					),
+					__( 'Everything else about the shape -- corners, height, type -- comes from your theme, so the button matches the page it is on.', 'moksa-line' )
+				);
+
+				$checkbox( 'button_divider', __( 'Divider', 'moksa-line' ), __( 'Draw a line with "or" between the button and the form', 'moksa-line' ) );
 				?>
 
 				<tr>
