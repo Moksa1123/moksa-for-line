@@ -55,6 +55,24 @@ spl_autoload_register(
 	}
 );
 
+/*
+ * Tell WooCommerce which of its features this plugin has been written for.
+ * Without these it lists the plugin as incompatible with order storage in
+ * custom tables and with the block checkout -- and it would be right to,
+ * except that every order here goes through wc_get_order() and the gateway
+ * registers with the block registry. Declaring it is what makes that true
+ * from WooCommerce's side as well.
+ */
+add_action(
+	'before_woocommerce_init',
+	function () {
+		if ( class_exists( '\\Automattic\\WooCommerce\\Utilities\\FeaturesUtil' ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
+		}
+	}
+);
+
 register_activation_hook( __FILE__, array( 'Moksa\\Line\\Plugin', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'Moksa\\Line\\Plugin', 'deactivate' ) );
 

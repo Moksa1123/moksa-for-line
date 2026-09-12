@@ -245,7 +245,17 @@ class MemberModule {
 
 			<nav class="moksa-scan__actions">
 				<?php if ( current_user_can( 'edit_shop_orders' ) || current_user_can( 'manage_woocommerce' ) ) : ?>
-					<a class="moksa-scan__action" href="<?php echo esc_url( admin_url( 'edit.php?post_type=shop_order&_customer_user=' . $user_id ) ); ?>">
+					<?php
+					// The orders screen moved when orders moved out of the posts
+					// table. Ask WooCommerce which one this site uses rather than
+					// linking to the old address and hoping.
+					$hpos       = class_exists( '\\Automattic\\WooCommerce\\Utilities\\OrderUtil' )
+						&& \Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled();
+					$orders_url = $hpos
+						? admin_url( 'admin.php?page=wc-orders&_customer_user=' . $user_id )
+						: admin_url( 'edit.php?post_type=shop_order&_customer_user=' . $user_id );
+					?>
+					<a class="moksa-scan__action" href="<?php echo esc_url( $orders_url ); ?>">
 						<?php esc_html_e( 'All orders', 'moksa-line' ); ?>
 					</a>
 				<?php endif; ?>

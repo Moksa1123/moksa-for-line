@@ -31,7 +31,13 @@ class PayModule {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 
 		add_filter( 'woocommerce_payment_gateways', array( $this, 'register_gateway' ) );
+		add_action( 'woocommerce_blocks_payment_method_type_registration', array( $this, 'register_block_method' ) );
 		add_action( 'woocommerce_order_status_cancelled', array( $this, 'void_on_cancel' ) );
+
+		// The order screen, and the customer's own view of an unfinished payment.
+		add_action( 'add_meta_boxes', array( $this, 'add_order_meta_box' ) );
+		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'thankyou_text' ), 10, 2 );
+		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'order_details_note' ) );
 
 		add_action( 'wp_ajax_moksa_line_pay_link', array( $this, 'ajax_create_link' ) );
 
@@ -56,6 +62,213 @@ class PayModule {
 		$gateways[] = WooGateway::class;
 
 		return $gateways;
+	}
+
+	/**
+	 * Add the gateway to the block checkout's registry.
+	 *
+	 * Without this the gateway exists, is enabled, and never appears on a
+	 * block-based checkout page -- which every new WooCommerce store has.
+	 *
+	 * @param \Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $registry Block registry.
+	 */
+	public function register_block_method( $registry ): void {
+		if ( ! class_exists( '\Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+			return;
+		}
+
+		$registry->register( new BlocksSupport() );
+	}
+
+	// --- The order screen ------------------------------------------------------------
+
+	/**
+	 * A box on the order edit screen showing what LINE Pay did with this order.
+	 *
+	 * Works with orders stored as posts and with HPOS: the screen id comes
+	 * from WooCommerce rather than being assumed to be shop_order.
+	 */
+	public function add_order_meta_box(): void {
+		$screen = function_exists( 'wc_get_page_screen_id' ) ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
+
+		add_meta_box(
+			'moksa-line-pay',
+			__( 'LINE Pay', 'moksa-line' ),
+			array( $this, 'render_order_meta_box' ),
+			$screen,
+			'side',
+			'default'
+		);
+	}
+
+	/**
+	 * @param \WP_Post|\WC_Order $object Whatever the screen hands over.
+	 */
+	public function render_order_meta_box( $object ): void {
+		$order = $object instanceof \WC_Order ? $object : wc_get_order( $object->ID ?? 0 );
+
+		if ( ! $order ) {
+			return;
+		}
+
+		if ( 'moksa_line_pay' !== $order->get_payment_method() ) {
+			echo '<p class="description">' . esc_html__( 'This order was not paid with LINE Pay.', 'moksa-line' ) . '</p>';
+
+			return;
+		}
+
+		$payment = Payments::by_wc_order( $order->get_id() );
+
+		if ( ! $payment ) {
+			echo '<p class="description">' . esc_html__( 'No LINE Pay record exists for this order. The payment may never have been started.', 'moksa-line' ) . '</p>';
+
+			return;
+		}
+
+		$statuses = array(
+			'created'            => __( 'Created', 'moksa-line' ),
+			'pending'            => __( 'Waiting for the customer', 'moksa-line' ),
+			'authorized'         => __( 'Authorised, not yet captured', 'moksa-line' ),
+			'captured'           => __( 'Paid', 'moksa-line' ),
+			'partially_refunded' => __( 'Partly refunded', 'moksa-line' ),
+			'refunded'           => __( 'Refunded', 'moksa-line' ),
+			'void'               => __( 'Voided', 'moksa-line' ),
+			'cancelled'          => __( 'Cancelled by the customer', 'moksa-line' ),
+			'expired'            => __( 'Expired unpaid', 'moksa-line' ),
+			'failed'             => __( 'Failed', 'moksa-line' ),
+		);
+
+		$status   = (string) $payment->status;
+		$label    = isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status;
+		$paid     = in_array( $status, array( 'captured', 'partially_refunded', 'refunded' ), true );
+		$refunded = (float) $payment->refunded;
+		$currency = (string) $payment->currency;
+		?>
+		<div class="moksa-pay-box">
+			<p class="moksa-pay-box__status moksa-pay-box__status--<?php echo esc_attr( $paid ? 'paid' : 'open' ); ?>">
+				<strong><?php echo esc_html( $label ); ?></strong>
+				<?php if ( Options::get( 'pay_sandbox' ) ) : ?>
+					<span class="moksa-pay-box__sandbox"><?php esc_html_e( 'Sandbox', 'moksa-line' ); ?></span>
+				<?php endif; ?>
+			</p>
+
+			<dl class="moksa-pay-box__facts">
+				<dt><?php esc_html_e( 'Amount', 'moksa-line' ); ?></dt>
+				<dd><?php echo esc_html( self::money( (float) $payment->amount, $currency ) ); ?></dd>
+
+				<?php if ( $refunded > 0 ) : ?>
+					<dt><?php esc_html_e( 'Refunded', 'moksa-line' ); ?></dt>
+					<dd><?php echo esc_html( self::money( $refunded, $currency ) ); ?></dd>
+				<?php endif; ?>
+
+				<dt><?php esc_html_e( 'Transaction', 'moksa-line' ); ?></dt>
+				<dd>
+					<?php if ( '' !== (string) $payment->transaction_id ) : ?>
+						<code><?php echo esc_html( (string) $payment->transaction_id ); ?></code>
+					<?php else : ?>
+						<span class="description"><?php esc_html_e( 'None yet', 'moksa-line' ); ?></span>
+					<?php endif; ?>
+				</dd>
+
+				<dt><?php esc_html_e( 'Reference', 'moksa-line' ); ?></dt>
+				<dd><code><?php echo esc_html( (string) $payment->order_ref ); ?></code></dd>
+			</dl>
+
+			<?php if ( 'pending' === $status ) : ?>
+				<p class="description">
+					<?php esc_html_e( 'The customer was sent to LINE Pay and has not come back. Unfinished payments are checked hourly and expire on their own.', 'moksa-line' ); ?>
+				</p>
+			<?php elseif ( 'authorized' === $status ) : ?>
+				<p class="description">
+					<?php esc_html_e( 'The money is held, not taken. Capture it from the order actions, or it is released when the order is cancelled.', 'moksa-line' ); ?>
+				</p>
+			<?php endif; ?>
+
+			<p>
+				<a href="<?php echo esc_url( Options::get( 'pay_sandbox' ) ? 'https://sandbox-web-pay.line.me/web/' : 'https://pay.line.me/portal/' ); ?>" target="_blank" rel="noopener">
+					<?php esc_html_e( 'Open the LINE Pay merchant centre', 'moksa-line' ); ?> &rarr;
+				</a>
+			</p>
+		</div>
+		<style>
+			.moksa-pay-box__status { margin: 0 0 8px; font-size: 14px; }
+			.moksa-pay-box__status--paid strong { color: #00792a; }
+			.moksa-pay-box__sandbox { margin-left: 6px; padding: 1px 6px; border-radius: 3px; background: #f0f0f1; font-size: 11px; font-weight: 400; color: #50575e; }
+			.moksa-pay-box__facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; margin: 0 0 8px; font-size: 12px; }
+			.moksa-pay-box__facts dt { color: #646970; }
+			.moksa-pay-box__facts dd { margin: 0; overflow-wrap: anywhere; }
+		</style>
+		<?php
+	}
+
+	/**
+	 * An amount with its currency, without WooCommerce's markup.
+	 *
+	 * @param float  $amount   Amount.
+	 * @param string $currency ISO code.
+	 */
+	private static function money( float $amount, string $currency ): string {
+		if ( function_exists( 'wc_price' ) ) {
+			return html_entity_decode( wp_strip_all_tags( wc_price( $amount, array( 'currency' => $currency ) ) ), ENT_QUOTES, 'UTF-8' );
+		}
+
+		return number_format( $amount, 0 ) . ' ' . $currency;
+	}
+
+	// --- What the customer is told -------------------------------------------------------
+
+	/**
+	 * The thank-you page, for an order whose payment did not finish.
+	 *
+	 * WooCommerce says "Thank you. Your order has been received." for every
+	 * order that reaches this page, including one the customer abandoned at
+	 * LINE Pay. Saying so is kinder than letting them find out later.
+	 *
+	 * @param string    $text  WooCommerce's line.
+	 * @param \WC_Order $order The order, when there is one.
+	 * @return string
+	 */
+	public function thankyou_text( $text, $order ) {
+		if ( ! $order instanceof \WC_Order || 'moksa_line_pay' !== $order->get_payment_method() ) {
+			return $text;
+		}
+
+		$note = self::unfinished_note( $order );
+
+		return '' !== $note ? $note : $text;
+	}
+
+	/**
+	 * The same note on the order's own page under My Account.
+	 *
+	 * @param \WC_Order $order The order.
+	 */
+	public function order_details_note( $order ): void {
+		if ( ! $order instanceof \WC_Order || 'moksa_line_pay' !== $order->get_payment_method() ) {
+			return;
+		}
+
+		$note = self::unfinished_note( $order );
+
+		if ( '' !== $note ) {
+			echo '<p class="moksa-line-notice">' . esc_html( $note ) . '</p>';
+		}
+	}
+
+	/**
+	 * A plain sentence about a payment that has not completed, or '' when it has.
+	 *
+	 * @param \WC_Order $order The order.
+	 */
+	private static function unfinished_note( \WC_Order $order ): string {
+		switch ( $order->get_status() ) {
+			case 'pending':
+				return __( 'Your order is in, but the LINE Pay payment did not go through. You can pay for it again from your account.', 'moksa-line' );
+			case 'on-hold':
+				return __( 'Your order is in and we are waiting for LINE Pay to confirm the payment. This usually takes a moment.', 'moksa-line' );
+			default:
+				return '';
+		}
 	}
 
 	// --- Return endpoints ---------------------------------------------------------

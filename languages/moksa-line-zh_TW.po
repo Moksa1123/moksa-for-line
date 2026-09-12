@@ -3366,3 +3366,48 @@ msgstr "90 天"
 
 msgid "Only applies to signing in with LINE. Signing in with a password keeps whatever WordPress does."
 msgstr "只影響用 LINE 登入。用密碼登入維持 WordPress 原本的時效。"
+
+msgid "This order was not paid with LINE Pay."
+msgstr "這筆訂單不是用 LINE Pay 付款的。"
+
+msgid "No LINE Pay record exists for this order. The payment may never have been started."
+msgstr "這筆訂單沒有 LINE Pay 紀錄，可能從未開始付款。"
+
+msgid "Waiting for the customer"
+msgstr "等待顧客付款"
+
+msgid "Authorised, not yet captured"
+msgstr "已授權，尚未請款"
+
+msgid "Paid"
+msgstr "已付款"
+
+msgid "Partly refunded"
+msgstr "部分退款"
+
+msgid "Voided"
+msgstr "已作廢"
+
+msgid "Cancelled by the customer"
+msgstr "顧客取消"
+
+msgid "Expired unpaid"
+msgstr "逾時未付款"
+
+msgid "None yet"
+msgstr "尚無"
+
+msgid "The customer was sent to LINE Pay and has not come back. Unfinished payments are checked hourly and expire on their own."
+msgstr "顧客已導向 LINE Pay 但尚未返回。未完成的付款每小時檢查一次，逾時會自動失效。"
+
+msgid "The money is held, not taken. Capture it from the order actions, or it is released when the order is cancelled."
+msgstr "款項已保留但尚未扣款。可從訂單動作請款，或在取消訂單時自動釋放。"
+
+msgid "Open the LINE Pay merchant centre"
+msgstr "開啟 LINE Pay 商家後台"
+
+msgid "Your order is in, but the LINE Pay payment did not go through. You can pay for it again from your account."
+msgstr "訂單已收到，但 LINE Pay 付款沒有完成。你可以從帳戶頁再付一次。"
+
+msgid "Your order is in and we are waiting for LINE Pay to confirm the payment. This usually takes a moment."
+msgstr "訂單已收到，正在等 LINE Pay 確認付款，通常一下子就好。"

@@ -72,6 +72,24 @@ class WooGateway extends WC_Payment_Gateway {
 	}
 
 	/**
+	 * Whether another plugin's LINE Pay gateway is enabled on this site.
+	 *
+	 * Checked by settings rather than by class, so it holds whether or not the
+	 * other plugin has loaded its gateway yet on this request.
+	 */
+	public static function another_line_pay_is_active(): bool {
+		foreach ( array( 'moksafowo-linepay' ) as $other ) {
+			$settings = get_option( 'woocommerce_' . $other . '_settings', array() );
+
+			if ( is_array( $settings ) && isset( $settings['enabled'] ) && 'yes' === $settings['enabled'] ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Whether the gateway can be offered.
 	 */
 	public function is_available(): bool {
@@ -80,6 +98,14 @@ class WooGateway extends WC_Payment_Gateway {
 		}
 
 		if ( ! Options::get( 'pay_enabled' ) || ! LinePayClient::is_configured() ) {
+			return false;
+		}
+
+		// moksa-for-woocommerce carries its own LINE Pay gateway. A store with
+		// both plugins would otherwise offer LINE Pay twice at checkout, and
+		// the customer has no way to know they are the same thing. That one
+		// wins: it is the commerce plugin, and it was there first.
+		if ( self::another_line_pay_is_active() ) {
 			return false;
 		}
 
