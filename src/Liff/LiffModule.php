@@ -13,6 +13,7 @@
 namespace Moksa\Line\Liff;
 
 use Moksa\Line\Data\Users;
+use Moksa\Line\Admin\AdminModule;
 use Moksa\Line\Inbox\Conversations;
 use Moksa\Line\Inbox\Messages;
 use Moksa\Line\Support\Logger;
@@ -430,20 +431,31 @@ class LiffModule {
 		// unversioned edge build; it exists only to make the URL cacheable.
 		wp_enqueue_script( 'moksa-line-liff-sdk', self::SDK_URL, array(), MOKSA_LINE_VERSION, true );
 
+		// Versioned by file time, like every other asset of this plugin. These
+		// two carried the bare plugin version, which never changes between
+		// releases -- so a browser that had front.css once kept it, and a fix
+		// to the avatar's size shipped to nobody who had opened the page before.
 		wp_enqueue_script(
 			'moksa-line-liff',
 			MOKSA_LINE_URL . 'assets/js/liff.js',
 			array( 'moksa-line-liff-sdk' ),
-			MOKSA_LINE_VERSION,
+			AdminModule::asset_version( 'assets/js/liff.js' ),
 			true
 		);
 
-		wp_enqueue_style(
-			'moksa-line-front',
-			MOKSA_LINE_URL . 'assets/css/front.css',
-			array(),
-			MOKSA_LINE_VERSION
-		);
+		// The front stylesheet is registered once, by the shortcode module, with
+		// its own version. Enqueuing by handle uses that registration rather
+		// than racing it with a second one under the same name.
+		if ( ! wp_style_is( 'moksa-line-front', 'registered' ) ) {
+			wp_register_style(
+				'moksa-line-front',
+				MOKSA_LINE_URL . 'assets/css/front.css',
+				array(),
+				AdminModule::asset_version( 'assets/css/front.css' )
+			);
+		}
+
+		wp_enqueue_style( 'moksa-line-front' );
 
 		wp_localize_script(
 			'moksa-line-liff',

@@ -81,9 +81,15 @@ class AdminModule {
 		foreach ( $pages as $page ) {
 			list( $slug, $label, $callback ) = $page;
 
+			// The unread bubble belongs on the menu, not in the browser tab:
+			// stripping only its tags left "Inbox 1" as the page title, a number
+			// frozen at page load next to the live count the inbox screen keeps
+			// in the title itself.
+			$page_title = wp_strip_all_tags( preg_replace( '#\s*<span class="awaiting-mod">.*?</span></span>#', '', $label ) );
+
 			add_submenu_page(
 				self::SLUG,
-				wp_strip_all_tags( $label ),
+				$page_title,
 				$label,
 				$capability,
 				$slug,

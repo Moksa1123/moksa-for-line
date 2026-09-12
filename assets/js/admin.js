@@ -986,23 +986,55 @@
 				loadThread($list.find('.moksa-conv.is-active'));
 			}
 
+			// Conversations waiting, not messages: the same number the menu
+			// bubble shows, so the two never disagree. Kept current on every
+			// tick, including the bubble itself, which is otherwise frozen at
+			// whatever it was when the page loaded.
+			var waiting = $list.find('.moksa-conv__unread').length;
+
+			document.title = (waiting > 0 ? '(' + waiting + ') ' : '') + baseTitle;
+
+			// Scoped to the inbox's own menu entry: core's Comments item uses the
+			// same awaiting-mod markup, and the first match on the page is that.
+			var $bubble = $('#adminmenu a[href$="page=moksa-line-inbox"] .pending-count');
+
+			if ($bubble.length) {
+				$bubble.text(waiting).closest('.awaiting-mod').toggle(waiting > 0);
+			}
+
 			if (update.inbound > 0) {
-				var unread = 0;
-
-				$list.find('.moksa-conv__unread').each(function () {
-					unread += parseInt($(this).text(), 10) || 0;
-				});
-
-				document.title = (unread > 0 ? '(' + unread + ') ' : '') + baseTitle;
 				ping();
 				notify(update.notice, update.inbound);
 			}
 		});
 
-		// Fifteen seconds while this screen is open. The heartbeat slows down
-		// on its own when the tab is in the background.
+		// Fifteen seconds while this screen is open.
+		//
+		// And not suspended when the tab is hidden. Core stops the heartbeat
+		// entirely for a background tab -- measured: zero ticks in forty
+		// seconds -- which for most screens is right and for this one is
+		// backwards: the desktop notification exists for exactly the moment
+		// the agent is looking at something else. disableSuspend() is core's
+		// own switch for screens where the heartbeat is doing real work.
 		if (window.wp && wp.heartbeat && wp.heartbeat.interval) {
 			wp.heartbeat.interval(15);
+
+			if (wp.heartbeat.disableSuspend) {
+				wp.heartbeat.disableSuspend();
+			}
+
+			// That is not enough on its own. Core has one more rule, in
+			// scheduleNextTick(): while the window is not focused, the interval
+			// is 120 seconds whatever was asked for -- measured as zero ticks
+			// in 68 seconds with the tab hidden. Two minutes is fine for a
+			// post lock and useless for an inbox, so while the window is
+			// unfocused this asks for a tick every 30 seconds itself.
+			// connectNow() is core's own way to do that and ignores focus.
+			window.setInterval(function () {
+				if (!document.hasFocus() && wp.heartbeat.connectNow) {
+					wp.heartbeat.connectNow();
+				}
+			}, 30000);
 		}
 
 		$reply.on('submit', function (event) {
