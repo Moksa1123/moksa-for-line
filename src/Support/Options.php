@@ -41,6 +41,10 @@ class Options {
 			'sync_profile'         => array( 'type' => 'bool', 'default' => true ),
 			'new_user_role'        => array( 'type' => 'string', 'default' => 'subscriber' ),
 			'login_redirect'       => array( 'type' => 'url', 'default' => '' ),
+
+			// How long someone stays signed in after using LINE. 'default'
+			// leaves WordPress to decide, which is 14 days.
+			'login_duration'       => array( 'type' => 'enum', 'default' => 'default', 'enum' => array( 'browser', 'default', '30', '90' ) ),
 			'bot_prompt'           => array( 'type' => 'enum', 'default' => 'none', 'enum' => array( 'none', 'normal', 'aggressive' ) ),
 
 			// --- Login button appearance ------------------------------------------

@@ -3348,3 +3348,21 @@ msgstr "請為這個圖文選單命名。"
 
 msgid "LINE could not complete this login. Please try again."
 msgstr "LINE 無法完成這次登入，請再試一次。"
+
+msgid "Stay signed in for"
+msgstr "登入狀態保留"
+
+msgid "Until they close the browser"
+msgstr "到關閉瀏覽器為止"
+
+msgid "14 days (the WordPress default)"
+msgstr "14 天（WordPress 預設）"
+
+msgid "30 days"
+msgstr "30 天"
+
+msgid "90 days"
+msgstr "90 天"
+
+msgid "Only applies to signing in with LINE. Signing in with a password keeps whatever WordPress does."
+msgstr "只影響用 LINE 登入。用密碼登入維持 WordPress 原本的時效。"

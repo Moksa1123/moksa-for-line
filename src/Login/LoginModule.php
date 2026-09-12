@@ -242,7 +242,7 @@ class LoginModule {
 
 		if ( get_current_user_id() !== $user_id ) {
 			wp_set_current_user( $user_id );
-			wp_set_auth_cookie( $user_id, true );
+			self::start_session( $user_id );
 
 			$user = get_userdata( $user_id );
 
@@ -623,6 +623,62 @@ class LoginModule {
 	}
 
 	// --- Helpers ---------------------------------------------------------------
+
+	/**
+	 * Sign the user in for as long as the shop has asked for.
+	 *
+	 * The filter is added and removed around this one call rather than left on
+	 * a hook. auth_cookie_expiration is global: a filter registered at load
+	 * time would quietly change how long a password login lasts too, which is
+	 * not what a setting about LINE logins should do.
+	 *
+	 * @param int $user_id Who is signing in.
+	 */
+	private static function start_session( int $user_id ): void {
+		$seconds = self::session_length();
+
+		// 'browser' means no remembering: WordPress writes a session cookie,
+		// which the browser drops when it closes.
+		if ( 0 === $seconds ) {
+			wp_set_auth_cookie( $user_id, false );
+
+			return;
+		}
+
+		if ( 0 > $seconds ) {
+			wp_set_auth_cookie( $user_id, true );
+
+			return;
+		}
+
+		$extend = static function () use ( $seconds ) {
+			return $seconds;
+		};
+
+		add_filter( 'auth_cookie_expiration', $extend, 99 );
+		wp_set_auth_cookie( $user_id, true );
+		remove_filter( 'auth_cookie_expiration', $extend, 99 );
+	}
+
+	/**
+	 * The configured session length in seconds.
+	 *
+	 * @return int Seconds, 0 for a browser session, or -1 to leave it to
+	 *             WordPress.
+	 */
+	public static function session_length(): int {
+		$setting = (string) Options::get( 'login_duration' );
+
+		if ( 'browser' === $setting ) {
+			return 0;
+		}
+
+		if ( ctype_digit( $setting ) && (int) $setting > 0 ) {
+			return (int) $setting * DAY_IN_SECONDS;
+		}
+
+		return -1;
+	}
 
 	/**
 	 * Transient key for a state value. The state itself is never used as the

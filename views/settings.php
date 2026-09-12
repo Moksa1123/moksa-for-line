@@ -281,6 +281,20 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 				<?php
 				?>
 
+				<?php
+				$select(
+					'login_duration',
+					__( 'Stay signed in for', 'moksa-line' ),
+					array(
+						'browser' => __( 'Until they close the browser', 'moksa-line' ),
+						'default' => __( '14 days (the WordPress default)', 'moksa-line' ),
+						'30'      => __( '30 days', 'moksa-line' ),
+						'90'      => __( '90 days', 'moksa-line' ),
+					),
+					__( 'Only applies to signing in with LINE. Signing in with a password keeps whatever WordPress does.', 'moksa-line' )
+				);
+				?>
+
 				<tr>
 					<th scope="row" colspan="2"><h2 class="moksa-subhead"><?php esc_html_e( 'Login button', 'moksa-line' ); ?></h2></th>
 				</tr>
