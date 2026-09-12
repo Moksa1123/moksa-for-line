@@ -142,8 +142,20 @@
 	max-width: 480px;
 }
 
-.moksa-liff__avatar {
+/*
+ * Sized here, not by the width/height attributes the script sets: a theme
+ * that declares img { width: 100% } overrides attributes, and LINE serves
+ * profile pictures at full resolution -- which is how a 64px avatar came out
+ * filling the whole LIFF window on a phone.
+ */
+.moksa-liff img.moksa-liff__avatar {
+	display: block;
+	width: 72px;
+	height: 72px;
+	max-width: 72px;
+	margin: 0 0 12px;
 	border-radius: 50%;
+	object-fit: cover;
 }
 
 .moksa-liff__greeting {

@@ -227,7 +227,7 @@ class AdminModule {
 		wp_enqueue_script(
 			'moksa-line-admin',
 			MOKSA_LINE_URL . 'assets/js/admin.js',
-			array( 'jquery', 'moksa-line-confirm', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor', 'moksa-line-flow-editor', 'moksa-line-card-editor', 'moksa-line-template-editor' ),
+			array( 'jquery', 'heartbeat', 'moksa-line-confirm', 'moksa-line-flex-renderer', 'moksa-line-richmenu-editor', 'moksa-line-flow-editor', 'moksa-line-card-editor', 'moksa-line-template-editor' ),
 			self::asset_version( 'assets/js/admin.js' ),
 			true
 		);
@@ -319,6 +319,8 @@ class AdminModule {
 					'sendAgain'    => __( 'Send again', 'moksa-line' ),
 					'confirmResend' => __( 'Send this notification to the customer again?', 'moksa-line' ),
 					'copyFailed'   => __( 'Could not copy -- select it and copy by hand', 'moksa-line' ),
+					/* translators: %d: how many messages arrived. */
+					'newMessages'  => __( '%d new messages', 'moksa-line' ),
 					'confirmClearLogs' => __( 'Delete every entry in the plugin log? The log is only used for diagnosis, so nothing else is lost.', 'moksa-line' ),
 					'altTextEmpty' => __( '(no fallback text -- the notification would be blank)', 'moksa-line' ),
 					'altTextMissing' => __( 'Fallback text is empty. The chat list and the push notification would show nothing.', 'moksa-line' ),

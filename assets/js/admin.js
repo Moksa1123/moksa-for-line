@@ -859,7 +859,7 @@
 			}
 		}
 
-		$('.moksa-conv').on('click', function () {
+		$(document).on('click', '.moksa-conv', function () {
 			var $conv = $(this);
 
 			current = $conv.data('conversation');
@@ -871,6 +871,10 @@
 			chosenSticker = null;
 			showChosenSticker();
 
+			loadThread($conv);
+		});
+
+		function loadThread($conv) {
 			post('inbox_thread', { conversation_id: current }).then(function (result) {
 				$thread.html(result.thread);
 				$name.text(result.name || '');
@@ -883,7 +887,123 @@
 				$thread.html('<p class="moksa-feedback__message moksa-feedback__message--bad">'
 					+ $('<div>').text(error.message).html() + '</p>');
 			});
+		}
+
+		// --- Live updates over the WordPress heartbeat ------------------------
+
+		var $list = $('[data-moksa-inbox-list]');
+		var latest = parseInt($list.data('latest'), 10) || 0;
+		var baseTitle = document.title;
+		var $notifyButton = $('[data-moksa-notify-enable]');
+
+		// Offer desktop notifications only where the browser has not decided.
+		if ('Notification' in window && 'default' === Notification.permission) {
+			$notifyButton.prop('hidden', false);
+		}
+
+		$notifyButton.on('click', function () {
+			Notification.requestPermission().then(function () {
+				$notifyButton.prop('hidden', true);
+			});
 		});
+
+		/**
+		 * A short, quiet tone. Generated, so there is no audio file to ship or
+		 * to fail to load; and only after the page has had a click, because
+		 * browsers refuse to play sound before that anyway.
+		 */
+		function ping() {
+			try {
+				var Ctx = window.AudioContext || window.webkitAudioContext;
+
+				if (!Ctx) {
+					return;
+				}
+
+				var ctx = new Ctx();
+				var osc = ctx.createOscillator();
+				var gain = ctx.createGain();
+
+				osc.type = 'sine';
+				osc.frequency.value = 880;
+				gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+				gain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 0.01);
+				gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.25);
+				osc.connect(gain).connect(ctx.destination);
+				osc.start();
+				osc.stop(ctx.currentTime + 0.26);
+			} catch (error) {
+				// Silence is an acceptable outcome for a sound.
+			}
+		}
+
+		function notify(notice, count) {
+			if (!('Notification' in window) || 'granted' !== Notification.permission || document.hasFocus()) {
+				return;
+			}
+
+			try {
+				var body = notice ? (notice.name + (notice.preview ? '：' + notice.preview : '')) : '';
+				var n = new Notification((strings.newMessages || '%d new messages').replace('%d', count), { body: body, tag: 'moksa-line-inbox' });
+
+				n.onclick = function () {
+					window.focus();
+					n.close();
+				};
+			} catch (error) {
+				// A browser that refuses is not an error worth reporting.
+			}
+		}
+
+		$(document).on('heartbeat-send', function (event, data) {
+			data.moksa_line_inbox = {
+				since: latest,
+				conversation: current,
+				status: $list.data('status') || '',
+				search: $list.data('search') || ''
+			};
+		});
+
+		$(document).on('heartbeat-tick', function (event, data) {
+			var update = data.moksa_line_inbox;
+
+			if (!update) {
+				return;
+			}
+
+			if (update.latest <= latest) {
+				return;
+			}
+
+			latest = update.latest;
+
+			if (update.list) {
+				$list.html(update.list);
+				$list.find('.moksa-conv[data-conversation="' + current + '"]').addClass('is-active');
+			}
+
+			if (update.thread_changed && current) {
+				loadThread($list.find('.moksa-conv.is-active'));
+			}
+
+			if (update.inbound > 0) {
+				var unread = 0;
+
+				$list.find('.moksa-conv__unread').each(function () {
+					unread += parseInt($(this).text(), 10) || 0;
+				});
+
+				document.title = (unread > 0 ? '(' + unread + ') ' : '') + baseTitle;
+				ping();
+				notify(update.notice, update.inbound);
+			}
+		});
+
+		// Fifteen seconds while this screen is open. The heartbeat slows down
+		// on its own when the tab is in the background.
+		if (window.wp && wp.heartbeat && wp.heartbeat.interval) {
+			wp.heartbeat.interval(15);
+		}
 
 		$reply.on('submit', function (event) {
 			event.preventDefault();

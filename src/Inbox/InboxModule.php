@@ -41,6 +41,97 @@ class InboxModule {
 		add_action( 'wp_ajax_moksa_line_inbox_send', array( $this, 'ajax_send' ) );
 		add_action( 'wp_ajax_moksa_line_inbox_thread', array( $this, 'ajax_thread' ) );
 		add_action( 'wp_ajax_moksa_line_inbox_status', array( $this, 'ajax_set_status' ) );
+
+		// Live updates ride WordPress's own heartbeat: no extra endpoint to
+		// guard, no timer of ours, and it already backs off when the tab is
+		// hidden.
+		add_filter( 'heartbeat_received', array( $this, 'heartbeat' ), 10, 2 );
+		add_filter( 'heartbeat_settings', array( $this, 'heartbeat_interval' ) );
+	}
+
+	// --- Live updates ------------------------------------------------------------
+
+	/**
+	 * Poll faster on the inbox screen. Elsewhere the default stands.
+	 *
+	 * @param array $settings Heartbeat settings.
+	 * @return array
+	 */
+	public function heartbeat_interval( $settings ) {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+		if ( $screen && false !== strpos( (string) $screen->id, 'moksa-line-inbox' ) ) {
+			$settings['interval'] = 15;
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Answer the inbox's heartbeat: has anything arrived since it last looked?
+	 *
+	 * The list is re-rendered from the same partial the page uses, with the
+	 * same filter, so what arrives is exactly what a reload would have shown.
+	 * The open thread is only flagged; the client fetches it through the
+	 * existing thread endpoint rather than a second copy of that rendering.
+	 *
+	 * @param array $response What goes back to the browser.
+	 * @param array $data     What the browser sent.
+	 * @return array
+	 */
+	public function heartbeat( $response, $data ) {
+		if ( empty( $data['moksa_line_inbox'] ) || ! is_array( $data['moksa_line_inbox'] ) || ! self::can_manage() ) {
+			return $response;
+		}
+
+		$asked        = $data['moksa_line_inbox'];
+		$since        = isset( $asked['since'] ) ? (int) $asked['since'] : 0;
+		$open         = isset( $asked['conversation'] ) ? (int) $asked['conversation'] : 0;
+		$status       = isset( $asked['status'] ) ? sanitize_key( (string) $asked['status'] ) : '';
+		$search       = isset( $asked['search'] ) ? sanitize_text_field( (string) $asked['search'] ) : '';
+		$latest       = Messages::latest_id();
+		$new_inbound  = Messages::inbound_since( $since );
+		$answer       = array(
+			'latest'  => $latest,
+			'inbound' => $new_inbound,
+		);
+
+		// Nothing at all since the last look, inbound or outbound: say so and
+		// send nothing else. This is the common case fifteen seconds apart.
+		if ( $latest <= $since ) {
+			$response['moksa_line_inbox'] = $answer;
+
+			return $response;
+		}
+
+		$list          = Conversations::paginate( array( 'status' => $status, 'search' => $search, 'per_page' => 50 ) );
+		$status_labels = array(
+			'bot'    => __( 'bot', 'moksa-line' ),
+			'human'  => __( 'human', 'moksa-line' ),
+			'closed' => __( 'closed', 'moksa-line' ),
+		);
+
+		ob_start();
+		require MOKSA_LINE_DIR . 'views/inbox-list.php';
+		$answer['list'] = ob_get_clean();
+
+		$answer['thread_changed'] = $open > 0 && Messages::inbound_since( $since, $open ) > 0;
+
+		if ( $new_inbound > 0 ) {
+			// The newest conversation with something unread, for the notification.
+			$top = isset( $list['rows'][0] ) ? $list['rows'][0] : null;
+
+			if ( $top ) {
+				$answer['notice'] = array(
+					'name'    => '' !== (string) $top->display_name ? (string) $top->display_name : (string) $top->line_user_id,
+					'preview' => (string) $top->last_message_preview,
+				);
+			}
+		}
+
+		$response['moksa_line_inbox'] = $answer;
+
+		return $response;
 	}
 
 	/**

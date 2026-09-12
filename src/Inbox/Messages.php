@@ -77,6 +77,48 @@ class Messages {
 	}
 
 	/**
+	 * The id of the most recent message of any kind.
+	 *
+	 * What the inbox screen remembers, so the next heartbeat can ask "anything
+	 * after this?" rather than "anything at all?".
+	 */
+	public static function latest_id(): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table, one indexed max.
+		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(id) FROM %i', self::table() ) );
+	}
+
+	/**
+	 * How many messages have come in from customers since a given id.
+	 *
+	 * Inbound only: the agent's own replies going out should not ring the bell.
+	 *
+	 * @param int $since           Message id the caller already knows about.
+	 * @param int $conversation_id Limit to one conversation, or 0 for all.
+	 */
+	public static function inbound_since( int $since, int $conversation_id = 0 ): int {
+		global $wpdb;
+
+		if ( $conversation_id > 0 ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table, polled on purpose.
+			return (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM %i WHERE id > %d AND direction = 'in' AND conversation_id = %d",
+					self::table(),
+					$since,
+					$conversation_id
+				)
+			);
+		}
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table, polled on purpose.
+		return (int) $wpdb->get_var(
+			$wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE id > %d AND direction = 'in'", self::table(), $since )
+		);
+	}
+
+	/**
 	 * Turn an inbound LINE message object into something readable in a list.
 	 *
 	 * @param array $message LINE message object from the webhook.

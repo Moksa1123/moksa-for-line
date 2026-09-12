@@ -3426,3 +3426,9 @@ msgstr "建立頁面"
 
 msgid "You cannot create pages."
 msgstr "你沒有建立頁面的權限。"
+
+msgid "%d new messages"
+msgstr "%d 則新訊息"
+
+msgid "Desktop notifications"
+msgstr "桌面通知"
