@@ -35,7 +35,7 @@ class TemplateModule {
 	public function ajax_warnings(): void {
 		$this->guard();
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitised -- JSON, decoded below.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON, decoded below.
 		$raw     = isset( $_POST['definition'] ) ? wp_unslash( $_POST['definition'] ) : '';
 		$decoded = json_decode( (string) $raw, true );
 
@@ -209,7 +209,7 @@ class TemplateModule {
 	 * @return array
 	 */
 	private function decoded_definition(): array {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitised -- JSON, decoded and then checked field by field.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON, decoded and then checked field by field.
 		$raw     = isset( $_POST['definition'] ) ? wp_unslash( $_POST['definition'] ) : '';
 		$decoded = json_decode( (string) $raw, true );
 

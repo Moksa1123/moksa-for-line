@@ -77,6 +77,7 @@ class FlexModule {
 	public function ajax_save(): void {
 		$this->guard();
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- a Flex/flow document, parsed as JSON and then checked field by field; sanitising it as text would corrupt valid URLs and colours.
 		$contents_raw = isset( $_POST['contents'] ) ? wp_unslash( $_POST['contents'] ) : '';
 		$decoded      = json_decode( (string) $contents_raw, true );
 

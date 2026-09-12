@@ -100,7 +100,7 @@ class Flow extends Repository {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->query(
 			$wpdb->prepare(
-				'INSERT INTO ' . self::sessions_table() . '
+				'INSERT INTO %i
 					(line_user_id, flow_id, step_index, answers, expires_at, created_at, updated_at)
 				 VALUES (%s, %d, 0, %s, %s, %s, %s)
 				 ON DUPLICATE KEY UPDATE
@@ -109,6 +109,7 @@ class Flow extends Repository {
 					answers = VALUES(answers),
 					expires_at = VALUES(expires_at),
 					updated_at = VALUES(updated_at)',
+				self::sessions_table(),
 				$line_user_id,
 				$flow_id,
 				wp_json_encode( array() ),

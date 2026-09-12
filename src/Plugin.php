@@ -62,11 +62,15 @@ final class Plugin {
 	 * this call only covers the .mo files shipped in /languages.
 	 */
 	public function load_textdomain(): void {
-		load_plugin_textdomain(
-			'moksa-line',
-			false,
-			dirname( MOKSA_LINE_BASENAME ) . '/languages'
-		);
+		// Deliberately empty of a load_plugin_textdomain() call. WordPress has
+		// loaded a plugin's translations by itself since 4.6, from both
+		// wp-content/languages/plugins and the plugin's own Domain Path, at the
+		// moment the first string is asked for. Calling it here did nothing
+		// except force that work to happen earlier than it was needed.
+		//
+		// The hook stays so the timing remains obvious to the next reader, and
+		// so anything that wants to add a language pack has somewhere to do it.
+		do_action( 'moksa_line_load_textdomain' );
 	}
 
 	/**

@@ -214,21 +214,26 @@ class Users {
 
 		$clause = implode( ' AND ', $where );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table, params prepared.
+		// The WHERE clause is assembled from the literal fragments above; every
+		// value in it is a placeholder, and the table name is one too.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned table, paged admin list.
 		$total = (int) $wpdb->get_var(
-			$params
-				? $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE {$clause}", $params )
-				: "SELECT COUNT(*) FROM {$table} WHERE {$clause}"
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM %i WHERE {$clause}",
+				array_merge( array( $table ), $params )
+			)
 		);
 
-		$query_params   = $params;
+		$query_params   = array_merge( array( $table ), $params );
 		$query_params[] = $per_page;
 		$query_params[] = $offset;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table, params prepared.
+		// The WHERE clause is assembled from the literal fragments above; every
+		// value in it is a placeholder, and the table name is one too.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned table, paged admin list.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$table} WHERE {$clause} ORDER BY updated_at DESC LIMIT %d OFFSET %d",
+				"SELECT * FROM %i WHERE {$clause} ORDER BY updated_at DESC LIMIT %d OFFSET %d",
 				$query_params
 			)
 		);

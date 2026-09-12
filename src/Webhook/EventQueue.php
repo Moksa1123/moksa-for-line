@@ -55,9 +55,10 @@ class EventQueue {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$inserted = $wpdb->query(
 			$wpdb->prepare(
-				'INSERT IGNORE INTO ' . self::table() . '
+				'INSERT IGNORE INTO %i
 					(webhook_event_id, event_type, source_type, source_id, reply_token, payload, status, received_at)
 				 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
+				self::table(),
 				$event_id,
 				isset( $event['type'] ) ? (string) $event['type'] : '',
 				isset( $source['type'] ) ? (string) $source['type'] : '',

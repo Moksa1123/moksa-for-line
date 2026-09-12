@@ -29,30 +29,6 @@ Connects a WordPress site to the LINE platform.
 
 The Messaging API provides no way to read past conversations, so the inbox starts from the moment the webhook is switched on. And answering an inbound message within a minute is free, while anything sent afterwards — inbox replies, broadcasts, receipts — is a push message and is billed by LINE.
 
-= External services =
-
-This plugin connects your site to the LINE platform, which is operated by LY Corporation. It cannot work without doing so. Each service below is listed with what is sent, and when.
-
-**LINE Messaging API** — `api.line.me` and `api-data.line.me`
-Used to send and receive messages, issue channel access tokens, read the profile of someone who messages your bot, and create rich menus. Sent: your channel id and secret (to obtain a token), the LINE user id of the recipient, and the message content you or the bot compose. Called whenever a message is sent, a webhook event is processed, or a rich menu is published.
-
-**LINE Login** — `access.line.me` and `api.line.me`
-Used to sign visitors in and to verify the resulting ID token. Sent: your channel id and secret, and the authorization code returned by LINE. Received: the visitor's LINE user id, display name, profile picture URL, and email address when your channel is approved for it. Called when a visitor uses a LINE login button.
-
-**LIFF SDK** — `static.line-scdn.net`
-A JavaScript file loaded in the visitor's browser on pages using the LIFF shortcodes. It must be served from LINE's own CDN; a bundled copy is not supported. Loaded only on pages containing `[moksa_liff_profile]` or `[moksa_line_chat]`.
-
-**LINE Pay** — `api-pay.line.me`, or `sandbox-api-pay.line.me` in sandbox mode
-Only contacted when LINE Pay is enabled. Sent: your LINE Pay channel id, a signature derived from your channel secret, the order reference, the amount and currency, and the names and quantities of the items being purchased. Called when a payment is reserved, confirmed, refunded, voided or queried.
-
-Terms of use: https://terms.line.me/LINE_Developers_Agreement — Privacy policy: https://line.me/en/terms/policy/
-
-**Optional, off unless you configure it:**
-
-*Webhook forwarding* — if you set a forwarding URL in the settings, every webhook delivery from LINE is relayed to that URL unchanged, including the message content and the sender's LINE user id. The destination is entirely your choice; nothing is sent anywhere until you enter one.
-
-*AI replies* — if you enable AI replies, the visitor's message text and a pseudonymous conversation id are passed to the AI Engine plugin, which sends them onward to whichever AI provider you have configured in that plugin. This plugin does not contact any AI provider directly. Review AI Engine's own disclosures for where that data goes.
-
 = Privacy =
 
 The plugin stores LINE user ids, display names, profile picture URLs and, where the channel is approved for it, email addresses. Messages exchanged with the bot are stored so the inbox can show them, and are deleted after the retention period set in the settings. Credentials are encrypted at rest using keys derived from the site's WordPress salts.
@@ -98,6 +74,34 @@ Deactivate and delete the older plugin once you have confirmed this one works. L
 = Do I have to reconfigure anything after switching? =
 
 No. The callback and webhook URLs are unchanged, so the settings already registered in the LINE Developers Console keep working.
+
+== External services ==
+
+This plugin connects your site to the LINE platform, which is operated by LY Corporation. It cannot work without doing so. Each service below is listed with what is sent, and when.
+
+**LINE Messaging API** — `api.line.me` and `api-data.line.me`
+Used to send and receive messages, issue channel access tokens, read the profile of someone who messages your bot, and create rich menus. Sent: your channel id and secret (to obtain a token), the LINE user id of the recipient, and the message content you or the bot compose. Called whenever a message is sent, a webhook event is processed, or a rich menu is published.
+
+**LINE Login** — `access.line.me` and `api.line.me`
+Used to sign visitors in and to verify the resulting ID token. Sent: your channel id and secret, and the authorization code returned by LINE. Received: the visitor's LINE user id, display name, profile picture URL, and email address when your channel is approved for it. Called when a visitor uses a LINE login button.
+
+**LIFF SDK** — `static.line-scdn.net`
+A JavaScript file loaded in the visitor's browser on pages using the LIFF shortcodes. It must be served from LINE's own CDN; a bundled copy is not supported. Loaded only on pages containing `[moksa_liff_profile]` or `[moksa_line_chat]`.
+
+**LINE Pay** — `api-pay.line.me`, or `sandbox-api-pay.line.me` in sandbox mode
+Only contacted when LINE Pay is enabled. Sent: your LINE Pay channel id, a signature derived from your channel secret, the order reference, the amount and currency, and the names and quantities of the items being purchased. Called when a payment is reserved, confirmed, refunded, voided or queried.
+
+Terms of use: https://terms.line.me/LINE_Developers_Agreement — Privacy policy: https://line.me/en/terms/policy/
+
+**Optional, off unless you configure it:**
+
+*Webhook forwarding* — if you set a forwarding URL in the settings, every webhook delivery from LINE is relayed to that URL unchanged, including the message content and the sender's LINE user id. The destination is entirely your choice; nothing is sent anywhere until you enter one.
+
+*AI replies* — if you enable AI replies, the visitor's message text and a pseudonymous conversation id are passed to the AI Engine plugin, which sends them onward to whichever AI provider you have configured in that plugin. This plugin does not contact any AI provider directly. Review AI Engine's own disclosures for where that data goes.
+
+This plugin is not affiliated with, endorsed by, or sponsored by LY Corporation.
+LINE and the LINE logo are trademarks of LY Corporation. The plugin integrates
+with LINE's published APIs; you supply your own channel credentials.
 
 == Upgrade Notice ==
 

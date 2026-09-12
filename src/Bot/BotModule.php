@@ -136,6 +136,7 @@ class BotModule {
 	public function ajax_save_flow(): void {
 		$this->guard();
 
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- a Flex/flow document, parsed as JSON and then checked field by field; sanitising it as text would corrupt valid URLs and colours.
 		$definition = json_decode( (string) wp_unslash( $_POST['definition'] ?? '' ), true );
 
 		if ( ! is_array( $definition ) ) {

@@ -901,7 +901,7 @@ class WooModule {
 					admin_url( 'admin-ajax.php' )
 				)
 			),
-			ShortcodeModule::style_attribute(),
+			ShortcodeModule::style_attribute(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- returns an escaped attribute, or nothing.
 			esc_html__( 'Sign in with LINE', 'moksa-line' )
 		);
 	}

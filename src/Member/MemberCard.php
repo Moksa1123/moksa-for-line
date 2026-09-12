@@ -87,9 +87,15 @@ class MemberCard {
 			return 0;
 		}
 
+		// A meta_value lookup is not indexed, which is what the slow-query
+		// warning is about. It runs once, when a member of staff scans a card --
+		// never in a page render or a loop -- and the alternative is a table of
+		// our own holding one column.
 		$users = get_users(
 			array(
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- see above.
 				'meta_key'    => self::META,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- see above.
 				'meta_value'  => $code,
 				'number'      => 2,
 				'fields'      => 'ID',

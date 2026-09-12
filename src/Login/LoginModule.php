@@ -147,6 +147,11 @@ class LoginModule {
 			wp_die( esc_html__( 'LINE Login is not configured on this site yet.', 'moksa-line' ) );
 		}
 
+		// Not wp_safe_redirect: the destination is access.line.me, and the safe
+		// variant only allows hosts on this site's allowlist -- it would send
+		// everybody to wp-admin instead of to LINE. The URL is built by
+		// authorize_url() from the configured channel, not from the request.
+		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- deliberate off-site redirect to the LINE authorisation page.
 		wp_redirect( $url );
 		exit;
 	}
@@ -247,6 +252,10 @@ class LoginModule {
 			$user = get_userdata( $user_id );
 
 			if ( $user instanceof WP_User ) {
+				// Core's own hook, fired deliberately: wp_set_auth_cookie() does
+				// not fire it, and everything that watches for a login -- session
+				// handling, security plugins, analytics -- is listening here.
+				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- firing a core hook, not defining one.
 				do_action( 'wp_login', $user->user_login, $user );
 			}
 		}

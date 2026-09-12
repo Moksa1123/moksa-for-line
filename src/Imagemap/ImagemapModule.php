@@ -196,7 +196,7 @@ class ImagemapModule {
 		$name    = Ajax::text( 'name' );
 		$alt     = Ajax::text( 'alt_text' );
 		$image   = Ajax::int( 'image_attachment_id' );
-		$raw     = isset( $_POST['areas'] ) ? wp_unslash( $_POST['areas'] ) : '[]'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitised -- JSON, decoded below.
+		$raw     = isset( $_POST['areas'] ) ? wp_unslash( $_POST['areas'] ) : '[]'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON, decoded below.
 		$decoded = json_decode( (string) $raw, true );
 
 		if ( ! is_array( $decoded ) ) {

@@ -68,12 +68,16 @@ if ( '' !== $channel && in_array( $channel, $channels, true ) ) {
 
 $clause = implode( ' AND ', $where );
 
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-$grand_total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$log_table}" );
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned log table.
+$grand_total = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', $log_table ) );
 
 if ( $params ) {
-	// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-	$total = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$log_table} WHERE {$clause}", $params ) );
+	// The WHERE clause is built from the literal fragments above; every value in
+	// it is a placeholder, and so is the table name.
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned log table.
+	$total = (int) $wpdb->get_var(
+		$wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE {$clause}", array_merge( array( $log_table ), $params ) )
+	);
 } else {
 	$total = $grand_total;
 }
@@ -82,11 +86,11 @@ $pages  = max( 1, (int) ceil( $total / $per_page ) );
 $paged  = min( $paged, $pages );
 $offset = ( $paged - 1 ) * $per_page;
 
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned log table.
 $logs = (array) $wpdb->get_results(
 	$wpdb->prepare(
-		"SELECT * FROM {$log_table} WHERE {$clause} ORDER BY id DESC LIMIT %d OFFSET %d",
-		array_merge( $params, array( $per_page, $offset ) )
+		"SELECT * FROM %i WHERE {$clause} ORDER BY id DESC LIMIT %d OFFSET %d",
+		array_merge( array( $log_table ), $params, array( $per_page, $offset ) )
 	)
 );
 

@@ -475,7 +475,18 @@ class MemberModule {
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title><?php echo esc_html( $title . ' — ' . get_bloginfo( 'name' ) ); ?></title>
-	<link rel="stylesheet" href="<?php echo esc_url( MOKSA_LINE_URL . 'assets/css/member.css?v=' . AdminModule::asset_version( 'assets/css/member.css' ) ); ?>" />
+	<?php
+	// Enqueued and then printed, rather than written as a tag. This page has no
+	// theme and calls no wp_head(), so nothing would otherwise print it -- and a
+	// hand-written <link> is one of the things the directory's scan rejects.
+	wp_enqueue_style(
+		'moksa-line-member',
+		MOKSA_LINE_URL . 'assets/css/member.css',
+		array(),
+		AdminModule::asset_version( 'assets/css/member.css' )
+	);
+	wp_print_styles( 'moksa-line-member' );
+	?>
 </head>
 <body class="moksa-scan-body">
 		<?php
