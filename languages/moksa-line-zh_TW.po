@@ -3411,3 +3411,18 @@ msgstr "訂單已收到，但 LINE Pay 付款沒有完成。你可以從帳戶�
 
 msgid "Your order is in and we are waiting for LINE Pay to confirm the payment. This usually takes a moment."
 msgstr "訂單已收到，正在等 LINE Pay 確認付款，通常一下子就好。"
+
+msgid "Endpoint URL"
+msgstr "端點網址"
+
+msgid "Paste this as the Endpoint URL when you add a LIFF app in the LINE Developers Console, under your LINE Login channel. Size: Full. Scopes: openid and profile. Then put the LIFF ID it gives you in the field below."
+msgstr "到 LINE Developers Console 的 LINE Login channel → LIFF 新增 app 時，Endpoint URL 貼這個。Size 選 Full，Scopes 勾 openid 和 profile。建好後把 LIFF ID 填到下面的欄位。"
+
+msgid "A LIFF app opens a page on this site inside LINE. There is no page carrying the LIFF shortcodes yet, so there is nothing to register."
+msgstr "LIFF app 會在 LINE 裡開這個網站的一個頁面。目前還沒有放 LIFF 短代碼的頁面，所以沒有網址可以登記。"
+
+msgid "Create the page"
+msgstr "建立頁面"
+
+msgid "You cannot create pages."
+msgstr "你沒有建立頁面的權限。"

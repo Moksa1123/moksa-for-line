@@ -29,10 +29,95 @@ class LiffModule {
 	const SDK_URL      = 'https://static.line-scdn.net/liff/edge/2/sdk.js';
 	const VERIFY_URL   = 'https://api.line.me/oauth2/v2.1/verify';
 
+	/** The shortcodes a page has to carry to be a LIFF endpoint. */
+	const SHORTCODES = array( 'moksa_liff_profile', 'moksa_line_chat' );
+
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_shortcode( 'moksa_liff_profile', array( $this, 'shortcode_profile' ) );
 		add_shortcode( 'moksa_line_chat', array( $this, 'shortcode_chat' ) );
+
+		add_action( 'wp_ajax_moksa_line_liff_create_page', array( $this, 'ajax_create_page' ) );
+	}
+
+	// --- The endpoint page ----------------------------------------------------------
+
+	/**
+	 * The published page that carries a LIFF shortcode, if there is one.
+	 *
+	 * The LINE console asks for an "Endpoint URL" and nothing in this plugin
+	 * used to say what that was: the answer is "whatever page you put the
+	 * shortcode on", which is only obvious once you know it.
+	 *
+	 * @return int Page id, or 0.
+	 */
+	public static function endpoint_page_id(): int {
+		$cached = get_transient( 'moksa_line_liff_page' );
+
+		if ( is_numeric( $cached ) && ( 0 === (int) $cached || 'publish' === get_post_status( (int) $cached ) ) ) {
+			return (int) $cached;
+		}
+
+		global $wpdb;
+
+		$like = array();
+		$args = array();
+
+		foreach ( self::SHORTCODES as $tag ) {
+			$like[] = 'post_content LIKE %s';
+			$args[] = '%' . $wpdb->esc_like( '[' . $tag ) . '%';
+		}
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- the OR list is built from literals above; cached in a transient.
+		$id = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'publish' AND (" . implode( ' OR ', $like ) . ') ORDER BY ID ASC LIMIT 1',
+				$args
+			)
+		);
+
+		set_transient( 'moksa_line_liff_page', $id, HOUR_IN_SECONDS );
+
+		return $id;
+	}
+
+	/**
+	 * The URL to paste into the LINE console, or '' when there is no page yet.
+	 */
+	public static function endpoint_url(): string {
+		$id = self::endpoint_page_id();
+
+		return $id > 0 ? (string) get_permalink( $id ) : '';
+	}
+
+	/**
+	 * Create the endpoint page, from the settings screen.
+	 */
+	public function ajax_create_page(): void {
+		\Moksa\Line\Admin\Ajax::guard( __( 'You cannot create pages.', 'moksa-line' ), 'publish_pages' );
+
+		$existing = self::endpoint_page_id();
+
+		if ( $existing > 0 ) {
+			wp_send_json_success( array( 'url' => get_permalink( $existing ), 'created' => false ) );
+		}
+
+		$id = wp_insert_post(
+			array(
+				'post_type'    => 'page',
+				'post_status'  => 'publish',
+				'post_title'   => __( 'LINE', 'moksa-line' ),
+				'post_name'    => 'line-app',
+				'post_content' => "<!-- wp:shortcode -->\n[moksa_liff_profile]\n<!-- /wp:shortcode -->\n\n<!-- wp:shortcode -->\n[moksa_line_chat]\n<!-- /wp:shortcode -->",
+			),
+			true
+		);
+
+		\Moksa\Line\Admin\Ajax::bail( $id, 'Could not create the LIFF page', 'liff' );
+
+		delete_transient( 'moksa_line_liff_page' );
+
+		wp_send_json_success( array( 'url' => get_permalink( (int) $id ), 'created' => true ) );
 	}
 
 	public function register_routes(): void {

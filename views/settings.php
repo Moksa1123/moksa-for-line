@@ -480,6 +480,27 @@ $select = function ( $key, $label, $choices, $help = '' ) {
 
 			<?php elseif ( 'liff' === $current ) : ?>
 
+				<?php $liff_endpoint = \Moksa\Line\Liff\LiffModule::endpoint_url(); ?>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Endpoint URL', 'moksa-line' ); ?></th>
+					<td>
+						<?php if ( '' !== $liff_endpoint ) : ?>
+							<button type="button" class="moksa-copyable" data-moksa-copy="<?php echo esc_attr( $liff_endpoint ); ?>"><code><?php echo esc_html( $liff_endpoint ); ?></code></button>
+							<p class="description">
+								<?php esc_html_e( 'Paste this as the Endpoint URL when you add a LIFF app in the LINE Developers Console, under your LINE Login channel. Size: Full. Scopes: openid and profile. Then put the LIFF ID it gives you in the field below.', 'moksa-line' ); ?>
+							</p>
+						<?php else : ?>
+							<p class="description">
+								<?php esc_html_e( 'A LIFF app opens a page on this site inside LINE. There is no page carrying the LIFF shortcodes yet, so there is nothing to register.', 'moksa-line' ); ?>
+							</p>
+							<p>
+								<button type="button" class="button" data-moksa-liff-create><?php esc_html_e( 'Create the page', 'moksa-line' ); ?></button>
+							</p>
+							<div class="moksa-feedback" data-moksa-feedback data-moksa-liff-feedback></div>
+						<?php endif; ?>
+					</td>
+				</tr>
+
 				<?php
 				$field( 'liff_id', __( 'Default LIFF ID', 'moksa-line' ), __( 'Used by the LIFF shortcodes unless one is given explicitly.', 'moksa-line' ) );
 				$field( 'liff_chat_id', __( 'Chat LIFF ID', 'moksa-line' ), __( 'Optional separate LIFF app for the chat shortcode.', 'moksa-line' ) );

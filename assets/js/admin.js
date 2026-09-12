@@ -1765,6 +1765,37 @@
 	 * so picking a page writes its URL there rather than adding a second
 	 * setting that could disagree with the first.
 	 */
+	/**
+	 * The LIFF tab's "create the page" button.
+	 *
+	 * One click makes the page the LINE console needs a URL for, then reloads
+	 * so the URL shows up where the button was.
+	 */
+	function bindLiffCreate() {
+		$(document).on('click', '[data-moksa-liff-create]', function () {
+			var $button = $(this);
+			var $feedback = $('[data-moksa-liff-feedback]');
+
+			$button.prop('disabled', true);
+
+			$.post(moksaLine.ajaxUrl, {
+				action: 'moksa_line_liff_create_page',
+				nonce: moksaLine.nonce
+			}).then(function (response) {
+				if (response && response.success) {
+					window.location.reload();
+					return;
+				}
+
+				$button.prop('disabled', false);
+				$feedback.text((response && response.data && response.data.message) || moksaLine.strings.failed);
+			}, function () {
+				$button.prop('disabled', false);
+				$feedback.text(moksaLine.strings.failed);
+			});
+		});
+	}
+
 	function bindDestination() {
 		var $select = $('[data-moksa-destination]');
 
@@ -1921,6 +1952,7 @@
 		bindCopy();
 		bindImagemaps();
 		bindTemplates();
+		bindLiffCreate();
 		bindDestination();
 		bindNotifyPreview();
 		bindWebhookCheck();
