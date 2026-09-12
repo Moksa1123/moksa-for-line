@@ -1,5 +1,5 @@
 === Moksa LINE Suite ===
-Contributors: moksa
+Contributors: moksa0923
 Tags: line, line login, line pay, chatbot, woocommerce
 Requires at least: 6.2
 Tested up to: 7.1
