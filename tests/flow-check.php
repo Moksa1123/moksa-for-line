@@ -13,19 +13,19 @@
  * the caller treated any string as an error -- so no flow could get past its
  * first question, and nothing in the admin showed it.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-use Moksa\Line\Bot\Flow;
+use Mofoline\Bot\Flow;
 
-if ( 'production' === wp_get_environment_type() && ! defined( 'MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
+if ( 'production' === wp_get_environment_type() && ! defined( 'MOFOLINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
 	echo "REFUSED: this site reports WP_ENVIRONMENT_TYPE=production.
 ";
 	echo "It creates and deletes a conversation flow and its submissions.
 ";
 	echo "If this really is a throwaway site, set WP_ENVIRONMENT_TYPE, or define
 ";
-	echo "MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.
+	echo "MOFOLINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.
 ";
 	return;
 }
@@ -162,7 +162,7 @@ Flow::end( $user );
 Flow::delete( (int) $flow_id );
 
 global $wpdb;
-$wpdb->delete( $wpdb->prefix . 'moksa_line_flow_submissions', array( 'flow_id' => (int) $flow_id ) );
+$wpdb->delete( $wpdb->prefix . 'mofoline_flow_submissions', array( 'flow_id' => (int) $flow_id ) );
 
 $passed = (int) $GLOBALS['moksa_pass'];
 $failed = (int) $GLOBALS['moksa_fail'];

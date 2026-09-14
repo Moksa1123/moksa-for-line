@@ -7,17 +7,17 @@
  * live for one minute and belong to the webhook request -- but it is worth
  * knowing before turning the inbox into the primary support channel.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Inbox;
+namespace Mofoline\Inbox;
 
-use Moksa\Line\Data\Users;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
-use Moksa\Line\Webhook\Dispatcher;
-use Moksa\Line\Admin\Ajax;
+use Mofoline\Data\Users;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
+use Mofoline\Webhook\Dispatcher;
+use Mofoline\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,21 +26,21 @@ class InboxModule {
 	/**
 	 * Capability required to read and answer conversations.
 	 */
-	const CAPABILITY = 'moksa_line_manage_inbox';
+	const CAPABILITY = 'mofoline_manage_inbox';
 
 	public function register(): void {
 		if ( ! Options::get( 'inbox_enabled' ) ) {
 			return;
 		}
 
-		add_action( 'moksa_line_inbound_message', array( $this, 'record_inbound' ), 10, 2 );
-		add_action( 'moksa_line_replied', array( $this, 'record_bot_reply' ), 10, 3 );
-		add_action( 'moksa_line_pushed', array( $this, 'record_push' ), 10, 2 );
-		add_action( 'moksa_line_event_follow', array( $this, 'on_follow' ), 10, 2 );
+		add_action( 'mofoline_inbound_message', array( $this, 'record_inbound' ), 10, 2 );
+		add_action( 'mofoline_replied', array( $this, 'record_bot_reply' ), 10, 3 );
+		add_action( 'mofoline_pushed', array( $this, 'record_push' ), 10, 2 );
+		add_action( 'mofoline_event_follow', array( $this, 'on_follow' ), 10, 2 );
 
-		add_action( 'wp_ajax_moksa_line_inbox_send', array( $this, 'ajax_send' ) );
-		add_action( 'wp_ajax_moksa_line_inbox_thread', array( $this, 'ajax_thread' ) );
-		add_action( 'wp_ajax_moksa_line_inbox_status', array( $this, 'ajax_set_status' ) );
+		add_action( 'wp_ajax_mofoline_inbox_send', array( $this, 'ajax_send' ) );
+		add_action( 'wp_ajax_mofoline_inbox_thread', array( $this, 'ajax_thread' ) );
+		add_action( 'wp_ajax_mofoline_inbox_status', array( $this, 'ajax_set_status' ) );
 
 		// Live updates ride WordPress's own heartbeat: no extra endpoint to
 		// guard, no timer of ours, and it already backs off when the tab is
@@ -60,7 +60,7 @@ class InboxModule {
 	public function heartbeat_interval( $settings ) {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 
-		if ( $screen && false !== strpos( (string) $screen->id, 'moksa-line-inbox' ) ) {
+		if ( $screen && false !== strpos( (string) $screen->id, 'mofoline-inbox' ) ) {
 			$settings['interval'] = 15;
 		}
 
@@ -80,11 +80,11 @@ class InboxModule {
 	 * @return array
 	 */
 	public function heartbeat( $response, $data ) {
-		if ( empty( $data['moksa_line_inbox'] ) || ! is_array( $data['moksa_line_inbox'] ) || ! self::can_manage() ) {
+		if ( empty( $data['mofoline_inbox'] ) || ! is_array( $data['mofoline_inbox'] ) || ! self::can_manage() ) {
 			return $response;
 		}
 
-		$asked        = $data['moksa_line_inbox'];
+		$asked        = $data['mofoline_inbox'];
 		$since        = isset( $asked['since'] ) ? (int) $asked['since'] : 0;
 		$open         = isset( $asked['conversation'] ) ? (int) $asked['conversation'] : 0;
 		$status       = isset( $asked['status'] ) ? sanitize_key( (string) $asked['status'] ) : '';
@@ -99,20 +99,20 @@ class InboxModule {
 		// Nothing at all since the last look, inbound or outbound: say so and
 		// send nothing else. This is the common case fifteen seconds apart.
 		if ( $latest <= $since ) {
-			$response['moksa_line_inbox'] = $answer;
+			$response['mofoline_inbox'] = $answer;
 
 			return $response;
 		}
 
 		$list          = Conversations::paginate( array( 'status' => $status, 'search' => $search, 'per_page' => 50 ) );
 		$status_labels = array(
-			'bot'    => __( 'bot', 'moksa-line' ),
-			'human'  => __( 'human', 'moksa-line' ),
-			'closed' => __( 'closed', 'moksa-line' ),
+			'bot'    => __( 'bot', 'moksa-for-line' ),
+			'human'  => __( 'human', 'moksa-for-line' ),
+			'closed' => __( 'closed', 'moksa-for-line' ),
 		);
 
 		ob_start();
-		require MOKSA_LINE_DIR . 'views/inbox-list.php';
+		require MOFOLINE_DIR . 'views/inbox-list.php';
 		$answer['list'] = ob_get_clean();
 
 		$answer['thread_changed'] = $open > 0 && Messages::inbound_since( $since, $open ) > 0;
@@ -129,7 +129,7 @@ class InboxModule {
 			}
 		}
 
-		$response['moksa_line_inbox'] = $answer;
+		$response['mofoline_inbox'] = $answer;
 
 		return $response;
 	}
@@ -267,10 +267,10 @@ class InboxModule {
 	 * Send an agent's reply.
 	 */
 	public function ajax_send(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+		check_ajax_referer( 'mofoline_admin', 'nonce' );
 
 		if ( ! self::can_manage() ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot reply to conversations.', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot reply to conversations.', 'moksa-for-line' ) ), 403 );
 		}
 
 		$conversation_id = Ajax::int( 'conversation_id' );
@@ -280,13 +280,13 @@ class InboxModule {
 		$is_sticker      = '' !== $package_id && '' !== $sticker_id;
 
 		if ( ! $is_sticker && '' === trim( $text ) ) {
-			wp_send_json_error( array( 'message' => __( 'Write something first.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Write something first.', 'moksa-for-line' ) ) );
 		}
 
 		$conversation = Conversations::find_by_id( $conversation_id );
 
 		if ( ! $conversation ) {
-			wp_send_json_error( array( 'message' => __( 'That conversation no longer exists.', 'moksa-line' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That conversation no longer exists.', 'moksa-for-line' ) ), 404 );
 		}
 
 		$line_user_id = (string) $conversation->line_user_id;
@@ -323,7 +323,7 @@ class InboxModule {
 				array(
 					'message' => sprintf(
 						/* translators: %s: error detail from LINE. */
-						__( 'LINE would not deliver that message: %s', 'moksa-line' ),
+						__( 'LINE would not deliver that message: %s', 'moksa-for-line' ),
 						$result->get_error_message()
 					),
 				)
@@ -341,7 +341,7 @@ class InboxModule {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Sent.', 'moksa-line' ),
+				'message' => __( 'Sent.', 'moksa-for-line' ),
 				'thread'  => $this->render_thread( $conversation_id ),
 			)
 		);
@@ -351,17 +351,17 @@ class InboxModule {
 	 * Return a conversation thread, and mark it read.
 	 */
 	public function ajax_thread(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+		check_ajax_referer( 'mofoline_admin', 'nonce' );
 
 		if ( ! self::can_manage() ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot read conversations.', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot read conversations.', 'moksa-for-line' ) ), 403 );
 		}
 
 		$conversation_id = Ajax::int( 'conversation_id' );
 		$conversation    = Conversations::find_by_id( $conversation_id );
 
 		if ( ! $conversation ) {
-			wp_send_json_error( array( 'message' => __( 'That conversation no longer exists.', 'moksa-line' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That conversation no longer exists.', 'moksa-for-line' ) ), 404 );
 		}
 
 		Conversations::mark_read( $conversation_id );
@@ -380,10 +380,10 @@ class InboxModule {
 	 * Hand a conversation to a human, or back to the bot.
 	 */
 	public function ajax_set_status(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+		check_ajax_referer( 'mofoline_admin', 'nonce' );
 
 		if ( ! self::can_manage() ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot change conversations.', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot change conversations.', 'moksa-for-line' ) ), 403 );
 		}
 
 		$conversation_id = Ajax::int( 'conversation_id' );
@@ -392,7 +392,7 @@ class InboxModule {
 		$conversation = Conversations::find_by_id( $conversation_id );
 
 		if ( ! $conversation || ! in_array( $status, Conversations::STATUSES, true ) ) {
-			wp_send_json_error( array( 'message' => __( 'That change is not valid.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That change is not valid.', 'moksa-for-line' ) ) );
 		}
 
 		Conversations::set_status(
@@ -415,7 +415,7 @@ class InboxModule {
 		ob_start();
 
 		if ( empty( $rows ) ) {
-			echo '<p class="moksa-inbox-empty">' . esc_html__( 'No messages yet. Only messages received after this plugin was installed appear here -- LINE does not provide access to earlier chat history.', 'moksa-line' ) . '</p>';
+			echo '<p class="moksa-inbox-empty">' . esc_html__( 'No messages yet. Only messages received after this plugin was installed appear here -- LINE does not provide access to earlier chat history.', 'moksa-for-line' ) . '</p>';
 		}
 
 		foreach ( $rows as $row ) {
@@ -425,14 +425,14 @@ class InboxModule {
 				$classes .= ' moksa-msg--failed';
 			}
 
-			$who = __( 'Visitor', 'moksa-line' );
+			$who = __( 'Visitor', 'moksa-for-line' );
 
 			if ( 'out' === $row->direction ) {
 				if ( 'agent' === $row->sender_kind ) {
 					$user = get_userdata( (int) $row->sender_wp_user_id );
-					$who  = $user ? $user->display_name : __( 'Agent', 'moksa-line' );
+					$who  = $user ? $user->display_name : __( 'Agent', 'moksa-for-line' );
 				} else {
-					$who = __( 'Bot', 'moksa-line' );
+					$who = __( 'Bot', 'moksa-for-line' );
 				}
 			}
 

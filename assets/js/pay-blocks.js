@@ -13,12 +13,12 @@
 		return;
 	}
 
-	var settings = window.wc.wcSettings.getSetting('moksa_line_pay_data', {});
+	var settings = window.wc.wcSettings.getSetting('mofoline_pay_data', {});
 	var decode = window.wp.htmlEntities.decodeEntities;
 	var el = window.wp.element.createElement;
 	var __ = window.wp.i18n.__;
 
-	var label = decode(settings.title || '') || __('LINE Pay', 'moksa-line');
+	var label = decode(settings.title || '') || __('LINE Pay', 'moksa-for-line');
 
 	// The label with the LINE Pay mark beside it. The icon is theirs, so it is
 	// shown as they supply it rather than restyled.
@@ -42,7 +42,7 @@
 	};
 
 	window.wc.wcBlocksRegistry.registerPaymentMethod({
-		name: 'moksa_line_pay',
+		name: 'mofoline_pay',
 		label: el(Label, null),
 		content: el(Content, null),
 		edit: el(Content, null),

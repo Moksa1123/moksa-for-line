@@ -16,10 +16,10 @@
  *
  * Touches no database and writes no files.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-use Moksa\Line\Support\QrCode;
+use Mofoline\Support\QrCode;
 
 $GLOBALS['qr_fail'] = 0;
 
@@ -497,7 +497,7 @@ echo "QR encoder\n";
 $cases = array(
 	'HELLO',
 	'https://example.com/x',
-	home_url( '/moksa-line-member/?t=' . str_repeat( 'a', 32 ) ),
+	home_url( '/mofoline-member/?t=' . str_repeat( 'a', 32 ) ),
 	'https://moksaweb.com/?q=' . rawurlencode( '會員卡' ),
 	str_repeat( 'A', 60 ),
 	'~!@#$%^&*()_+-={}[]|:;"<>,.?/' . "\x00\x01\xff",

@@ -2,14 +2,14 @@
 /**
  * Dashboard: setup state and headline numbers.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-use Moksa\Line\Admin\AdminModule;
-use Moksa\Line\Data\Users;
-use Moksa\Line\Inbox\Conversations;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Api\TokenManager;
+use Mofoline\Admin\AdminModule;
+use Mofoline\Data\Users;
+use Mofoline\Inbox\Conversations;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Api\TokenManager;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -31,8 +31,8 @@ defined( 'ABSPATH' ) || exit;
 		}
 	}
 	?>
-	<div class="wrap moksa-line-wrap">
-		<h1><?php esc_html_e( 'LINE', 'moksa-line' ); ?></h1>
+	<div class="wrap mofoline-wrap">
+		<h1><?php esc_html_e( 'LINE', 'moksa-for-line' ); ?></h1>
 
 		<?php
 		// Each number is a question -- "which three people?" -- so each card is the
@@ -41,22 +41,22 @@ defined( 'ABSPATH' ) || exit;
 		$cards     = array(
 			array(
 				'number' => $stats['total'],
-				'label'  => __( 'LINE users known', 'moksa-line' ),
+				'label'  => __( 'LINE users known', 'moksa-for-line' ),
 				'url'    => $users_url,
 			),
 			array(
 				'number' => $stats['friends'],
-				'label'  => __( 'Friends of the account', 'moksa-line' ),
+				'label'  => __( 'Friends of the account', 'moksa-for-line' ),
 				'url'    => $users_url,
 			),
 			array(
 				'number' => $stats['linked'],
-				'label'  => __( 'Linked WordPress accounts', 'moksa-line' ),
+				'label'  => __( 'Linked WordPress accounts', 'moksa-for-line' ),
 				'url'    => $users_url,
 			),
 			array(
 				'number' => Conversations::unread_total(),
-				'label'  => __( 'Conversations waiting', 'moksa-line' ),
+				'label'  => __( 'Conversations waiting', 'moksa-for-line' ),
 				'url'    => admin_url( 'admin.php?page=' . AdminModule::SLUG . '-inbox' ),
 			),
 		);
@@ -71,7 +71,7 @@ defined( 'ABSPATH' ) || exit;
 		</div>
 
 		<div class="moksa-panel">
-			<h2><?php esc_html_e( 'Setup', 'moksa-line' ); ?></h2>
+			<h2><?php esc_html_e( 'Setup', 'moksa-for-line' ); ?></h2>
 			<ul class="moksa-checklist">
 				<?php foreach ( $checklist as $item ) : ?>
 					<li class="moksa-checklist__item moksa-checklist__item--<?php echo $item['done'] ? 'done' : 'todo'; ?>">
@@ -80,7 +80,7 @@ defined( 'ABSPATH' ) || exit;
 							<span class="moksa-checklist__hint"><?php echo esc_html( $item['hint'] ); ?></span>
 							<?php if ( ! empty( $item['fix'] ) ) : ?>
 								<a class="moksa-checklist__fix" href="<?php echo esc_url( (string) $item['fix'] ); ?>">
-									<?php esc_html_e( 'Fix this', 'moksa-line' ); ?> <span aria-hidden="true">&rarr;</span>
+									<?php esc_html_e( 'Fix this', 'moksa-for-line' ); ?> <span aria-hidden="true">&rarr;</span>
 								</a>
 							<?php endif; ?>
 						<?php endif; ?>
@@ -89,20 +89,20 @@ defined( 'ABSPATH' ) || exit;
 			</ul>
 			<p>
 				<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=' . AdminModule::SLUG . '-settings' ) ); ?>">
-					<?php esc_html_e( 'Open settings', 'moksa-line' ); ?>
+					<?php esc_html_e( 'Open settings', 'moksa-for-line' ); ?>
 				</a>
 			</p>
 		</div>
 
 		<?php if ( $quota ) : ?>
 			<div class="moksa-panel">
-				<h2><?php esc_html_e( 'Message quota this month', 'moksa-line' ); ?></h2>
+				<h2><?php esc_html_e( 'Message quota this month', 'moksa-for-line' ); ?></h2>
 				<?php if ( 'limited' === $quota['type'] && $quota['limit'] > 0 ) : ?>
 					<p>
 						<?php
 						printf(
 							/* translators: 1: messages used, 2: monthly allowance. */
-							esc_html__( '%1$s of %2$s push messages used.', 'moksa-line' ),
+							esc_html__( '%1$s of %2$s push messages used.', 'moksa-for-line' ),
 							esc_html( number_format_i18n( $quota['used'] ) ),
 							esc_html( number_format_i18n( $quota['limit'] ) )
 						);
@@ -116,13 +116,13 @@ defined( 'ABSPATH' ) || exit;
 						<?php
 						printf(
 							/* translators: %s: messages used. */
-							esc_html__( '%s push messages sent this month. This plan has no monthly cap.', 'moksa-line' ),
+							esc_html__( '%s push messages sent this month. This plan has no monthly cap.', 'moksa-for-line' ),
 							esc_html( number_format_i18n( $quota['used'] ) )
 						);
 						?>
 					</p>
 				<?php endif; ?>
-				<p class="description"><?php esc_html_e( 'Replies to an inbound message are free. Push, multicast and broadcast are billed.', 'moksa-line' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Replies to an inbound message are free. Push, multicast and broadcast are billed.', 'moksa-for-line' ); ?></p>
 			</div>
 		<?php endif; ?>
 	</div>

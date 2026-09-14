@@ -8,12 +8,12 @@
  * the presence of a "message" key, and it retries once on 401 with a fresh
  * token rather than failing the user's action.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Api;
+namespace Mofoline\Api;
 
-use Moksa\Line\Support\Logger;
+use Mofoline\Support\Logger;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -54,7 +54,7 @@ class Client {
 
 		// A 401 means the cached token died early (revoked, or the channel
 		// secret was rotated). Mint a new one and try exactly once more.
-		if ( is_wp_error( $result ) && 'moksa_line_unauthorized' === $result->get_error_code() ) {
+		if ( is_wp_error( $result ) && 'mofoline_unauthorized' === $result->get_error_code() ) {
 			TokenManager::forget();
 			$token = TokenManager::get();
 
@@ -108,7 +108,7 @@ class Client {
 			Logger::error(
 				sprintf(
 					/* translators: 1: HTTP method and path, 2: the transport error. */
-					__( '%1$s never reached LINE: %2$s', 'moksa-line' ),
+					__( '%1$s never reached LINE: %2$s', 'moksa-for-line' ),
 					$method . ' ' . $path,
 					$response->get_error_message()
 				),
@@ -161,16 +161,16 @@ class Client {
 			$message .= ' (' . implode( '; ', array_filter( $parts ) ) . ')';
 		}
 
-		$code = 'moksa_line_api_error';
+		$code = 'mofoline_api_error';
 
 		if ( 401 === $status ) {
-			$code = 'moksa_line_unauthorized';
+			$code = 'mofoline_unauthorized';
 		} elseif ( 429 === $status ) {
-			$code    = 'moksa_line_rate_limited';
-			$message = __( 'LINE is rate limiting this channel. Try again shortly.', 'moksa-line' );
+			$code    = 'mofoline_rate_limited';
+			$message = __( 'LINE is rate limiting this channel. Try again shortly.', 'moksa-for-line' );
 		} elseif ( 403 === $status ) {
-			$code    = 'moksa_line_forbidden';
-			$message = $message . ' ' . __( '(Check the channel plan and that the feature is enabled for this channel.)', 'moksa-line' );
+			$code    = 'mofoline_forbidden';
+			$message = $message . ' ' . __( '(Check the channel plan and that the feature is enabled for this channel.)', 'moksa-for-line' );
 		}
 
 		// The log list shows this line and nothing else, so it has to say what
@@ -180,7 +180,7 @@ class Client {
 		Logger::error(
 			sprintf(
 				/* translators: 1: HTTP method and path, 2: HTTP status code, 3: LINE's own message. */
-				__( '%1$s failed (%2$d): %3$s', 'moksa-line' ),
+				__( '%1$s failed (%2$d): %3$s', 'moksa-for-line' ),
 				$method . ' ' . $path,
 				$status,
 				$message
@@ -255,10 +255,10 @@ class Client {
 
 		if ( 200 !== $status ) {
 			return new WP_Error(
-				'moksa_line_content_failed',
+				'mofoline_content_failed',
 				sprintf(
 					/* translators: %d: HTTP status code. */
-					__( 'Could not download the message content (HTTP %d).', 'moksa-line' ),
+					__( 'Could not download the message content (HTTP %d).', 'moksa-for-line' ),
 					$status
 				)
 			);

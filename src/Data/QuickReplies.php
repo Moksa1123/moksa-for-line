@@ -5,10 +5,10 @@
  * A quick reply is a property of a message rather than a message type, so a
  * set is always attached to something else when it is sent.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Data;
+namespace Mofoline\Data;
 
 defined( 'ABSPATH' ) || exit;
 

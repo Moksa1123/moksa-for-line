@@ -25,7 +25,7 @@
 	var MAX_LABEL = 20;
 
 	function strings() {
-		return (window.moksaLine && window.moksaLine.strings) || {};
+		return (window.mofoline && window.mofoline.strings) || {};
 	}
 
 	function t(key, fallback) {
@@ -467,8 +467,8 @@
 					.append($('<div class="moksa-bubble"></div>').text(
 						done
 							.split('{display_name}').join(t('sampleName', 'Ming'))
-							.split('{site_name}').join((window.moksaLine && window.moksaLine.siteName) || '')
-							.split('{site_url}').join((window.moksaLine && window.moksaLine.siteUrl) || '')
+							.split('{site_name}').join((window.mofoline && window.mofoline.siteName) || '')
+							.split('{site_url}').join((window.mofoline && window.mofoline.siteUrl) || '')
 					))
 			);
 		}

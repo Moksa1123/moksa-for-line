@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-SLUG="moksa-line"
+SLUG="moksa-for-line"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST="${ROOT}/dist"
 STAGE="${DIST}/${SLUG}"
@@ -20,7 +20,7 @@ STAGE="${DIST}/${SLUG}"
 # accident -- which is exactly how a set of screenshots and a browser
 # automation log once ended up inside the package.
 INCLUDE_FILES=(
-	"moksa-line.php"
+	"moksa-for-line.php"
 	"uninstall.php"
 	"readme.txt"
 	"LICENSE"

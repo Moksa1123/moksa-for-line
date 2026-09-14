@@ -8,29 +8,29 @@
  * matters most, so it reuses the rich menu's area editor rather than asking
  * anyone to type coordinates in a 1040-wide space.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Imagemap;
+namespace Mofoline\Imagemap;
 
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Data\Imagemaps;
-use Moksa\Line\Admin\Ajax;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Data\Imagemaps;
+use Mofoline\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
 class ImagemapModule {
 
-	const NAMESPACE_V1 = 'moksa-line/v1';
+	const NAMESPACE_V1 = 'mofoline/v1';
 
 	/** LINE's limit on tappable regions. */
 	const MAX_ACTIONS = 50;
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
-		add_action( 'wp_ajax_moksa_line_imagemap_save', array( $this, 'ajax_save' ) );
-		add_action( 'wp_ajax_moksa_line_imagemap_delete', array( $this, 'ajax_delete' ) );
-		add_action( 'wp_ajax_moksa_line_imagemap_send_test', array( $this, 'ajax_send_test' ) );
+		add_action( 'wp_ajax_mofoline_imagemap_save', array( $this, 'ajax_save' ) );
+		add_action( 'wp_ajax_mofoline_imagemap_delete', array( $this, 'ajax_delete' ) );
+		add_action( 'wp_ajax_mofoline_imagemap_send_test', array( $this, 'ajax_send_test' ) );
 	}
 
 	/**
@@ -89,15 +89,15 @@ class ImagemapModule {
 
 		if ( empty( $actions ) ) {
 			return new \WP_Error(
-				'moksa_line_imagemap_no_actions',
-				__( 'This imagemap has no tappable areas yet.', 'moksa-line' )
+				'mofoline_imagemap_no_actions',
+				__( 'This imagemap has no tappable areas yet.', 'moksa-for-line' )
 			);
 		}
 
 		if ( ! ImagemapImages::complete( (int) $row->id ) ) {
 			return new \WP_Error(
-				'moksa_line_imagemap_incomplete',
-				__( 'The image sizes for this imagemap are missing. Choose the image again and save.', 'moksa-line' )
+				'mofoline_imagemap_incomplete',
+				__( 'The image sizes for this imagemap are missing. Choose the image again and save.', 'moksa-for-line' )
 			);
 		}
 
@@ -105,8 +105,8 @@ class ImagemapModule {
 
 		if ( 0 !== stripos( $base, 'https://' ) ) {
 			return new \WP_Error(
-				'moksa_line_imagemap_not_https',
-				__( 'LINE only accepts an imagemap image over HTTPS, and this site is served over plain HTTP.', 'moksa-line' )
+				'mofoline_imagemap_not_https',
+				__( 'LINE only accepts an imagemap image over HTTPS, and this site is served over plain HTTP.', 'moksa-for-line' )
 			);
 		}
 
@@ -199,19 +199,19 @@ class ImagemapModule {
 		$decoded = '' === Ajax::text( 'areas' ) ? array() : Ajax::json_verbatim( 'areas' );
 
 		if ( ! is_array( $decoded ) ) {
-			wp_send_json_error( array( 'message' => __( 'The tappable areas could not be read.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The tappable areas could not be read.', 'moksa-for-line' ) ) );
 		}
 
 		if ( '' === trim( $name ) ) {
-			wp_send_json_error( array( 'message' => __( 'Give this imagemap a name.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Give this imagemap a name.', 'moksa-for-line' ) ) );
 		}
 
 		if ( '' === trim( $alt ) ) {
-			wp_send_json_error( array( 'message' => __( 'Fallback text is required: it is all the customer sees in the chat list.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Fallback text is required: it is all the customer sees in the chat list.', 'moksa-for-line' ) ) );
 		}
 
 		if ( $image <= 0 ) {
-			wp_send_json_error( array( 'message' => __( 'Choose the banner image first.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Choose the banner image first.', 'moksa-for-line' ) ) );
 		}
 
 		$fields = array(
@@ -230,7 +230,7 @@ class ImagemapModule {
 		$saved = Imagemaps::save( $fields );
 
 		if ( $saved <= 0 ) {
-			wp_send_json_error( array( 'message' => __( 'The imagemap could not be saved.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The imagemap could not be saved.', 'moksa-for-line' ) ) );
 		}
 
 		// Cutting happens after the row exists, because the files are named
@@ -259,7 +259,7 @@ class ImagemapModule {
 			array(
 				'id'          => $saved,
 				'base_height' => $built['base_height'],
-				'message'     => __( 'Saved.', 'moksa-line' ),
+				'message'     => __( 'Saved.', 'moksa-for-line' ),
 			)
 		);
 	}
@@ -280,10 +280,10 @@ class ImagemapModule {
 		}
 
 		if ( $id <= 0 || ! Imagemaps::delete( $id ) ) {
-			wp_send_json_error( array( 'message' => __( 'That imagemap no longer exists.', 'moksa-line' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That imagemap no longer exists.', 'moksa-for-line' ) ), 404 );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Imagemap deleted.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Imagemap deleted.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -296,13 +296,13 @@ class ImagemapModule {
 		$target = Ajax::text( 'line_user_id' );
 
 		if ( '' === $target ) {
-			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-for-line' ) ) );
 		}
 
 		$row = Imagemaps::find( $id );
 
 		if ( ! $row ) {
-			wp_send_json_error( array( 'message' => __( 'That imagemap no longer exists.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That imagemap no longer exists.', 'moksa-for-line' ) ) );
 		}
 
 		$message = self::message( $row );
@@ -313,10 +313,10 @@ class ImagemapModule {
 
 		Ajax::bail( $result, 'Could not send an imagemap test', 'imagemap' );
 
-		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-for-line' ) ) );
 	}
 
 	private function guard(): void {
-		Ajax::guard( __( 'You do not have permission to manage imagemaps.', 'moksa-line' ) );
+		Ajax::guard( __( 'You do not have permission to manage imagemaps.', 'moksa-for-line' ) );
 	}
 }

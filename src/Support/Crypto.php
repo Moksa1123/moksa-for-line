@@ -5,10 +5,10 @@
  * Keys are derived from WordPress salts, so a database dump alone is not
  * enough to recover credentials -- wp-config.php is required as well.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Support;
+namespace Mofoline\Support;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,8 +26,8 @@ class Crypto {
 	private static function key(): string {
 		$material = '';
 
-		if ( defined( 'MOKSA_LINE_ENCRYPTION_KEY' ) && MOKSA_LINE_ENCRYPTION_KEY ) {
-			$material = (string) MOKSA_LINE_ENCRYPTION_KEY;
+		if ( defined( 'MOFOLINE_ENCRYPTION_KEY' ) && MOFOLINE_ENCRYPTION_KEY ) {
+			$material = (string) MOFOLINE_ENCRYPTION_KEY;
 		} elseif ( defined( 'LOGGED_IN_KEY' ) && defined( 'LOGGED_IN_SALT' ) ) {
 			$material = LOGGED_IN_KEY . LOGGED_IN_SALT;
 		} elseif ( defined( 'AUTH_KEY' ) ) {

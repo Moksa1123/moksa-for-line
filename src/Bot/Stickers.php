@@ -19,10 +19,10 @@
  * send, so an image loading is not proof that LINE will accept it -- only the
  * documented list is.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Bot;
+namespace Mofoline\Bot;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -37,19 +37,19 @@ class Stickers {
 		$packs = array(
 			array(
 				'package_id' => '446',
-				'label'      => __( 'Brown & Cony', 'moksa-line' ),
+				'label'      => __( 'Brown & Cony', 'moksa-for-line' ),
 				'from'       => 1988,
 				'to'         => 2027,
 			),
 			array(
 				'package_id' => '789',
-				'label'      => __( 'Sally', 'moksa-line' ),
+				'label'      => __( 'Sally', 'moksa-for-line' ),
 				'from'       => 10855,
 				'to'         => 10894,
 			),
 			array(
 				'package_id' => '1070',
-				'label'      => __( 'Brown & Cony, second set', 'moksa-line' ),
+				'label'      => __( 'Brown & Cony, second set', 'moksa-for-line' ),
 				'from'       => 17839,
 				'to'         => 17878,
 			),
@@ -63,7 +63,7 @@ class Stickers {
 		 *
 		 * @param array $packs Packs, each with package_id, label, from and to.
 		 */
-		return (array) apply_filters( 'moksa_line_sticker_packs', $packs );
+		return (array) apply_filters( 'mofoline_sticker_packs', $packs );
 	}
 
 	/**

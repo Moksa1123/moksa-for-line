@@ -11,7 +11,7 @@
 
 /* Confirmation dialog ---------------------------------------------------- */
 
-/* Lives outside .moksa-line-wrap: <dialog> is moved to the top layer, so a
+/* Lives outside .mofoline-wrap: <dialog> is moved to the top layer, so a
    selector scoped to the plugin wrapper would still match, but the backdrop
    pseudo-element would not. */
 .moksa-confirm {

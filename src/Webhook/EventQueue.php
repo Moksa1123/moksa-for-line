@@ -7,14 +7,14 @@
  * UNIQUE index, which makes a retry a no-op rather than a second reply to the
  * customer.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Webhook;
+namespace Mofoline\Webhook;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Migrator;
+use Mofoline\Support\Db;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -216,14 +216,14 @@ class EventQueue {
 			if ( 'sticker' === $kind ) {
 				return sprintf(
 					/* translators: 1: sticker package id, 2: sticker id. */
-					__( 'Sticker %1$s / %2$s', 'moksa-line' ),
+					__( 'Sticker %1$s / %2$s', 'moksa-for-line' ),
 					(string) ( $payload['message']['packageId'] ?? '?' ),
 					(string) ( $payload['message']['stickerId'] ?? '?' )
 				);
 			}
 
 			/* translators: %s: message type, such as image or location. */
-			return sprintf( __( '%s message', 'moksa-line' ), $kind );
+			return sprintf( __( '%s message', 'moksa-for-line' ), $kind );
 		}
 
 		if ( 'postback' === $type ) {

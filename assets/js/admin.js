@@ -8,20 +8,20 @@
 (function ($) {
 	'use strict';
 
-	var settings = window.moksaLine || {};
+	var settings = window.mofoline || {};
 	var strings = settings.strings || {};
 
 	/**
 	 * Send an admin-ajax request and normalise the response.
 	 *
-	 * @param {string} action Action name without the moksa_line_ prefix.
+	 * @param {string} action Action name without the mofoline_ prefix.
 	 * @param {Object} data   Payload.
 	 * @return {Promise}
 	 */
 	function post(action, data) {
 		return $.post(
 			settings.ajaxUrl,
-			$.extend({ action: 'moksa_line_' + action, nonce: settings.nonce }, data || {})
+			$.extend({ action: 'mofoline_' + action, nonce: settings.nonce }, data || {})
 		).then(function (response) {
 			if (!response || !response.success) {
 				var message = (response && response.data && response.data.message) || strings.failed;
@@ -273,7 +273,7 @@
 			var text = $.trim($alt.val() || '');
 
 			$notifBody
-				.text(text || moksaLine.strings.altTextEmpty)
+				.text(text || mofoline.strings.altTextEmpty)
 				.toggleClass('is-empty', '' === text);
 		}
 
@@ -375,7 +375,7 @@
 
 				seen[label] = true;
 				problems.push(
-					moksaLine.strings.contrastWarning
+					mofoline.strings.contrastWarning
 						.replace('%1$s', label)
 						.replace('%2$s', ratio.toFixed(1))
 						.replace('%3$s', needed.toFixed(1))
@@ -399,10 +399,10 @@
 			var altLength = window.Array && Array.from ? Array.from(alt).length : alt.length;
 
 			if ('' === alt) {
-				problems.push(moksaLine.strings.altTextMissing);
+				problems.push(mofoline.strings.altTextMissing);
 			} else if (altLength > MAX_ALT_TEXT) {
 				problems.push(
-					moksaLine.strings.altTextTooLong.replace('%d', String(altLength))
+					mofoline.strings.altTextTooLong.replace('%d', String(altLength))
 				);
 			}
 
@@ -437,7 +437,7 @@
 				: 0;
 
 			$carouselNote
-				.text(count > 1 ? moksaLine.strings.carouselCount.replace('%d', count) : '')
+				.text(count > 1 ? mofoline.strings.carouselCount.replace('%d', count) : '')
 				.prop('hidden', count < 2);
 		}
 
@@ -944,7 +944,7 @@
 
 			try {
 				var body = notice ? (notice.name + (notice.preview ? '：' + notice.preview : '')) : '';
-				var n = new Notification((strings.newMessages || '%d new messages').replace('%d', count), { body: body, tag: 'moksa-line-inbox' });
+				var n = new Notification((strings.newMessages || '%d new messages').replace('%d', count), { body: body, tag: 'mofoline-inbox' });
 
 				n.onclick = function () {
 					window.focus();
@@ -956,7 +956,7 @@
 		}
 
 		$(document).on('heartbeat-send', function (event, data) {
-			data.moksa_line_inbox = {
+			data.mofoline_inbox = {
 				since: latest,
 				conversation: current,
 				status: $list.data('status') || '',
@@ -965,7 +965,7 @@
 		});
 
 		$(document).on('heartbeat-tick', function (event, data) {
-			var update = data.moksa_line_inbox;
+			var update = data.mofoline_inbox;
 
 			if (!update) {
 				return;
@@ -996,7 +996,7 @@
 
 			// Scoped to the inbox's own menu entry: core's Comments item uses the
 			// same awaiting-mod markup, and the first match on the page is that.
-			var $bubble = $('#adminmenu a[href$="page=moksa-line-inbox"] .pending-count');
+			var $bubble = $('#adminmenu a[href$="page=mofoline-inbox"] .pending-count');
 
 			if ($bubble.length) {
 				$bubble.text(waiting).closest('.awaiting-mod').toggle(waiting > 0);
@@ -1240,7 +1240,7 @@
 	// --- Profile unlink -------------------------------------------------------------------
 
 	function bindUnlink() {
-		$('[data-moksa-line-unlink]').on('click', function () {
+		$('[data-mofoline-unlink]').on('click', function () {
 			var $button = $(this);
 
 			moksaConfirm(strings.confirmDelete, { danger: true, confirmLabel: strings.confirmDeleteAction }).then(function (confirmed) {
@@ -1249,9 +1249,9 @@
 				}
 
 				$.post(settings.ajaxUrl || window.ajaxurl, {
-					action: 'moksa_line_unlink',
+					action: 'mofoline_unlink',
 					nonce: $button.data('nonce'),
-					user_id: $button.data('moksa-line-unlink')
+					user_id: $button.data('mofoline-unlink')
 				}).then(function () {
 					window.location.reload();
 				});
@@ -1364,7 +1364,7 @@
 			function done(ok) {
 				$('.moksa-copyable').removeClass('is-copied is-copy-failed');
 				$el.addClass(ok ? 'is-copied' : 'is-copy-failed');
-				$el.attr('aria-label', ok ? moksaLine.strings.copied : moksaLine.strings.copyFailed);
+				$el.attr('aria-label', ok ? mofoline.strings.copied : mofoline.strings.copyFailed);
 
 				window.setTimeout(function () {
 					$el.removeClass('is-copied is-copy-failed').removeAttr('aria-label');
@@ -1411,16 +1411,16 @@
 		$(document).on('click', '[data-moksa-resend-notification]', function () {
 			var $button = $(this);
 
-			moksaConfirm(moksaLine.strings.confirmResend, { confirmLabel: strings.confirmSendAction }).then(function (confirmed) {
+			moksaConfirm(mofoline.strings.confirmResend, { confirmLabel: strings.confirmSendAction }).then(function (confirmed) {
 				if (!confirmed) {
 					return;
 				}
 
-				$button.prop('disabled', true).text(moksaLine.strings.working);
+				$button.prop('disabled', true).text(mofoline.strings.working);
 
-				$.post(moksaLine.ajaxUrl, {
-					action: 'moksa_line_resend_notification',
-					nonce: moksaLine.nonce,
+				$.post(mofoline.ajaxUrl, {
+					action: 'mofoline_resend_notification',
+					nonce: mofoline.nonce,
 					order_id: $button.data('order'),
 					status: $button.data('status')
 				}).done(function (response) {
@@ -1431,11 +1431,11 @@
 						return;
 					}
 
-					$button.prop('disabled', false).text(moksaLine.strings.sendAgain);
-					moksaNotify((response && response.data && response.data.message) || moksaLine.strings.failed);
+					$button.prop('disabled', false).text(mofoline.strings.sendAgain);
+					moksaNotify((response && response.data && response.data.message) || mofoline.strings.failed);
 				}).fail(function () {
-					$button.prop('disabled', false).text(moksaLine.strings.sendAgain);
-					moksaNotify(moksaLine.strings.failed);
+					$button.prop('disabled', false).text(mofoline.strings.sendAgain);
+					moksaNotify(mofoline.strings.failed);
 				});
 			});
 		});
@@ -1455,7 +1455,7 @@
 		function apply() {
 			$rows.each(function () {
 				var parts = String($(this).data('moksa-visible-when')).split('=');
-				var $control = $('#moksa-' + parts[0] + ', [name="moksa_line[' + parts[0] + ']"]').first();
+				var $control = $('#moksa-' + parts[0] + ', [name="mofoline[' + parts[0] + ']"]').first();
 
 				// An unknown control must not hide the row: better an extra
 				// field than a setting with no way to reach it.
@@ -1487,7 +1487,7 @@
 			function update() {
 				var used = textLength($field.val() || '');
 				$into
-					.text(moksaLine.strings.charactersUsed.replace('%1$s', used).replace('%2$s', max))
+					.text(mofoline.strings.charactersUsed.replace('%1$s', used).replace('%2$s', max))
 					.toggleClass('is-near-limit', used > max * 0.9);
 			}
 
@@ -1539,7 +1539,7 @@
 						if ('carousel' === parsed.type && parsed.contents && parsed.contents.length > 1) {
 							$card.append(
 								$('<p class="moksa-bubble moksa-bubble--empty"></p>').text(
-									moksaLine.strings.carouselCount.replace('%d', parsed.contents.length)
+									mofoline.strings.carouselCount.replace('%d', parsed.contents.length)
 								)
 							);
 						}
@@ -1553,11 +1553,11 @@
 				$preview.append(drawn
 					? $card
 					: $('<div class="moksa-bubble moksa-bubble--card"></div>')
-						.text(moksaLine.strings.flexAttached.replace('%s', $.trim($option.text()))));
+						.text(mofoline.strings.flexAttached.replace('%s', $.trim($option.text()))));
 			}
 
 			if (!$preview.children().length) {
-				$preview.append($('<p class="moksa-bubble moksa-bubble--empty"></p>').text(moksaLine.strings.broadcastEmpty));
+				$preview.append($('<p class="moksa-bubble moksa-bubble--empty"></p>').text(mofoline.strings.broadcastEmpty));
 			}
 		}
 
@@ -1583,9 +1583,9 @@
 		// Sample values, so the shop reads the sentence the customer reads
 		// rather than a line of braces.
 		var SAMPLE = {
-			'{display_name}': moksaLine.strings.sampleName,
-			'{site_name}': moksaLine.siteName,
-			'{site_url}': moksaLine.siteUrl
+			'{display_name}': mofoline.strings.sampleName,
+			'{site_name}': mofoline.siteName,
+			'{site_url}': mofoline.siteUrl
 		};
 
 		function fill(text) {
@@ -1616,7 +1616,7 @@
 
 			if ('text' === type) {
 				var text = $.trim($('#moksa-rule-text').val() || '');
-				reply = text ? bubble(fill(text)) : bubble(moksaLine.strings.replyEmpty, 'moksa-bubble--empty');
+				reply = text ? bubble(fill(text)) : bubble(mofoline.strings.replyEmpty, 'moksa-bubble--empty');
 			} else if ('image' === type) {
 				var url = $.trim($('#moksa-rule-image').val() || '');
 
@@ -1624,7 +1624,7 @@
 					reply = $('<div class="moksa-bubble moksa-bubble--media"></div>')
 						.append($('<img alt="" />').attr('src', url));
 				} else {
-					reply = bubble(moksaLine.strings.replyEmpty, 'moksa-bubble--empty');
+					reply = bubble(mofoline.strings.replyEmpty, 'moksa-bubble--empty');
 				}
 			} else {
 				// Everything else is a reference to something built elsewhere,
@@ -1637,7 +1637,7 @@
 
 				reply = bubble(
 					chosenLabel
-						? moksaLine.strings.replyReference.replace('%1$s', label).replace('%2$s', chosenLabel)
+						? mofoline.strings.replyReference.replace('%1$s', label).replace('%2$s', chosenLabel)
 						: label,
 					'moksa-bubble--card'
 				);
@@ -1930,9 +1930,9 @@
 
 			$button.prop('disabled', true);
 
-			$.post(moksaLine.ajaxUrl, {
-				action: 'moksa_line_liff_create_page',
-				nonce: moksaLine.nonce
+			$.post(mofoline.ajaxUrl, {
+				action: 'mofoline_liff_create_page',
+				nonce: mofoline.nonce
 			}).then(function (response) {
 				if (response && response.success) {
 					window.location.reload();
@@ -1940,10 +1940,10 @@
 				}
 
 				$button.prop('disabled', false);
-				$feedback.text((response && response.data && response.data.message) || moksaLine.strings.failed);
+				$feedback.text((response && response.data && response.data.message) || mofoline.strings.failed);
 			}, function () {
 				$button.prop('disabled', false);
-				$feedback.text(moksaLine.strings.failed);
+				$feedback.text(mofoline.strings.failed);
 			});
 		});
 	}
@@ -2071,21 +2071,21 @@
 		$(document).on('click', '[data-moksa-clear-logs]', function () {
 			var $trigger = $(this);
 
-			moksaConfirm(moksaLine.strings.confirmClearLogs, { danger: true, confirmLabel: strings.confirmClearAction }).then(function (confirmed) {
+			moksaConfirm(mofoline.strings.confirmClearLogs, { danger: true, confirmLabel: strings.confirmClearAction }).then(function (confirmed) {
 				if (!confirmed) {
 					return;
 				}
 
 				var $button = $trigger.prop('disabled', true);
 
-				$.post(moksaLine.ajaxUrl, {
-					action: 'moksa_line_clear_logs',
-					nonce: moksaLine.nonce
+				$.post(mofoline.ajaxUrl, {
+					action: 'mofoline_clear_logs',
+					nonce: mofoline.nonce
 				}).done(function () {
 					window.location.reload();
 				}).fail(function () {
 					$button.prop('disabled', false);
-					moksaNotify(moksaLine.strings.failed);
+					moksaNotify(mofoline.strings.failed);
 				});
 			});
 		});

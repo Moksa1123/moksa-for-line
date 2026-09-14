@@ -7,14 +7,14 @@
  * arrived by webhook after this plugin was installed and the webhook was
  * switched on. History from before that is not recoverable.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Inbox;
+namespace Mofoline\Inbox;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Data\Users;
-use Moksa\Line\Support\Migrator;
+use Mofoline\Support\Db;
+use Mofoline\Data\Users;
+use Mofoline\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -188,7 +188,7 @@ class Conversations {
 		 * @param string $status       New status.
 		 * @param int    $assignee_id  Assigned agent.
 		 */
-		do_action( 'moksa_line_conversation_status', $line_user_id, $status, $assignee_id );
+		do_action( 'mofoline_conversation_status', $line_user_id, $status, $assignee_id );
 	}
 
 	/**

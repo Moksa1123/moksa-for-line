@@ -15,13 +15,13 @@
  * it silently returns the builder instead of a result, which looks like
  * success and is not.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Bot\Ai;
+namespace Mofoline\Bot\Ai;
 
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -60,10 +60,10 @@ class CoreAiProvider implements ProviderInterface {
 		return get_bloginfo( 'version' )
 			? sprintf(
 				/* translators: %s: WordPress version. */
-				__( 'WordPress AI Client (WordPress %s)', 'moksa-line' ),
+				__( 'WordPress AI Client (WordPress %s)', 'moksa-for-line' ),
 				get_bloginfo( 'version' )
 			)
-			: __( 'WordPress AI Client', 'moksa-line' );
+			: __( 'WordPress AI Client', 'moksa-for-line' );
 	}
 
 	/**
@@ -77,22 +77,22 @@ class CoreAiProvider implements ProviderInterface {
 	public function ask( string $message, string $conversation, array $context = array() ) {
 		if ( ! $this->installed() ) {
 			return new WP_Error(
-				'moksa_line_ai_unavailable',
-				__( 'This WordPress does not have the AI Client. It ships with WordPress 7.0 and later.', 'moksa-line' )
+				'mofoline_ai_unavailable',
+				__( 'This WordPress does not have the AI Client. It ships with WordPress 7.0 and later.', 'moksa-for-line' )
 			);
 		}
 
 		if ( ! wp_supports_ai() ) {
 			return new WP_Error(
-				'moksa_line_ai_disabled',
-				__( 'AI features are switched off for this site.', 'moksa-line' )
+				'mofoline_ai_disabled',
+				__( 'AI features are switched off for this site.', 'moksa-for-line' )
 			);
 		}
 
 		if ( ! $this->is_available() ) {
 			return new WP_Error(
-				'moksa_line_ai_no_provider',
-				__( 'No AI provider is connected yet. Install the AI plugin from WordPress.org and connect a provider, or add one another way.', 'moksa-line' )
+				'mofoline_ai_no_provider',
+				__( 'No AI provider is connected yet. Install the AI plugin from WordPress.org and connect a provider, or add one another way.', 'moksa-for-line' )
 			);
 		}
 
@@ -117,7 +117,7 @@ class CoreAiProvider implements ProviderInterface {
 		 * @param string                       $message Visitor message.
 		 * @param array                        $context Conversation context.
 		 */
-		$builder = apply_filters( 'moksa_line_core_ai_prompt', $builder, $message, $context );
+		$builder = apply_filters( 'mofoline_core_ai_prompt', $builder, $message, $context );
 
 		$reply = $builder->generate_text();
 
@@ -135,8 +135,8 @@ class CoreAiProvider implements ProviderInterface {
 
 		if ( '' === $reply ) {
 			return new WP_Error(
-				'moksa_line_ai_empty',
-				__( 'The AI returned an empty answer.', 'moksa-line' )
+				'mofoline_ai_empty',
+				__( 'The AI returned an empty answer.', 'moksa-for-line' )
 			);
 		}
 
@@ -157,17 +157,17 @@ class CoreAiProvider implements ProviderInterface {
 		$parts = array(
 			sprintf(
 				/* translators: %s: site name. */
-				__( 'You are a customer service assistant for %s, replying inside LINE.', 'moksa-line' ),
+				__( 'You are a customer service assistant for %s, replying inside LINE.', 'moksa-for-line' ),
 				get_bloginfo( 'name' )
 			),
-			__( 'Answer in the language the customer used. Keep it short: this is a chat message, not an article.', 'moksa-line' ),
-			__( 'If you do not know something, say so and offer to pass it to a person. Never invent prices, stock or delivery dates.', 'moksa-line' ),
+			__( 'Answer in the language the customer used. Keep it short: this is a chat message, not an article.', 'moksa-for-line' ),
+			__( 'If you do not know something, say so and offer to pass it to a person. Never invent prices, stock or delivery dates.', 'moksa-for-line' ),
 		);
 
 		if ( ! empty( $context['display_name'] ) ) {
 			$parts[] = sprintf(
 				/* translators: %s: the customer's LINE display name. */
-				__( 'The customer is called %s.', 'moksa-line' ),
+				__( 'The customer is called %s.', 'moksa-for-line' ),
 				(string) $context['display_name']
 			);
 		}
@@ -179,7 +179,7 @@ class CoreAiProvider implements ProviderInterface {
 		 * @param array  $context     Conversation context.
 		 */
 		return (string) apply_filters(
-			'moksa_line_core_ai_system_instruction',
+			'mofoline_core_ai_system_instruction',
 			implode( ' ', $parts ),
 			$context
 		);

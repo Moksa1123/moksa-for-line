@@ -19,7 +19,7 @@
  * flag that made "absent" read as "present", and every callback went down
  * the cancel branch.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -38,7 +38,7 @@ function callback_check( bool $ok, string $label, string $detail = '' ): void {
 
 $plant = static function ( string $state, int $link_to ): void {
 	set_transient(
-		'mlline_' . hash( 'sha256', $state ),
+		'mofoline_' . hash( 'sha256', $state ),
 		array(
 			'code_verifier' => str_repeat( 'a', 43 ),
 			'redirect'      => home_url( '/' ),
@@ -49,7 +49,7 @@ $plant = static function ( string $state, int $link_to ): void {
 };
 
 $open = static function ( array $query ): array {
-	$url      = add_query_arg( $query, admin_url( 'admin-ajax.php?action=moksa_line_callback' ) );
+	$url      = add_query_arg( $query, admin_url( 'admin-ajax.php?action=mofoline_callback' ) );
 	$response = wp_remote_get( $url, array( 'redirection' => 0, 'timeout' => 20, 'sslverify' => false ) );
 
 	if ( is_wp_error( $response ) ) {
@@ -70,21 +70,21 @@ echo "Login callback over HTTP\n";
 $plant( "link-$suffix", 1 );
 $r = $open( array( 'state' => "link-$suffix", 'code' => 'bogus' ) );
 callback_check( 400 === $r['status'], 'a link opened from another session is refused', 'HTTP ' . $r['status'] );
-callback_check( false !== strpos( $r['body'], __( 'This link was started from a different account. Please start again from your own account page.', 'moksa-line' ) ), 'and says why' );
+callback_check( false !== strpos( $r['body'], __( 'This link was started from a different account. Please start again from your own account page.', 'moksa-for-line' ) ), 'and says why' );
 
 $plant( "login-$suffix", 0 );
 $r = $open( array( 'state' => "login-$suffix", 'code' => 'bogus' ) );
 callback_check( 400 === $r['status'], 'a code LINE rejects ends on an error page, not a redirect', 'HTTP ' . $r['status'] . ' ' . $r['location'] );
 
 $r = $open( array( 'state' => "login-$suffix", 'code' => 'bogus' ) );
-callback_check( 400 === $r['status'] && false !== strpos( $r['body'], __( 'This login link has expired. Please try again.', 'moksa-line' ) ), 'the same state a second time is expired', 'HTTP ' . $r['status'] );
+callback_check( 400 === $r['status'] && false !== strpos( $r['body'], __( 'This login link has expired. Please try again.', 'moksa-for-line' ) ), 'the same state a second time is expired', 'HTTP ' . $r['status'] );
 
 $plant( "cancel-$suffix", 0 );
 $r = $open( array( 'state' => "cancel-$suffix", 'error' => 'access_denied' ) );
 callback_check( 302 === $r['status'] && 0 === strpos( $r['location'], home_url( '/' ) ), 'cancelling at LINE goes back to the site', 'HTTP ' . $r['status'] . ' ' . $r['location'] );
 
 set_transient(
-	'mlline_' . hash( 'sha256', "evil-$suffix" ),
+	'mofoline_' . hash( 'sha256', "evil-$suffix" ),
 	array( 'code_verifier' => str_repeat( 'a', 43 ), 'redirect' => 'https://evil.example/steal', 'link_to' => 0 ),
 	300
 );

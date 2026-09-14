@@ -11,17 +11,17 @@
  *   30  keyword rules
  *   40  AI
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Bot;
+namespace Mofoline\Bot;
 
-use Moksa\Line\Bot\Ai\AiResponder;
-use Moksa\Line\Data\QuickReplies;
-use Moksa\Line\Inbox\Conversations;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Support\Options;
-use Moksa\Line\Admin\Ajax;
+use Mofoline\Bot\Ai\AiResponder;
+use Mofoline\Data\QuickReplies;
+use Mofoline\Inbox\Conversations;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Support\Options;
+use Mofoline\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -37,19 +37,19 @@ class BotModule {
 	}
 
 	public function register(): void {
-		add_filter( 'moksa_line_compose_reply', array( $this, 'continue_flow' ), 10, 4 );
-		add_filter( 'moksa_line_compose_reply', array( $this, 'start_flow' ), 20, 4 );
-		add_filter( 'moksa_line_compose_reply', array( $this, 'keyword_reply' ), 30, 4 );
-		add_filter( 'moksa_line_compose_reply', array( $this, 'ai_reply' ), 40, 4 );
+		add_filter( 'mofoline_compose_reply', array( $this, 'continue_flow' ), 10, 4 );
+		add_filter( 'mofoline_compose_reply', array( $this, 'start_flow' ), 20, 4 );
+		add_filter( 'mofoline_compose_reply', array( $this, 'keyword_reply' ), 30, 4 );
+		add_filter( 'mofoline_compose_reply', array( $this, 'ai_reply' ), 40, 4 );
 
-		add_filter( 'moksa_line_compose_postback_reply', array( $this, 'postback_reply' ), 10, 4 );
+		add_filter( 'mofoline_compose_postback_reply', array( $this, 'postback_reply' ), 10, 4 );
 
-		add_action( 'wp_ajax_moksa_line_rule_save', array( $this, 'ajax_save_rule' ) );
-		add_action( 'wp_ajax_moksa_line_rule_delete', array( $this, 'ajax_delete_rule' ) );
-		add_action( 'wp_ajax_moksa_line_flow_save', array( $this, 'ajax_save_flow' ) );
-		add_action( 'wp_ajax_moksa_line_flow_delete', array( $this, 'ajax_delete_flow' ) );
-		add_action( 'wp_ajax_moksa_line_quick_reply_save', array( $this, 'ajax_save_quick_reply' ) );
-		add_action( 'wp_ajax_moksa_line_quick_reply_delete', array( $this, 'ajax_delete_quick_reply' ) );
+		add_action( 'wp_ajax_mofoline_rule_save', array( $this, 'ajax_save_rule' ) );
+		add_action( 'wp_ajax_mofoline_rule_delete', array( $this, 'ajax_delete_rule' ) );
+		add_action( 'wp_ajax_mofoline_flow_save', array( $this, 'ajax_save_flow' ) );
+		add_action( 'wp_ajax_mofoline_flow_delete', array( $this, 'ajax_delete_flow' ) );
+		add_action( 'wp_ajax_mofoline_quick_reply_save', array( $this, 'ajax_save_quick_reply' ) );
+		add_action( 'wp_ajax_mofoline_quick_reply_delete', array( $this, 'ajax_delete_quick_reply' ) );
 	}
 
 	// --- Admin AJAX -------------------------------------------------------------
@@ -76,7 +76,7 @@ class BotModule {
 					array(
 						'message' => sprintf(
 							/* translators: %s: JSON parser message. */
-							__( 'That is not valid JSON: %s', 'moksa-line' ),
+							__( 'That is not valid JSON: %s', 'moksa-for-line' ),
 							json_last_error_msg()
 						),
 					)
@@ -92,12 +92,12 @@ class BotModule {
 		$match_type = Ajax::key( 'match_type', 'exact' );
 
 		if ( 'any' !== $match_type && '' === trim( $keyword ) ) {
-			wp_send_json_error( array( 'message' => __( 'Give the rule something to match on.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Give the rule something to match on.', 'moksa-for-line' ) ) );
 		}
 
 		// A broken pattern would otherwise silently match nothing forever.
 		if ( 'regex' === $match_type && null === AutoReply::matches_pattern( $keyword, '' ) ) {
-			wp_send_json_error( array( 'message' => __( 'That pattern is not valid.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That pattern is not valid.', 'moksa-for-line' ) ) );
 		}
 
 		$id = AutoReply::save(
@@ -113,7 +113,7 @@ class BotModule {
 			)
 		);
 
-		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Rule saved.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Rule saved.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -125,10 +125,10 @@ class BotModule {
 		$id = Ajax::int( 'id' );
 
 		if ( $id <= 0 || ! AutoReply::delete( $id ) ) {
-			wp_send_json_error( array( 'message' => __( 'That rule no longer exists.', 'moksa-line' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That rule no longer exists.', 'moksa-for-line' ) ), 404 );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Rule deleted.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Rule deleted.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -140,11 +140,11 @@ class BotModule {
 		$definition = Ajax::json_verbatim( 'definition' );
 
 		if ( ! is_array( $definition ) ) {
-			wp_send_json_error( array( 'message' => __( 'The flow definition is not valid JSON.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The flow definition is not valid JSON.', 'moksa-for-line' ) ) );
 		}
 
 		if ( empty( $definition['steps'] ) || ! is_array( $definition['steps'] ) ) {
-			wp_send_json_error( array( 'message' => __( 'A flow needs at least one step.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'A flow needs at least one step.', 'moksa-for-line' ) ) );
 		}
 
 		foreach ( $definition['steps'] as $index => $step ) {
@@ -153,7 +153,7 @@ class BotModule {
 					array(
 						'message' => sprintf(
 							/* translators: %d: step number. */
-							__( 'Step %d has no question to ask.', 'moksa-line' ),
+							__( 'Step %d has no question to ask.', 'moksa-for-line' ),
 							(int) $index + 1
 						),
 					)
@@ -164,7 +164,7 @@ class BotModule {
 		$email = Ajax::email( 'notify_email' );
 
 		if ( '' !== $email && ! is_email( $email ) ) {
-			wp_send_json_error( array( 'message' => __( 'That notification address is not valid.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That notification address is not valid.', 'moksa-for-line' ) ) );
 		}
 
 		$id = Flow::save(
@@ -179,7 +179,7 @@ class BotModule {
 			)
 		);
 
-		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Flow saved.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Flow saved.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -193,10 +193,10 @@ class BotModule {
 		// "Deleted." for a row that was never there tells somebody looking at
 		// a stale list that they have just fixed something.
 		if ( $id <= 0 || ! Flow::delete( $id ) ) {
-			wp_send_json_error( array( 'message' => __( 'That flow no longer exists.', 'moksa-line' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That flow no longer exists.', 'moksa-for-line' ) ), 404 );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Flow deleted.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Flow deleted.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -208,11 +208,11 @@ class BotModule {
 		$items = Ajax::json_verbatim( 'items' );
 
 		if ( ! is_array( $items ) || empty( $items ) ) {
-			wp_send_json_error( array( 'message' => __( 'Add at least one quick reply button.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Add at least one quick reply button.', 'moksa-for-line' ) ) );
 		}
 
 		if ( count( $items ) > 13 ) {
-			wp_send_json_error( array( 'message' => __( 'LINE allows at most 13 quick reply buttons.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'LINE allows at most 13 quick reply buttons.', 'moksa-for-line' ) ) );
 		}
 
 		$id = QuickReplies::save(
@@ -224,7 +224,7 @@ class BotModule {
 			)
 		);
 
-		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Quick reply set saved.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'id' => $id, 'message' => __( 'Quick reply set saved.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -236,17 +236,17 @@ class BotModule {
 		$id = Ajax::int( 'id' );
 
 		if ( $id <= 0 || ! QuickReplies::delete( $id ) ) {
-			wp_send_json_error( array( 'message' => __( 'That quick reply set no longer exists.', 'moksa-line' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That quick reply set no longer exists.', 'moksa-for-line' ) ), 404 );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Quick reply set deleted.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Quick reply set deleted.', 'moksa-for-line' ) ) );
 	}
 
 	/**
 	 * Shared nonce and capability check.
 	 */
 	private function guard(): void {
-		Ajax::guard( __( 'You do not have permission to change bot settings.', 'moksa-line' ) );
+		Ajax::guard( __( 'You do not have permission to change bot settings.', 'moksa-for-line' ) );
 	}
 
 	/**
@@ -393,7 +393,7 @@ class BotModule {
 
 			return array(
 				MessagingClient::text(
-					__( 'A member of our team will reply here shortly.', 'moksa-line' )
+					__( 'A member of our team will reply here shortly.', 'moksa-for-line' )
 				),
 			);
 		}

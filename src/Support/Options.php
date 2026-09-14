@@ -6,16 +6,16 @@
  * its type, default and whether it holds a credential. Credentials are stored
  * encrypted (see Crypto) and never returned by the settings AJAX surface.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Support;
+namespace Mofoline\Support;
 
 defined( 'ABSPATH' ) || exit;
 
 class Options {
 
-	const PREFIX = 'moksa_line_';
+	const PREFIX = 'mofoline_';
 
 	/**
 	 * Runtime cache so a single request never hits get_option() twice for the
@@ -137,7 +137,7 @@ class Options {
 	/**
 	 * Read a setting, decrypting it when it is a credential.
 	 *
-	 * @param string $key      Key without the moksa_line_ prefix.
+	 * @param string $key      Key without the mofoline_ prefix.
 	 * @param mixed  $fallback Overrides the schema default when provided.
 	 * @return mixed
 	 */

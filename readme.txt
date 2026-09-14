@@ -1,4 +1,4 @@
-=== Moksa LINE Suite ===
+=== Moksa for LINE ===
 Contributors: moksa0923
 Tags: line, line login, line pay, chatbot, woocommerce
 Requires at least: 6.2
@@ -59,7 +59,7 @@ Online API v3. Its signature construction is publicly documented and widely used
 
 = Does uninstalling delete my data? =
 
-No, unless you define `MOKSA_LINE_REMOVE_DATA` as `true` in `wp-config.php`. Payment records and conversation history are the kind of thing a shop may need to keep.
+No, unless you define `MOFOLINE_REMOVE_DATA` as `true` in `wp-config.php`. Payment records and conversation history are the kind of thing a shop may need to keep.
 
 = Why can I not select administrator as the role for new accounts? =
 
@@ -67,13 +67,13 @@ Because a self-service login flow that can mint administrators is a way to lose 
 
 = I already use the Moksa LINE Login plugin. What happens to my data? =
 
-It is imported automatically. The two plugins share the same option and table prefix, so activating this one carries across your channel settings, LINE users, WordPress account bindings and reply rules. Credentials that were stored as plain text are re-stored encrypted, and reply rules are moved to the column the code actually reads, so some may work for the first time.
+It is imported automatically. Activating this one copies your channel settings, LINE users, WordPress account bindings and reply rules across from the older plugin's tables and options, leaving the originals in place. Credentials that were stored as plain text are re-stored encrypted, and reply rules are moved to the column the code actually reads, so some may work for the first time.
 
 Deactivate and delete the older plugin once you have confirmed this one works. Leaving both active means two webhook handlers competing for the same events.
 
 = Do I have to reconfigure anything after switching? =
 
-No. The callback and webhook URLs are unchanged, so the settings already registered in the LINE Developers Console keep working.
+One thing. The webhook keeps answering at the old address, so messages keep arriving. The LINE Login callback address is new: copy the Callback URL from **LINE > Settings** into your LINE Login channel in the Developers Console (add it alongside the old one). Everything else -- settings, LINE users, account links, reply rules -- is imported for you.
 
 == External services ==
 
@@ -86,7 +86,7 @@ Used to send and receive messages, issue channel access tokens, read the profile
 Used to sign visitors in and to verify the resulting ID token. Sent: your channel id and secret, and the authorization code returned by LINE. Received: the visitor's LINE user id, display name, profile picture URL, and email address when your channel is approved for it. Called when a visitor uses a LINE login button.
 
 **LIFF SDK** — `static.line-scdn.net`, and `api.line.me` for verification
-A JavaScript file loaded in the visitor's browser on pages using the LIFF shortcodes. It must be served from LINE's own CDN; a bundled copy is not supported. Loaded only on pages containing `[moksa_liff_profile]` or `[moksa_line_chat]`. When the visitor opens such a page inside LINE, the ID token LIFF issues is sent from your site to `api.line.me` to be verified before the visitor's LINE user id, display name and picture are used.
+A JavaScript file loaded in the visitor's browser on pages using the LIFF shortcodes. It must be served from LINE's own CDN; a bundled copy is not supported. Loaded only on pages containing `[mofoline_liff_profile]` or `[mofoline_chat]`. When the visitor opens such a page inside LINE, the ID token LIFF issues is sent from your site to `api.line.me` to be verified before the visitor's LINE user id, display name and picture are used.
 
 **Images served by LINE** — `profile.line-scdn.net`, `stickershop.line-scdn.net`
 Profile pictures and sticker images are not copied to your site; they are loaded by the browser directly from LINE's CDN wherever they are shown — the inbox and user list in wp-admin, and the visitor's own picture on the My Account page and the LIFF profile. A browser loading them discloses its IP address and user agent to LINE, as with any image hosted elsewhere. Sent by the plugin: nothing; the URLs come from LINE's own profile data.
@@ -133,7 +133,7 @@ Initial release.
 Replacing Moksa LINE Login:
 
 * This is a separate plugin, not an update. Both can be installed at once, but only one should be active, or two webhook handlers will compete for the same events.
-* It shares the moksa_line_ option and table prefix, so the older plugin's settings, LINE users, account bindings and reply rules are imported on first load.
+* The older plugin's settings, LINE users, account bindings and reply rules are copied across on first load; its own tables and options are left untouched.
 * Credentials that were stored as plain text are re-stored encrypted.
 * Auto-reply rules are moved to the column the code actually reads, so some rules may work for the first time.
 * The import runs once, is safe to repeat, and neither double-encrypts credentials nor duplicates conversations.

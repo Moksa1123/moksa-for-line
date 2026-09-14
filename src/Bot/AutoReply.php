@@ -8,17 +8,17 @@
  * ones regardless of priority, and the matcher is tested against the whole
  * ruleset rather than short-circuiting on the first row.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Bot;
+namespace Mofoline\Bot;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Data\Flex;
-use Moksa\Line\Data\QuickReplies;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Migrator;
+use Mofoline\Support\Db;
+use Mofoline\Data\Flex;
+use Mofoline\Data\QuickReplies;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -52,11 +52,11 @@ class AutoReply {
 	 */
 	public static function match_labels(): array {
 		return array(
-			'exact'   => __( 'The whole message is exactly this', 'moksa-line' ),
-			'prefix'  => __( 'The message starts with this', 'moksa-line' ),
-			'partial' => __( 'The message contains this', 'moksa-line' ),
-			'regex'   => __( 'The message matches this pattern', 'moksa-line' ),
-			'any'     => __( 'Anything (catch-all)', 'moksa-line' ),
+			'exact'   => __( 'The whole message is exactly this', 'moksa-for-line' ),
+			'prefix'  => __( 'The message starts with this', 'moksa-for-line' ),
+			'partial' => __( 'The message contains this', 'moksa-for-line' ),
+			'regex'   => __( 'The message matches this pattern', 'moksa-for-line' ),
+			'any'     => __( 'Anything (catch-all)', 'moksa-for-line' ),
 		);
 	}
 
@@ -67,13 +67,13 @@ class AutoReply {
 	 */
 	public static function reply_labels(): array {
 		return array(
-			'text'        => __( 'Text', 'moksa-line' ),
-			'flex'        => __( 'A Flex template', 'moksa-line' ),
-			'quick_reply' => __( 'A quick reply set', 'moksa-line' ),
-			'flow'        => __( 'Start a conversation flow', 'moksa-line' ),
-			'sticker'     => __( 'A sticker', 'moksa-line' ),
-			'image'       => __( 'An image', 'moksa-line' ),
-			'raw'         => __( 'Raw message JSON', 'moksa-line' ),
+			'text'        => __( 'Text', 'moksa-for-line' ),
+			'flex'        => __( 'A Flex template', 'moksa-for-line' ),
+			'quick_reply' => __( 'A quick reply set', 'moksa-for-line' ),
+			'flow'        => __( 'Start a conversation flow', 'moksa-for-line' ),
+			'sticker'     => __( 'A sticker', 'moksa-for-line' ),
+			'image'       => __( 'An image', 'moksa-for-line' ),
+			'raw'         => __( 'Raw message JSON', 'moksa-for-line' ),
 		);
 	}
 
@@ -83,7 +83,7 @@ class AutoReply {
 	 * @return array
 	 */
 	public static function active_rules(): array {
-		$cached = wp_cache_get( 'moksa_line_active_rules', 'moksa_line' );
+		$cached = wp_cache_get( 'mofoline_active_rules', 'mofoline' );
 
 		if ( is_array( $cached ) ) {
 			return $cached;
@@ -93,7 +93,7 @@ class AutoReply {
 
 		$rules = (array) Db::get_results( Db::prepare( "SELECT * FROM %i WHERE is_active = 1 ORDER BY priority ASC, id ASC", $table ) );
 
-		wp_cache_set( 'moksa_line_active_rules', $rules, 'moksa_line', 300 );
+		wp_cache_set( 'mofoline_active_rules', $rules, 'mofoline', 300 );
 
 		return $rules;
 	}
@@ -102,7 +102,7 @@ class AutoReply {
 	 * Drop the rule cache after an edit.
 	 */
 	public static function flush_cache(): void {
-		wp_cache_delete( 'moksa_line_active_rules', 'moksa_line' );
+		wp_cache_delete( 'mofoline_active_rules', 'mofoline' );
 	}
 
 	/**
@@ -328,7 +328,7 @@ class AutoReply {
 		}
 
 		if ( '' === $prompt ) {
-			$prompt = __( 'Please choose an option:', 'moksa-line' );
+			$prompt = __( 'Please choose an option:', 'moksa-for-line' );
 		}
 
 		return array( MessagingClient::text( self::expand( $prompt, $line_user_id ), $items ) );
@@ -348,7 +348,7 @@ class AutoReply {
 		$display_name = '';
 
 		if ( '' !== $line_user_id ) {
-			$record = \Moksa\Line\Data\Users::by_line_id( $line_user_id );
+			$record = \Mofoline\Data\Users::by_line_id( $line_user_id );
 
 			if ( $record ) {
 				$display_name = (string) $record->display_name;

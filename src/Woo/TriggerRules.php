@@ -9,10 +9,10 @@
  * The stored format is inherited from the plugin this replaces, so templates
  * created there keep working: a list of arrays with type, operator and value.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Woo;
+namespace Mofoline\Woo;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -84,7 +84,7 @@ class TriggerRules {
 		 * @param array     $rule     The rule.
 		 * @param \WC_Order $order    Order under evaluation.
 		 */
-		$matched = apply_filters( 'moksa_line_notify_rule_match', null, $rule, $order );
+		$matched = apply_filters( 'mofoline_notify_rule_match', null, $rule, $order );
 
 		// An unrecognised rule fails rather than matches: a template that
 		// depends on a condition nothing can evaluate should stay quiet.
@@ -158,9 +158,9 @@ class TriggerRules {
 	 */
 	public static function types(): array {
 		return array(
-			'payment_method'  => __( 'Payment method', 'moksa-line' ),
-			'shipping_method' => __( 'Shipping method', 'moksa-line' ),
-			'order_total'     => __( 'Order total', 'moksa-line' ),
+			'payment_method'  => __( 'Payment method', 'moksa-for-line' ),
+			'shipping_method' => __( 'Shipping method', 'moksa-for-line' ),
+			'order_total'     => __( 'Order total', 'moksa-for-line' ),
 		);
 	}
 
@@ -172,19 +172,19 @@ class TriggerRules {
 	public static function operators(): array {
 		return array(
 			'payment_method'  => array(
-				'is'     => __( 'is', 'moksa-line' ),
-				'is_not' => __( 'is not', 'moksa-line' ),
+				'is'     => __( 'is', 'moksa-for-line' ),
+				'is_not' => __( 'is not', 'moksa-for-line' ),
 			),
 			'shipping_method' => array(
-				'is'     => __( 'is', 'moksa-line' ),
-				'is_not' => __( 'is not', 'moksa-line' ),
+				'is'     => __( 'is', 'moksa-for-line' ),
+				'is_not' => __( 'is not', 'moksa-for-line' ),
 			),
 			'order_total'     => array(
-				'gt'  => __( 'is more than', 'moksa-line' ),
-				'gte' => __( 'is at least', 'moksa-line' ),
-				'eq'  => __( 'equals', 'moksa-line' ),
-				'lte' => __( 'is at most', 'moksa-line' ),
-				'lt'  => __( 'is less than', 'moksa-line' ),
+				'gt'  => __( 'is more than', 'moksa-for-line' ),
+				'gte' => __( 'is at least', 'moksa-for-line' ),
+				'eq'  => __( 'equals', 'moksa-for-line' ),
+				'lte' => __( 'is at most', 'moksa-for-line' ),
+				'lt'  => __( 'is less than', 'moksa-for-line' ),
 			),
 		);
 	}

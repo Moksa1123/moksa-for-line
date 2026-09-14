@@ -2,27 +2,27 @@
 /**
  * The template message screen.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Template;
+namespace Mofoline\Template;
 
-use Moksa\Line\Api\Client;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Api\TokenManager;
-use Moksa\Line\Data\Templates;
-use Moksa\Line\Admin\Ajax;
+use Mofoline\Api\Client;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Api\TokenManager;
+use Mofoline\Data\Templates;
+use Mofoline\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
 class TemplateModule {
 
 	public function register(): void {
-		add_action( 'wp_ajax_moksa_line_template_save', array( $this, 'ajax_save' ) );
-		add_action( 'wp_ajax_moksa_line_template_delete', array( $this, 'ajax_delete' ) );
-		add_action( 'wp_ajax_moksa_line_template_validate', array( $this, 'ajax_validate' ) );
-		add_action( 'wp_ajax_moksa_line_template_send_test', array( $this, 'ajax_send_test' ) );
-		add_action( 'wp_ajax_moksa_line_template_warnings', array( $this, 'ajax_warnings' ) );
+		add_action( 'wp_ajax_mofoline_template_save', array( $this, 'ajax_save' ) );
+		add_action( 'wp_ajax_mofoline_template_delete', array( $this, 'ajax_delete' ) );
+		add_action( 'wp_ajax_mofoline_template_validate', array( $this, 'ajax_validate' ) );
+		add_action( 'wp_ajax_mofoline_template_send_test', array( $this, 'ajax_send_test' ) );
+		add_action( 'wp_ajax_mofoline_template_warnings', array( $this, 'ajax_warnings' ) );
 	}
 
 	/**
@@ -54,11 +54,11 @@ class TemplateModule {
 		$decoded  = $this->decoded_definition();
 
 		if ( '' === trim( $name ) ) {
-			wp_send_json_error( array( 'message' => __( 'Give this template a name.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Give this template a name.', 'moksa-for-line' ) ) );
 		}
 
 		if ( '' === trim( $alt_text ) ) {
-			wp_send_json_error( array( 'message' => __( 'Fallback text is required: it is all the customer sees in the chat list.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Fallback text is required: it is all the customer sees in the chat list.', 'moksa-for-line' ) ) );
 		}
 
 		$problems = TemplateMessages::check( $decoded );
@@ -66,7 +66,7 @@ class TemplateModule {
 		if ( $problems ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'This template will not send as it stands.', 'moksa-line' ),
+					'message'  => __( 'This template will not send as it stands.', 'moksa-for-line' ),
 					'problems' => $problems,
 				)
 			);
@@ -86,13 +86,13 @@ class TemplateModule {
 		$saved = Templates::save( $fields );
 
 		if ( $saved <= 0 ) {
-			wp_send_json_error( array( 'message' => __( 'The template could not be saved.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The template could not be saved.', 'moksa-for-line' ) ) );
 		}
 
 		wp_send_json_success(
 			array(
 				'id'      => $saved,
-				'message' => __( 'Template saved.', 'moksa-line' ),
+				'message' => __( 'Template saved.', 'moksa-for-line' ),
 			)
 		);
 	}
@@ -113,7 +113,7 @@ class TemplateModule {
 		if ( $problems ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'Found problems before contacting LINE.', 'moksa-line' ),
+					'message'  => __( 'Found problems before contacting LINE.', 'moksa-for-line' ),
 					'problems' => $problems,
 					'source'   => 'local',
 				)
@@ -123,7 +123,7 @@ class TemplateModule {
 		if ( ! TokenManager::is_configured() ) {
 			wp_send_json_success(
 				array(
-					'message' => __( 'Passed the local checks. Connect the Messaging API channel to also validate against LINE.', 'moksa-line' ),
+					'message' => __( 'Passed the local checks. Connect the Messaging API channel to also validate against LINE.', 'moksa-for-line' ),
 					'source'  => 'local',
 				)
 			);
@@ -138,7 +138,7 @@ class TemplateModule {
 		if ( is_wp_error( $result ) ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'LINE rejected this template.', 'moksa-line' ),
+					'message'  => __( 'LINE rejected this template.', 'moksa-for-line' ),
 					'problems' => array( $result->get_error_message() ),
 					'source'   => 'line',
 				)
@@ -147,7 +147,7 @@ class TemplateModule {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'LINE accepted this template.', 'moksa-line' ),
+				'message' => __( 'LINE accepted this template.', 'moksa-for-line' ),
 				'source'  => 'line',
 			)
 		);
@@ -163,14 +163,14 @@ class TemplateModule {
 		$target = Ajax::text( 'line_user_id' );
 
 		if ( '' === $target ) {
-			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-for-line' ) ) );
 		}
 
 		$row        = Templates::find( $id );
 		$definition = Templates::definition( $id );
 
 		if ( ! $row || ! $definition ) {
-			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-for-line' ) ) );
 		}
 
 		$result = MessagingClient::push(
@@ -180,7 +180,7 @@ class TemplateModule {
 
 		Ajax::bail( $result, 'Could not send a template test', 'template' );
 
-		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -195,10 +195,10 @@ class TemplateModule {
 		// looking at a stale list that they fixed something. The Flex handler
 		// next door already got this right; these two did not.
 		if ( $id <= 0 || ! Templates::delete( $id ) ) {
-			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-line' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-for-line' ) ), 404 );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Template deleted.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Template deleted.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -210,13 +210,13 @@ class TemplateModule {
 		$decoded = Ajax::json_verbatim( 'definition' );
 
 		if ( ! is_array( $decoded ) ) {
-			wp_send_json_error( array( 'message' => __( 'That is not valid JSON.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That is not valid JSON.', 'moksa-for-line' ) ) );
 		}
 
 		return $decoded;
 	}
 
 	private function guard(): void {
-		Ajax::guard( __( 'You do not have permission to manage templates.', 'moksa-line' ) );
+		Ajax::guard( __( 'You do not have permission to manage templates.', 'moksa-for-line' ) );
 	}
 }

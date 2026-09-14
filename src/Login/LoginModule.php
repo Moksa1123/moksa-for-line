@@ -16,15 +16,15 @@
  *   the callback into an open redirect.
  * - PKCE is used, so an intercepted authorization code is not enough on its own.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Login;
+namespace Mofoline\Login;
 
-use Moksa\Line\Admin\Ajax;
-use Moksa\Line\Data\Users;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Admin\Ajax;
+use Mofoline\Data\Users;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 use WP_Error;
 use WP_User;
 
@@ -44,13 +44,13 @@ class LoginModule {
 	 * Hook the module into WordPress.
 	 */
 	public function register(): void {
-		add_action( 'wp_ajax_nopriv_moksa_line_callback', array( $this, 'handle_callback' ) );
-		add_action( 'wp_ajax_moksa_line_callback', array( $this, 'handle_callback' ) );
+		add_action( 'wp_ajax_nopriv_mofoline_callback', array( $this, 'handle_callback' ) );
+		add_action( 'wp_ajax_mofoline_callback', array( $this, 'handle_callback' ) );
 
-		add_action( 'wp_ajax_nopriv_moksa_line_start', array( $this, 'handle_start' ) );
-		add_action( 'wp_ajax_moksa_line_start', array( $this, 'handle_start' ) );
+		add_action( 'wp_ajax_nopriv_mofoline_start', array( $this, 'handle_start' ) );
+		add_action( 'wp_ajax_mofoline_start', array( $this, 'handle_start' ) );
 
-		add_action( 'wp_ajax_moksa_line_unlink', array( $this, 'handle_unlink' ) );
+		add_action( 'wp_ajax_mofoline_unlink', array( $this, 'handle_unlink' ) );
 
 		add_filter( 'get_avatar_url', array( $this, 'filter_avatar_url' ), 10, 2 );
 		add_action( 'delete_user', array( $this, 'on_user_deleted' ) );
@@ -64,7 +64,7 @@ class LoginModule {
 	 * existing install until an administrator edited the channel.
 	 */
 	public static function callback_url(): string {
-		return admin_url( 'admin-ajax.php?action=moksa_line_callback' );
+		return admin_url( 'admin-ajax.php?action=mofoline_callback' );
 	}
 
 	/**
@@ -129,7 +129,7 @@ class LoginModule {
 	}
 
 	/**
-	 * Front-end entry point: /wp-admin/admin-ajax.php?action=moksa_line_start
+	 * Front-end entry point: /wp-admin/admin-ajax.php?action=mofoline_start
 	 * Sends the visitor to LINE. Having a server-side starter means the state
 	 * is created at click time, not at page render time, so a cached page can
 	 * still produce a valid login.
@@ -138,14 +138,14 @@ class LoginModule {
 		$redirect = Ajax::query_url( 'redirect_to' );
 		$link     = Ajax::query_flag( 'link' ) && is_user_logged_in();
 
-		if ( $link && ! wp_verify_nonce( Ajax::query_text( '_wpnonce' ), 'moksa_line_link' ) ) {
-			wp_die( esc_html__( 'This link expired. Please go back and try again.', 'moksa-line' ), 403 );
+		if ( $link && ! wp_verify_nonce( Ajax::query_text( '_wpnonce' ), 'mofoline_link' ) ) {
+			wp_die( esc_html__( 'This link expired. Please go back and try again.', 'moksa-for-line' ), 403 );
 		}
 
 		$url = self::authorize_url( $redirect, array( 'link' => $link ) );
 
 		if ( '#' === $url ) {
-			wp_die( esc_html__( 'LINE Login is not configured on this site yet.', 'moksa-line' ) );
+			wp_die( esc_html__( 'LINE Login is not configured on this site yet.', 'moksa-for-line' ) );
 		}
 
 		// The destination is access.line.me, which is not on this site's
@@ -178,7 +178,7 @@ class LoginModule {
 		$state = Ajax::query_text( 'state' );
 
 		if ( '' === $state ) {
-			$this->fail( __( 'This login request is missing its state. Please start again.', 'moksa-line' ) );
+			$this->fail( __( 'This login request is missing its state. Please start again.', 'moksa-for-line' ) );
 		}
 
 		$stored = get_transient( self::state_key( $state ) );
@@ -188,7 +188,7 @@ class LoginModule {
 		delete_transient( self::state_key( $state ) );
 
 		if ( ! is_array( $stored ) ) {
-			$this->fail( __( 'This login link has expired. Please try again.', 'moksa-line' ) );
+			$this->fail( __( 'This login link has expired. Please try again.', 'moksa-for-line' ) );
 		}
 
 		// LINE reports user-side cancellation as an error parameter.
@@ -204,7 +204,7 @@ class LoginModule {
 		$code = Ajax::query_text( 'code' );
 
 		if ( '' === $code ) {
-			$this->fail( __( 'LINE did not return an authorization code.', 'moksa-line' ) );
+			$this->fail( __( 'LINE did not return an authorization code.', 'moksa-for-line' ) );
 		}
 
 		// A link has to finish in the session that started it. The target was
@@ -221,7 +221,7 @@ class LoginModule {
 				'login'
 			);
 
-			$this->fail( __( 'This link was started from a different account. Please start again from your own account page.', 'moksa-line' ) );
+			$this->fail( __( 'This link was started from a different account. Please start again from your own account page.', 'moksa-for-line' ) );
 		}
 
 
@@ -269,10 +269,10 @@ class LoginModule {
 		);
 
 		if ( '' !== $profile['pictureUrl'] ) {
-			update_user_meta( $user_id, 'moksa_line_avatar', $profile['pictureUrl'] );
+			update_user_meta( $user_id, 'mofoline_avatar', $profile['pictureUrl'] );
 		}
 
-		update_user_meta( $user_id, 'moksa_line_user_id', $line_user_id );
+		update_user_meta( $user_id, 'mofoline_user_id', $line_user_id );
 
 		if ( get_current_user_id() !== $user_id ) {
 			$this->start_session( $user_id );
@@ -285,7 +285,7 @@ class LoginModule {
 		 * @param string $line_user_id LINE user id.
 		 * @param array  $profile      Normalised profile data.
 		 */
-		do_action( 'moksa_line_logged_in', $user_id, $line_user_id, $profile );
+		do_action( 'mofoline_logged_in', $user_id, $line_user_id, $profile );
 
 		wp_safe_redirect( $this->safe_redirect( $stored['redirect'] ?? '' ) );
 		exit;
@@ -324,8 +324,8 @@ class LoginModule {
 			Logger::capture( $response, 'Token exchange could not reach LINE', 'login' );
 
 			return new WP_Error(
-				'moksa_line_token_unreachable',
-				__( 'Could not reach LINE to complete the login. Please try again.', 'moksa-line' )
+				'mofoline_token_unreachable',
+				__( 'Could not reach LINE to complete the login. Please try again.', 'moksa-for-line' )
 			);
 		}
 
@@ -344,8 +344,8 @@ class LoginModule {
 			// and a description of our own setup. The detail is in the log
 			// above, which is where the person who can act on it will look.
 			return new WP_Error(
-				'moksa_line_token_rejected',
-				__( 'LINE could not complete this login. Please try again.', 'moksa-line' )
+				'mofoline_token_rejected',
+				__( 'LINE could not complete this login. Please try again.', 'moksa-for-line' )
 			);
 		}
 
@@ -445,8 +445,8 @@ class LoginModule {
 
 		if ( ! Options::get( 'auto_register' ) ) {
 			return new WP_Error(
-				'moksa_line_registration_closed',
-				__( 'This site is not accepting new registrations through LINE. Please sign in with your existing account first, then link LINE from your profile.', 'moksa-line' )
+				'mofoline_registration_closed',
+				__( 'This site is not accepting new registrations through LINE. Please sign in with your existing account first, then link LINE from your profile.', 'moksa-for-line' )
 			);
 		}
 
@@ -506,7 +506,7 @@ class LoginModule {
 		 * @param string $line_user_id LINE user id.
 		 * @param array  $profile      Normalised profile.
 		 */
-		do_action( 'moksa_line_user_registered', (int) $user_id, $line_user_id, $profile );
+		do_action( 'mofoline_user_registered', (int) $user_id, $line_user_id, $profile );
 
 		return (int) $user_id;
 	}
@@ -522,8 +522,8 @@ class LoginModule {
 	private function link_existing_account( int $wp_user_id, string $line_user_id, array $profile ) {
 		if ( ! get_userdata( $wp_user_id ) ) {
 			return new WP_Error(
-				'moksa_line_link_target_missing',
-				__( 'The account to link to no longer exists.', 'moksa-line' )
+				'mofoline_link_target_missing',
+				__( 'The account to link to no longer exists.', 'moksa-for-line' )
 			);
 		}
 
@@ -531,8 +531,8 @@ class LoginModule {
 
 		if ( $record && (int) $record->wp_user_id > 0 && (int) $record->wp_user_id !== $wp_user_id ) {
 			return new WP_Error(
-				'moksa_line_already_linked',
-				__( 'This LINE account is already linked to another user on this site.', 'moksa-line' )
+				'mofoline_already_linked',
+				__( 'This LINE account is already linked to another user on this site.', 'moksa-for-line' )
 			);
 		}
 
@@ -590,23 +590,23 @@ class LoginModule {
 	 * Let a signed-in user detach their LINE account.
 	 */
 	public function handle_unlink(): void {
-		check_ajax_referer( 'moksa_line_link', 'nonce' );
+		check_ajax_referer( 'mofoline_link', 'nonce' );
 
 		$user_id = get_current_user_id();
 
 		if ( ! $user_id ) {
-			wp_send_json_error( array( 'message' => __( 'You are not signed in.', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You are not signed in.', 'moksa-for-line' ) ), 403 );
 		}
 
 		$target = Ajax::int( 'user_id', $user_id );
 
 		if ( $target !== $user_id && ! current_user_can( 'edit_users' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot unlink another user.', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot unlink another user.', 'moksa-for-line' ) ), 403 );
 		}
 
 		Users::unlink( $target );
 
-		wp_send_json_success( array( 'message' => __( 'LINE account unlinked.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'LINE account unlinked.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -644,7 +644,7 @@ class LoginModule {
 			return $url;
 		}
 
-		$avatar = get_user_meta( $user_id, 'moksa_line_avatar', true );
+		$avatar = get_user_meta( $user_id, 'mofoline_avatar', true );
 
 		return $avatar ? esc_url_raw( $avatar ) : $url;
 	}
@@ -702,7 +702,7 @@ class LoginModule {
 
 		if ( is_wp_error( $signed ) ) {
 			Logger::capture( $signed, 'WordPress refused the sign-in after LINE had authenticated', 'login' );
-			$this->fail( __( 'The sign-in could not be completed. Please try again.', 'moksa-line' ) );
+			$this->fail( __( 'The sign-in could not be completed. Please try again.', 'moksa-for-line' ) );
 		}
 	}
 
@@ -733,7 +733,7 @@ class LoginModule {
 	 * @param string $state State value.
 	 */
 	private static function state_key( string $state ): string {
-		return 'mlline_' . hash( 'sha256', $state );
+		return 'mofoline_' . hash( 'sha256', $state );
 	}
 
 	/**
@@ -778,7 +778,7 @@ class LoginModule {
 	private function fail( string $message ): void {
 		wp_die(
 			esc_html( $message ),
-			esc_html__( 'LINE Login', 'moksa-line' ),
+			esc_html__( 'LINE Login', 'moksa-for-line' ),
 			array(
 				'response'  => 400,
 				'back_link' => true,

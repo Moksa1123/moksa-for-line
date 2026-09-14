@@ -8,13 +8,13 @@
  * (POST /oauth2/v3/token, 15 minutes, no issuance cap), cached in a transient
  * and re-minted on demand.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Api;
+namespace Mofoline\Api;
 
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
 class TokenManager {
 
 	const ENDPOINT      = 'https://api.line.me/oauth2/v3/token';
-	const CACHE_KEY     = 'moksa_line_stateless_token';
+	const CACHE_KEY     = 'mofoline_stateless_token';
 	/** Refresh a minute before LINE expires it, to survive clock skew. */
 	const SAFETY_MARGIN = 60;
 
@@ -37,8 +37,8 @@ class TokenManager {
 
 			if ( '' === $token ) {
 				return new WP_Error(
-					'moksa_line_no_token',
-					__( 'No channel access token is configured. Add one under LINE > Settings > Messaging API.', 'moksa-line' )
+					'mofoline_no_token',
+					__( 'No channel access token is configured. Add one under LINE > Settings > Messaging API.', 'moksa-for-line' )
 				);
 			}
 
@@ -65,8 +65,8 @@ class TokenManager {
 
 		if ( '' === $channel_id || '' === $secret ) {
 			return new WP_Error(
-				'moksa_line_no_credentials',
-				__( 'Messaging API Channel ID and Channel Secret are required to issue a token.', 'moksa-line' )
+				'mofoline_no_credentials',
+				__( 'Messaging API Channel ID and Channel Secret are required to issue a token.', 'moksa-for-line' )
 			);
 		}
 
@@ -100,7 +100,7 @@ class TokenManager {
 				'token'
 			);
 
-			return new WP_Error( 'moksa_line_token_failed', $message );
+			return new WP_Error( 'mofoline_token_failed', $message );
 		}
 
 		$token   = (string) $body['access_token'];

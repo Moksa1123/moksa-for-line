@@ -11,13 +11,13 @@
  * Nothing here fails hard when AI Engine is absent: the bot simply falls
  * through to its other reply paths.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Bot\Ai;
+namespace Mofoline\Bot\Ai;
 
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -85,8 +85,8 @@ class AiEngineProvider implements ProviderInterface {
 
 		if ( ! is_object( $api ) ) {
 			return new WP_Error(
-				'moksa_line_ai_unavailable',
-				__( 'AI Engine is not active on this site.', 'moksa-line' )
+				'mofoline_ai_unavailable',
+				__( 'AI Engine is not active on this site.', 'moksa-for-line' )
 			);
 		}
 
@@ -94,8 +94,8 @@ class AiEngineProvider implements ProviderInterface {
 		// is true and tells a shop owner nothing. Say what is actually missing.
 		if ( ! $this->is_available() ) {
 			return new WP_Error(
-				'moksa_line_ai_no_key',
-				__( 'AI Engine has no AI service with an API key yet. Add one under Meow Apps > AI Engine > Settings.', 'moksa-line' )
+				'mofoline_ai_no_key',
+				__( 'AI Engine has no AI service with an API key yet. Add one under Meow Apps > AI Engine > Settings.', 'moksa-for-line' )
 			);
 		}
 
@@ -123,7 +123,7 @@ class AiEngineProvider implements ProviderInterface {
 		 * @param string $message Visitor message.
 		 * @param array  $context Conversation context.
 		 */
-		$params = apply_filters( 'moksa_line_ai_engine_params', $params, $message, $context );
+		$params = apply_filters( 'mofoline_ai_engine_params', $params, $message, $context );
 
 		try {
 			$reply = $api->simpleChatbotQuery( $bot_id, $message, $params, true );
@@ -134,7 +134,7 @@ class AiEngineProvider implements ProviderInterface {
 				'ai'
 			);
 
-			return new WP_Error( 'moksa_line_ai_failed', $e->getMessage() );
+			return new WP_Error( 'mofoline_ai_failed', $e->getMessage() );
 		}
 
 		if ( is_wp_error( $reply ) ) {
@@ -151,8 +151,8 @@ class AiEngineProvider implements ProviderInterface {
 
 		if ( '' === $reply ) {
 			return new WP_Error(
-				'moksa_line_ai_empty',
-				__( 'The AI returned an empty answer.', 'moksa-line' )
+				'mofoline_ai_empty',
+				__( 'The AI returned an empty answer.', 'moksa-for-line' )
 			);
 		}
 
@@ -191,7 +191,7 @@ class AiEngineProvider implements ProviderInterface {
 		}
 
 		if ( empty( $bots ) ) {
-			$bots['default'] = __( 'Default chatbot', 'moksa-line' );
+			$bots['default'] = __( 'Default chatbot', 'moksa-for-line' );
 		}
 
 		return $bots;

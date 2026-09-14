@@ -12,17 +12,17 @@
  * including someone who found the code -- it is a sign-in prompt that says
  * nothing about whether the code was even real.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Member;
+namespace Mofoline\Member;
 
-use Moksa\Line\Admin\AdminModule;
-use Moksa\Line\Admin\Ajax;
-use Moksa\Line\Data\Users;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
-use Moksa\Line\Support\QrCode;
+use Mofoline\Admin\AdminModule;
+use Mofoline\Admin\Ajax;
+use Mofoline\Data\Users;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
+use Mofoline\Support\QrCode;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -32,7 +32,7 @@ class MemberModule {
 	const SLUG = 'line-member';
 
 	/** Which option remembers the rewrite rules we flushed for. */
-	const FLUSHED = 'moksa_line_member_rewrite';
+	const FLUSHED = 'mofoline_member_rewrite';
 
 	public function register(): void {
 		if ( ! Options::get( 'member_card' ) ) {
@@ -43,7 +43,7 @@ class MemberModule {
 		add_filter( 'query_vars', array( $this, 'add_query_var' ) );
 		add_action( 'template_redirect', array( $this, 'maybe_render' ) );
 
-		add_action( 'wp_ajax_moksa_line_member_reissue', array( $this, 'ajax_reissue' ) );
+		add_action( 'wp_ajax_mofoline_member_reissue', array( $this, 'ajax_reissue' ) );
 	}
 
 	// --- Routing ------------------------------------------------------------------
@@ -54,7 +54,7 @@ class MemberModule {
 	public function add_rewrite(): void {
 		add_rewrite_rule(
 			'^' . self::SLUG . '/([0-9A-Za-z]{' . MemberCard::LENGTH . '})/?$',
-			'index.php?moksa_line_member=$matches[1]',
+			'index.php?mofoline_member=$matches[1]',
 			'top'
 		);
 
@@ -62,7 +62,7 @@ class MemberModule {
 		// focus, so it has to exist on its own.
 		add_rewrite_rule(
 			'^' . self::SLUG . '/?$',
-			'index.php?moksa_line_member=lookup',
+			'index.php?mofoline_member=lookup',
 			'top'
 		);
 
@@ -90,7 +90,7 @@ class MemberModule {
 	 * @return array
 	 */
 	public function add_query_var( $vars ) {
-		$vars[] = 'moksa_line_member';
+		$vars[] = 'mofoline_member';
 
 		return $vars;
 	}
@@ -113,7 +113,7 @@ class MemberModule {
 	 * Take over the request when it is a card.
 	 */
 	public function maybe_render(): void {
-		$requested = get_query_var( 'moksa_line_member' );
+		$requested = get_query_var( 'mofoline_member' );
 
 		if ( ! is_string( $requested ) || '' === $requested ) {
 			return;
@@ -148,7 +148,7 @@ class MemberModule {
 					exit;
 				}
 
-				$this->render_lookup( __( 'No member has that code. Check it and try again', 'moksa-line' ) );
+				$this->render_lookup( __( 'No member has that code. Check it and try again', 'moksa-for-line' ) );
 				exit;
 			}
 
@@ -160,7 +160,7 @@ class MemberModule {
 
 		if ( $user_id <= 0 ) {
 			status_header( 404 );
-			$this->render_lookup( __( 'That card is not valid. It may have been replaced', 'moksa-line' ) );
+			$this->render_lookup( __( 'That card is not valid. It may have been replaced', 'moksa-for-line' ) );
 			exit;
 		}
 
@@ -190,7 +190,7 @@ class MemberModule {
 
 		if ( ! $user ) {
 			status_header( 404 );
-			$this->render_lookup( __( 'That account no longer exists', 'moksa-line' ) );
+			$this->render_lookup( __( 'That account no longer exists', 'moksa-for-line' ) );
 
 			return;
 		}
@@ -199,11 +199,11 @@ class MemberModule {
 		$linked  = $record && '' !== (string) $record->line_user_id;
 		$picture = $linked ? (string) $record->picture_url : '';
 
-		$this->open( __( 'Member card', 'moksa-line' ) );
+		$this->open( __( 'Member card', 'moksa-for-line' ) );
 		?>
 		<main class="moksa-scan moksa-scan--card">
 			<header class="moksa-scan__head">
-				<span class="moksa-scan__badge"><?php esc_html_e( 'Verified member', 'moksa-line' ); ?></span>
+				<span class="moksa-scan__badge"><?php esc_html_e( 'Verified member', 'moksa-for-line' ); ?></span>
 			</header>
 
 			<section class="moksa-scan__who">
@@ -220,11 +220,11 @@ class MemberModule {
 						<?php
 						printf(
 							/* translators: %s: the date the customer registered. */
-							esc_html__( 'Joined %s', 'moksa-line' ),
+							esc_html__( 'Joined %s', 'moksa-for-line' ),
 							esc_html(
 								mysql2date(
 									/* translators: date format for "Member since", see https://www.php.net/manual/datetime.format.php -- translate it to whatever reads naturally in your language, not literally. */
-									_x( 'F j, Y', 'member-since date', 'moksa-line' ),
+									_x( 'F j, Y', 'member-since date', 'moksa-for-line' ),
 									get_date_from_gmt( $user->user_registered )
 								)
 							)
@@ -238,7 +238,7 @@ class MemberModule {
 			<?php $this->render_orders( $user_id ); ?>
 
 			<section class="moksa-scan__block">
-				<h2 class="moksa-scan__heading"><?php esc_html_e( 'Member code', 'moksa-line' ); ?></h2>
+				<h2 class="moksa-scan__heading"><?php esc_html_e( 'Member code', 'moksa-for-line' ); ?></h2>
 				<p class="moksa-scan__code"><?php echo esc_html( MemberCard::grouped( MemberCard::code_for( $user_id ) ) ); ?></p>
 			</section>
 
@@ -255,11 +255,11 @@ class MemberModule {
 						: admin_url( 'edit.php?post_type=shop_order&_customer_user=' . $user_id );
 					?>
 					<a class="moksa-scan__action" href="<?php echo esc_url( $orders_url ); ?>">
-						<?php esc_html_e( 'All orders', 'moksa-line' ); ?>
+						<?php esc_html_e( 'All orders', 'moksa-for-line' ); ?>
 					</a>
 				<?php endif; ?>
 
-				<?php if ( $linked && \Moksa\Line\Inbox\InboxModule::can_manage() ) : ?>
+				<?php if ( $linked && \Mofoline\Inbox\InboxModule::can_manage() ) : ?>
 					<a class="moksa-scan__action" href="<?php echo esc_url( add_query_arg(
 							array(
 								'page' => AdminModule::SLUG . '-inbox',
@@ -269,18 +269,18 @@ class MemberModule {
 							),
 							admin_url( 'admin.php' )
 						) ); ?>">
-						<?php esc_html_e( 'Message on LINE', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Message on LINE', 'moksa-for-line' ); ?>
 					</a>
 				<?php endif; ?>
 
 				<?php if ( current_user_can( 'edit_user', $user_id ) ) : ?>
 					<a class="moksa-scan__action" href="<?php echo esc_url( get_edit_user_link( $user_id ) ); ?>">
-						<?php esc_html_e( 'Edit member', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Edit member', 'moksa-for-line' ); ?>
 					</a>
 				<?php endif; ?>
 
 				<a class="moksa-scan__action moksa-scan__action--quiet" href="<?php echo esc_url( home_url( '/' . self::SLUG . '/' ) ); ?>">
-					<?php esc_html_e( 'Scan another', 'moksa-line' ); ?>
+					<?php esc_html_e( 'Scan another', 'moksa-for-line' ); ?>
 				</a>
 			</nav>
 		</main>
@@ -297,10 +297,10 @@ class MemberModule {
 	private function render_line_state( $record, bool $linked ): void {
 		?>
 		<section class="moksa-scan__block">
-			<h2 class="moksa-scan__heading"><?php esc_html_e( 'LINE', 'moksa-line' ); ?></h2>
+			<h2 class="moksa-scan__heading"><?php esc_html_e( 'LINE', 'moksa-for-line' ); ?></h2>
 
 			<?php if ( ! $linked ) : ?>
-				<p class="moksa-scan__state moksa-scan__state--off"><?php esc_html_e( 'No LINE account linked', 'moksa-line' ); ?></p>
+				<p class="moksa-scan__state moksa-scan__state--off"><?php esc_html_e( 'No LINE account linked', 'moksa-for-line' ); ?></p>
 			<?php else : ?>
 				<p class="moksa-scan__state moksa-scan__state--on">
 					<?php
@@ -309,14 +309,14 @@ class MemberModule {
 					echo esc_html(
 						'' !== $display
 							/* translators: %s: the member's LINE display name. */
-							? sprintf( __( 'Linked as %s', 'moksa-line' ), $display )
-							: __( 'Linked', 'moksa-line' )
+							? sprintf( __( 'Linked as %s', 'moksa-for-line' ), $display )
+							: __( 'Linked', 'moksa-for-line' )
 					);
 					?>
 				</p>
 
 				<?php if ( ! (int) $record->is_friend ) : ?>
-					<p class="moksa-scan__note moksa-scan__note--warn"><?php esc_html_e( 'Not seen as a friend of the official account, so LINE messages may not arrive', 'moksa-line' ); ?></p>
+					<p class="moksa-scan__note moksa-scan__note--warn"><?php esc_html_e( 'Not seen as a friend of the official account, so LINE messages may not arrive', 'moksa-for-line' ); ?></p>
 				<?php endif; ?>
 			<?php endif; ?>
 		</section>
@@ -346,15 +346,15 @@ class MemberModule {
 		$spent = function_exists( 'wc_get_customer_total_spent' ) ? wc_get_customer_total_spent( $user_id ) : 0;
 		?>
 		<section class="moksa-scan__block">
-			<h2 class="moksa-scan__heading"><?php esc_html_e( 'Orders', 'moksa-line' ); ?></h2>
+			<h2 class="moksa-scan__heading"><?php esc_html_e( 'Orders', 'moksa-for-line' ); ?></h2>
 
 			<dl class="moksa-scan__stats">
 				<div class="moksa-scan__stat">
-					<dt><?php esc_html_e( 'Placed', 'moksa-line' ); ?></dt>
+					<dt><?php esc_html_e( 'Placed', 'moksa-for-line' ); ?></dt>
 					<dd><?php echo esc_html( number_format_i18n( $count ) ); ?></dd>
 				</div>
 				<div class="moksa-scan__stat">
-					<dt><?php esc_html_e( 'Spent', 'moksa-line' ); ?></dt>
+					<dt><?php esc_html_e( 'Spent', 'moksa-for-line' ); ?></dt>
 					<dd>
 						<?php
 						// wc_price returns markup, and the amount inside it is
@@ -366,7 +366,7 @@ class MemberModule {
 			</dl>
 
 			<?php if ( empty( $orders ) ) : ?>
-				<p class="moksa-scan__note"><?php esc_html_e( 'No orders yet', 'moksa-line' ); ?></p>
+				<p class="moksa-scan__note"><?php esc_html_e( 'No orders yet', 'moksa-for-line' ); ?></p>
 			<?php else : ?>
 				<ul class="moksa-scan__orders">
 					<?php foreach ( $orders as $order ) : ?>
@@ -388,7 +388,7 @@ class MemberModule {
 										$order->get_date_created()
 											? wp_date(
 												/* translators: date format for an order in the member card, see https://www.php.net/manual/datetime.format.php -- translate it to whatever reads naturally in your language, not literally. */
-												_x( 'F j, Y', 'order date', 'moksa-line' ),
+												_x( 'F j, Y', 'order date', 'moksa-for-line' ),
 												$order->get_date_created()->getTimestamp()
 											)
 											: ''
@@ -415,18 +415,18 @@ class MemberModule {
 		// install that lives in a subdirectory.
 		$here = home_url( user_trailingslashit( $wp->request ) );
 
-		$this->open( __( 'Member card', 'moksa-line' ) );
+		$this->open( __( 'Member card', 'moksa-for-line' ) );
 		?>
 		<main class="moksa-scan moksa-scan--gate">
-			<h1 class="moksa-scan__name"><?php esc_html_e( 'Member card', 'moksa-line' ); ?></h1>
-			<p class="moksa-scan__note"><?php esc_html_e( 'Only staff can read this card. Sign in to see it', 'moksa-line' ); ?></p>
+			<h1 class="moksa-scan__name"><?php esc_html_e( 'Member card', 'moksa-for-line' ); ?></h1>
+			<p class="moksa-scan__note"><?php esc_html_e( 'Only staff can read this card. Sign in to see it', 'moksa-for-line' ); ?></p>
 
 			<nav class="moksa-scan__actions">
 				<a class="moksa-scan__action" href="<?php echo esc_url( wp_login_url( $here ) ); ?>">
-					<?php esc_html_e( 'Staff sign-in', 'moksa-line' ); ?>
+					<?php esc_html_e( 'Staff sign-in', 'moksa-for-line' ); ?>
 				</a>
 				<a class="moksa-scan__action moksa-scan__action--quiet" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-					<?php esc_html_e( 'Go to the shop', 'moksa-line' ); ?>
+					<?php esc_html_e( 'Go to the shop', 'moksa-for-line' ); ?>
 				</a>
 			</nav>
 		</main>
@@ -440,24 +440,24 @@ class MemberModule {
 	 * @param string $error Message to show above the form, if any.
 	 */
 	private function render_lookup( string $error = '' ): void {
-		$this->open( __( 'Find a member', 'moksa-line' ) );
+		$this->open( __( 'Find a member', 'moksa-for-line' ) );
 		?>
 		<main class="moksa-scan moksa-scan--lookup">
-			<h1 class="moksa-scan__name"><?php esc_html_e( 'Find a member', 'moksa-line' ); ?></h1>
+			<h1 class="moksa-scan__name"><?php esc_html_e( 'Find a member', 'moksa-for-line' ); ?></h1>
 
 			<?php if ( '' !== $error ) : ?>
 				<p class="moksa-scan__error"><?php echo esc_html( $error ); ?></p>
 			<?php endif; ?>
 
 			<form class="moksa-scan__form" method="get" action="<?php echo esc_url( home_url( '/' . self::SLUG . '/' ) ); ?>">
-				<label for="moksa-scan-code"><?php esc_html_e( 'Member code', 'moksa-line' ); ?></label>
+				<label for="moksa-scan-code"><?php esc_html_e( 'Member code', 'moksa-for-line' ); ?></label>
 				<input id="moksa-scan-code" name="code" type="text" inputmode="latin" autocapitalize="characters"
 					autocomplete="off" spellcheck="false" required
-					placeholder="<?php esc_attr_e( 'ABCDE FGHJK MNPQR STVWX', 'moksa-line' ); ?>" />
-				<button type="submit"><?php esc_html_e( 'Look up', 'moksa-line' ); ?></button>
+					placeholder="<?php esc_attr_e( 'ABCDE FGHJK MNPQR STVWX', 'moksa-for-line' ); ?>" />
+				<button type="submit"><?php esc_html_e( 'Look up', 'moksa-for-line' ); ?></button>
 			</form>
 
-			<p class="moksa-scan__note"><?php esc_html_e( 'The code has no I, L or O -- read those as 1, 1 and 0', 'moksa-line' ); ?></p>
+			<p class="moksa-scan__note"><?php esc_html_e( 'The code has no I, L or O -- read those as 1, 1 and 0', 'moksa-for-line' ); ?></p>
 		</main>
 		<?php
 		$this->close();
@@ -489,12 +489,12 @@ class MemberModule {
 	// theme and calls no wp_head(), so nothing would otherwise print it -- and a
 	// hand-written <link> is one of the things the directory's scan rejects.
 	wp_enqueue_style(
-		'moksa-line-member',
-		MOKSA_LINE_URL . 'assets/css/member.css',
+		'mofoline-member',
+		MOFOLINE_URL . 'assets/css/member.css',
 		array(),
 		AdminModule::asset_version( 'assets/css/member.css' )
 	);
-	wp_print_styles( 'moksa-line-member' );
+	wp_print_styles( 'mofoline-member' );
 	?>
 </head>
 <body class="moksa-scan-body">
@@ -539,8 +539,8 @@ class MemberModule {
 		}
 		?>
 		<section class="moksa-account__section moksa-account__card">
-			<h3 class="moksa-account__subhead"><?php esc_html_e( 'Membership card', 'moksa-line' ); ?></h3>
-			<p class="moksa-account__lead"><?php esc_html_e( 'Show this at the counter and we will find you', 'moksa-line' ); ?></p>
+			<h3 class="moksa-account__subhead"><?php esc_html_e( 'Membership card', 'moksa-for-line' ); ?></h3>
+			<p class="moksa-account__lead"><?php esc_html_e( 'Show this at the counter and we will find you', 'moksa-for-line' ); ?></p>
 
 			<?php
 			// A button, because it does something: the code sits inside a page
@@ -550,23 +550,23 @@ class MemberModule {
 			// code that is already scannable, which is the right way round.
 			?>
 			<button type="button" class="moksa-account__qr" data-moksa-qr-zoom
-				aria-label="<?php esc_attr_e( 'Show the code larger', 'moksa-line' ); ?>">
+				aria-label="<?php esc_attr_e( 'Show the code larger', 'moksa-for-line' ); ?>">
 				<?php echo wp_kses( $svg, QrCode::allowed_html() ); ?>
-				<span class="moksa-account__qr-hint"><?php esc_html_e( 'Tap to enlarge', 'moksa-line' ); ?></span>
+				<span class="moksa-account__qr-hint"><?php esc_html_e( 'Tap to enlarge', 'moksa-for-line' ); ?></span>
 			</button>
 
 			<button type="button" class="moksa-account__code" data-moksa-member-code="<?php echo esc_attr( $code ); ?>"
-				title="<?php esc_attr_e( 'Copy your member code', 'moksa-line' ); ?>">
+				title="<?php esc_attr_e( 'Copy your member code', 'moksa-for-line' ); ?>">
 				<?php echo esc_html( MemberCard::grouped( $code ) ); ?>
 			</button>
 
-			<p class="moksa-account__hint"><?php esc_html_e( 'If the camera will not read it, read the code out', 'moksa-line' ); ?></p>
+			<p class="moksa-account__hint"><?php esc_html_e( 'If the camera will not read it, read the code out', 'moksa-for-line' ); ?></p>
 
 			<div class="moksa-account__actions">
 				<button type="button" class="moksa-account__quiet"
-					data-moksa-line-reissue="<?php echo esc_attr( (string) $user_id ); ?>"
-					data-nonce="<?php echo esc_attr( wp_create_nonce( 'moksa_line_member' ) ); ?>">
-					<?php esc_html_e( 'Replace this card', 'moksa-line' ); ?>
+					data-mofoline-reissue="<?php echo esc_attr( (string) $user_id ); ?>"
+					data-nonce="<?php echo esc_attr( wp_create_nonce( 'mofoline_member' ) ); ?>">
+					<?php esc_html_e( 'Replace this card', 'moksa-for-line' ); ?>
 				</button>
 			</div>
 		</section>
@@ -579,19 +579,19 @@ class MemberModule {
 	 * Issue the customer a new code, retiring the one they have.
 	 */
 	public function ajax_reissue(): void {
-		check_ajax_referer( 'moksa_line_member', 'nonce' );
+		check_ajax_referer( 'mofoline_member', 'nonce' );
 
 		$user_id = get_current_user_id();
 
 		if ( $user_id <= 0 ) {
-			wp_send_json_error( array( 'message' => __( 'You are not signed in', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You are not signed in', 'moksa-for-line' ) ), 403 );
 		}
 
 		MemberCard::issue( $user_id );
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'The old code has stopped working. This one is yours now', 'moksa-line' ),
+				'message' => __( 'The old code has stopped working. This one is yours now', 'moksa-for-line' ),
 			)
 		);
 	}

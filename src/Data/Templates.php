@@ -2,10 +2,10 @@
 /**
  * Stored template messages.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Data;
+namespace Mofoline\Data;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -7,10 +7,10 @@
  * WP_Filesystem so a host that routes file access through FTP or a
  * restricted layer still works.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Support;
+namespace Mofoline\Support;
 
 defined( 'ABSPATH' ) || exit;
 

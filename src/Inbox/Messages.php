@@ -2,13 +2,13 @@
 /**
  * Message history for the inbox.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Inbox;
+namespace Mofoline\Inbox;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Support\Migrator;
+use Mofoline\Support\Db;
+use Mofoline\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -122,30 +122,30 @@ class Messages {
 				return isset( $message['text'] ) ? (string) $message['text'] : '';
 
 			case 'image':
-				return __( '[Image]', 'moksa-line' );
+				return __( '[Image]', 'moksa-for-line' );
 
 			case 'video':
-				return __( '[Video]', 'moksa-line' );
+				return __( '[Video]', 'moksa-for-line' );
 
 			case 'audio':
-				return __( '[Audio]', 'moksa-line' );
+				return __( '[Audio]', 'moksa-for-line' );
 
 			case 'file':
 				return isset( $message['fileName'] )
-					? sprintf( '[%s] %s', __( 'File', 'moksa-line' ), (string) $message['fileName'] )
-					: __( '[File]', 'moksa-line' );
+					? sprintf( '[%s] %s', __( 'File', 'moksa-for-line' ), (string) $message['fileName'] )
+					: __( '[File]', 'moksa-for-line' );
 
 			case 'location':
 				$title = isset( $message['title'] ) ? (string) $message['title'] : '';
 				$addr  = isset( $message['address'] ) ? (string) $message['address'] : '';
 
-				return trim( sprintf( '[%s] %s %s', __( 'Location', 'moksa-line' ), $title, $addr ) );
+				return trim( sprintf( '[%s] %s %s', __( 'Location', 'moksa-for-line' ), $title, $addr ) );
 
 			case 'sticker':
-				return __( '[Sticker]', 'moksa-line' );
+				return __( '[Sticker]', 'moksa-for-line' );
 
 			default:
-				return sprintf( '[%s]', $type ? $type : __( 'Message', 'moksa-line' ) );
+				return sprintf( '[%s]', $type ? $type : __( 'Message', 'moksa-for-line' ) );
 		}
 	}
 
@@ -165,8 +165,8 @@ class Messages {
 
 			if ( isset( $message['type'] ) && 'flex' === $message['type'] ) {
 				$parts[] = isset( $message['altText'] )
-					? sprintf( '[%s] %s', __( 'Flex', 'moksa-line' ), (string) $message['altText'] )
-					: __( '[Flex]', 'moksa-line' );
+					? sprintf( '[%s] %s', __( 'Flex', 'moksa-for-line' ), (string) $message['altText'] )
+					: __( '[Flex]', 'moksa-for-line' );
 				continue;
 			}
 
@@ -174,8 +174,8 @@ class Messages {
 			// without this the thread showed a bare "[template]".
 			if ( isset( $message['type'] ) && 'template' === $message['type'] ) {
 				$parts[] = isset( $message['altText'] )
-					? sprintf( '[%s] %s', __( 'Template', 'moksa-line' ), (string) $message['altText'] )
-					: __( '[Template]', 'moksa-line' );
+					? sprintf( '[%s] %s', __( 'Template', 'moksa-for-line' ), (string) $message['altText'] )
+					: __( '[Template]', 'moksa-for-line' );
 				continue;
 			}
 

@@ -7,15 +7,15 @@
  * before WordPress had loaded translations or WooCommerce, and the activation
  * hook was registered from inside a constructor where it never reliably fired.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line;
+namespace Mofoline;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Migrator;
-use Moksa\Line\Support\Options;
+use Mofoline\Support\Db;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Migrator;
+use Mofoline\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -51,7 +51,7 @@ final class Plugin {
 		add_action( 'init', array( $this, 'load_textdomain' ), 0 );
 		add_action( 'init', array( Migrator::class, 'maybe_upgrade' ), 1 );
 
-		add_action( 'moksa_line_daily_maintenance', array( $this, 'run_maintenance' ) );
+		add_action( 'mofoline_daily_maintenance', array( $this, 'run_maintenance' ) );
 	}
 
 	/**
@@ -71,7 +71,7 @@ final class Plugin {
 		//
 		// The hook stays so the timing remains obvious to the next reader, and
 		// so anything that wants to add a language pack has somewhere to do it.
-		do_action( 'moksa_line_load_textdomain' );
+		do_action( 'mofoline_load_textdomain' );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class Plugin {
 		 *
 		 * @param array<string,string> $modules Module name => class name.
 		 */
-		$modules = apply_filters( 'moksa_line_modules', $modules );
+		$modules = apply_filters( 'mofoline_modules', $modules );
 
 		foreach ( $modules as $name => $class ) {
 			if ( ! class_exists( $class ) ) {
@@ -127,7 +127,7 @@ final class Plugin {
 		 *
 		 * @param Plugin $plugin Plugin instance.
 		 */
-		do_action( 'moksa_line_loaded', $this );
+		do_action( 'mofoline_loaded', $this );
 	}
 
 	/**
@@ -172,8 +172,8 @@ final class Plugin {
 	public static function activate(): void {
 		Migrator::maybe_upgrade( true );
 
-		if ( ! wp_next_scheduled( 'moksa_line_daily_maintenance' ) ) {
-			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'moksa_line_daily_maintenance' );
+		if ( ! wp_next_scheduled( 'mofoline_daily_maintenance' ) ) {
+			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'mofoline_daily_maintenance' );
 		}
 
 		flush_rewrite_rules();
@@ -183,12 +183,12 @@ final class Plugin {
 	 * Deactivation: stop cron, leave data alone.
 	 */
 	public static function deactivate(): void {
-		wp_clear_scheduled_hook( 'moksa_line_daily_maintenance' );
-		wp_clear_scheduled_hook( 'moksa_line_process_events' );
+		wp_clear_scheduled_hook( 'mofoline_daily_maintenance' );
+		wp_clear_scheduled_hook( 'mofoline_process_events' );
 
 		// So that re-activating rebuilds the account endpoint's rule rather
 		// than trusting a flag from a previous install.
-		delete_option( 'moksa_line_account_endpoint' );
+		delete_option( 'mofoline_account_endpoint' );
 
 		flush_rewrite_rules();
 	}

@@ -28,18 +28,18 @@ final class Keys {
 	public const SHIPPING_CVS_STORE_ADDRESS = '_moksafowo_shipping_cvs_store_address';
 }
 
-namespace Moksa\Line\Test;
+namespace Mofoline\Test;
 
-use Moksa\Line\Woo\OrderContext;
+use Mofoline\Woo\OrderContext;
 
-if ( 'production' === \wp_get_environment_type() && ! \defined( 'MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
+if ( 'production' === \wp_get_environment_type() && ! \defined( 'MOFOLINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
 	echo "REFUSED: this site reports WP_ENVIRONMENT_TYPE=production.
 ";
 	echo "It writes and removes two meta values on your most recent order.
 ";
 	echo "If this really is a throwaway site, set WP_ENVIRONMENT_TYPE, or define
 ";
-	echo "MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.
+	echo "MOFOLINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.
 ";
 	return;
 }

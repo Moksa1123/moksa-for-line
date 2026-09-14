@@ -21,10 +21,10 @@
  * because the alternative is letting someone build something and only then
  * being told it is impossible.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Template;
+namespace Mofoline\Template;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -52,10 +52,10 @@ class TemplateMessages {
 	 */
 	public static function kinds(): array {
 		return array(
-			'buttons'        => __( 'One card with up to four buttons', 'moksa-line' ),
-			'confirm'        => __( 'A question with exactly two answers', 'moksa-line' ),
-			'carousel'       => __( 'Up to ten cards side by side, each with buttons', 'moksa-line' ),
-			'image_carousel' => __( 'Up to ten images side by side, each tappable', 'moksa-line' ),
+			'buttons'        => __( 'One card with up to four buttons', 'moksa-for-line' ),
+			'confirm'        => __( 'A question with exactly two answers', 'moksa-for-line' ),
+			'carousel'       => __( 'Up to ten cards side by side, each with buttons', 'moksa-for-line' ),
+			'image_carousel' => __( 'Up to ten images side by side, each tappable', 'moksa-for-line' ),
 		);
 	}
 
@@ -89,7 +89,7 @@ class TemplateMessages {
 		$problems = array();
 
 		if ( ! isset( self::kinds()[ $kind ] ) ) {
-			return array( __( 'Choose what kind of template this is.', 'moksa-line' ) );
+			return array( __( 'Choose what kind of template this is.', 'moksa-for-line' ) );
 		}
 
 		if ( 'confirm' === $kind ) {
@@ -117,17 +117,17 @@ class TemplateMessages {
 		$actions  = isset( $template['actions'] ) ? (array) $template['actions'] : array();
 
 		if ( '' === trim( $text ) ) {
-			$problems[] = __( 'A confirm template needs a question.', 'moksa-line' );
+			$problems[] = __( 'A confirm template needs a question.', 'moksa-for-line' );
 		} elseif ( mb_strlen( $text ) > self::CONFIRM_TEXT ) {
 			$problems[] = sprintf(
 				/* translators: %d: character limit. */
-				__( 'The question is limited to %d characters.', 'moksa-line' ),
+				__( 'The question is limited to %d characters.', 'moksa-for-line' ),
 				self::CONFIRM_TEXT
 			);
 		}
 
 		if ( count( $actions ) !== self::CONFIRM_ACTIONS ) {
-			$problems[] = __( 'A confirm template must have exactly two buttons -- LINE refuses one or three.', 'moksa-line' );
+			$problems[] = __( 'A confirm template must have exactly two buttons -- LINE refuses one or three.', 'moksa-for-line' );
 		}
 
 		return array_merge( $problems, self::check_actions( $actions ) );
@@ -145,17 +145,17 @@ class TemplateMessages {
 		$limit    = $adorned ? self::BUTTONS_TEXT_ADORNED : self::BUTTONS_TEXT;
 
 		if ( '' === trim( $text ) ) {
-			$problems[] = __( 'A buttons template needs some text.', 'moksa-line' );
+			$problems[] = __( 'A buttons template needs some text.', 'moksa-for-line' );
 		} elseif ( mb_strlen( $text ) > $limit ) {
 			$problems[] = $adorned
 				? sprintf(
 					/* translators: %d: character limit. */
-					__( 'With an image or a title, the text is limited to %d characters.', 'moksa-line' ),
+					__( 'With an image or a title, the text is limited to %d characters.', 'moksa-for-line' ),
 					$limit
 				)
 				: sprintf(
 					/* translators: %d: character limit. */
-					__( 'The text is limited to %d characters.', 'moksa-line' ),
+					__( 'The text is limited to %d characters.', 'moksa-for-line' ),
 					$limit
 				);
 		}
@@ -163,17 +163,17 @@ class TemplateMessages {
 		if ( isset( $template['title'] ) && mb_strlen( (string) $template['title'] ) > self::TITLE ) {
 			$problems[] = sprintf(
 				/* translators: %d: character limit. */
-				__( 'The title is limited to %d characters.', 'moksa-line' ),
+				__( 'The title is limited to %d characters.', 'moksa-for-line' ),
 				self::TITLE
 			);
 		}
 
 		if ( empty( $actions ) ) {
-			$problems[] = __( 'Add at least one button.', 'moksa-line' );
+			$problems[] = __( 'Add at least one button.', 'moksa-for-line' );
 		} elseif ( count( $actions ) > self::MAX_BUTTON_ACTIONS ) {
 			$problems[] = sprintf(
 				/* translators: %d: the button limit. */
-				__( 'A buttons template holds at most %d buttons.', 'moksa-line' ),
+				__( 'A buttons template holds at most %d buttons.', 'moksa-for-line' ),
 				self::MAX_BUTTON_ACTIONS
 			);
 		}
@@ -193,13 +193,13 @@ class TemplateMessages {
 		$columns  = isset( $template['columns'] ) ? (array) $template['columns'] : array();
 
 		if ( empty( $columns ) ) {
-			return array( __( 'A carousel needs at least one card.', 'moksa-line' ) );
+			return array( __( 'A carousel needs at least one card.', 'moksa-for-line' ) );
 		}
 
 		if ( count( $columns ) > self::MAX_COLUMNS ) {
 			$problems[] = sprintf(
 				/* translators: %d: the column limit. */
-				__( 'A carousel holds at most %d cards.', 'moksa-line' ),
+				__( 'A carousel holds at most %d cards.', 'moksa-for-line' ),
 				self::MAX_COLUMNS
 			);
 		}
@@ -222,13 +222,13 @@ class TemplateMessages {
 			if ( '' === trim( $text ) ) {
 				$problems[] = sprintf(
 					/* translators: %d: card number. */
-					__( 'Card %d has no text.', 'moksa-line' ),
+					__( 'Card %d has no text.', 'moksa-for-line' ),
 					$number
 				);
 			} elseif ( mb_strlen( $text ) > $limit ) {
 				$problems[] = sprintf(
 					/* translators: 1: card number, 2: character limit. */
-					__( 'Card %1$d has more than the %2$d characters LINE allows here.', 'moksa-line' ),
+					__( 'Card %1$d has more than the %2$d characters LINE allows here.', 'moksa-for-line' ),
 					$number,
 					$limit
 				);
@@ -237,7 +237,7 @@ class TemplateMessages {
 			if ( isset( $column['title'] ) && mb_strlen( (string) $column['title'] ) > self::TITLE ) {
 				$problems[] = sprintf(
 					/* translators: 1: card number, 2: character limit. */
-					__( 'The title on card %1$d is longer than %2$d characters.', 'moksa-line' ),
+					__( 'The title on card %1$d is longer than %2$d characters.', 'moksa-for-line' ),
 					$number,
 					self::TITLE
 				);
@@ -246,13 +246,13 @@ class TemplateMessages {
 			if ( empty( $actions ) ) {
 				$problems[] = sprintf(
 					/* translators: %d: card number. */
-					__( 'Card %d has no buttons.', 'moksa-line' ),
+					__( 'Card %d has no buttons.', 'moksa-for-line' ),
 					$number
 				);
 			} elseif ( count( $actions ) > self::MAX_CAROUSEL_ACTIONS ) {
 				$problems[] = sprintf(
 					/* translators: 1: card number, 2: the button limit. */
-					__( 'Card %1$d has more than the %2$d buttons a carousel card allows.', 'moksa-line' ),
+					__( 'Card %1$d has more than the %2$d buttons a carousel card allows.', 'moksa-for-line' ),
 					$number,
 					self::MAX_CAROUSEL_ACTIONS
 				);
@@ -263,7 +263,7 @@ class TemplateMessages {
 		}
 
 		if ( count( array_unique( $shapes ) ) > 1 ) {
-			$problems[] = __( 'Every card must be built the same way: all with an image or none, all with a title or none, and the same number of buttons. LINE refuses a carousel whose cards disagree.', 'moksa-line' );
+			$problems[] = __( 'Every card must be built the same way: all with an image or none, all with a title or none, and the same number of buttons. LINE refuses a carousel whose cards disagree.', 'moksa-for-line' );
 		}
 
 		return $problems;
@@ -278,13 +278,13 @@ class TemplateMessages {
 		$columns  = isset( $template['columns'] ) ? (array) $template['columns'] : array();
 
 		if ( empty( $columns ) ) {
-			return array( __( 'An image carousel needs at least one image.', 'moksa-line' ) );
+			return array( __( 'An image carousel needs at least one image.', 'moksa-for-line' ) );
 		}
 
 		if ( count( $columns ) > self::MAX_COLUMNS ) {
 			$problems[] = sprintf(
 				/* translators: %d: the column limit. */
-				__( 'An image carousel holds at most %d images.', 'moksa-line' ),
+				__( 'An image carousel holds at most %d images.', 'moksa-for-line' ),
 				self::MAX_COLUMNS
 			);
 		}
@@ -296,7 +296,7 @@ class TemplateMessages {
 			if ( empty( $column['imageUrl'] ) ) {
 				$problems[] = sprintf(
 					/* translators: %d: image number. */
-					__( 'Image %d has no picture.', 'moksa-line' ),
+					__( 'Image %d has no picture.', 'moksa-for-line' ),
 					$number
 				);
 			} else {
@@ -306,7 +306,7 @@ class TemplateMessages {
 			if ( empty( $column['action'] ) ) {
 				$problems[] = sprintf(
 					/* translators: %d: image number. */
-					__( 'Image %d does nothing when tapped.', 'moksa-line' ),
+					__( 'Image %d does nothing when tapped.', 'moksa-for-line' ),
 					$number
 				);
 			} else {
@@ -332,16 +332,16 @@ class TemplateMessages {
 
 			if ( '' === trim( $label ) ) {
 				$problems[] = null === $card
-					? __( 'Every button needs a label.', 'moksa-line' )
+					? __( 'Every button needs a label.', 'moksa-for-line' )
 					: sprintf(
 						/* translators: %d: card number. */
-						__( 'A button on card %d has no label.', 'moksa-line' ),
+						__( 'A button on card %d has no label.', 'moksa-for-line' ),
 						$card
 					);
 			} elseif ( mb_strlen( $label ) > self::LABEL ) {
 				$problems[] = sprintf(
 					/* translators: 1: the label, 2: character limit. */
-					__( 'The button "%1$s" is longer than the %2$d characters LINE shows.', 'moksa-line' ),
+					__( 'The button "%1$s" is longer than the %2$d characters LINE shows.', 'moksa-for-line' ),
 					$label,
 					self::LABEL
 				);
@@ -353,26 +353,26 @@ class TemplateMessages {
 				if ( '' === trim( $uri ) ) {
 					$problems[] = sprintf(
 						/* translators: %s: the button label. */
-						__( 'The button "%s" opens a link but has none.', 'moksa-line' ),
+						__( 'The button "%s" opens a link but has none.', 'moksa-for-line' ),
 						$label
 					);
 				} elseif ( ! preg_match( '#^(https://|tel:|line://|https?://line\.me/)#i', $uri ) ) {
 					$problems[] = sprintf(
 						/* translators: %s: the button label. */
-						__( 'The link on "%s" must start with https://, tel: or a LINE URL.', 'moksa-line' ),
+						__( 'The link on "%s" must start with https://, tel: or a LINE URL.', 'moksa-for-line' ),
 						$label
 					);
 				}
 			} elseif ( 'message' === $type && '' === trim( (string) ( $action['text'] ?? '' ) ) ) {
 				$problems[] = sprintf(
 					/* translators: %s: the button label. */
-					__( 'The button "%s" sends a message but has no text.', 'moksa-line' ),
+					__( 'The button "%s" sends a message but has no text.', 'moksa-for-line' ),
 					$label
 				);
 			} elseif ( 'postback' === $type && '' === trim( (string) ( $action['data'] ?? '' ) ) ) {
 				$problems[] = sprintf(
 					/* translators: %s: the button label. */
-					__( 'The button "%s" is a postback but carries no data.', 'moksa-line' ),
+					__( 'The button "%s" is a postback but carries no data.', 'moksa-for-line' ),
 					$label
 				);
 			}
@@ -397,10 +397,10 @@ class TemplateMessages {
 
 		return array(
 			null === $card
-				? __( 'The image must be served over HTTPS. LINE refuses the whole message otherwise, not just the picture.', 'moksa-line' )
+				? __( 'The image must be served over HTTPS. LINE refuses the whole message otherwise, not just the picture.', 'moksa-for-line' )
 				: sprintf(
 					/* translators: %d: card number. */
-					__( 'The image on card %d must be served over HTTPS.', 'moksa-line' ),
+					__( 'The image on card %d must be served over HTTPS.', 'moksa-for-line' ),
 					$card
 				),
 		);

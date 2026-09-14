@@ -9,7 +9,7 @@
 (function () {
 	'use strict';
 
-	var config = window.moksaLineLiff || {};
+	var config = window.mofolineLiff || {};
 	var strings = config.strings || {};
 
 	if (!config.liffId || typeof liff === 'undefined') {

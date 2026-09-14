@@ -16,11 +16,11 @@
  * No cookies are sent -- send_auth_cookies is filtered off -- and the setting
  * is put back exactly as it was found.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-use Moksa\Line\Login\LoginModule;
-use Moksa\Line\Support\Options;
+use Mofoline\Login\LoginModule;
+use Mofoline\Support\Options;
 
 $GLOBALS['session_fail'] = 0;
 
@@ -68,7 +68,7 @@ function session_measure( $user_id ) {
 
 	$method = new ReflectionMethod( LoginModule::class, 'start_session' );
 	$method->setAccessible( true );
-	$method->invoke( Moksa\Line\Plugin::instance()->module( 'login' ), $user_id );
+	$method->invoke( Mofoline\Plugin::instance()->module( 'login' ), $user_id );
 
 	return $GLOBALS['session_seen'];
 }

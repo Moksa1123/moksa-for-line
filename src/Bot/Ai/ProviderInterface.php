@@ -5,10 +5,10 @@
  * The bot does not care which plugin or API answers; it needs a string back,
  * or a WP_Error it can log and fall through from.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Bot\Ai;
+namespace Mofoline\Bot\Ai;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -1,36 +1,36 @@
 <?php
 /**
- * Plugin Name: Moksa LINE Suite
+ * Plugin Name: Moksa for LINE
  * Plugin URI: https://moksaweb.com/
  * Description: LINE Login, Messaging API bot, Flex Message builder, tabbed rich menus, customer-service inbox, AI replies and LINE Pay for WordPress and WooCommerce.
  * Version: 1.0.0
  * Author: Moksa
  * Author URI: https://moksaweb.com/
- * Text Domain: moksa-line
+ * Text Domain: moksa-for-line
  * Domain Path: /languages
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Requires at least: 6.2
  * Requires PHP: 7.4
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MOKSA_LINE_VERSION', '1.0.0' );
-define( 'MOKSA_LINE_FILE', __FILE__ );
-define( 'MOKSA_LINE_DIR', plugin_dir_path( __FILE__ ) );
-define( 'MOKSA_LINE_URL', plugin_dir_url( __FILE__ ) );
-define( 'MOKSA_LINE_BASENAME', plugin_basename( __FILE__ ) );
+define( 'MOFOLINE_VERSION', '1.0.0' );
+define( 'MOFOLINE_FILE', __FILE__ );
+define( 'MOFOLINE_DIR', plugin_dir_path( __FILE__ ) );
+define( 'MOFOLINE_URL', plugin_dir_url( __FILE__ ) );
+define( 'MOFOLINE_BASENAME', plugin_basename( __FILE__ ) );
 
 // Kept for templates and third-party snippets written against 1.x.
-define( 'MOKSA_LINE_PLUGIN_DIR', MOKSA_LINE_DIR );
-define( 'MOKSA_LINE_PLUGIN_URL', MOKSA_LINE_URL );
-define( 'MOKSA_LINE_PLUGIN_BASENAME', MOKSA_LINE_BASENAME );
+define( 'MOFOLINE_PLUGIN_DIR', MOFOLINE_DIR );
+define( 'MOFOLINE_PLUGIN_URL', MOFOLINE_URL );
+define( 'MOFOLINE_PLUGIN_BASENAME', MOFOLINE_BASENAME );
 
 /**
- * PSR-4 autoloader for the Moksa\Line namespace.
+ * PSR-4 autoloader for the Mofoline namespace.
  *
  * Composer is deliberately not required: this plugin is installed by copying a
  * folder, and a missing vendor/ directory would be a fatal error rather than a
@@ -40,14 +40,14 @@ define( 'MOKSA_LINE_PLUGIN_BASENAME', MOKSA_LINE_BASENAME );
  */
 spl_autoload_register(
 	function ( $class ) {
-		$prefix = 'Moksa\\Line\\';
+		$prefix = 'Mofoline\\';
 
 		if ( 0 !== strncmp( $prefix, $class, strlen( $prefix ) ) ) {
 			return;
 		}
 
 		$relative = substr( $class, strlen( $prefix ) );
-		$path     = MOKSA_LINE_DIR . 'src/' . str_replace( '\\', '/', $relative ) . '.php';
+		$path     = MOFOLINE_DIR . 'src/' . str_replace( '\\', '/', $relative ) . '.php';
 
 		if ( is_readable( $path ) ) {
 			require_once $path;
@@ -73,14 +73,14 @@ add_action(
 	}
 );
 
-register_activation_hook( __FILE__, array( 'Moksa\\Line\\Plugin', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'Moksa\\Line\\Plugin', 'deactivate' ) );
+register_activation_hook( __FILE__, array( 'Mofoline\\Plugin', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'Mofoline\\Plugin', 'deactivate' ) );
 
 /**
  * Plugin instance.
  */
-function moksa_line(): Moksa\Line\Plugin {
-	return Moksa\Line\Plugin::instance();
+function mofoline(): Mofoline\Plugin {
+	return Mofoline\Plugin::instance();
 }
 
-moksa_line()->boot();
+mofoline()->boot();

@@ -17,7 +17,7 @@
  *
  * Reads only. Sends nothing, writes nothing.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
 $GLOBALS['ajax_fail'] = 0;
@@ -88,7 +88,7 @@ foreach ( array_keys( $GLOBALS['wp_filter'] ) as $hook ) {
 		$public = true;
 	}
 
-	if ( 0 !== strpos( $action, 'moksa_line_' ) ) {
+	if ( 0 !== strpos( $action, 'mofoline_' ) ) {
 		continue;
 	}
 
@@ -111,8 +111,8 @@ $open = array(
 	// The two halves of the LINE Login redirect. A visitor who is not signed
 	// in yet is exactly who these are for; the state transient is what makes
 	// them safe, and tests/logic-check.php covers that.
-	'moksa_line_start'    => 'starts the OAuth redirect, before anybody is signed in',
-	'moksa_line_callback' => 'receives the OAuth redirect, before anybody is signed in',
+	'mofoline_start'    => 'starts the OAuth redirect, before anybody is signed in',
+	'mofoline_callback' => 'receives the OAuth redirect, before anybody is signed in',
 );
 
 // Endpoints a customer is allowed to call about their own account. Being
@@ -120,8 +120,8 @@ $open = array(
 // They still have to check a nonce and who the caller is, and this asserts
 // exactly that rather than waving them through.
 $self_service = array(
-	'moksa_line_member_reissue' => 'a customer replacing their own membership card',
-	'moksa_line_unlink'         => 'a customer unlinking their own LINE account',
+	'mofoline_member_reissue' => 'a customer replacing their own membership card',
+	'mofoline_unlink'         => 'a customer unlinking their own LINE account',
 );
 
 foreach ( $registered as $action => $info ) {

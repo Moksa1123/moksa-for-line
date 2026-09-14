@@ -7,14 +7,14 @@
  * reply. So the endpoint verifies the signature, stores the events, answers
  * 200, and only then -- after the response is flushed -- does the work.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Webhook;
+namespace Mofoline\Webhook;
 
-use Moksa\Line\Api\Signature;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Api\Signature;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
 
 class WebhookModule {
 
-	const NAMESPACE_V1 = 'moksa-line/v1';
+	const NAMESPACE_V1 = 'mofoline/v1';
 
 	/**
 	 * Events staged for post-response processing.
@@ -33,7 +33,7 @@ class WebhookModule {
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
-		add_action( 'moksa_line_process_events', array( EventQueue::class, 'drain' ) );
+		add_action( 'mofoline_process_events', array( EventQueue::class, 'drain' ) );
 	}
 
 	/**
@@ -43,18 +43,27 @@ class WebhookModule {
 		return rest_url( self::NAMESPACE_V1 . '/webhook' );
 	}
 
+	/**
+	 * The namespace the plugin this one replaces answered under. A LINE
+	 * channel that still points at it keeps delivering, so nothing is lost
+	 * between installing this plugin and updating the console.
+	 */
+	const LEGACY_NAMESPACE = 'moksa-line/v1';
+
 	public function register_routes(): void {
-		register_rest_route(
-			self::NAMESPACE_V1,
-			'/webhook',
-			array(
-				'methods'             => 'POST',
-				'callback'            => array( $this, 'handle' ),
-				// The HMAC over the raw body is the authentication. LINE does
-				// not publish sender IPs, so there is nothing else to check.
-				'permission_callback' => '__return_true',
-			)
-		);
+		foreach ( array( self::NAMESPACE_V1, self::LEGACY_NAMESPACE ) as $namespace ) {
+			register_rest_route(
+				$namespace,
+				'/webhook',
+				array(
+					'methods'             => 'POST',
+					'callback'            => array( $this, 'handle' ),
+					// The HMAC over the raw body is the authentication. LINE does
+					// not publish sender IPs, so there is nothing else to check.
+					'permission_callback' => '__return_true',
+				)
+			);
+		}
 	}
 
 	/**
@@ -108,8 +117,8 @@ class WebhookModule {
 
 			// Fallback: if this process is killed before shutdown runs, cron
 			// picks the events up. Scheduling is idempotent.
-			if ( ! wp_next_scheduled( 'moksa_line_process_events' ) ) {
-				wp_schedule_single_event( time() + 30, 'moksa_line_process_events' );
+			if ( ! wp_next_scheduled( 'mofoline_process_events' ) ) {
+				wp_schedule_single_event( time() + 30, 'mofoline_process_events' );
 			}
 		}
 

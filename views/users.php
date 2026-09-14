@@ -2,11 +2,11 @@
 /**
  * LINE users.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-use Moksa\Line\Admin\Ajax;
-use Moksa\Line\Data\Users;
+use Mofoline\Admin\Ajax;
+use Mofoline\Data\Users;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,31 +23,31 @@ defined( 'ABSPATH' ) || exit;
 	);
 	$pages = (int) ceil( $list['total'] / 30 );
 	?>
-	<div class="wrap moksa-line-wrap">
-		<h1><?php esc_html_e( 'LINE users', 'moksa-line' ); ?></h1>
+	<div class="wrap mofoline-wrap">
+		<h1><?php esc_html_e( 'LINE users', 'moksa-for-line' ); ?></h1>
 
 		<form method="get">
-			<input type="hidden" name="page" value="moksa-line-users" />
+			<input type="hidden" name="page" value="mofoline-users" />
 			<p class="search-box">
-				<label for="moksa-users-search" class="screen-reader-text"><?php esc_html_e( 'Search LINE users', 'moksa-line' ); ?></label>
-				<input type="search" id="moksa-users-search" class="moksa-search" name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'Name, LINE id or email', 'moksa-line' ); ?>" />
-				<?php submit_button( __( 'Search', 'moksa-line' ), 'secondary', '', false ); ?>
+				<label for="moksa-users-search" class="screen-reader-text"><?php esc_html_e( 'Search LINE users', 'moksa-for-line' ); ?></label>
+				<input type="search" id="moksa-users-search" class="moksa-search" name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'Name, LINE id or email', 'moksa-for-line' ); ?>" />
+				<?php submit_button( __( 'Search', 'moksa-for-line' ), 'secondary', '', false ); ?>
 			</p>
 		</form>
 
 		<table class="widefat striped">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Name', 'moksa-line' ); ?></th>
-					<th><?php esc_html_e( 'LINE user id', 'moksa-line' ); ?></th>
-					<th><?php esc_html_e( 'Friend', 'moksa-line' ); ?></th>
-					<th><?php esc_html_e( 'WordPress account', 'moksa-line' ); ?></th>
-					<th><?php esc_html_e( 'Last seen', 'moksa-line' ); ?></th>
+					<th><?php esc_html_e( 'Name', 'moksa-for-line' ); ?></th>
+					<th><?php esc_html_e( 'LINE user id', 'moksa-for-line' ); ?></th>
+					<th><?php esc_html_e( 'Friend', 'moksa-for-line' ); ?></th>
+					<th><?php esc_html_e( 'WordPress account', 'moksa-for-line' ); ?></th>
+					<th><?php esc_html_e( 'Last seen', 'moksa-for-line' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php if ( empty( $list['rows'] ) ) : ?>
-					<tr><td colspan="5"><?php esc_html_e( 'No LINE users recorded yet.', 'moksa-line' ); ?></td></tr>
+					<tr><td colspan="5"><?php esc_html_e( 'No LINE users recorded yet.', 'moksa-for-line' ); ?></td></tr>
 				<?php endif; ?>
 				<?php foreach ( $list['rows'] as $row ) : ?>
 					<tr>
@@ -73,9 +73,9 @@ defined( 'ABSPATH' ) || exit;
 						<td><button type="button" class="moksa-copyable" data-moksa-copy="<?php echo esc_attr( (string) $row->line_user_id ); ?>"><code><?php echo esc_html( (string) $row->line_user_id ); ?></code></button></td>
 						<td>
 							<?php if ( (int) $row->is_friend ) : ?>
-								<span class="moksa-pill moksa-pill--ok"><?php esc_html_e( 'yes', 'moksa-line' ); ?></span>
+								<span class="moksa-pill moksa-pill--ok"><?php esc_html_e( 'yes', 'moksa-for-line' ); ?></span>
 							<?php else : ?>
-								<span class="moksa-pill moksa-pill--warn"><?php esc_html_e( 'no', 'moksa-line' ); ?></span>
+								<span class="moksa-pill moksa-pill--warn"><?php esc_html_e( 'no', 'moksa-for-line' ); ?></span>
 							<?php endif; ?>
 						</td>
 						<td>
@@ -89,7 +89,7 @@ defined( 'ABSPATH' ) || exit;
 									esc_html( $wp_user->user_login )
 								);
 							} else {
-								esc_html_e( 'Not linked', 'moksa-line' );
+								esc_html_e( 'Not linked', 'moksa-for-line' );
 							}
 							?>
 						</td>

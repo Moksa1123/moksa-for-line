@@ -8,10 +8,10 @@
  * alias. Re-uploading a whole menu per tap -- which is what a naive build
  * does -- is both slow and visibly janky.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Api;
+namespace Mofoline\Api;
 
 use WP_Error;
 
@@ -47,15 +47,15 @@ class RichMenuClient {
 	public static function upload_image( string $rich_menu_id, string $bytes, string $content_type ) {
 		if ( ! in_array( $content_type, array( 'image/jpeg', 'image/png' ), true ) ) {
 			return new WP_Error(
-				'moksa_line_bad_image_type',
-				__( 'Rich menu images must be JPEG or PNG.', 'moksa-line' )
+				'mofoline_bad_image_type',
+				__( 'Rich menu images must be JPEG or PNG.', 'moksa-for-line' )
 			);
 		}
 
 		if ( strlen( $bytes ) > self::MAX_IMAGE_BYTES ) {
 			return new WP_Error(
-				'moksa_line_image_too_large',
-				__( 'Rich menu images must be 1 MB or smaller.', 'moksa-line' )
+				'mofoline_image_too_large',
+				__( 'Rich menu images must be 1 MB or smaller.', 'moksa-for-line' )
 			);
 		}
 

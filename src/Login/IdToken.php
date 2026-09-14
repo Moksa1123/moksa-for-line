@@ -8,13 +8,13 @@
  * verified ID token. Verification is delegated to LINE's own endpoint, with a
  * local claim check as a second gate.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Login;
+namespace Mofoline\Login;
 
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -38,8 +38,8 @@ class IdToken {
 
 		if ( '' === $id_token ) {
 			return new WP_Error(
-				'moksa_line_no_id_token',
-				__( 'LINE did not return an ID token. Make sure the openid scope is enabled for this channel.', 'moksa-line' )
+				'mofoline_no_id_token',
+				__( 'LINE did not return an ID token. Make sure the openid scope is enabled for this channel.', 'moksa-for-line' )
 			);
 		}
 
@@ -60,8 +60,8 @@ class IdToken {
 			Logger::capture( $response, 'Could not reach the ID token verification endpoint', 'login' );
 
 			return new WP_Error(
-				'moksa_line_verify_unreachable',
-				__( 'Could not reach LINE to verify the login. Please try again.', 'moksa-line' )
+				'mofoline_verify_unreachable',
+				__( 'Could not reach LINE to verify the login. Please try again.', 'moksa-for-line' )
 			);
 		}
 
@@ -76,8 +76,8 @@ class IdToken {
 			Logger::error( 'ID token rejected by LINE', array( 'detail' => $detail ), 'login' );
 
 			return new WP_Error(
-				'moksa_line_invalid_id_token',
-				__( 'This login could not be verified. Please try again.', 'moksa-line' )
+				'mofoline_invalid_id_token',
+				__( 'This login could not be verified. Please try again.', 'moksa-for-line' )
 			);
 		}
 
@@ -88,7 +88,7 @@ class IdToken {
 		if ( $problem ) {
 			Logger::error( 'ID token claims failed local checks', array( 'detail' => $problem ), 'login' );
 
-			return new WP_Error( 'moksa_line_bad_claims', $problem );
+			return new WP_Error( 'mofoline_bad_claims', $problem );
 		}
 
 		return $claims;
@@ -104,21 +104,21 @@ class IdToken {
 	 */
 	private static function check_claims( array $claims, string $channel_id, string $nonce ): string {
 		if ( empty( $claims['sub'] ) ) {
-			return __( 'The login response did not identify a user.', 'moksa-line' );
+			return __( 'The login response did not identify a user.', 'moksa-for-line' );
 		}
 
 		if ( ! isset( $claims['iss'] ) || self::ISSUER !== $claims['iss'] ) {
-			return __( 'The login response came from an unexpected issuer.', 'moksa-line' );
+			return __( 'The login response came from an unexpected issuer.', 'moksa-for-line' );
 		}
 
 		$audience = isset( $claims['aud'] ) ? (array) $claims['aud'] : array();
 
 		if ( '' !== $channel_id && ! in_array( $channel_id, $audience, true ) ) {
-			return __( 'The login response was issued for a different channel.', 'moksa-line' );
+			return __( 'The login response was issued for a different channel.', 'moksa-for-line' );
 		}
 
 		if ( isset( $claims['exp'] ) && ( (int) $claims['exp'] + self::LEEWAY ) < time() ) {
-			return __( 'The login response has expired. Please try again.', 'moksa-line' );
+			return __( 'The login response has expired. Please try again.', 'moksa-for-line' );
 		}
 
 		// A missing nonce in the response when one was requested means the
@@ -127,7 +127,7 @@ class IdToken {
 			$returned = isset( $claims['nonce'] ) ? (string) $claims['nonce'] : '';
 
 			if ( ! hash_equals( $nonce, $returned ) ) {
-				return __( 'The login response did not match this login attempt.', 'moksa-line' );
+				return __( 'The login response did not match this login attempt.', 'moksa-for-line' );
 			}
 		}
 

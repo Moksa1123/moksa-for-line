@@ -11,10 +11,10 @@
  * Verified against an independent encoder (segno) and an independent decoder
  * (OpenCV) -- see tests/qr-check.php and the notes there.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Support;
+namespace Mofoline\Support;
 
 defined( 'ABSPATH' ) || exit;
 

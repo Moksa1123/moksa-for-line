@@ -8,10 +8,10 @@
  * the accumulated result of integrating with ECPay, RY Tools, AST and
  * WooCommerce Shipment Tracking, and are worth more than the code around them.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Woo;
+namespace Mofoline\Woo;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -199,7 +199,7 @@ class OrderContext {
 		// the filter so a site can still override any of it.
 		$values = array_merge( $values, self::moksa_for_woocommerce( $order ) );
 
-		$values = apply_filters( 'moksa_line_order_placeholders', $values, $order, $status );
+		$values = apply_filters( 'mofoline_order_placeholders', $values, $order, $status );
 
 		$map = array();
 
@@ -306,7 +306,7 @@ class OrderContext {
 		 * @param string    $tracking_number Empty when nothing was found.
 		 * @param \WC_Order $order           Order.
 		 */
-		return (string) apply_filters( 'moksa_line_order_tracking_number', '', $order );
+		return (string) apply_filters( 'mofoline_order_tracking_number', '', $order );
 	}
 
 	/**
@@ -349,28 +349,28 @@ class OrderContext {
 	 *
 	 * A flat list of twenty-four is a list you read once and then hunt through.
 	 * The groups are also where another plugin's values land: anything added
-	 * through the moksa_line_order_placeholders filter and described through
-	 * moksa_line_documented_placeholders appears under "From other plugins",
+	 * through the mofoline_order_placeholders filter and described through
+	 * mofoline_documented_placeholders appears under "From other plugins",
 	 * so a shop can see what its own extensions provide without reading code.
 	 *
 	 * @return array<string,array<string,string>> Group label => placeholder => description.
 	 */
 	public static function documented_groups(): array {
 		$groups = array(
-			__( 'The order', 'moksa-line' )     => array(
+			__( 'The order', 'moksa-for-line' )     => array(
 				'{order_number}', '{order_status}', '{status_label}', '{status_color}',
 				'{order_date}', '{total}', '{order_subtotal}', '{items_count}', '{order_items}',
 				'{view_order_url}',
 			),
-			__( 'The customer', 'moksa-line' )  => array(
+			__( 'The customer', 'moksa-for-line' )  => array(
 				'{customer_full_name}', '{customer_email}', '{billing_name}',
 				'{billing_phone}', '{billing_address}', '{customer_note}',
 			),
-			__( 'Delivery', 'moksa-line' )      => array(
+			__( 'Delivery', 'moksa-for-line' )      => array(
 				'{shipping_name}', '{shipping_address}', '{shipping_city}',
 				'{shipping_method}', '{tracking_number}', '{store_name}', '{store_address}',
 			),
-			__( 'Payment', 'moksa-line' )       => array(
+			__( 'Payment', 'moksa-for-line' )       => array(
 				'{payment_method}', '{transaction_number}', '{invoice_number}',
 			),
 		);
@@ -391,7 +391,7 @@ class OrderContext {
 		$extra = array_diff_key( $documented, $placed );
 
 		if ( $extra ) {
-			$out[ __( 'From other plugins', 'moksa-line' ) ] = $extra;
+			$out[ __( 'From other plugins', 'moksa-for-line' ) ] = $extra;
 		}
 
 		return $out;
@@ -404,44 +404,44 @@ class OrderContext {
 	 */
 	public static function documented(): array {
 		$documented = array(
-			'{order_number}'       => __( 'Order number', 'moksa-line' ),
-			'{order_status}'       => __( 'Status slug', 'moksa-line' ),
-			'{status_label}'       => __( 'Status name, translated', 'moksa-line' ),
-			'{status_color}'       => __( 'A colour matching the status', 'moksa-line' ),
-			'{order_date}'         => __( 'Date the order was placed', 'moksa-line' ),
-			'{total}'              => __( 'Order total, formatted', 'moksa-line' ),
-			'{order_subtotal}'     => __( 'Subtotal, formatted', 'moksa-line' ),
-			'{items_count}'        => __( 'Number of items', 'moksa-line' ),
-			'{order_items}'        => __( 'List of items and quantities', 'moksa-line' ),
-			'{customer_full_name}' => __( 'Customer name', 'moksa-line' ),
-			'{customer_email}'     => __( 'Customer email', 'moksa-line' ),
-			'{billing_name}'       => __( 'Billing name', 'moksa-line' ),
-			'{billing_phone}'      => __( 'Billing phone', 'moksa-line' ),
-			'{billing_address}'    => __( 'Billing address', 'moksa-line' ),
-			'{shipping_name}'      => __( 'Shipping name', 'moksa-line' ),
-			'{shipping_address}'   => __( 'Shipping address', 'moksa-line' ),
-			'{shipping_city}'      => __( 'Shipping city', 'moksa-line' ),
-			'{shipping_method}'    => __( 'Shipping method', 'moksa-line' ),
-			'{payment_method}'     => __( 'Payment method', 'moksa-line' ),
-			'{tracking_number}'    => __( 'Tracking number, from ECPay, RY Tools, AST or Shipment Tracking', 'moksa-line' ),
-			'{store_name}'         => __( 'Pickup store name', 'moksa-line' ),
-			'{store_address}'      => __( 'Pickup store address', 'moksa-line' ),
-			'{invoice_number}'     => __( 'E-invoice number, from Moksa for WooCommerce', 'moksa-line' ),
-			'{transaction_number}' => __( 'Payment transaction number, from Moksa for WooCommerce', 'moksa-line' ),
-			'{customer_note}'      => __( 'Customer note', 'moksa-line' ),
-			'{view_order_url}'     => __( 'Link to the order (https sites only)', 'moksa-line' ),
+			'{order_number}'       => __( 'Order number', 'moksa-for-line' ),
+			'{order_status}'       => __( 'Status slug', 'moksa-for-line' ),
+			'{status_label}'       => __( 'Status name, translated', 'moksa-for-line' ),
+			'{status_color}'       => __( 'A colour matching the status', 'moksa-for-line' ),
+			'{order_date}'         => __( 'Date the order was placed', 'moksa-for-line' ),
+			'{total}'              => __( 'Order total, formatted', 'moksa-for-line' ),
+			'{order_subtotal}'     => __( 'Subtotal, formatted', 'moksa-for-line' ),
+			'{items_count}'        => __( 'Number of items', 'moksa-for-line' ),
+			'{order_items}'        => __( 'List of items and quantities', 'moksa-for-line' ),
+			'{customer_full_name}' => __( 'Customer name', 'moksa-for-line' ),
+			'{customer_email}'     => __( 'Customer email', 'moksa-for-line' ),
+			'{billing_name}'       => __( 'Billing name', 'moksa-for-line' ),
+			'{billing_phone}'      => __( 'Billing phone', 'moksa-for-line' ),
+			'{billing_address}'    => __( 'Billing address', 'moksa-for-line' ),
+			'{shipping_name}'      => __( 'Shipping name', 'moksa-for-line' ),
+			'{shipping_address}'   => __( 'Shipping address', 'moksa-for-line' ),
+			'{shipping_city}'      => __( 'Shipping city', 'moksa-for-line' ),
+			'{shipping_method}'    => __( 'Shipping method', 'moksa-for-line' ),
+			'{payment_method}'     => __( 'Payment method', 'moksa-for-line' ),
+			'{tracking_number}'    => __( 'Tracking number, from ECPay, RY Tools, AST or Shipment Tracking', 'moksa-for-line' ),
+			'{store_name}'         => __( 'Pickup store name', 'moksa-for-line' ),
+			'{store_address}'      => __( 'Pickup store address', 'moksa-for-line' ),
+			'{invoice_number}'     => __( 'E-invoice number, from Moksa for WooCommerce', 'moksa-for-line' ),
+			'{transaction_number}' => __( 'Payment transaction number, from Moksa for WooCommerce', 'moksa-for-line' ),
+			'{customer_note}'      => __( 'Customer note', 'moksa-for-line' ),
+			'{view_order_url}'     => __( 'Link to the order (https sites only)', 'moksa-for-line' ),
 		);
 
 		/**
 		 * Describe placeholders added by other plugins.
 		 *
-		 * A plugin adding values through moksa_line_order_placeholders could
+		 * A plugin adding values through mofoline_order_placeholders could
 		 * substitute them but had no way to say what they were, so they were
 		 * invisible to whoever was writing the message. Describe them here and
 		 * they appear in the reference beside the built-in ones.
 		 *
 		 * @param array<string,string> $documented Placeholder => description.
 		 */
-		return (array) apply_filters( 'moksa_line_documented_placeholders', $documented );
+		return (array) apply_filters( 'mofoline_documented_placeholders', $documented );
 	}
 }

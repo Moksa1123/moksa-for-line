@@ -7,17 +7,17 @@
  * only ever be inside one flow -- which is what stops a second trigger word
  * mid-booking from quietly forking the conversation.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Bot;
+namespace Mofoline\Bot;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Data\Repository;
-use Moksa\Line\Data\Users;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Migrator;
+use Mofoline\Support\Db;
+use Mofoline\Data\Repository;
+use Mofoline\Data\Users;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -142,7 +142,7 @@ class Flow extends Repository {
 		if ( self::is_cancel( $text ) ) {
 			self::end( $line_user_id );
 
-			return array( MessagingClient::text( __( 'No problem, that has been cancelled.', 'moksa-line' ) ) );
+			return array( MessagingClient::text( __( 'No problem, that has been cancelled.', 'moksa-for-line' ) ) );
 		}
 
 		$index = (int) $session->step_index;
@@ -216,12 +216,12 @@ class Flow extends Repository {
 		 * @param string $line_user_id  LINE user id.
 		 * @param int    $submission_id Stored submission id.
 		 */
-		do_action( 'moksa_line_flow_completed', $answers, $flow, $line_user_id, $submission_id );
+		do_action( 'mofoline_flow_completed', $answers, $flow, $line_user_id, $submission_id );
 
 		$definition = self::definition( $flow );
 		$message    = isset( $definition['complete_message'] ) && '' !== trim( (string) $definition['complete_message'] )
 			? (string) $definition['complete_message']
-			: __( 'Thank you, we have received your details.', 'moksa-line' );
+			: __( 'Thank you, we have received your details.', 'moksa-for-line' );
 
 		return array( MessagingClient::text( self::fill( $message, $answers, $line_user_id ) ) );
 	}
@@ -268,12 +268,12 @@ class Flow extends Repository {
 		$lines = array(
 			sprintf(
 				/* translators: %s: flow name. */
-				__( 'A visitor completed "%s" on LINE.', 'moksa-line' ),
+				__( 'A visitor completed "%s" on LINE.', 'moksa-for-line' ),
 				(string) $flow->name
 			),
 			'',
-			sprintf( '%s: %s', __( 'Display name', 'moksa-line' ), $display ),
-			sprintf( '%s: %s', __( 'LINE user id', 'moksa-line' ), $line_user_id ),
+			sprintf( '%s: %s', __( 'Display name', 'moksa-for-line' ), $display ),
+			sprintf( '%s: %s', __( 'LINE user id', 'moksa-for-line' ), $line_user_id ),
 			'',
 		);
 
@@ -285,7 +285,7 @@ class Flow extends Repository {
 			$to,
 			sprintf(
 				/* translators: 1: site name, 2: flow name. */
-				__( '[%1$s] New LINE submission: %2$s', 'moksa-line' ),
+				__( '[%1$s] New LINE submission: %2$s', 'moksa-for-line' ),
 				get_bloginfo( 'name' ),
 				(string) $flow->name
 			),
@@ -336,7 +336,7 @@ class Flow extends Repository {
 		$prompt = isset( $step['prompt'] ) ? (string) $step['prompt'] : '';
 
 		if ( '' === $prompt ) {
-			$prompt = __( 'Please reply with your answer.', 'moksa-line' );
+			$prompt = __( 'Please reply with your answer.', 'moksa-for-line' );
 		}
 
 		$quick = array();
@@ -362,8 +362,8 @@ class Flow extends Repository {
 			'type'   => 'action',
 			'action' => array(
 				'type'  => 'message',
-				'label' => __( 'Cancel', 'moksa-line' ),
-				'text'  => __( 'Cancel', 'moksa-line' ),
+				'label' => __( 'Cancel', 'moksa-for-line' ),
+				'text'  => __( 'Cancel', 'moksa-for-line' ),
 			),
 		);
 
@@ -387,33 +387,33 @@ class Flow extends Repository {
 		$type = isset( $step['type'] ) ? (string) $step['type'] : 'text';
 
 		if ( '' === $text ) {
-			return new \WP_Error( 'moksa_line_flow_empty', __( 'That looked empty. Please try again.', 'moksa-line' ) );
+			return new \WP_Error( 'mofoline_flow_empty', __( 'That looked empty. Please try again.', 'moksa-for-line' ) );
 		}
 
 		switch ( $type ) {
 			case 'email':
 				return is_email( $text )
 					? sanitize_email( $text )
-					: new \WP_Error( 'moksa_line_flow_email', __( 'That does not look like an email address. Please try again.', 'moksa-line' ) );
+					: new \WP_Error( 'mofoline_flow_email', __( 'That does not look like an email address. Please try again.', 'moksa-for-line' ) );
 
 			case 'phone':
 				$digits = preg_replace( '/[^0-9+]/', '', $text );
 
 				return strlen( (string) $digits ) >= 8
 					? $digits
-					: new \WP_Error( 'moksa_line_flow_phone', __( 'That does not look like a phone number. Please try again.', 'moksa-line' ) );
+					: new \WP_Error( 'mofoline_flow_phone', __( 'That does not look like a phone number. Please try again.', 'moksa-for-line' ) );
 
 			case 'number':
 				return is_numeric( $text )
 					? $text + 0
-					: new \WP_Error( 'moksa_line_flow_number', __( 'Please reply with a number.', 'moksa-line' ) );
+					: new \WP_Error( 'mofoline_flow_number', __( 'Please reply with a number.', 'moksa-for-line' ) );
 
 			case 'date':
 				$timestamp = strtotime( $text );
 
 				return false !== $timestamp
 					? gmdate( 'Y-m-d', $timestamp )
-					: new \WP_Error( 'moksa_line_flow_date', __( 'Please reply with a date, for example 2026-03-15.', 'moksa-line' ) );
+					: new \WP_Error( 'mofoline_flow_date', __( 'Please reply with a date, for example 2026-03-15.', 'moksa-for-line' ) );
 
 			case 'choice':
 				$choices = isset( $step['choices'] ) ? array_map( 'strval', (array) $step['choices'] ) : array();
@@ -425,12 +425,12 @@ class Flow extends Repository {
 				}
 
 				return new \WP_Error(
-					'moksa_line_flow_choice',
+					'mofoline_flow_choice',
 					sprintf(
 						/* translators: %s: list of choices, joined with the separator below. */
-						__( 'Please choose one of: %s', 'moksa-line' ),
+						__( 'Please choose one of: %s', 'moksa-for-line' ),
 						/* translators: separator between items in a list, including any trailing space. Chinese uses a full-width enumeration comma with no space. */
-						implode( _x( ', ', 'list separator', 'moksa-line' ), $choices )
+						implode( _x( ', ', 'list separator', 'moksa-for-line' ), $choices )
 					)
 				);
 
@@ -455,11 +455,11 @@ class Flow extends Repository {
 		 *
 		 * @param string[] $words Cancel words, compared case-insensitively.
 		 */
-		$words = apply_filters( 'moksa_line_flow_cancel_words', $words );
+		$words = apply_filters( 'mofoline_flow_cancel_words', $words );
 
 		// The translated "Cancel" label is always accepted, since it is what
 		// the quick reply button sends.
-		$words[] = __( 'Cancel', 'moksa-line' );
+		$words[] = __( 'Cancel', 'moksa-for-line' );
 
 		foreach ( $words as $word ) {
 			if ( 0 === strcasecmp( trim( $text ), trim( (string) $word ) ) ) {

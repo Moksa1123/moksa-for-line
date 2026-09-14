@@ -7,12 +7,12 @@
  * It must be computed over the *raw* request body: re-encoding the decoded
  * JSON changes key order and whitespace, and the signature never matches.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Api;
+namespace Mofoline\Api;
 
-use Moksa\Line\Support\Options;
+use Mofoline\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 

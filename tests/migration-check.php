@@ -8,12 +8,13 @@
  *
  *   wp eval-file tests/migration-check.php
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
 global $wpdb;
 
-$prefix  = $wpdb->prefix . 'moksa_line_';
+$prefix  = $wpdb->prefix . 'mofoline_';
+$legacy  = $wpdb->prefix . Mofoline\Support\Migrator::LEGACY_PREFIX;
 $collate = $wpdb->get_charset_collate();
 
 /*
@@ -24,24 +25,25 @@ $collate = $wpdb->get_charset_collate();
  * holding real conversations it destroys every message, and LINE offers no way
  * to read chat history back.
  */
-if ( 'production' === wp_get_environment_type() && ! defined( 'MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
+if ( 'production' === wp_get_environment_type() && ! defined( 'MOFOLINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
 	echo "REFUSED: this site reports WP_ENVIRONMENT_TYPE=production.\n";
-	echo "It DROPS every moksa_line_* table, including recorded conversations and\n";
+	echo "It DROPS every mofoline_* table, including recorded conversations and\n";
 	echo "messages, which cannot be recovered -- LINE does not expose chat history.\n";
 	echo "If this really is a throwaway site, set WP_ENVIRONMENT_TYPE, or define\n";
-	echo "MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.\n";
+	echo "MOFOLINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.\n";
 	return;
 }
 
 echo "== Tearing down and recreating a 1.4.0 install ==\n";
 
-foreach ( Moksa\Line\Support\Migrator::table_keys() as $t ) {
+foreach ( Mofoline\Support\Migrator::table_keys() as $t ) {
 	$wpdb->query( "DROP TABLE IF EXISTS {$prefix}{$t}" );
+	$wpdb->query( "DROP TABLE IF EXISTS {$legacy}{$t}" );
 }
 
 // The exact four tables 1.4.0 created, with its column names.
 $wpdb->query(
-	"CREATE TABLE {$prefix}users (
+	"CREATE TABLE {$legacy}users (
 		id bigint(20) NOT NULL AUTO_INCREMENT,
 		wp_user_id bigint(20) NOT NULL DEFAULT 0,
 		line_user_id varchar(255) NOT NULL,
@@ -57,7 +59,7 @@ $wpdb->query(
 );
 
 $wpdb->query(
-	"CREATE TABLE {$prefix}quick_replies (
+	"CREATE TABLE {$legacy}quick_replies (
 		id bigint(20) NOT NULL AUTO_INCREMENT,
 		keyword varchar(255) NOT NULL,
 		reply_message text NOT NULL,
@@ -68,7 +70,7 @@ $wpdb->query(
 );
 
 $wpdb->query(
-	"CREATE TABLE {$prefix}auto_replies (
+	"CREATE TABLE {$legacy}auto_replies (
 		id bigint(20) NOT NULL AUTO_INCREMENT,
 		keyword varchar(255) NOT NULL,
 		reply_type varchar(50) NOT NULL DEFAULT 'text',
@@ -81,7 +83,7 @@ $wpdb->query(
 );
 
 $wpdb->query(
-	"CREATE TABLE {$prefix}imagemaps (
+	"CREATE TABLE {$legacy}imagemaps (
 		id bigint(20) NOT NULL AUTO_INCREMENT,
 		title varchar(255) NOT NULL,
 		alt_text varchar(255) NOT NULL,
@@ -93,11 +95,11 @@ $wpdb->query(
 );
 
 // v1 data.
-$wpdb->query( "INSERT INTO {$prefix}users (wp_user_id, line_user_id, display_name, picture_url, status_message, email) VALUES (1, 'Ulegacy0001', 'Legacy Person', 'https://example.com/a.jpg', 'hi', 'legacy@example.com')" );
-$wpdb->query( "INSERT INTO {$prefix}users (wp_user_id, line_user_id, display_name, picture_url, status_message, email) VALUES (0, 'Ulegacy0002', 'Second Person', '', '', '')" );
-$wpdb->query( "INSERT INTO {$prefix}auto_replies (keyword, reply_type, reply_content, match_type, status) VALUES ('hours', 'text', 'We open at 9am.', 'exact', 1)" );
-$wpdb->query( "INSERT INTO {$prefix}auto_replies (keyword, reply_type, reply_content, match_type, status) VALUES ('price', 'text', 'From NT\$500.', 'partial', 0)" );
-$wpdb->query( "INSERT INTO {$prefix}quick_replies (keyword, reply_message, status) VALUES ('Book now', 'I would like to book', 1)" );
+$wpdb->query( "INSERT INTO {$legacy}users (wp_user_id, line_user_id, display_name, picture_url, status_message, email) VALUES (1, 'Ulegacy0001', 'Legacy Person', 'https://example.com/a.jpg', 'hi', 'legacy@example.com')" );
+$wpdb->query( "INSERT INTO {$legacy}users (wp_user_id, line_user_id, display_name, picture_url, status_message, email) VALUES (0, 'Ulegacy0002', 'Second Person', '', '', '')" );
+$wpdb->query( "INSERT INTO {$legacy}auto_replies (keyword, reply_type, reply_content, match_type, status) VALUES ('hours', 'text', 'We open at 9am.', 'exact', 1)" );
+$wpdb->query( "INSERT INTO {$legacy}auto_replies (keyword, reply_type, reply_content, match_type, status) VALUES ('price', 'text', 'From NT\$500.', 'partial', 0)" );
+$wpdb->query( "INSERT INTO {$legacy}quick_replies (keyword, reply_message, status) VALUES ('Book now', 'I would like to book', 1)" );
 
 // v1 options: plaintext secrets, n8n-specific forwarding key.
 update_option( 'moksa_line_channel_id', '1234567890' );
@@ -105,25 +107,26 @@ update_option( 'moksa_line_channel_secret', 'PLAINTEXT-login-secret' );
 update_option( 'moksa_line_messaging_secret', 'PLAINTEXT-messaging-secret' );
 update_option( 'moksa_line_messaging_token', 'PLAINTEXT-long-lived-token' );
 update_option( 'moksa_line_n8n_webhook_url', 'https://n8n.example.com/webhook/line' );
-// Clear the new-format keys so this exercises the import path rather than
-// the guard that refuses to overwrite a deliberate setting.
-foreach ( array( 'webhook_forward_url', 'woo_notify_delay', 'woo_tracking_delay', 'woo_tracking_retries' ) as $reset ) {
-	Moksa\Line\Support\Options::delete( $reset );
+// Clear this plugin's own copies so the run exercises the import path rather
+// than the guard that refuses to overwrite a deliberate setting.
+foreach ( array( 'channel_id', 'channel_secret', 'messaging_secret', 'messaging_token', 'n8n_webhook_url', 'order_delay', 'order_processing_delay', 'order_processing_max_retries', 'webhook_forward_url', 'woo_notify_delay', 'woo_tracking_delay', 'woo_tracking_retries' ) as $reset ) {
+	Mofoline\Support\Options::delete( $reset );
 }
 
 update_option( 'moksa_line_order_delay', '30' );
 update_option( 'moksa_line_order_processing_delay', '90' );
 update_option( 'moksa_line_order_processing_max_retries', '5' );
+delete_option( 'mofoline_db_version' );
 delete_option( 'moksa_line_db_version' );
-delete_option( 'moksa_line_webhook_forward_url' );
+delete_option( 'mofoline_webhook_forward_url' );
 
-Moksa\Line\Support\Options::flush_cache();
+Mofoline\Support\Options::flush_cache();
 
 echo "1.4.0 state built.\n\n";
 
 echo "== Running the migrator ==\n";
-Moksa\Line\Support\Migrator::maybe_upgrade( true );
-Moksa\Line\Support\Options::flush_cache();
+Mofoline\Support\Migrator::maybe_upgrade( true );
+Mofoline\Support\Options::flush_cache();
 echo "Done.\n\n";
 
 // ---------------------------------------------------------------- assertions
@@ -146,7 +149,7 @@ function check( $condition, $label, $detail = '' ) {
 
 echo "== Schema ==\n";
 $tables   = $wpdb->get_col( "SHOW TABLES LIKE '{$prefix}%'" );
-$expected = Moksa\Line\Support\Migrator::table_keys();
+$expected = Mofoline\Support\Migrator::table_keys();
 
 // Counted against the migrator's own list rather than a number typed here,
 // which drifts the moment a table is added.
@@ -185,26 +188,26 @@ check( isset( $items[0]['action']['label'] ) && 'Book now' === $items[0]['action
 
 echo "\n== Credentials encrypted in place ==\n";
 foreach ( array( 'channel_secret', 'messaging_secret', 'messaging_token' ) as $key ) {
-	$stored = get_option( 'moksa_line_' . $key );
-	check( Moksa\Line\Support\Crypto::is_encrypted( (string) $stored ), "{$key} is now ciphertext" );
+	$stored = get_option( 'mofoline_' . $key );
+	check( Mofoline\Support\Crypto::is_encrypted( (string) $stored ), "{$key} is now ciphertext" );
 }
-check( 'PLAINTEXT-login-secret' === Moksa\Line\Support\Options::get( 'channel_secret' ), 'channel_secret still reads back correctly' );
-check( 'PLAINTEXT-messaging-secret' === Moksa\Line\Support\Options::get( 'messaging_secret' ), 'messaging_secret still reads back correctly' );
-check( '1234567890' === Moksa\Line\Support\Options::get( 'channel_id' ), 'non-secret settings untouched' );
+check( 'PLAINTEXT-login-secret' === Mofoline\Support\Options::get( 'channel_secret' ), 'channel_secret still reads back correctly' );
+check( 'PLAINTEXT-messaging-secret' === Mofoline\Support\Options::get( 'messaging_secret' ), 'messaging_secret still reads back correctly' );
+check( '1234567890' === Mofoline\Support\Options::get( 'channel_id' ), 'non-secret settings untouched' );
 
 echo "\n== Forwarding URL moved off the n8n-specific key ==\n";
 check(
-	'https://n8n.example.com/webhook/line' === Moksa\Line\Support\Options::get( 'webhook_forward_url' ),
+	'https://n8n.example.com/webhook/line' === Mofoline\Support\Options::get( 'webhook_forward_url' ),
 	'n8n url carried into webhook_forward_url',
-	(string) Moksa\Line\Support\Options::get( 'webhook_forward_url' )
+	(string) Mofoline\Support\Options::get( 'webhook_forward_url' )
 );
 
 echo "
 == Renamed settings carried over ==
 ";
-check( 30 === Moksa\Line\Support\Options::get( 'woo_notify_delay' ), 'order delay carried over', (string) Moksa\Line\Support\Options::get( 'woo_notify_delay' ) );
-check( 90 === Moksa\Line\Support\Options::get( 'woo_tracking_delay' ), 'processing delay carried over', (string) Moksa\Line\Support\Options::get( 'woo_tracking_delay' ) );
-check( 5 === Moksa\Line\Support\Options::get( 'woo_tracking_retries' ), 'retry budget carried over', (string) Moksa\Line\Support\Options::get( 'woo_tracking_retries' ) );
+check( 30 === Mofoline\Support\Options::get( 'woo_notify_delay' ), 'order delay carried over', (string) Mofoline\Support\Options::get( 'woo_notify_delay' ) );
+check( 90 === Mofoline\Support\Options::get( 'woo_tracking_delay' ), 'processing delay carried over', (string) Mofoline\Support\Options::get( 'woo_tracking_delay' ) );
+check( 5 === Mofoline\Support\Options::get( 'woo_tracking_retries' ), 'retry budget carried over', (string) Mofoline\Support\Options::get( 'woo_tracking_retries' ) );
 
 echo "\n== Users preserved and inbox seeded ==\n";
 $users = $wpdb->get_results( "SELECT * FROM {$prefix}users ORDER BY id" );
@@ -219,17 +222,17 @@ check( 'Legacy Person' === $conversations[0]->display_name, 'seeded conversation
 
 echo "\n== Version recorded ==\n";
 check(
-	Moksa\Line\Support\Migrator::DB_VERSION === Moksa\Line\Support\Options::get( 'db_version' ),
+	Mofoline\Support\Migrator::DB_VERSION === Mofoline\Support\Options::get( 'db_version' ),
 	'db_version matches Migrator::DB_VERSION',
-	(string) Moksa\Line\Support\Options::get( 'db_version' )
+	(string) Mofoline\Support\Options::get( 'db_version' )
 );
 
 echo "\n== Re-running the migrator must be harmless ==\n";
-Moksa\Line\Support\Migrator::maybe_upgrade( true );
-Moksa\Line\Support\Options::flush_cache();
+Mofoline\Support\Migrator::maybe_upgrade( true );
+Mofoline\Support\Options::flush_cache();
 $conversations_again = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$prefix}conversations" );
 check( 2 === $conversations_again, 'conversations not duplicated on a second run', $conversations_again . ' found' );
-check( 'PLAINTEXT-messaging-secret' === Moksa\Line\Support\Options::get( 'messaging_secret' ), 'secrets not double-encrypted' );
+check( 'PLAINTEXT-messaging-secret' === Mofoline\Support\Options::get( 'messaging_secret' ), 'secrets not double-encrypted' );
 
 $failures = (int) $GLOBALS['moksa_migration_failures'];
 

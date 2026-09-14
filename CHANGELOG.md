@@ -14,9 +14,9 @@ published to the plugin directory. It is a new plugin rather than an update:
 the folder, main file and text domain are all different, so WordPress treats
 them as unrelated and both can be installed at once.
 
-They do, however, share the `moksa_line_` option and table prefix, and that is
-deliberate. Installing this on a site that ran the old plugin imports
-everything on first load:
+The old plugin kept its data under the `moksa_line_` prefix; this one uses
+`mofoline_`. Installing this on a site that ran the old plugin copies
+everything across on first load and leaves the originals where they were:
 
 - Channel IDs, secrets and every other setting carry over. Credentials that
   were stored as plain text are re-stored encrypted.
@@ -97,5 +97,5 @@ is lost if they return.
   received after this plugin was installed and the webhook switched on.
 - Answering an inbound message within a minute is free; anything sent
   afterwards is a push message and is billed by LINE.
-- Uninstalling leaves data in place unless `MOKSA_LINE_REMOVE_DATA` is defined
+- Uninstalling leaves data in place unless `MOFOLINE_REMOVE_DATA` is defined
   as `true` in `wp-config.php`.

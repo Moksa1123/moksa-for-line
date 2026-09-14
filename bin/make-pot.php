@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /**
- * Generate languages/moksa-line.pot from the source.
+ * Generate languages/moksa-for-line.pot from the source.
  *
  * WP-CLI's i18n command is the usual tool for this, but it is a heavy
  * dependency for a job this size and it is not installed everywhere. This
@@ -10,12 +10,12 @@
  *
  * Usage: php bin/make-pot.php
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
 declare( strict_types=1 );
 
-const DOMAIN = 'moksa-line';
+const DOMAIN = 'moksa-for-line';
 
 /**
  * Gettext functions, mapped to the argument positions that hold translatable
@@ -329,7 +329,7 @@ function write_pot( string $path, array $entries ): void {
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Moksa LINE Suite 1.0.0\\n"
+"Project-Id-Version: Moksa for LINE 1.0.0\\n"
 "Report-Msgid-Bugs-To: https://moksaweb.com/\\n"
 "POT-Creation-Date: {$now}\\n"
 "MIME-Version: 1.0\\n"
@@ -337,7 +337,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\\n"
 "Language-Team: LANGUAGE <LL@li.org>\\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\\n"
-"X-Domain: moksa-line\\n"
+"X-Domain: moksa-for-line\\n"
 
 HEADER;
 

@@ -2,7 +2,7 @@
  * Admin styles for the LINE screens.
  */
 
-.moksa-line-wrap {
+.mofoline-wrap {
 	--moksa-green: #06c755;
 	--moksa-border: #dcdcde;
 	--moksa-muted: #646970;
@@ -20,9 +20,9 @@
  * Scoped to form controls on purpose: table.widefat is a full-width data table
  * and must not be capped.
  */
-.moksa-line-wrap input.widefat,
-.moksa-line-wrap select.widefat,
-.moksa-line-wrap textarea.widefat {
+.mofoline-wrap input.widefat,
+.mofoline-wrap select.widefat,
+.mofoline-wrap textarea.widefat {
 	max-width: var(--moksa-field-max);
 }
 
@@ -33,7 +33,7 @@
  * them the width core already gives .regular-text leaves two deliberate widths
  * on the screen instead of five accidental ones.
  */
-.moksa-line-wrap .form-table select {
+.mofoline-wrap .form-table select {
 	width: 350px;
 	max-width: 100%;
 }
@@ -43,7 +43,7 @@
  * they take the same width and wrap rather than running 180px past everything
  * else on the row.
  */
-.moksa-line-wrap .form-table .moksa-copyable {
+.mofoline-wrap .form-table .moksa-copyable {
 	width: 350px;
 }
 
@@ -51,7 +51,7 @@
  * A colour input is a swatch, not a text field. Sharing .regular-text with the
  * text inputs stretched it to 350px of flat colour.
  */
-.moksa-line-wrap input[type="color"].regular-text {
+.mofoline-wrap input[type="color"].regular-text {
 	width: 64px;
 	height: 32px;
 	padding: 2px;
@@ -63,7 +63,7 @@
  * describes. The help text therefore wrapped a line earlier than the input
  * above it and regularly left a single character stranded on its own line.
  */
-.moksa-line-wrap .description {
+.mofoline-wrap .description {
 	/* inline-block, not the default inline: max-width has no effect on an
 	   inline box, so every <span class="description"> ignored the ceiling and
 	   ran the full width of its panel -- 1337px, about 103 Chinese characters
@@ -77,16 +77,16 @@
  * in. The field ceiling above is for top-level forms; applying it here left a
  * prompt box visibly narrower than the two fields directly beneath it.
  */
-.moksa-line-wrap .moksa-flow-step__label .widefat,
-.moksa-line-wrap .moksa-card-fields__label .widefat,
-.moksa-line-wrap .moksa-tpl-field .widefat {
+.mofoline-wrap .moksa-flow-step__label .widefat,
+.mofoline-wrap .moksa-card-fields__label .widefat,
+.mofoline-wrap .moksa-tpl-field .widefat {
 	max-width: none;
 }
 
 /* JSON and code want the column they are given. */
-.moksa-line-wrap textarea.code,
-.moksa-line-wrap input.code,
-.moksa-line-wrap .moksa-area-json {
+.mofoline-wrap textarea.code,
+.mofoline-wrap input.code,
+.mofoline-wrap .moksa-area-json {
 	max-width: none;
 }
 
@@ -97,7 +97,7 @@
  * into and send before choosing a conversation. Nine controls across these
  * screens rely on hidden, so it is settled once, here.
  */
-.moksa-line-wrap [hidden] {
+.mofoline-wrap [hidden] {
 	display: none !important;
 }
 
@@ -461,8 +461,8 @@
    what it searches, which is the only guidance the field has. */
 /* Help text set to the full width of a wide screen runs past the length the
    eye can track back from, so a sentence of guidance becomes work to read. */
-.moksa-line-wrap .form-table td .description,
-.moksa-line-wrap .moksa-panel .description {
+.mofoline-wrap .form-table td .description,
+.mofoline-wrap .moksa-panel .description {
 	max-width: 68ch;
 }
 
@@ -849,7 +849,7 @@
 /* Scoped to the wrapper to match the specificity of core's .wp-core-ui
    .button, whose min-height and line-height otherwise force 40px and leave
    this 34x40 rather than square. */
-.moksa-line-wrap .moksa-inbox__sticker-toggle {
+.mofoline-wrap .moksa-inbox__sticker-toggle {
 	flex: 0 0 auto;
 	width: 34px;
 	height: 34px;
@@ -1893,7 +1893,7 @@ input[type="color"] {
 }
 
 /* A button, so it is reachable by keyboard; styled so it reads as a token. */
-.moksa-line-wrap .moksa-param__key,
+.mofoline-wrap .moksa-param__key,
 .moksa-params .moksa-param__key {
 	display: inline-flex;
 	align-items: center;

@@ -15,7 +15,7 @@
 (function ($) {
 	'use strict';
 
-	// Filled in at DOM ready, not here. wp_localize_script attaches moksaLine
+	// Filled in at DOM ready, not here. wp_localize_script attaches mofoline
 	// to the admin handle, and this file is one of that handle's dependencies,
 	// so it is printed BEFORE that data exists. Reading it at load time left
 	// this object permanently empty, and every string in the area editor fell
@@ -842,7 +842,7 @@
 	// --- Bootstrap --------------------------------------------------------------
 
 	$(function () {
-		strings = (window.moksaLine && window.moksaLine.strings) || {};
+		strings = (window.mofoline && window.mofoline.strings) || {};
 
 		$('[data-moksa-area-editor]').each(function () {
 			var editor = new AreaEditor(this);

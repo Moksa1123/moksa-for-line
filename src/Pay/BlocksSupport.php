@@ -11,20 +11,20 @@
  * Nothing about the payment itself lives here. The block only collects the
  * choice; process_payment() on the gateway does the same work either way.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Pay;
+namespace Mofoline\Pay;
 
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
-use Moksa\Line\Admin\AdminModule;
+use Mofoline\Admin\AdminModule;
 
 defined( 'ABSPATH' ) || exit;
 
 final class BlocksSupport extends AbstractPaymentMethodType {
 
 	/** @var string Must match the gateway id, or the block and the gateway never meet. */
-	protected $name = 'moksa_line_pay';
+	protected $name = 'mofoline_pay';
 
 	/**
 	 * @var WooGateway|null The gateway instance WooCommerce built, when it has.
@@ -32,7 +32,7 @@ final class BlocksSupport extends AbstractPaymentMethodType {
 	private $gateway = null;
 
 	public function initialize() {
-		$this->settings = get_option( 'woocommerce_moksa_line_pay_settings', array() );
+		$this->settings = get_option( 'woocommerce_mofoline_pay_settings', array() );
 	}
 
 	/**
@@ -50,16 +50,16 @@ final class BlocksSupport extends AbstractPaymentMethodType {
 
 	public function get_payment_method_script_handles() {
 		wp_register_script(
-			'moksa-line-pay-blocks',
-			MOKSA_LINE_URL . 'assets/js/pay-blocks.js',
+			'mofoline-pay-blocks',
+			MOFOLINE_URL . 'assets/js/pay-blocks.js',
 			array( 'wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-html-entities', 'wp-i18n' ),
 			AdminModule::asset_version( 'assets/js/pay-blocks.js' ),
 			true
 		);
 
-		wp_set_script_translations( 'moksa-line-pay-blocks', 'moksa-line', MOKSA_LINE_DIR . 'languages' );
+		wp_set_script_translations( 'mofoline-pay-blocks', 'moksa-for-line', MOFOLINE_DIR . 'languages' );
 
-		return array( 'moksa-line-pay-blocks' );
+		return array( 'mofoline-pay-blocks' );
 	}
 
 	/**
@@ -69,9 +69,9 @@ final class BlocksSupport extends AbstractPaymentMethodType {
 		$gateway = $this->gateway();
 
 		return array(
-			'title'       => $gateway ? $gateway->title : __( 'LINE Pay', 'moksa-line' ),
+			'title'       => $gateway ? $gateway->title : __( 'LINE Pay', 'moksa-for-line' ),
 			'description' => $gateway ? $gateway->description : '',
-			'icon'        => MOKSA_LINE_URL . 'assets/img/linepay.svg',
+			'icon'        => MOFOLINE_URL . 'assets/img/linepay.svg',
 			'supports'    => $gateway ? array_filter( $gateway->supports, array( $gateway, 'supports' ) ) : array( 'products' ),
 		);
 	}

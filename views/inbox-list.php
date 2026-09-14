@@ -5,14 +5,14 @@
  *
  * Expects $list (from Conversations::paginate) and $status_labels.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
 defined( 'ABSPATH' ) || exit;
 
 ( static function ( array $list, array $status_labels ): void {
 	if ( empty( $list['rows'] ) ) : ?>
-		<p class="moksa-inbox__empty"><?php esc_html_e( 'No conversations yet.', 'moksa-line' ); ?></p>
+		<p class="moksa-inbox__empty"><?php esc_html_e( 'No conversations yet.', 'moksa-for-line' ); ?></p>
 	<?php endif; ?>
 
 	<?php foreach ( $list['rows'] as $conversation ) : ?>

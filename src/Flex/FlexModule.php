@@ -7,28 +7,28 @@
  * LINE's own validation endpoint. A template that will not send cannot be
  * saved as if it were fine.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Flex;
+namespace Mofoline\Flex;
 
-use Moksa\Line\Data\Flex;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Woo\ProductCards;
-use Moksa\Line\Api\TokenManager;
-use Moksa\Line\Admin\Ajax;
+use Mofoline\Data\Flex;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Woo\ProductCards;
+use Mofoline\Api\TokenManager;
+use Mofoline\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
 class FlexModule {
 
 	public function register(): void {
-		add_action( 'wp_ajax_moksa_line_flex_save', array( $this, 'ajax_save' ) );
-		add_action( 'wp_ajax_moksa_line_flex_delete', array( $this, 'ajax_delete' ) );
-		add_action( 'wp_ajax_moksa_line_flex_validate', array( $this, 'ajax_validate' ) );
-		add_action( 'wp_ajax_moksa_line_flex_send_test', array( $this, 'ajax_send_test' ) );
-		add_action( 'wp_ajax_moksa_line_flex_products', array( $this, 'ajax_products' ) );
-		add_action( 'wp_ajax_moksa_line_flex_product_cards', array( $this, 'ajax_product_cards' ) );
+		add_action( 'wp_ajax_mofoline_flex_save', array( $this, 'ajax_save' ) );
+		add_action( 'wp_ajax_mofoline_flex_delete', array( $this, 'ajax_delete' ) );
+		add_action( 'wp_ajax_mofoline_flex_validate', array( $this, 'ajax_validate' ) );
+		add_action( 'wp_ajax_mofoline_flex_send_test', array( $this, 'ajax_send_test' ) );
+		add_action( 'wp_ajax_mofoline_flex_products', array( $this, 'ajax_products' ) );
+		add_action( 'wp_ajax_mofoline_flex_product_cards', array( $this, 'ajax_product_cards' ) );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class FlexModule {
 		$ids = Ajax::ints( 'ids' );
 
 		if ( empty( $ids ) ) {
-			wp_send_json_error( array( 'message' => __( 'Choose at least one product.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Choose at least one product.', 'moksa-for-line' ) ) );
 		}
 
 		$contents = ProductCards::carousel( $ids );
@@ -84,7 +84,7 @@ class FlexModule {
 				array(
 					'message' => sprintf(
 						/* translators: %s: JSON parser message. */
-						__( 'That is not valid JSON: %s', 'moksa-line' ),
+						__( 'That is not valid JSON: %s', 'moksa-for-line' ),
 						json_last_error_msg()
 					),
 				)
@@ -97,7 +97,7 @@ class FlexModule {
 		if ( ! empty( $problems ) ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'This template will not send as it stands.', 'moksa-line' ),
+					'message'  => __( 'This template will not send as it stands.', 'moksa-for-line' ),
 					'problems' => $problems,
 				)
 			);
@@ -116,13 +116,13 @@ class FlexModule {
 		);
 
 		if ( ! $id ) {
-			wp_send_json_error( array( 'message' => __( 'The template could not be saved.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The template could not be saved.', 'moksa-for-line' ) ) );
 		}
 
 		wp_send_json_success(
 			array(
 				'id'      => $id,
-				'message' => __( 'Template saved.', 'moksa-line' ),
+				'message' => __( 'Template saved.', 'moksa-for-line' ),
 			)
 		);
 	}
@@ -136,10 +136,10 @@ class FlexModule {
 		$id = Ajax::int( 'id' );
 
 		if ( $id <= 0 || ! Flex::delete( $id ) ) {
-			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-line' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That template no longer exists.', 'moksa-for-line' ) ), 404 );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Template deleted.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Template deleted.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -154,7 +154,7 @@ class FlexModule {
 		if ( ! is_array( $decoded ) ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'That is not valid JSON.', 'moksa-line' ),
+					'message'  => __( 'That is not valid JSON.', 'moksa-for-line' ),
 					'problems' => array( json_last_error_msg() ),
 				)
 			);
@@ -167,7 +167,7 @@ class FlexModule {
 		if ( ! empty( $problems ) ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'Found problems before contacting LINE.', 'moksa-line' ),
+					'message'  => __( 'Found problems before contacting LINE.', 'moksa-for-line' ),
 					'problems' => $problems,
 					'source'   => 'local',
 				)
@@ -177,7 +177,7 @@ class FlexModule {
 		if ( ! TokenManager::is_configured() ) {
 			wp_send_json_success(
 				array(
-					'message' => __( 'Passed the local checks. Connect the Messaging API channel to also validate against LINE.', 'moksa-line' ),
+					'message' => __( 'Passed the local checks. Connect the Messaging API channel to also validate against LINE.', 'moksa-for-line' ),
 					'source'  => 'local',
 				)
 			);
@@ -188,7 +188,7 @@ class FlexModule {
 		if ( is_wp_error( $remote ) ) {
 			wp_send_json_error(
 				array(
-					'message'  => __( 'LINE rejected this template.', 'moksa-line' ),
+					'message'  => __( 'LINE rejected this template.', 'moksa-for-line' ),
 					'problems' => array( $remote->get_error_message() ),
 					'source'   => 'line',
 				)
@@ -197,7 +197,7 @@ class FlexModule {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'LINE accepted this template.', 'moksa-line' ),
+				'message' => __( 'LINE accepted this template.', 'moksa-for-line' ),
 				'source'  => 'line',
 			)
 		);
@@ -212,13 +212,13 @@ class FlexModule {
 		$line_user_id = Ajax::text( 'line_user_id' );
 
 		if ( '' === $line_user_id ) {
-			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-for-line' ) ) );
 		}
 
 		$decoded = Ajax::json_verbatim( 'contents' );
 
 		if ( ! is_array( $decoded ) ) {
-			wp_send_json_error( array( 'message' => __( 'That is not valid JSON.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That is not valid JSON.', 'moksa-for-line' ) ) );
 		}
 
 		$alt_text = Ajax::text( 'alt_text', 'Preview' );
@@ -227,7 +227,7 @@ class FlexModule {
 
 		Ajax::bail( $result );
 
-		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Sent. Check the chat on your phone.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -238,7 +238,7 @@ class FlexModule {
 	public static function starters(): array {
 		return array(
 			'card'    => array(
-				'label'    => __( 'Image card with a button', 'moksa-line' ),
+				'label'    => __( 'Image card with a button', 'moksa-for-line' ),
 				'contents' => array(
 					'type' => 'bubble',
 					'hero' => array(
@@ -259,14 +259,14 @@ class FlexModule {
 						'contents' => array(
 							array(
 								'type'   => 'text',
-								'text'   => __( 'Headline', 'moksa-line' ),
+								'text'   => __( 'Headline', 'moksa-for-line' ),
 								'weight' => 'bold',
 								'size'   => 'xl',
 								'wrap'   => true,
 							),
 							array(
 								'type'  => 'text',
-								'text'  => __( 'A sentence or two about what this is.', 'moksa-line' ),
+								'text'  => __( 'A sentence or two about what this is.', 'moksa-for-line' ),
 								'size'  => 'sm',
 								'color' => '#666666',
 								'wrap'  => true,
@@ -289,7 +289,7 @@ class FlexModule {
 								'color'  => '#06843A',
 								'action' => array(
 									'type'  => 'uri',
-									'label' => __( 'Find out more', 'moksa-line' ),
+									'label' => __( 'Find out more', 'moksa-for-line' ),
 									'uri'   => home_url(),
 								),
 							),
@@ -298,7 +298,7 @@ class FlexModule {
 				),
 			),
 			'receipt' => array(
-				'label'    => __( 'Order summary', 'moksa-line' ),
+				'label'    => __( 'Order summary', 'moksa-for-line' ),
 				'contents' => array(
 					'type' => 'bubble',
 					'body' => array(
@@ -308,7 +308,7 @@ class FlexModule {
 						'contents' => array(
 							array(
 								'type'   => 'text',
-								'text'   => __( 'Order confirmed', 'moksa-line' ),
+								'text'   => __( 'Order confirmed', 'moksa-for-line' ),
 								'weight' => 'bold',
 								'size'   => 'lg',
 							),
@@ -317,7 +317,7 @@ class FlexModule {
 								'type'     => 'box',
 								'layout'   => 'horizontal',
 								'contents' => array(
-									array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line' ), 'size' => 'sm', 'color' => '#767676' ),
+									array( 'type' => 'text', 'text' => __( 'Total', 'moksa-for-line' ), 'size' => 'sm', 'color' => '#767676' ),
 									array( 'type' => 'text', 'text' => 'NT$0', 'size' => 'sm', 'align' => 'end' ),
 								),
 							),
@@ -349,7 +349,7 @@ class FlexModule {
 		// Nothing usable on this site: point at the plugin's own asset, which
 		// is served from the same origin and therefore https wherever the
 		// admin is reachable at all.
-		$fallback = MOKSA_LINE_URL . 'assets/img/flex-placeholder.png';
+		$fallback = MOFOLINE_URL . 'assets/img/flex-placeholder.png';
 
 		return 0 === strpos( $fallback, 'https://' ) ? $fallback : '';
 	}
@@ -358,6 +358,6 @@ class FlexModule {
 	 * Shared nonce and capability check.
 	 */
 	private function guard(): void {
-		Ajax::guard( __( 'You do not have permission to manage templates.', 'moksa-line' ) );
+		Ajax::guard( __( 'You do not have permission to manage templates.', 'moksa-for-line' ) );
 	}
 }

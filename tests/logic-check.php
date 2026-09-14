@@ -81,10 +81,10 @@ require_once $base . '/src/Flex/Validator.php';
 require_once $base . '/src/Api/RichMenuClient.php';
 require_once $base . '/src/Api/MessagingClient.php';
 
-use Moksa\Line\Flex\Validator;
-use Moksa\Line\Api\Signature;
-use Moksa\Line\Support\Crypto;
-use Moksa\Line\Support\Options;
+use Mofoline\Flex\Validator;
+use Mofoline\Api\Signature;
+use Mofoline\Support\Crypto;
+use Mofoline\Support\Options;
 
 $failures = 0;
 
@@ -118,7 +118,7 @@ check( Crypto::encrypt( $secret ) !== $cipher, 'a fresh IV is used each time' );
 
 echo "\nOptions\n";
 Options::set( 'channel_secret', $secret );
-check( Crypto::is_encrypted( get_option( 'moksa_line_channel_secret' ) ), 'secrets are stored encrypted' );
+check( Crypto::is_encrypted( get_option( 'mofoline_channel_secret' ) ), 'secrets are stored encrypted' );
 check( Options::get( 'channel_secret' ) === $secret, 'secrets decrypt on read' );
 check( strpos( Options::mask( 'channel_secret' ), substr( $secret, -4 ) ) !== false, 'mask keeps the last four characters' );
 check( strpos( Options::mask( 'channel_secret' ), substr( $secret, 0, 8 ) ) === false, 'mask hides the beginning' );
@@ -187,20 +187,20 @@ $uuid_v5 = '/^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12
 
 foreach ( array( 'order-48-processing-0', 'receipt-ORD123', '訂單-48', '' ) as $seed ) {
 	check(
-		(bool) preg_match( $uuid_v5, Moksa\Line\Api\MessagingClient::retry_key( $seed ) ),
+		(bool) preg_match( $uuid_v5, Mofoline\Api\MessagingClient::retry_key( $seed ) ),
 		'a retry key from ' . ( '' === $seed ? '(empty)' : $seed ) . ' is a UUID LINE accepts'
 	);
 }
 
 check(
-	Moksa\Line\Api\MessagingClient::retry_key( 'order-48-processing-0' )
-		=== Moksa\Line\Api\MessagingClient::retry_key( 'order-48-processing-0' ),
+	Mofoline\Api\MessagingClient::retry_key( 'order-48-processing-0' )
+		=== Mofoline\Api\MessagingClient::retry_key( 'order-48-processing-0' ),
 	'the same description always yields the same key, so LINE sees a repeat as a retry'
 );
 
 check(
-	Moksa\Line\Api\MessagingClient::retry_key( 'order-48-processing-0' )
-		!== Moksa\Line\Api\MessagingClient::retry_key( 'order-48-completed-0' ),
+	Mofoline\Api\MessagingClient::retry_key( 'order-48-processing-0' )
+		!== Mofoline\Api\MessagingClient::retry_key( 'order-48-completed-0' ),
 	'a different status yields a different key, so a second notification is not swallowed'
 );
 
@@ -215,18 +215,18 @@ $alias_ok = static function ( $value ) {
 
 foreach ( array( '測試選單', '日本語メニュー', '', '---', 'tab群組-第二頁' ) as $name ) {
 	check(
-		$alias_ok( Moksa\Line\Api\RichMenuClient::sanitize_alias_id( $name ) ),
+		$alias_ok( Mofoline\Api\RichMenuClient::sanitize_alias_id( $name ) ),
 		'alias id from ' . ( '' === $name ? '(empty)' : $name ) . ' is a shape LINE accepts'
 	);
 }
 
 check(
-	'main-menu' === Moksa\Line\Api\RichMenuClient::sanitize_alias_id( 'Main Menu' ),
+	'main-menu' === Mofoline\Api\RichMenuClient::sanitize_alias_id( 'Main Menu' ),
 	'a Latin name keeps a readable alias'
 );
 
 check(
-	$alias_ok( Moksa\Line\Api\RichMenuClient::sanitize_alias_id( str_repeat( 'very-long-menu-name-', 5 ) ) ),
+	$alias_ok( Mofoline\Api\RichMenuClient::sanitize_alias_id( str_repeat( 'very-long-menu-name-', 5 ) ) ),
 	'an over-long name is cut without leaving a trailing hyphen'
 );
 

@@ -11,12 +11,12 @@
  * carousel stays editable in the fields afterwards rather than becoming a wall
  * of JSON the shop cannot touch.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Woo;
+namespace Mofoline\Woo;
 
-use Moksa\Line\Support\Logger;
+use Mofoline\Support\Logger;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -84,8 +84,8 @@ class ProductCards {
 	public static function carousel( array $ids ) {
 		if ( ! self::available() ) {
 			return new \WP_Error(
-				'moksa_line_no_woo',
-				__( 'WooCommerce is not active, so there are no products to build from.', 'moksa-line' )
+				'mofoline_no_woo',
+				__( 'WooCommerce is not active, so there are no products to build from.', 'moksa-for-line' )
 			);
 		}
 
@@ -104,8 +104,8 @@ class ProductCards {
 
 		if ( empty( $bubbles ) ) {
 			return new \WP_Error(
-				'moksa_line_no_products',
-				__( 'None of those products could be loaded.', 'moksa-line' )
+				'mofoline_no_products',
+				__( 'None of those products could be loaded.', 'moksa-for-line' )
 			);
 		}
 
@@ -179,8 +179,8 @@ class ProductCards {
 						'action' => array(
 							'type'  => 'uri',
 							'label' => $product->is_in_stock()
-								? __( 'Buy now', 'moksa-line' )
-								: __( 'View', 'moksa-line' ),
+								? __( 'Buy now', 'moksa-for-line' )
+								: __( 'View', 'moksa-for-line' ),
 							// LINE cuts an action label at 20 characters.
 							'uri'   => $link,
 						),
@@ -209,7 +209,7 @@ class ProductCards {
 	 */
 	private static function price_line( $product ): string {
 		if ( ! $product->is_in_stock() ) {
-			return __( 'Out of stock', 'moksa-line' );
+			return __( 'Out of stock', 'moksa-for-line' );
 		}
 
 		// A variable product has a range, not a price.
@@ -225,7 +225,7 @@ class ProductCards {
 				? $min
 				: sprintf(
 					/* translators: 1: lowest price, 2: highest price. */
-					__( '%1$s to %2$s', 'moksa-line' ),
+					__( '%1$s to %2$s', 'moksa-for-line' ),
 					$min,
 					$max
 				);
@@ -244,7 +244,7 @@ class ProductCards {
 				return self::clamp(
 					sprintf(
 						/* translators: 1: current price, 2: the price before the sale. */
-						__( '%1$s (was %2$s)', 'moksa-line' ),
+						__( '%1$s (was %2$s)', 'moksa-for-line' ),
 						$now,
 						$was
 					),

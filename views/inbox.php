@@ -2,13 +2,13 @@
 /**
  * Customer-service inbox.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-use Moksa\Line\Admin\Ajax;
-use Moksa\Line\Inbox\Conversations;
-use Moksa\Line\Inbox\Messages;
-use Moksa\Line\Support\Options;
+use Mofoline\Admin\Ajax;
+use Mofoline\Inbox\Conversations;
+use Mofoline\Inbox\Messages;
+use Mofoline\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,8 +16,8 @@ defined( 'ABSPATH' ) || exit;
 	if ( ! Options::get( 'inbox_enabled' ) ) {
 		printf(
 			'<div class="wrap"><h1>%s</h1><p>%s</p></div>',
-			esc_html__( 'Inbox', 'moksa-line' ),
-			esc_html__( 'The inbox is switched off under LINE > Settings > Messaging API.', 'moksa-line' )
+			esc_html__( 'Inbox', 'moksa-for-line' ),
+			esc_html__( 'The inbox is switched off under LINE > Settings > Messaging API.', 'moksa-for-line' )
 		);
 
 		return;
@@ -36,31 +36,31 @@ defined( 'ABSPATH' ) || exit;
 	?>
 	<?php
 	$status_labels = array(
-		'bot'    => __( 'bot', 'moksa-line' ),
-		'human'  => __( 'human', 'moksa-line' ),
-		'closed' => __( 'closed', 'moksa-line' ),
+		'bot'    => __( 'bot', 'moksa-for-line' ),
+		'human'  => __( 'human', 'moksa-for-line' ),
+		'closed' => __( 'closed', 'moksa-for-line' ),
 	);
 	?>
-	<div class="wrap moksa-line-wrap">
-		<h1><?php esc_html_e( 'Inbox', 'moksa-line' ); ?></h1>
+	<div class="wrap mofoline-wrap">
+		<h1><?php esc_html_e( 'Inbox', 'moksa-for-line' ); ?></h1>
 
 		<p class="description">
-			<?php esc_html_e( 'Only messages received after this plugin was installed appear here. LINE provides no way to read earlier chat history.', 'moksa-line' ); ?>
-			<?php esc_html_e( 'Replies are sent as push messages, which are billed against your channel quota.', 'moksa-line' ); ?>
+			<?php esc_html_e( 'Only messages received after this plugin was installed appear here. LINE provides no way to read earlier chat history.', 'moksa-for-line' ); ?>
+			<?php esc_html_e( 'Replies are sent as push messages, which are billed against your channel quota.', 'moksa-for-line' ); ?>
 		</p>
 
 		<form method="get" class="moksa-inbox__filters">
-			<input type="hidden" name="page" value="moksa-line-inbox" />
-			<label for="moksa-inbox-status" class="screen-reader-text"><?php esc_html_e( 'Which conversations to show', 'moksa-line' ); ?></label>
+			<input type="hidden" name="page" value="mofoline-inbox" />
+			<label for="moksa-inbox-status" class="screen-reader-text"><?php esc_html_e( 'Which conversations to show', 'moksa-for-line' ); ?></label>
 			<select id="moksa-inbox-status" name="status">
-				<option value=""><?php esc_html_e( 'All conversations', 'moksa-line' ); ?></option>
-				<option value="bot" <?php selected( $status, 'bot' ); ?>><?php esc_html_e( 'Handled by the bot', 'moksa-line' ); ?></option>
-				<option value="human" <?php selected( $status, 'human' ); ?>><?php esc_html_e( 'Taken over by a person', 'moksa-line' ); ?></option>
-				<option value="closed" <?php selected( $status, 'closed' ); ?>><?php esc_html_e( 'Closed', 'moksa-line' ); ?></option>
+				<option value=""><?php esc_html_e( 'All conversations', 'moksa-for-line' ); ?></option>
+				<option value="bot" <?php selected( $status, 'bot' ); ?>><?php esc_html_e( 'Handled by the bot', 'moksa-for-line' ); ?></option>
+				<option value="human" <?php selected( $status, 'human' ); ?>><?php esc_html_e( 'Taken over by a person', 'moksa-for-line' ); ?></option>
+				<option value="closed" <?php selected( $status, 'closed' ); ?>><?php esc_html_e( 'Closed', 'moksa-for-line' ); ?></option>
 			</select>
-			<label for="moksa-inbox-search" class="screen-reader-text"><?php esc_html_e( 'Search conversations', 'moksa-line' ); ?></label>
-			<input type="search" id="moksa-inbox-search" class="moksa-search" name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'Search name or message', 'moksa-line' ); ?>" />
-			<?php submit_button( __( 'Filter', 'moksa-line' ), 'secondary', '', false ); ?>
+			<label for="moksa-inbox-search" class="screen-reader-text"><?php esc_html_e( 'Search conversations', 'moksa-for-line' ); ?></label>
+			<input type="search" id="moksa-inbox-search" class="moksa-search" name="s" value="<?php echo esc_attr( $search ); ?>" placeholder="<?php esc_attr_e( 'Search name or message', 'moksa-for-line' ); ?>" />
+			<?php submit_button( __( 'Filter', 'moksa-for-line' ), 'secondary', '', false ); ?>
 		</form>
 
 		<div class="moksa-inbox">
@@ -68,48 +68,48 @@ defined( 'ABSPATH' ) || exit;
 				data-status="<?php echo esc_attr( $status ); ?>"
 				data-search="<?php echo esc_attr( $search ); ?>"
 				data-latest="<?php echo esc_attr( (string) Messages::latest_id() ); ?>">
-				<?php require MOKSA_LINE_DIR . 'views/inbox-list.php'; ?>
+				<?php require MOFOLINE_DIR . 'views/inbox-list.php'; ?>
 			</div>
 
 			<div class="moksa-inbox__thread">
 				<div class="moksa-inbox__header">
-					<strong data-moksa-thread-name><?php esc_html_e( 'Choose a conversation', 'moksa-line' ); ?></strong>
+					<strong data-moksa-thread-name><?php esc_html_e( 'Choose a conversation', 'moksa-for-line' ); ?></strong>
 					<button type="button" class="button button-small" data-moksa-notify-enable hidden>
-						<?php esc_html_e( 'Desktop notifications', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Desktop notifications', 'moksa-for-line' ); ?>
 					</button>
 					<span class="moksa-inbox__actions" hidden data-moksa-thread-actions>
-						<button type="button" class="button" data-moksa-status="human"><?php esc_html_e( 'Take over', 'moksa-line' ); ?></button>
-						<button type="button" class="button" data-moksa-status="bot"><?php esc_html_e( 'Give back to the bot', 'moksa-line' ); ?></button>
-						<button type="button" class="button" data-moksa-status="closed"><?php esc_html_e( 'Close', 'moksa-line' ); ?></button>
+						<button type="button" class="button" data-moksa-status="human"><?php esc_html_e( 'Take over', 'moksa-for-line' ); ?></button>
+						<button type="button" class="button" data-moksa-status="bot"><?php esc_html_e( 'Give back to the bot', 'moksa-for-line' ); ?></button>
+						<button type="button" class="button" data-moksa-status="closed"><?php esc_html_e( 'Close', 'moksa-for-line' ); ?></button>
 					</span>
 				</div>
 
 				<div class="moksa-inbox__messages" data-moksa-thread>
-					<p class="moksa-inbox-empty"><span><?php esc_html_e( 'Pick a conversation on the left to read it and reply.', 'moksa-line' ); ?></span></p>
+					<p class="moksa-inbox-empty"><span><?php esc_html_e( 'Pick a conversation on the left to read it and reply.', 'moksa-for-line' ); ?></span></p>
 				</div>
 
 				<?php // The picker sits above the composer so opening it does not push the send button off screen. ?>
 				<div class="moksa-stickers" data-moksa-sticker-picker hidden>
 					<div class="moksa-stickers__packs">
-						<?php foreach ( \Moksa\Line\Bot\Stickers::packs() as $index => $pack ) : ?>
+						<?php foreach ( \Mofoline\Bot\Stickers::packs() as $index => $pack ) : ?>
 							<button type="button" class="button button-small<?php echo 0 === $index ? ' is-current' : ''; ?>"
 								data-moksa-sticker-pack="<?php echo esc_attr( (string) $pack['package_id'] ); ?>">
 								<?php echo esc_html( (string) $pack['label'] ); ?>
 							</button>
 						<?php endforeach; ?>
 						<span class="description">
-							<?php esc_html_e( 'LINE only accepts these from a bot. Pick one, then press Send. It is billed like any other message.', 'moksa-line' ); ?>
+							<?php esc_html_e( 'LINE only accepts these from a bot. Pick one, then press Send. It is billed like any other message.', 'moksa-for-line' ); ?>
 						</span>
 					</div>
 
-					<?php foreach ( \Moksa\Line\Bot\Stickers::packs() as $index => $pack ) : ?>
+					<?php foreach ( \Mofoline\Bot\Stickers::packs() as $index => $pack ) : ?>
 						<div class="moksa-stickers__grid" data-moksa-sticker-grid="<?php echo esc_attr( (string) $pack['package_id'] ); ?>"<?php echo 0 === $index ? '' : ' hidden'; ?>>
 							<?php for ( $id = (int) $pack['from']; $id <= (int) $pack['to']; $id++ ) : ?>
 								<button type="button" class="moksa-sticker"
 									data-moksa-pick-sticker="<?php echo esc_attr( (string) $pack['package_id'] ); ?>"
 									data-sticker-id="<?php echo esc_attr( (string) $id ); ?>"
 									title="<?php echo esc_attr( $pack['package_id'] . ', ' . $id ); ?>">
-									<img src="<?php echo esc_url( \Moksa\Line\Bot\Stickers::image_url( (string) $id ) ); ?>"
+									<img src="<?php echo esc_url( \Mofoline\Bot\Stickers::image_url( (string) $id ) ); ?>"
 										alt="" width="60" height="60" loading="lazy" />
 								</button>
 							<?php endfor; ?>
@@ -126,9 +126,9 @@ defined( 'ABSPATH' ) || exit;
 					?>
 					<div class="moksa-inbox__tools">
 						<button type="button" class="button moksa-inbox__sticker-toggle" data-moksa-toggle-stickers
-							aria-expanded="false" title="<?php esc_attr_e( 'Send a sticker', 'moksa-line' ); ?>">
+							aria-expanded="false" title="<?php esc_attr_e( 'Send a sticker', 'moksa-for-line' ); ?>">
 							<span aria-hidden="true">☺</span>
-							<span class="screen-reader-text"><?php esc_html_e( 'Send a sticker', 'moksa-line' ); ?></span>
+							<span class="screen-reader-text"><?php esc_html_e( 'Send a sticker', 'moksa-for-line' ); ?></span>
 						</button>
 
 						<?php
@@ -138,18 +138,18 @@ defined( 'ABSPATH' ) || exit;
 						<span class="moksa-reply-sticker" data-moksa-chosen-sticker hidden>
 							<img src="" alt="" width="34" height="34" data-moksa-chosen-sticker-image />
 							<button type="button" class="moksa-reply-sticker__clear" data-moksa-clear-sticker
-								title="<?php esc_attr_e( 'Remove this sticker', 'moksa-line' ); ?>">
+								title="<?php esc_attr_e( 'Remove this sticker', 'moksa-for-line' ); ?>">
 								<span aria-hidden="true">&times;</span>
-								<span class="screen-reader-text"><?php esc_html_e( 'Remove this sticker', 'moksa-line' ); ?></span>
+								<span class="screen-reader-text"><?php esc_html_e( 'Remove this sticker', 'moksa-for-line' ); ?></span>
 							</button>
 						</span>
 					</div>
 
 					<div class="moksa-inbox__compose">
-						<label class="screen-reader-text" for="moksa-reply-text"><?php esc_html_e( 'Reply', 'moksa-line' ); ?></label>
+						<label class="screen-reader-text" for="moksa-reply-text"><?php esc_html_e( 'Reply', 'moksa-for-line' ); ?></label>
 						<?php // Not required: a sticker on its own is a complete reply. ?>
-						<textarea id="moksa-reply-text" rows="3" placeholder="<?php esc_attr_e( 'Write a reply', 'moksa-line' ); ?>"></textarea>
-						<button type="submit" class="button button-primary"><?php esc_html_e( 'Send', 'moksa-line' ); ?></button>
+						<textarea id="moksa-reply-text" rows="3" placeholder="<?php esc_attr_e( 'Write a reply', 'moksa-for-line' ); ?>"></textarea>
+						<button type="submit" class="button button-primary"><?php esc_html_e( 'Send', 'moksa-for-line' ); ?></button>
 					</div>
 				</form>
 			</div>

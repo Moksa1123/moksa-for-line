@@ -7,19 +7,19 @@
  * LIFF ID token with LINE before believing any user id, so a crafted request
  * cannot post into someone else's conversation.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Liff;
+namespace Mofoline\Liff;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Data\Users;
-use Moksa\Line\Admin\AdminModule;
-use Moksa\Line\Admin\Ajax;
-use Moksa\Line\Inbox\Conversations;
-use Moksa\Line\Inbox\Messages;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Support\Db;
+use Mofoline\Data\Users;
+use Mofoline\Admin\AdminModule;
+use Mofoline\Admin\Ajax;
+use Mofoline\Inbox\Conversations;
+use Mofoline\Inbox\Messages;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -28,19 +28,19 @@ defined( 'ABSPATH' ) || exit;
 
 class LiffModule {
 
-	const NAMESPACE_V1 = 'moksa-line/v1';
+	const NAMESPACE_V1 = 'mofoline/v1';
 	const SDK_URL      = 'https://static.line-scdn.net/liff/edge/2/sdk.js';
 	const VERIFY_URL   = 'https://api.line.me/oauth2/v2.1/verify';
 
 	/** The shortcodes a page has to carry to be a LIFF endpoint. */
-	const SHORTCODES = array( 'moksa_liff_profile', 'moksa_line_chat' );
+	const SHORTCODES = array( 'mofoline_liff_profile', 'mofoline_chat' );
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
-		add_shortcode( 'moksa_liff_profile', array( $this, 'shortcode_profile' ) );
-		add_shortcode( 'moksa_line_chat', array( $this, 'shortcode_chat' ) );
+		add_shortcode( 'mofoline_liff_profile', array( $this, 'shortcode_profile' ) );
+		add_shortcode( 'mofoline_chat', array( $this, 'shortcode_chat' ) );
 
-		add_action( 'wp_ajax_moksa_line_liff_create_page', array( $this, 'ajax_create_page' ) );
+		add_action( 'wp_ajax_mofoline_liff_create_page', array( $this, 'ajax_create_page' ) );
 	}
 
 	// --- The endpoint page ----------------------------------------------------------
@@ -55,7 +55,7 @@ class LiffModule {
 	 * @return int Page id, or 0.
 	 */
 	public static function endpoint_page_id(): int {
-		$cached = get_transient( 'moksa_line_liff_page' );
+		$cached = get_transient( 'mofoline_liff_page' );
 
 		if ( is_numeric( $cached ) && ( 0 === (int) $cached || 'publish' === get_post_status( (int) $cached ) ) ) {
 			return (int) $cached;
@@ -73,7 +73,7 @@ class LiffModule {
 			)
 		);
 
-		set_transient( 'moksa_line_liff_page', $id, HOUR_IN_SECONDS );
+		set_transient( 'mofoline_liff_page', $id, HOUR_IN_SECONDS );
 
 		return $id;
 	}
@@ -91,7 +91,7 @@ class LiffModule {
 	 * Create the endpoint page, from the settings screen.
 	 */
 	public function ajax_create_page(): void {
-		Ajax::guard( __( 'You cannot create pages.', 'moksa-line' ), 'publish_pages' );
+		Ajax::guard( __( 'You cannot create pages.', 'moksa-for-line' ), 'publish_pages' );
 
 		$existing = self::endpoint_page_id();
 
@@ -103,16 +103,16 @@ class LiffModule {
 			array(
 				'post_type'    => 'page',
 				'post_status'  => 'publish',
-				'post_title'   => __( 'LINE', 'moksa-line' ),
+				'post_title'   => __( 'LINE', 'moksa-for-line' ),
 				'post_name'    => 'line-app',
-				'post_content' => "<!-- wp:shortcode -->\n[moksa_liff_profile]\n<!-- /wp:shortcode -->\n\n<!-- wp:shortcode -->\n[moksa_line_chat]\n<!-- /wp:shortcode -->",
+				'post_content' => "<!-- wp:shortcode -->\n[mofoline_liff_profile]\n<!-- /wp:shortcode -->\n\n<!-- wp:shortcode -->\n[mofoline_chat]\n<!-- /wp:shortcode -->",
 			),
 			true
 		);
 
 		Ajax::bail( $id, 'Could not create the LIFF page', 'liff' );
 
-		delete_transient( 'moksa_line_liff_page' );
+		delete_transient( 'mofoline_liff_page' );
 
 		wp_send_json_success( array( 'url' => get_permalink( (int) $id ), 'created' => true ) );
 	}
@@ -197,8 +197,8 @@ class LiffModule {
 	public function handle_message( WP_REST_Request $request ) {
 		if ( ! Options::get( 'inbox_enabled' ) ) {
 			return new WP_Error(
-				'moksa_line_inbox_off',
-				__( 'Messaging is not available right now.', 'moksa-line' ),
+				'mofoline_inbox_off',
+				__( 'Messaging is not available right now.', 'moksa-for-line' ),
 				array( 'status' => 503 )
 			);
 		}
@@ -214,8 +214,8 @@ class LiffModule {
 
 		if ( '' === $text ) {
 			return new WP_Error(
-				'moksa_line_empty_message',
-				__( 'Write something first.', 'moksa-line' ),
+				'mofoline_empty_message',
+				__( 'Write something first.', 'moksa-for-line' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -224,8 +224,8 @@ class LiffModule {
 		// send before an agent has had a chance to look at it.
 		if ( ! self::within_rate_limit( $line_user_id ) ) {
 			return new WP_Error(
-				'moksa_line_too_fast',
-				__( 'That is a lot of messages at once. Please wait a moment.', 'moksa-line' ),
+				'mofoline_too_fast',
+				__( 'That is a lot of messages at once. Please wait a moment.', 'moksa-for-line' ),
 				array( 'status' => 429 )
 			);
 		}
@@ -254,7 +254,7 @@ class LiffModule {
 		 * @param string $text         Message text.
 		 * @param string $line_user_id LINE user id.
 		 */
-		do_action( 'moksa_line_liff_message', $text, $line_user_id );
+		do_action( 'mofoline_liff_message', $text, $line_user_id );
 
 		return new WP_REST_Response( array( 'status' => 'received' ), 200 );
 	}
@@ -270,8 +270,8 @@ class LiffModule {
 	public static function verify_id_token( string $id_token ) {
 		if ( '' === $id_token ) {
 			return new WP_Error(
-				'moksa_line_liff_no_token',
-				__( 'This page could not identify you. Reopen it from LINE.', 'moksa-line' ),
+				'mofoline_liff_no_token',
+				__( 'This page could not identify you. Reopen it from LINE.', 'moksa-for-line' ),
 				array( 'status' => 401 )
 			);
 		}
@@ -296,8 +296,8 @@ class LiffModule {
 			Logger::capture( $response, 'Could not verify a LIFF ID token', 'liff' );
 
 			return new WP_Error(
-				'moksa_line_liff_unreachable',
-				__( 'Could not reach LINE to verify this session.', 'moksa-line' ),
+				'mofoline_liff_unreachable',
+				__( 'Could not reach LINE to verify this session.', 'moksa-for-line' ),
 				array( 'status' => 503 )
 			);
 		}
@@ -306,8 +306,8 @@ class LiffModule {
 
 		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) || empty( $claims['sub'] ) ) {
 			return new WP_Error(
-				'moksa_line_liff_invalid',
-				__( 'This session could not be verified. Reopen the page from LINE.', 'moksa-line' ),
+				'mofoline_liff_invalid',
+				__( 'This session could not be verified. Reopen the page from LINE.', 'moksa-for-line' ),
 				array( 'status' => 401 )
 			);
 		}
@@ -317,8 +317,8 @@ class LiffModule {
 
 			if ( ! in_array( $channel_id, $audience, true ) ) {
 				return new WP_Error(
-					'moksa_line_liff_wrong_channel',
-					__( 'This session belongs to a different channel.', 'moksa-line' ),
+					'mofoline_liff_wrong_channel',
+					__( 'This session belongs to a different channel.', 'moksa-for-line' ),
 					array( 'status' => 401 )
 				);
 			}
@@ -333,7 +333,7 @@ class LiffModule {
 	 * @param string $line_user_id LINE user id.
 	 */
 	private static function within_rate_limit( string $line_user_id ): bool {
-		$key   = 'moksa_liff_rate_' . substr( hash( 'sha256', $line_user_id ), 0, 24 );
+		$key   = 'mofoline_liff_rate_' . substr( hash( 'sha256', $line_user_id ), 0, 24 );
 		$count = (int) get_transient( $key );
 
 		if ( $count >= 20 ) {
@@ -358,17 +358,17 @@ class LiffModule {
 				'liff_id' => (string) Options::get( 'liff_id' ),
 			),
 			(array) $atts,
-			'moksa_liff_profile'
+			'mofoline_liff_profile'
 		);
 
 		if ( '' === $atts['liff_id'] ) {
-			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-line' ) );
+			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-for-line' ) );
 		}
 
 		$this->enqueue( $atts['liff_id'] );
 
 		return '<div class="moksa-liff moksa-liff--profile" data-moksa-liff-profile>'
-			. '<p class="moksa-liff__status">' . esc_html__( 'Connecting to LINE...', 'moksa-line' ) . '</p>'
+			. '<p class="moksa-liff__status">' . esc_html__( 'Connecting to LINE...', 'moksa-for-line' ) . '</p>'
 			. '</div>';
 	}
 
@@ -381,11 +381,11 @@ class LiffModule {
 		$atts = shortcode_atts(
 			array(
 				'liff_id'     => (string) Options::get( 'liff_chat_id' ),
-				'placeholder' => __( 'Type your message', 'moksa-line' ),
-				'intro'       => __( 'Send us a message and we will reply in your LINE chat.', 'moksa-line' ),
+				'placeholder' => __( 'Type your message', 'moksa-for-line' ),
+				'intro'       => __( 'Send us a message and we will reply in your LINE chat.', 'moksa-for-line' ),
 			),
 			(array) $atts,
-			'moksa_line_chat'
+			'mofoline_chat'
 		);
 
 		if ( '' === $atts['liff_id'] ) {
@@ -393,7 +393,7 @@ class LiffModule {
 		}
 
 		if ( '' === $atts['liff_id'] ) {
-			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-line' ) );
+			return $this->notice( __( 'No LIFF ID has been configured yet.', 'moksa-for-line' ) );
 		}
 
 		$this->enqueue( $atts['liff_id'] );
@@ -402,12 +402,12 @@ class LiffModule {
 		?>
 		<div class="moksa-liff moksa-liff--chat" data-moksa-liff-chat>
 			<p class="moksa-liff__intro"><?php echo esc_html( $atts['intro'] ); ?></p>
-			<p class="moksa-liff__status" data-moksa-chat-status><?php esc_html_e( 'Connecting to LINE...', 'moksa-line' ); ?></p>
+			<p class="moksa-liff__status" data-moksa-chat-status><?php esc_html_e( 'Connecting to LINE...', 'moksa-for-line' ); ?></p>
 			<form class="moksa-liff__form" data-moksa-chat-form hidden>
-				<label class="screen-reader-text" for="moksa-chat-message"><?php esc_html_e( 'Your message', 'moksa-line' ); ?></label>
+				<label class="screen-reader-text" for="moksa-chat-message"><?php esc_html_e( 'Your message', 'moksa-for-line' ); ?></label>
 				<textarea id="moksa-chat-message" name="message" rows="3" required
 					placeholder="<?php echo esc_attr( $atts['placeholder'] ); ?>"></textarea>
-				<button type="submit" class="moksa-liff__send"><?php esc_html_e( 'Send', 'moksa-line' ); ?></button>
+				<button type="submit" class="moksa-liff__send"><?php esc_html_e( 'Send', 'moksa-for-line' ); ?></button>
 			</form>
 		</div>
 		<?php
@@ -425,16 +425,16 @@ class LiffModule {
 		// supported and would break whenever LINE changes the runtime. The
 		// version is the plugin's rather than the SDK's, since LINE serves an
 		// unversioned edge build; it exists only to make the URL cacheable.
-		wp_enqueue_script( 'moksa-line-liff-sdk', self::SDK_URL, array(), MOKSA_LINE_VERSION, true );
+		wp_enqueue_script( 'mofoline-liff-sdk', self::SDK_URL, array(), MOFOLINE_VERSION, true );
 
 		// Versioned by file time, like every other asset of this plugin. These
 		// two carried the bare plugin version, which never changes between
 		// releases -- so a browser that had front.css once kept it, and a fix
 		// to the avatar's size shipped to nobody who had opened the page before.
 		wp_enqueue_script(
-			'moksa-line-liff',
-			MOKSA_LINE_URL . 'assets/js/liff.js',
-			array( 'moksa-line-liff-sdk' ),
+			'mofoline-liff',
+			MOFOLINE_URL . 'assets/js/liff.js',
+			array( 'mofoline-liff-sdk' ),
 			AdminModule::asset_version( 'assets/js/liff.js' ),
 			true
 		);
@@ -442,31 +442,31 @@ class LiffModule {
 		// The front stylesheet is registered once, by the shortcode module, with
 		// its own version. Enqueuing by handle uses that registration rather
 		// than racing it with a second one under the same name.
-		if ( ! wp_style_is( 'moksa-line-front', 'registered' ) ) {
+		if ( ! wp_style_is( 'mofoline-front', 'registered' ) ) {
 			wp_register_style(
-				'moksa-line-front',
-				MOKSA_LINE_URL . 'assets/css/front.css',
+				'mofoline-front',
+				MOFOLINE_URL . 'assets/css/front.css',
 				array(),
 				AdminModule::asset_version( 'assets/css/front.css' )
 			);
 		}
 
-		wp_enqueue_style( 'moksa-line-front' );
+		wp_enqueue_style( 'mofoline-front' );
 
 		wp_localize_script(
-			'moksa-line-liff',
-			'moksaLineLiff',
+			'mofoline-liff',
+			'mofolineLiff',
 			array(
 				'liffId'     => $liff_id,
 				'sessionUrl' => rest_url( self::NAMESPACE_V1 . '/liff/session' ),
 				'messageUrl' => rest_url( self::NAMESPACE_V1 . '/liff/message' ),
 				'strings'    => array(
 					/* translators: %s: the visitor's LINE display name. */
-					'greeting'  => __( 'Hello, %s', 'moksa-line' ),
-					'sending'   => __( 'Sending...', 'moksa-line' ),
-					'sent'      => __( 'Sent. We will reply in your LINE chat.', 'moksa-line' ),
-					'failed'    => __( 'That did not send. Please try again.', 'moksa-line' ),
-					'notInLine' => __( 'Open this page from LINE to continue.', 'moksa-line' ),
+					'greeting'  => __( 'Hello, %s', 'moksa-for-line' ),
+					'sending'   => __( 'Sending...', 'moksa-for-line' ),
+					'sent'      => __( 'Sent. We will reply in your LINE chat.', 'moksa-for-line' ),
+					'failed'    => __( 'That did not send. Please try again.', 'moksa-for-line' ),
+					'notInLine' => __( 'Open this page from LINE to continue.', 'moksa-for-line' ),
 				),
 			)
 		);

@@ -7,13 +7,13 @@
  * told their order shipped?" is a question a shop has to be able to answer
  * after the fact, and a log that only records failures cannot answer it.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Woo;
+namespace Mofoline\Woo;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Support\Migrator;
+use Mofoline\Support\Db;
+use Mofoline\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
 

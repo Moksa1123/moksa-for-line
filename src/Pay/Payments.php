@@ -7,13 +7,13 @@
  * differs from the reservation, and a cart that changed in another tab would
  * otherwise break checkout in a way that is very hard to diagnose.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Pay;
+namespace Mofoline\Pay;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Support\Migrator;
+use Mofoline\Support\Db;
+use Mofoline\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
 

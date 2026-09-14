@@ -2,13 +2,13 @@
 /**
  * Order notification history.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-use Moksa\Line\Admin\Ajax;
-use Moksa\Line\Support\Options;
-use Moksa\Line\Woo\NotifyHistory;
-use Moksa\Line\Woo\NotifyTemplates;
+use Mofoline\Admin\Ajax;
+use Mofoline\Support\Options;
+use Mofoline\Woo\NotifyHistory;
+use Mofoline\Woo\NotifyTemplates;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,8 +16,8 @@ defined( 'ABSPATH' ) || exit;
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		printf(
 			'<div class="wrap"><h1>%s</h1><p>%s</p></div>',
-			esc_html__( 'Order notifications', 'moksa-line' ),
-			esc_html__( 'WooCommerce is not active, so there is nothing to notify about.', 'moksa-line' )
+			esc_html__( 'Order notifications', 'moksa-for-line' ),
+			esc_html__( 'WooCommerce is not active, so there is nothing to notify about.', 'moksa-for-line' )
 		);
 
 		return;
@@ -38,15 +38,15 @@ defined( 'ABSPATH' ) || exit;
 	$tally = NotifyHistory::tally( 30 );
 	$pages = (int) ceil( $list['total'] / 30 );
 	?>
-	<div class="wrap moksa-line-wrap">
-		<h1><?php esc_html_e( 'Order notifications', 'moksa-line' ); ?></h1>
+	<div class="wrap mofoline-wrap">
+		<h1><?php esc_html_e( 'Order notifications', 'moksa-for-line' ); ?></h1>
 
 		<?php if ( ! Options::get( 'woo_notify' ) ) : ?>
 			<div class="notice notice-warning">
 				<p>
-					<?php esc_html_e( 'Order notifications are switched off, so nothing is being sent.', 'moksa-line' ); ?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=moksa-line-settings&tab=woo' ) ); ?>">
-						<?php esc_html_e( 'Turn them on', 'moksa-line' ); ?>
+					<?php esc_html_e( 'Order notifications are switched off, so nothing is being sent.', 'moksa-for-line' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=mofoline-settings&tab=woo' ) ); ?>">
+						<?php esc_html_e( 'Turn them on', 'moksa-for-line' ); ?>
 					</a>
 				</p>
 			</div>
@@ -55,11 +55,11 @@ defined( 'ABSPATH' ) || exit;
 		<div class="moksa-cards">
 			<div class="moksa-card">
 				<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( $tally['sent'] ) ); ?></span>
-				<span class="moksa-card__label"><?php esc_html_e( 'Delivered in the last 30 days', 'moksa-line' ); ?></span>
+				<span class="moksa-card__label"><?php esc_html_e( 'Delivered in the last 30 days', 'moksa-for-line' ); ?></span>
 			</div>
 			<div class="moksa-card">
 				<span class="moksa-card__number"><?php echo esc_html( number_format_i18n( $tally['failed'] ) ); ?></span>
-				<span class="moksa-card__label"><?php esc_html_e( 'Failed in the last 30 days', 'moksa-line' ); ?></span>
+				<span class="moksa-card__label"><?php esc_html_e( 'Failed in the last 30 days', 'moksa-for-line' ); ?></span>
 			</div>
 			<div class="moksa-card">
 				<span class="moksa-card__number">
@@ -71,49 +71,49 @@ defined( 'ABSPATH' ) || exit;
 					);
 					?>
 				</span>
-				<span class="moksa-card__label"><?php esc_html_e( 'Active templates', 'moksa-line' ); ?></span>
+				<span class="moksa-card__label"><?php esc_html_e( 'Active templates', 'moksa-for-line' ); ?></span>
 			</div>
 		</div>
 
 		<p>
 			<a class="button button-primary" href="<?php echo esc_url( admin_url( 'post-new.php?post_type=' . NotifyTemplates::POST_TYPE ) ); ?>">
-				<?php esc_html_e( 'Add a notification template', 'moksa-line' ); ?>
+				<?php esc_html_e( 'Add a notification template', 'moksa-for-line' ); ?>
 			</a>
 			<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . NotifyTemplates::POST_TYPE ) ); ?>">
-				<?php esc_html_e( 'Manage templates', 'moksa-line' ); ?>
+				<?php esc_html_e( 'Manage templates', 'moksa-for-line' ); ?>
 			</a>
 		</p>
 
 		<form method="get" class="moksa-inbox__filters">
-			<input type="hidden" name="page" value="moksa-line-notifications" />
-			<label for="moksa-notify-status" class="screen-reader-text"><?php esc_html_e( 'Which results to show', 'moksa-line' ); ?></label>
+			<input type="hidden" name="page" value="mofoline-notifications" />
+			<label for="moksa-notify-status" class="screen-reader-text"><?php esc_html_e( 'Which results to show', 'moksa-for-line' ); ?></label>
 			<select id="moksa-notify-status" name="status">
-				<option value=""><?php esc_html_e( 'All results', 'moksa-line' ); ?></option>
-				<option value="sent" <?php selected( $status, 'sent' ); ?>><?php esc_html_e( 'Delivered', 'moksa-line' ); ?></option>
-				<option value="failed" <?php selected( $status, 'failed' ); ?>><?php esc_html_e( 'Failed', 'moksa-line' ); ?></option>
-				<option value="pending" <?php selected( $status, 'pending' ); ?>><?php esc_html_e( 'Never settled', 'moksa-line' ); ?></option>
-				<option value="unknown" <?php selected( $status, 'unknown' ); ?>><?php esc_html_e( 'Imported, result unknown', 'moksa-line' ); ?></option>
+				<option value=""><?php esc_html_e( 'All results', 'moksa-for-line' ); ?></option>
+				<option value="sent" <?php selected( $status, 'sent' ); ?>><?php esc_html_e( 'Delivered', 'moksa-for-line' ); ?></option>
+				<option value="failed" <?php selected( $status, 'failed' ); ?>><?php esc_html_e( 'Failed', 'moksa-for-line' ); ?></option>
+				<option value="pending" <?php selected( $status, 'pending' ); ?>><?php esc_html_e( 'Never settled', 'moksa-for-line' ); ?></option>
+				<option value="unknown" <?php selected( $status, 'unknown' ); ?>><?php esc_html_e( 'Imported, result unknown', 'moksa-for-line' ); ?></option>
 			</select>
-			<label for="moksa-notify-order" class="screen-reader-text"><?php esc_html_e( 'Order number', 'moksa-line' ); ?></label>
+			<label for="moksa-notify-order" class="screen-reader-text"><?php esc_html_e( 'Order number', 'moksa-for-line' ); ?></label>
 			<input type="number" id="moksa-notify-order" name="order_id" value="<?php echo esc_attr( $order_id ? (string) $order_id : '' ); ?>"
-				placeholder="<?php esc_attr_e( 'Order id', 'moksa-line' ); ?>" class="small-text" />
-			<?php submit_button( __( 'Filter', 'moksa-line' ), 'secondary', '', false ); ?>
+				placeholder="<?php esc_attr_e( 'Order id', 'moksa-for-line' ); ?>" class="small-text" />
+			<?php submit_button( __( 'Filter', 'moksa-for-line' ), 'secondary', '', false ); ?>
 		</form>
 
 		<table class="widefat striped">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'When', 'moksa-line' ); ?></th>
-					<th><?php esc_html_e( 'Order', 'moksa-line' ); ?></th>
-					<th><?php esc_html_e( 'Status', 'moksa-line' ); ?></th>
-					<th><?php esc_html_e( 'Recipient', 'moksa-line' ); ?></th>
-					<th><?php esc_html_e( 'Template', 'moksa-line' ); ?></th>
-					<th><?php esc_html_e( 'Result', 'moksa-line' ); ?></th>
+					<th><?php esc_html_e( 'When', 'moksa-for-line' ); ?></th>
+					<th><?php esc_html_e( 'Order', 'moksa-for-line' ); ?></th>
+					<th><?php esc_html_e( 'Status', 'moksa-for-line' ); ?></th>
+					<th><?php esc_html_e( 'Recipient', 'moksa-for-line' ); ?></th>
+					<th><?php esc_html_e( 'Template', 'moksa-for-line' ); ?></th>
+					<th><?php esc_html_e( 'Result', 'moksa-for-line' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php if ( empty( $list['rows'] ) ) : ?>
-					<tr><td colspan="6"><?php esc_html_e( 'Nothing sent yet.', 'moksa-line' ); ?></td></tr>
+					<tr><td colspan="6"><?php esc_html_e( 'Nothing sent yet.', 'moksa-for-line' ); ?></td></tr>
 				<?php endif; ?>
 
 				<?php foreach ( $list['rows'] as $row ) : ?>
@@ -153,7 +153,7 @@ defined( 'ABSPATH' ) || exit;
 									esc_html( get_the_title( $template ) )
 								);
 							} else {
-								esc_html_e( 'Built-in card', 'moksa-line' );
+								esc_html_e( 'Built-in card', 'moksa-for-line' );
 							}
 							?>
 						</td>
@@ -167,7 +167,7 @@ defined( 'ABSPATH' ) || exit;
 								<button type="button" class="button button-small" data-moksa-resend-notification
 									data-order="<?php echo esc_attr( (string) (int) $row->order_id ); ?>"
 									data-status="<?php echo esc_attr( (string) $row->order_status ); ?>">
-									<?php esc_html_e( 'Send again', 'moksa-line' ); ?>
+									<?php esc_html_e( 'Send again', 'moksa-for-line' ); ?>
 								</button>
 							<?php endif; ?>
 						</td>

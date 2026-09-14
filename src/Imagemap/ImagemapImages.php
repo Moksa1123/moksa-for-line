@@ -15,12 +15,12 @@
  * once per recipient device class and resizing on the fly would be paid for
  * over and over.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Imagemap;
+namespace Mofoline\Imagemap;
 
-use Moksa\Line\Support\Logger;
+use Mofoline\Support\Logger;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -46,8 +46,8 @@ class ImagemapImages {
 		$uploads = wp_upload_dir();
 
 		return array(
-			'path' => trailingslashit( $uploads['basedir'] ) . 'moksa-line/imagemap',
-			'url'  => trailingslashit( $uploads['baseurl'] ) . 'moksa-line/imagemap',
+			'path' => trailingslashit( $uploads['basedir'] ) . 'moksa-for-line/imagemap',
+			'url'  => trailingslashit( $uploads['baseurl'] ) . 'moksa-for-line/imagemap',
 		);
 	}
 
@@ -73,8 +73,8 @@ class ImagemapImages {
 
 		if ( ! $source || ! file_exists( $source ) ) {
 			return new WP_Error(
-				'moksa_line_imagemap_no_file',
-				__( 'That image could not be read from the media library.', 'moksa-line' )
+				'mofoline_imagemap_no_file',
+				__( 'That image could not be read from the media library.', 'moksa-for-line' )
 			);
 		}
 
@@ -82,8 +82,8 @@ class ImagemapImages {
 
 		if ( ! $size || empty( $size[0] ) ) {
 			return new WP_Error(
-				'moksa_line_imagemap_no_size',
-				__( 'Could not read the image dimensions.', 'moksa-line' )
+				'mofoline_imagemap_no_size',
+				__( 'Could not read the image dimensions.', 'moksa-for-line' )
 			);
 		}
 
@@ -91,10 +91,10 @@ class ImagemapImages {
 
 		if ( $source_width < 1040 ) {
 			return new WP_Error(
-				'moksa_line_imagemap_too_small',
+				'mofoline_imagemap_too_small',
 				sprintf(
 					/* translators: %d: the image's width in pixels. */
-					__( 'The image is only %d pixels wide. An imagemap needs at least 1040, because LINE renders it at that width.', 'moksa-line' ),
+					__( 'The image is only %d pixels wide. An imagemap needs at least 1040, because LINE renders it at that width.', 'moksa-for-line' ),
 					(int) $source_width
 				)
 			);
@@ -104,8 +104,8 @@ class ImagemapImages {
 
 		if ( ! wp_mkdir_p( $dir['path'] ) ) {
 			return new WP_Error(
-				'moksa_line_imagemap_no_dir',
-				__( 'Could not create the folder for the imagemap images.', 'moksa-line' )
+				'mofoline_imagemap_no_dir',
+				__( 'Could not create the folder for the imagemap images.', 'moksa-for-line' )
 			);
 		}
 
@@ -137,10 +137,10 @@ class ImagemapImages {
 
 			if ( $bytes > self::MAX_BYTES ) {
 				return new WP_Error(
-					'moksa_line_imagemap_too_big',
+					'mofoline_imagemap_too_big',
 					sprintf(
 						/* translators: 1: width in pixels, 2: file size. */
-						__( 'The %1$dpx copy came out at %2$s, over the 1 MB LINE allows. Use a simpler or smaller image.', 'moksa-line' ),
+						__( 'The %1$dpx copy came out at %2$s, over the 1 MB LINE allows. Use a simpler or smaller image.', 'moksa-for-line' ),
 						$width,
 						size_format( $bytes )
 					)

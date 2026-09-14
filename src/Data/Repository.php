@@ -6,13 +6,13 @@
  * real query logic (users, events, conversations) keeps its own class rather
  * than being bent into a generic shape.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Data;
+namespace Mofoline\Data;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Support\Migrator;
+use Mofoline\Support\Db;
+use Mofoline\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
 

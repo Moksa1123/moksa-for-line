@@ -28,7 +28,7 @@
 	var MAX_BUBBLES = 12;
 
 	function strings() {
-		return (window.moksaLine && window.moksaLine.strings) || {};
+		return (window.mofoline && window.mofoline.strings) || {};
 	}
 
 	function t(key, fallback) {
@@ -566,9 +566,9 @@
 
 		this.$list.html($('<p class="moksa-cards-note"></p>').text(t('working', 'Working...')));
 
-		$.post(moksaLine.ajaxUrl, {
-			action: 'moksa_line_flex_products',
-			nonce: moksaLine.nonce,
+		$.post(mofoline.ajaxUrl, {
+			action: 'mofoline_flex_products',
+			nonce: mofoline.nonce,
 			search: search
 		}).done(function (response) {
 			if (!response || !response.success) {
@@ -661,9 +661,9 @@
 
 		this.$insert.prop('disabled', true);
 
-		$.post(moksaLine.ajaxUrl, {
-			action: 'moksa_line_flex_product_cards',
-			nonce: moksaLine.nonce,
+		$.post(mofoline.ajaxUrl, {
+			action: 'mofoline_flex_product_cards',
+			nonce: mofoline.nonce,
 			ids: this.chosen
 		}).done(function (response) {
 			self.$insert.prop('disabled', false);

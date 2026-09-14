@@ -12,10 +12,10 @@
  * Writes go through the same insert/update/delete WordPress offers, which
  * take a column map and a format list and never see raw SQL.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Support;
+namespace Mofoline\Support;
 
 use wpdb;
 

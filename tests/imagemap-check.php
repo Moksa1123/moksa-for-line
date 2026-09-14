@@ -11,16 +11,16 @@
  *
  * Creates an attachment and the derived files, and deletes both again.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-use Moksa\Line\Imagemap\ImagemapImages;
+use Mofoline\Imagemap\ImagemapImages;
 
-if ( 'production' === wp_get_environment_type() && ! defined( 'MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
+if ( 'production' === wp_get_environment_type() && ! defined( 'MOFOLINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
 	echo "REFUSED: this site reports WP_ENVIRONMENT_TYPE=production.\n";
 	echo "It creates and deletes an attachment and its imagemap renditions.\n";
 	echo "If this really is a throwaway site, set WP_ENVIRONMENT_TYPE, or define\n";
-	echo "MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.\n";
+	echo "MOFOLINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.\n";
 	return;
 }
 
@@ -93,7 +93,7 @@ foreach ( ImagemapImages::WIDTHS as $w ) {
 }
 
 echo "\nThe URL LINE is given\n";
-$base = \Moksa\Line\Imagemap\ImagemapModule::base_url( $imagemap_id );
+$base = \Mofoline\Imagemap\ImagemapModule::base_url( $imagemap_id );
 im_check( 0 === strpos( $base, 'https://' ), 'is https, which LINE requires', $base );
 im_check( ! preg_match( '/\.(jpg|jpeg|png)$/i', $base ), 'carries no file extension, which LINE refuses', $base );
 im_check( false === strpos( $base, '?' ), 'is a path rather than a query string', $base );

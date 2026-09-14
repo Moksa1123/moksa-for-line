@@ -5,10 +5,10 @@
  * Nothing else can make one, so holding one is proof of preparation. The
  * SQL inside is read only by Db, which is the only thing that runs it.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Support;
+namespace Mofoline\Support;
 
 defined( 'ABSPATH' ) || exit;
 

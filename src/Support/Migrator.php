@@ -8,13 +8,15 @@
  * every load when the stored version is behind, so schema changes never depend
  * on the activation hook firing.
  *
- * It also imports that plugin's data, which is possible because both share the
- * moksa_line_ option and table prefix.
+ * It also imports that plugin's data. That plugin kept everything under the
+ * moksa_line_ prefix; this one uses mofoline_, so the import begins by
+ * copying options, tables and user meta across, and then upgrades the copies
+ * in place.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Support;
+namespace Mofoline\Support;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,6 +28,9 @@ class Migrator {
 	 * moves when they do.
 	 */
 	const DB_VERSION = '1.0.4';
+
+	/** The option, table and user-meta prefix of the plugin this one replaces. */
+	const LEGACY_PREFIX = 'moksa_line_';
 
 	/**
 	 * Run dbDelta when the stored version is behind the code version.
@@ -41,6 +46,12 @@ class Migrator {
 		// feature that silently does nothing into a self-healing no-op.
 		if ( ! $force && version_compare( $installed, self::DB_VERSION, '>=' ) && ! self::tables_missing() ) {
 			return;
+		}
+
+		// Copies first, so that dbDelta upgrades the copied tables the same way
+		// it upgrades everything else.
+		if ( '' === $installed || '0' === $installed ) {
+			self::copy_from_legacy();
 		}
 
 		self::install();
@@ -70,13 +81,13 @@ class Migrator {
 	 * hour without anyone reinstalling the plugin.
 	 */
 	private static function tables_missing(): bool {
-		$cached = get_transient( 'moksa_line_schema_ok' );
+		$cached = get_transient( 'mofoline_schema_ok' );
 
 		if ( '1' === $cached ) {
 			return false;
 		}
 
-		$prefix = Db::prefix() . 'moksa_line_';
+		$prefix = Db::prefix() . 'mofoline_';
 
 		$found = (array) Db::get_col( Db::prepare( 'SHOW TABLES LIKE %s', Db::esc_like( $prefix ) . '%' ) );
 
@@ -89,7 +100,7 @@ class Migrator {
 		$missing = array_diff( $expected, $found );
 
 		if ( empty( $missing ) ) {
-			set_transient( 'moksa_line_schema_ok', '1', HOUR_IN_SECONDS );
+			set_transient( 'mofoline_schema_ok', '1', HOUR_IN_SECONDS );
 
 			return false;
 		}
@@ -101,7 +112,7 @@ class Migrator {
 	 * Create or update every table.
 	 */
 	public static function install(): void {
-		delete_transient( 'moksa_line_schema_ok' );
+		delete_transient( 'mofoline_schema_ok' );
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -114,7 +125,7 @@ class Migrator {
 	 * Fully qualified table name for a logical table key.
 	 */
 	public static function table( string $key ): string {
-		return Db::prefix() . 'moksa_line_' . $key;
+		return Db::prefix() . 'mofoline_' . $key;
 	}
 
 	/**
@@ -405,12 +416,100 @@ class Migrator {
 	}
 
 	/**
+	 * Bring the old plugin's options, tables and user meta under this prefix.
+	 *
+	 * Runs once, before the schema is installed, and only on a site that has
+	 * never recorded a schema version. Nothing is moved: the old rows stay
+	 * where they were, so the old plugin keeps working until it is removed,
+	 * and running this again finds every target already present and does
+	 * nothing.
+	 */
+	private static function copy_from_legacy(): void {
+		$legacy_prefix = Db::prefix() . self::LEGACY_PREFIX;
+
+		// Tables: a copy with the old plugin's own columns; dbDelta then brings
+		// each up to the current schema and migrate_from_legacy() fills the
+		// columns that were renamed.
+		foreach ( self::table_keys() as $key ) {
+			$legacy = $legacy_prefix . $key;
+			$target = self::table( $key );
+
+			if ( ! self::table_exists( $legacy ) || self::table_exists( $target ) ) {
+				continue;
+			}
+
+			Db::query( Db::prepare( 'CREATE TABLE %i LIKE %i', $target, $legacy ) );
+			Db::query( Db::prepare( 'INSERT INTO %i SELECT * FROM %i', $target, $legacy ) );
+		}
+
+		// Options: every moksa_line_* option that has no mofoline_* counterpart
+		// yet. The schema version is left behind on purpose, so the upgrade
+		// steps still run against the copied tables.
+		$options = Db::core_table( 'options' );
+		$rows    = Db::get_results(
+			Db::prepare(
+				'SELECT option_name, option_value FROM %i WHERE option_name LIKE %s',
+				$options,
+				Db::esc_like( self::LEGACY_PREFIX ) . '%'
+			)
+		);
+
+		foreach ( $rows as $row ) {
+			$key = substr( (string) $row->option_name, strlen( self::LEGACY_PREFIX ) );
+
+			if ( 'db_version' === $key || false !== get_option( Options::PREFIX . $key, false ) ) {
+				continue;
+			}
+
+			add_option( Options::PREFIX . $key, maybe_unserialize( $row->option_value ), '', false );
+		}
+
+		// User meta: the account binding, the cached avatar and the member code.
+		$usermeta = Db::core_table( 'usermeta' );
+
+		foreach ( array( 'user_id', 'avatar', 'member_code' ) as $suffix ) {
+			$old = ( 'member_code' === $suffix ? '_' : '' ) . self::LEGACY_PREFIX . $suffix;
+			$new = ( 'member_code' === $suffix ? '_' : '' ) . Options::PREFIX . $suffix;
+
+			Db::query(
+				Db::prepare(
+					'INSERT INTO %i (user_id, meta_key, meta_value)
+					 SELECT m.user_id, %s, m.meta_value FROM %i m
+					 WHERE m.meta_key = %s
+					   AND NOT EXISTS ( SELECT 1 FROM %i n WHERE n.user_id = m.user_id AND n.meta_key = %s )',
+					$usermeta,
+					$new,
+					$usermeta,
+					$old,
+					$usermeta,
+					$new
+				)
+			);
+		}
+
+		// The old plugin's daily job is not ours to run.
+		wp_clear_scheduled_hook( self::LEGACY_PREFIX . 'daily_maintenance' );
+	}
+
+	/**
+	 * Whether a table exists.
+	 *
+	 * @param string $table Fully qualified table name.
+	 */
+	private static function table_exists( string $table ): bool {
+		return (string) Db::get_var( Db::prepare( 'SHOW TABLES LIKE %s', $table ) ) === $table;
+	}
+
+	/**
 	 * Import data left behind by the Moksa LINE Login plugin this one replaces.
 	 *
-	 * That plugin shared the moksa_line_ option and table prefix, so installing
-	 * this one on a site that ran it finds its data already there. The import
-	 * is guarded by the stored schema version and every step is written to be
-	 * safe to repeat, because a half-finished upgrade must be resumable.
+	 * By the time this runs, copy_from_legacy() has brought that plugin's
+	 * options and tables under this prefix and dbDelta has added the columns
+	 * the current schema needs. What is left is the data inside: secrets in
+	 * the clear, settings under old names, columns that were renamed. The
+	 * import is guarded by the stored schema version and every step is
+	 * written to be safe to repeat, because a half-finished upgrade must be
+	 * resumable.
 	 *
 	 * @param string $from Previously installed db_version ('0' when there is none).
 	 */
@@ -420,8 +519,7 @@ class Migrator {
 			return;
 		}
 
-		// 1. Settings kept their moksa_line_ prefix, so most carry over as-is.
-		//    Secrets, however, were stored in the clear and must be encrypted.
+		// 1. Secrets were stored in the clear and must be encrypted.
 		foreach ( array( 'channel_secret', 'messaging_secret', 'messaging_token', 'pay_channel_secret' ) as $key ) {
 			$raw = get_option( Options::PREFIX . $key, '' );
 
@@ -434,10 +532,10 @@ class Migrator {
 		//    when the new key is still at its default, so a deliberate choice
 		//    made here is never overwritten by an old one.
 		$renamed = array(
-			'moksa_line_n8n_webhook_url'             => 'webhook_forward_url',
-			'moksa_line_order_delay'                 => 'woo_notify_delay',
-			'moksa_line_order_processing_delay'      => 'woo_tracking_delay',
-			'moksa_line_order_processing_max_retries' => 'woo_tracking_retries',
+			Options::PREFIX . 'n8n_webhook_url'             => 'webhook_forward_url',
+			Options::PREFIX . 'order_delay'                 => 'woo_notify_delay',
+			Options::PREFIX . 'order_processing_delay'      => 'woo_tracking_delay',
+			Options::PREFIX . 'order_processing_max_retries' => 'woo_tracking_retries',
 		);
 
 		$schema = Options::schema();

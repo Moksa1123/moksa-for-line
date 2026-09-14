@@ -7,13 +7,13 @@
  * account is actually linked, which is why the login flow must never assume a
  * row implies a WordPress user.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Data;
+namespace Mofoline\Data;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Support\Migrator;
+use Mofoline\Support\Db;
+use Mofoline\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -114,7 +114,7 @@ class Users {
 	 */
 	public static function link( string $line_user_id, int $wp_user_id ): void {
 		self::upsert( $line_user_id, array( 'wp_user_id' => $wp_user_id ) );
-		update_user_meta( $wp_user_id, 'moksa_line_user_id', $line_user_id );
+		update_user_meta( $wp_user_id, 'mofoline_user_id', $line_user_id );
 	}
 
 	/**
@@ -132,8 +132,8 @@ class Users {
 			array( '%d' )
 		);
 
-		delete_user_meta( $wp_user_id, 'moksa_line_user_id' );
-		delete_user_meta( $wp_user_id, 'moksa_line_avatar' );
+		delete_user_meta( $wp_user_id, 'mofoline_user_id' );
+		delete_user_meta( $wp_user_id, 'mofoline_avatar' );
 	}
 
 	/**

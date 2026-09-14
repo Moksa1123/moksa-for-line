@@ -10,18 +10,18 @@
  * The local rows are the source of truth; publishing reconciles LINE to match
  * them, so a half-finished publish can simply be run again.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\RichMenu;
+namespace Mofoline\RichMenu;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Data\Repository;
-use Moksa\Line\Api\RichMenuClient;
-use Moksa\Line\Support\Files;
-use Moksa\Line\Support\Logger;
+use Mofoline\Support\Db;
+use Mofoline\Data\Repository;
+use Mofoline\Api\RichMenuClient;
+use Mofoline\Support\Files;
+use Mofoline\Support\Logger;
 use WP_Error;
-use Moksa\Line\Admin\Ajax;
+use Mofoline\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -53,11 +53,11 @@ class RichMenuModule extends Repository {
 	}
 
 	public function register(): void {
-		add_action( 'wp_ajax_moksa_line_richmenu_save', array( $this, 'ajax_save' ) );
-		add_action( 'wp_ajax_moksa_line_richmenu_delete', array( $this, 'ajax_delete' ) );
-		add_action( 'wp_ajax_moksa_line_richmenu_publish', array( $this, 'ajax_publish' ) );
-		add_action( 'wp_ajax_moksa_line_richmenu_default', array( $this, 'ajax_set_default' ) );
-		add_action( 'wp_ajax_moksa_line_richmenu_sync', array( $this, 'ajax_sync' ) );
+		add_action( 'wp_ajax_mofoline_richmenu_save', array( $this, 'ajax_save' ) );
+		add_action( 'wp_ajax_mofoline_richmenu_delete', array( $this, 'ajax_delete' ) );
+		add_action( 'wp_ajax_mofoline_richmenu_publish', array( $this, 'ajax_publish' ) );
+		add_action( 'wp_ajax_mofoline_richmenu_default', array( $this, 'ajax_set_default' ) );
+		add_action( 'wp_ajax_mofoline_richmenu_sync', array( $this, 'ajax_sync' ) );
 	}
 
 	// --- Publishing ------------------------------------------------------------
@@ -77,7 +77,7 @@ class RichMenuModule extends Repository {
 		$row = self::find( $id );
 
 		if ( ! $row ) {
-			return new WP_Error( 'moksa_line_menu_missing', __( 'That rich menu no longer exists.', 'moksa-line' ) );
+			return new WP_Error( 'mofoline_menu_missing', __( 'That rich menu no longer exists.', 'moksa-for-line' ) );
 		}
 
 		$image = self::image_bytes( (int) $row->image_attachment_id );
@@ -90,8 +90,8 @@ class RichMenuModule extends Repository {
 
 		if ( ! is_array( $areas ) || empty( $areas ) ) {
 			return new WP_Error(
-				'moksa_line_menu_no_areas',
-				__( 'This rich menu has no tappable areas yet.', 'moksa-line' )
+				'mofoline_menu_no_areas',
+				__( 'This rich menu has no tappable areas yet.', 'moksa-for-line' )
 			);
 		}
 
@@ -99,7 +99,7 @@ class RichMenuModule extends Repository {
 			'size'        => RichMenuClient::size( (string) $row->size ),
 			'selected'    => (bool) $row->selected,
 			'name'        => mb_substr( (string) $row->name, 0, 300 ),
-			'chatBarText' => mb_substr( '' !== $row->chat_bar_text ? (string) $row->chat_bar_text : __( 'Menu', 'moksa-line' ), 0, 14 ),
+			'chatBarText' => mb_substr( '' !== $row->chat_bar_text ? (string) $row->chat_bar_text : __( 'Menu', 'moksa-for-line' ), 0, 14 ),
 			'areas'       => self::normalize_areas( $areas, (string) $row->size ),
 		);
 
@@ -112,7 +112,7 @@ class RichMenuModule extends Repository {
 		$new_id = isset( $created['richMenuId'] ) ? (string) $created['richMenuId'] : '';
 
 		if ( '' === $new_id ) {
-			return new WP_Error( 'moksa_line_menu_no_id', __( 'LINE accepted the menu but did not return an id.', 'moksa-line' ) );
+			return new WP_Error( 'mofoline_menu_no_id', __( 'LINE accepted the menu but did not return an id.', 'moksa-for-line' ) );
 		}
 
 		$uploaded = RichMenuClient::upload_image( $new_id, $image['bytes'], $image['mime'] );
@@ -365,8 +365,8 @@ class RichMenuModule extends Repository {
 	private static function image_bytes( int $attachment_id ) {
 		if ( $attachment_id <= 0 ) {
 			return new WP_Error(
-				'moksa_line_menu_no_image',
-				__( 'Choose a menu image first. LINE requires one, 2500px wide and either 1686px or 843px tall.', 'moksa-line' )
+				'mofoline_menu_no_image',
+				__( 'Choose a menu image first. LINE requires one, 2500px wide and either 1686px or 843px tall.', 'moksa-for-line' )
 			);
 		}
 
@@ -374,8 +374,8 @@ class RichMenuModule extends Repository {
 
 		if ( ! $path || ! is_readable( $path ) ) {
 			return new WP_Error(
-				'moksa_line_menu_image_unreadable',
-				__( 'The selected image could not be read from the media library.', 'moksa-line' )
+				'mofoline_menu_image_unreadable',
+				__( 'The selected image could not be read from the media library.', 'moksa-for-line' )
 			);
 		}
 
@@ -389,8 +389,8 @@ class RichMenuModule extends Repository {
 
 		if ( false === $bytes ) {
 			return new WP_Error(
-				'moksa_line_menu_image_unreadable',
-				__( 'The selected image could not be read from disk.', 'moksa-line' )
+				'mofoline_menu_image_unreadable',
+				__( 'The selected image could not be read from disk.', 'moksa-for-line' )
 			);
 		}
 
@@ -410,13 +410,13 @@ class RichMenuModule extends Repository {
 		$expected = RichMenuClient::size( $size );
 
 		if ( ! is_array( $meta ) || empty( $meta['width'] ) ) {
-			return array( __( 'Could not read the image dimensions.', 'moksa-line' ) );
+			return array( __( 'Could not read the image dimensions.', 'moksa-for-line' ) );
 		}
 
 		if ( (int) $meta['width'] !== $expected['width'] || (int) $meta['height'] !== $expected['height'] ) {
 			$problems[] = sprintf(
 				/* translators: 1: required width, 2: required height, 3: actual width, 4: actual height. */
-				__( 'LINE expects %1$d x %2$d pixels for this menu size; this image is %3$d x %4$d.', 'moksa-line' ),
+				__( 'LINE expects %1$d x %2$d pixels for this menu size; this image is %3$d x %4$d.', 'moksa-for-line' ),
 				$expected['width'],
 				$expected['height'],
 				(int) $meta['width'],
@@ -427,13 +427,13 @@ class RichMenuModule extends Repository {
 		$path = get_attached_file( $attachment_id );
 
 		if ( $path && file_exists( $path ) && filesize( $path ) > RichMenuClient::MAX_IMAGE_BYTES ) {
-			$problems[] = __( 'The image is larger than 1 MB, which LINE will reject.', 'moksa-line' );
+			$problems[] = __( 'The image is larger than 1 MB, which LINE will reject.', 'moksa-for-line' );
 		}
 
 		$mime = (string) get_post_mime_type( $attachment_id );
 
 		if ( ! in_array( $mime, array( 'image/jpeg', 'image/jpg', 'image/png' ), true ) ) {
-			$problems[] = __( 'Rich menu images must be JPEG or PNG.', 'moksa-line' );
+			$problems[] = __( 'Rich menu images must be JPEG or PNG.', 'moksa-for-line' );
 		}
 
 		return $problems;
@@ -450,7 +450,7 @@ class RichMenuModule extends Repository {
 		$areas = '' === Ajax::text( 'areas' ) ? array() : Ajax::json_verbatim( 'areas' );
 
 		if ( ! is_array( $areas ) ) {
-			wp_send_json_error( array( 'message' => __( 'The tappable areas could not be read.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The tappable areas could not be read.', 'moksa-for-line' ) ) );
 		}
 
 		$size  = Ajax::is( 'size', 'half' ) ? 'half' : 'full';
@@ -461,7 +461,7 @@ class RichMenuModule extends Repository {
 		// being required: posting nothing at all saved a nameless menu that
 		// then sat in the list with a blank row where its name should be.
 		if ( '' === trim( $name ) ) {
-			wp_send_json_error( array( 'message' => __( 'Give the rich menu a name.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Give the rich menu a name.', 'moksa-for-line' ) ) );
 		}
 
 		$id = self::save(
@@ -481,7 +481,7 @@ class RichMenuModule extends Repository {
 		);
 
 		if ( ! $id ) {
-			wp_send_json_error( array( 'message' => __( 'The rich menu could not be saved.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The rich menu could not be saved.', 'moksa-for-line' ) ) );
 		}
 
 		// Only one menu can be the channel default.
@@ -500,7 +500,7 @@ class RichMenuModule extends Repository {
 		wp_send_json_success(
 			array(
 				'id'       => $id,
-				'message'  => __( 'Saved. Publish it to push the change to LINE.', 'moksa-line' ),
+				'message'  => __( 'Saved. Publish it to push the change to LINE.', 'moksa-for-line' ),
 				'warnings' => $warnings,
 			)
 		);
@@ -516,7 +516,7 @@ class RichMenuModule extends Repository {
 		$row = self::find( $id );
 
 		if ( ! $row ) {
-			wp_send_json_error( array( 'message' => __( 'That rich menu no longer exists.', 'moksa-line' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'That rich menu no longer exists.', 'moksa-for-line' ) ), 404 );
 		}
 
 		if ( '' !== (string) $row->alias_id ) {
@@ -542,13 +542,13 @@ class RichMenuModule extends Repository {
 		if ( $was_default ) {
 			wp_send_json_success(
 				array(
-					'message' => __( 'Rich menu deleted. That was the default, so until you make another menu the default, customers see whatever the LINE Official Account Manager holds -- or no menu at all.', 'moksa-line' ),
+					'message' => __( 'Rich menu deleted. That was the default, so until you make another menu the default, customers see whatever the LINE Official Account Manager holds -- or no menu at all.', 'moksa-for-line' ),
 					'warning' => true,
 				)
 			);
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Rich menu deleted.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Rich menu deleted.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -575,7 +575,7 @@ class RichMenuModule extends Repository {
 				array(
 					'message' => sprintf(
 						/* translators: %d: number of menus published. */
-						_n( 'Published %d menu to LINE.', 'Published %d menus to LINE.', $report['published'], 'moksa-line' ),
+						_n( 'Published %d menu to LINE.', 'Published %d menus to LINE.', $report['published'], 'moksa-for-line' ),
 						$report['published']
 					),
 				)
@@ -586,7 +586,7 @@ class RichMenuModule extends Repository {
 
 		Ajax::bail( $result );
 
-		wp_send_json_success( array( 'message' => __( 'Published to LINE.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Published to LINE.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -599,7 +599,7 @@ class RichMenuModule extends Repository {
 		$row = self::find( $id );
 
 		if ( ! $row || '' === (string) $row->richmenu_id ) {
-			wp_send_json_error( array( 'message' => __( 'Publish this menu to LINE before making it the default.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Publish this menu to LINE before making it the default.', 'moksa-for-line' ) ) );
 		}
 
 		$result = RichMenuClient::set_default( (string) $row->richmenu_id );
@@ -612,7 +612,7 @@ class RichMenuModule extends Repository {
 
 		self::save( array( 'id' => $id, 'is_default' => 1 ) );
 
-		wp_send_json_success( array( 'message' => __( 'This menu is now the default for everyone.', 'moksa-line' ) ) );
+		wp_send_json_success( array( 'message' => __( 'This menu is now the default for everyone.', 'moksa-for-line' ) ) );
 	}
 
 	/**
@@ -660,17 +660,17 @@ class RichMenuModule extends Repository {
 		}
 
 		if ( '' === $line_default ) {
-			$default_note = __( 'LINE has no default menu, so everyone falls back to whatever the Official Account Manager holds.', 'moksa-line' );
+			$default_note = __( 'LINE has no default menu, so everyone falls back to whatever the Official Account Manager holds.', 'moksa-for-line' );
 		} elseif ( $line_default === $local_default ) {
 			$default_note = sprintf(
 				/* translators: %s: rich menu name. */
-				__( 'Default menu: %s, which matches this site.', 'moksa-line' ),
+				__( 'Default menu: %s, which matches this site.', 'moksa-for-line' ),
 				isset( $known[ $line_default ] ) ? $known[ $line_default ] : $line_default
 			);
 		} else {
 			$default_note = sprintf(
 				/* translators: %s: rich menu name or id. */
-				__( 'LINE serves %s as the default, which is not what this site has marked. Set the default again here to line them up.', 'moksa-line' ),
+				__( 'LINE serves %s as the default, which is not what this site has marked. Set the default again here to line them up.', 'moksa-for-line' ),
 				isset( $known[ $line_default ] ) ? $known[ $line_default ] : $line_default
 			);
 		}
@@ -684,13 +684,13 @@ class RichMenuModule extends Repository {
 		$lines = array(
 			sprintf(
 				/* translators: 1: number of rich menus, 2: number of aliases. */
-				_n( 'LINE has %1$s rich menu and %2$s aliases.', 'LINE has %1$s rich menus and %2$s aliases.', $remote_count, 'moksa-line' ),
+				_n( 'LINE has %1$s rich menu and %2$s aliases.', 'LINE has %1$s rich menus and %2$s aliases.', $remote_count, 'moksa-for-line' ),
 				number_format_i18n( $remote_count ),
 				number_format_i18n( $alias_count )
 			),
 			sprintf(
 				/* translators: %s: number of rich menus tracked by this site. */
-				_n( 'This site tracks %s.', 'This site tracks %s.', count( $known ), 'moksa-line' ),
+				_n( 'This site tracks %s.', 'This site tracks %s.', count( $known ), 'moksa-for-line' ),
 				number_format_i18n( count( $known ) )
 			),
 			$default_note,
@@ -703,13 +703,13 @@ class RichMenuModule extends Repository {
 			$lines[] = '' !== $orphan['name']
 				? sprintf(
 					/* translators: 1: rich menu name, 2: rich menu id. */
-					__( 'Only on LINE: %1$s (%2$s)', 'moksa-line' ),
+					__( 'Only on LINE: %1$s (%2$s)', 'moksa-for-line' ),
 					$orphan['name'],
 					$orphan['id']
 				)
 				: sprintf(
 					/* translators: %s: rich menu id. */
-					__( 'Only on LINE: %s', 'moksa-line' ),
+					__( 'Only on LINE: %s', 'moksa-for-line' ),
 					$orphan['id']
 				);
 		}
@@ -723,7 +723,7 @@ class RichMenuModule extends Repository {
 				'default_note'  => $default_note,
 				'default_ok'    => $line_default === $local_default,
 				'lines'         => $lines,
-				'message'       => __( 'Comparison complete.', 'moksa-line' ),
+				'message'       => __( 'Comparison complete.', 'moksa-for-line' ),
 			)
 		);
 	}
@@ -732,6 +732,6 @@ class RichMenuModule extends Repository {
 	 * Shared nonce and capability check for the AJAX handlers.
 	 */
 	private function guard(): void {
-		Ajax::guard( __( 'You do not have permission to manage rich menus.', 'moksa-line' ) );
+		Ajax::guard( __( 'You do not have permission to manage rich menus.', 'moksa-for-line' ) );
 	}
 }

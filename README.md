@@ -1,4 +1,4 @@
-# Moksa LINE Suite
+# Moksa for LINE
 
 LINE Login, a Messaging API bot, Flex Messages, tabbed rich menus, a
 customer-service inbox, AI replies and LINE Pay, for WordPress and WooCommerce.
@@ -37,19 +37,19 @@ Version 1.0.0. Requires WordPress 6.2 and PHP 7.4.
 ### Shortcodes
 
 ```
-[moksa_line_login label="Log in with LINE" redirect="/account/"]
-[moksa_line_add_friend]
-[moksa_line_profile]
-[moksa_liff_profile]
-[moksa_line_chat]
+[mofoline_login label="Log in with LINE" redirect="/account/"]
+[mofoline_add_friend]
+[mofoline_profile]
+[mofoline_liff_profile]
+[mofoline_chat]
 ```
 
 ### Optional constants
 
 ```php
 // wp-config.php
-define( 'MOKSA_LINE_ENCRYPTION_KEY', '...' ); // Key for credentials at rest; defaults to the WP salts.
-define( 'MOKSA_LINE_REMOVE_DATA', true );     // Delete all plugin data on uninstall. Off by default.
+define( 'MOFOLINE_ENCRYPTION_KEY', '...' ); // Key for credentials at rest; defaults to the WP salts.
+define( 'MOFOLINE_REMOVE_DATA', true );     // Delete all plugin data on uninstall. Off by default.
 ```
 
 ## Things worth knowing before you rely on it
@@ -74,22 +74,22 @@ define( 'MOKSA_LINE_REMOVE_DATA', true );     // Delete all plugin data on unins
 The bot's reply pipeline is a filter chain, so a site can add its own step:
 
 ```php
-add_filter( 'moksa_line_compose_reply', function ( $messages, $text, $event, $line_user_id ) {
+add_filter( 'mofoline_compose_reply', function ( $messages, $text, $event, $line_user_id ) {
 	if ( null !== $messages ) {
 		return $messages; // Something earlier already answered.
 	}
 
 	if ( 'order status' === strtolower( trim( $text ) ) ) {
-		return array( Moksa\Line\Api\MessagingClient::text( my_lookup_order( $line_user_id ) ) );
+		return array( Mofoline\Api\MessagingClient::text( my_lookup_order( $line_user_id ) ) );
 	}
 
 	return $messages;
 }, 25, 4 ); // Between flow triggers (20) and keyword rules (30).
 ```
 
-Other useful hooks: `moksa_line_logged_in`, `moksa_line_user_registered`,
-`moksa_line_inbound_message`, `moksa_line_postback`, `moksa_line_flow_completed`,
-`moksa_line_payment_completed`, `moksa_line_ai_answer`, `moksa_line_modules`.
+Other useful hooks: `mofoline_logged_in`, `mofoline_user_registered`,
+`mofoline_inbound_message`, `mofoline_postback`, `mofoline_flow_completed`,
+`mofoline_payment_completed`, `mofoline_ai_answer`, `mofoline_modules`.
 
 ## Development
 
@@ -144,7 +144,7 @@ wp eval-file tests/moksafowo-bridge-check.php
 Each of those five refuses to run when `wp_get_environment_type()` says
 `production`, because they write to the database and WordPress defaults to
 `production` when `WP_ENVIRONMENT_TYPE` is unset. Set that constant on your
-test site, or define `MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS` in `wp-config.php`,
+test site, or define `MOFOLINE_ALLOW_DESTRUCTIVE_TESTS` in `wp-config.php`,
 and they run. The guard exists because one of them was once run against a site
 holding real data.
 
@@ -153,7 +153,7 @@ holding real data.
 # Regenerate the translation template after changing any user-facing string
 php bin/make-pot.php
 
-# Build dist/moksa-line.zip, ready to upload
+# Build dist/moksa-for-line.zip, ready to upload
 bash bin/build.sh
 ```
 
@@ -165,12 +165,12 @@ catalogue.
 
 `bin/build.sh` refuses to build when the plugin header version and the
 readme's `Stable tag` disagree, syntax-checks the staged copy rather than the
-working tree, and always names the zip's root folder `moksa-line` regardless of
+working tree, and always names the zip's root folder `moksa-for-line` regardless of
 what the checkout directory is called.
 
 ### Translations
 
-`languages/moksa-line.pot` is the current template (580 strings). No
+`languages/moksa-for-line.pot` is the current template (580 strings). No
 translations ship with the plugin: the ones inherited from 1.3.2 covered four
 of those 580 strings, so keeping them would have produced a mostly-English
 interface with a few stray translated words in it. Traditional Chinese

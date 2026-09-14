@@ -14,8 +14,8 @@
  * like 繼 the strokes close up and the whole word looks dirty against a solid
  * background. Off, the browser picks the nearest weight it really has.
  */
-.moksa-line-button,
-.moksa-line-notice,
+.mofoline-button,
+.mofoline-notice,
 .moksa-liff,
 .moksa-account,
 .moksa-account * {
@@ -38,11 +38,11 @@
  * using a non-designated colour as prohibited. The colour is theirs, not a
  * choice of ours to correct.
  */
-.moksa-line-button {
+.mofoline-button {
 	/* Colour is the only thing the settings screen can change, and it arrives
 	   as a custom property inline. Unset means the default here wins. */
-	background: var(--moksa-line-button-bg, var(--moksa-green));
-	color: var(--moksa-line-button-fg, #fff);
+	background: var(--mofoline-button-bg, var(--moksa-green));
+	color: var(--mofoline-button-fg, #fff);
 
 	/* Shape and type are the theme's. These were settings once; a shop that
 	   used them got one control that matched nothing else on the page. */
@@ -60,54 +60,54 @@
 	transition: filter 0.15s ease;
 }
 
-.moksa-line-button:hover,
-.moksa-line-button:focus {
+.mofoline-button:hover,
+.mofoline-button:focus {
 	/* Darkening what is there beats hardcoding a second green, which would
 	   ignore whatever colour the site actually configured. */
 	filter: brightness(0.93);
-	color: var(--moksa-line-button-fg, #fff);
+	color: var(--mofoline-button-fg, #fff);
 }
 
-.moksa-line-button:focus-visible {
+.mofoline-button:focus-visible {
 	outline: 2px solid currentColor;
 	outline-offset: 2px;
 }
 
-.moksa-line-button--small {
+.mofoline-button--small {
 	padding: 6px 12px;
 	font-size: 0.875em;
 }
 
-.moksa-line-button--large {
+.mofoline-button--large {
 	padding: 14px 26px;
 	font-size: 1.125em;
 }
 
 /* Outlined rather than filled, over whatever the page's own background is. */
-.moksa-line-button--friend {
+.mofoline-button--friend {
 	background: transparent;
-	color: var(--moksa-line-button-bg, var(--moksa-green));
-	border: 2px solid var(--moksa-line-button-bg, var(--moksa-green));
+	color: var(--mofoline-button-bg, var(--moksa-green));
+	border: 2px solid var(--mofoline-button-bg, var(--moksa-green));
 }
 
-.moksa-line-button--friend:hover,
-.moksa-line-button--friend:focus {
+.mofoline-button--friend:hover,
+.mofoline-button--friend:focus {
 	filter: none;
 	background: rgba(6, 199, 85, 0.1);
-	color: var(--moksa-line-button-bg, var(--moksa-green));
+	color: var(--mofoline-button-bg, var(--moksa-green));
 }
 
-.moksa-line-button__logo {
+.mofoline-button__logo {
 	flex: 0 0 auto;
 }
 
-.moksa-line-profile {
+.mofoline-profile {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
 }
 
-.moksa-line-profile__avatar {
+.mofoline-profile__avatar {
 	border-radius: 50%;
 }
 
@@ -117,7 +117,7 @@
  * with an amber rule down the side, which is a strange thing to tell somebody
  * who has done nothing wrong.
  */
-.moksa-line-notice {
+.mofoline-notice {
 	padding: 8px 12px;
 	border-left: 3px solid rgba(128, 128, 128, 0.28);
 	border-left-color: color-mix(in srgb, currentColor 22%, transparent);
@@ -129,7 +129,7 @@
  * pale amber panel only works if the text on it is dark, and on a dark theme
  * the text is not.
  */
-.moksa-line-notice--warn,
+.mofoline-notice--warn,
 .moksa-liff__notice {
 	padding: 8px 12px;
 	border-left: 4px solid #dba617;
@@ -179,8 +179,8 @@
 
 .moksa-liff__send {
 	align-self: flex-start;
-	background: var(--moksa-line-button-bg, var(--moksa-green));
-	color: var(--moksa-line-button-fg, #fff);
+	background: var(--mofoline-button-bg, var(--moksa-green));
+	color: var(--mofoline-button-fg, #fff);
 	border: 0;
 	border-radius: 6px;
 	padding: 10px 20px;
@@ -194,13 +194,13 @@
 	cursor: default;
 }
 
-.moksa-line-woo-login {
+.mofoline-woo-login {
 	margin-bottom: 16px;
 }
 
 /* A row that wraps, rather than a button shoved sideways with a margin that
    leaves it hanging off the end of the sentence on a phone. */
-.moksa-line-checkout-prompt {
+.mofoline-checkout-prompt {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -213,12 +213,12 @@
  * Where the login button sits, which is the only thing about it worth a
  * setting. Its size, corners and type come from the page it lands on.
  */
-.moksa-line-button--center {
+.mofoline-button--center {
 	display: flex;
 	margin-inline: auto;
 }
 
-.moksa-line-button--full {
+.mofoline-button--full {
 	display: flex;
 	width: 100%;
 }
@@ -227,7 +227,7 @@
  * The rule between the button and the form. The word sits on the line rather
  * than beside it, so it reads as one divider at any width.
  */
-.moksa-line-divider {
+.mofoline-divider {
 	display: flex;
 	align-items: center;
 	gap: 12px;
@@ -235,8 +235,8 @@
 	opacity: 0.65;
 }
 
-.moksa-line-divider::before,
-.moksa-line-divider::after {
+.mofoline-divider::before,
+.mofoline-divider::after {
 	content: "";
 	flex: 1 1 auto;
 	height: 1px;

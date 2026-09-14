@@ -2,10 +2,10 @@
 /**
  * Stored Flex Message templates.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Data;
+namespace Mofoline\Data;
 
 defined( 'ABSPATH' ) || exit;
 

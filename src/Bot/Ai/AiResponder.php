@@ -8,22 +8,22 @@
  * out of the conversation entirely, and a hard rule that a conversation a
  * human has taken over never gets an AI reply.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Bot\Ai;
+namespace Mofoline\Bot\Ai;
 
-use Moksa\Line\Data\Users;
-use Moksa\Line\Inbox\Conversations;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Data\Users;
+use Mofoline\Inbox\Conversations;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
 class AiResponder {
 
-	const USAGE_PREFIX = 'moksa_line_ai_usage_';
+	const USAGE_PREFIX = 'mofoline_ai_usage_';
 
 	/**
 	 * @var ProviderInterface|null
@@ -49,7 +49,7 @@ class AiResponder {
 		 *
 		 * @param ProviderInterface|null $provider Selected provider.
 		 */
-		$provider = apply_filters( 'moksa_line_ai_provider', $provider );
+		$provider = apply_filters( 'mofoline_ai_provider', $provider );
 
 		if ( ! $provider instanceof ProviderInterface || ! $provider->is_available() ) {
 			return null;
@@ -91,7 +91,7 @@ class AiResponder {
 
 			return array(
 				MessagingClient::text(
-					__( 'Sure -- I have passed this to a member of our team. They will reply here shortly.', 'moksa-line' )
+					__( 'Sure -- I have passed this to a member of our team. They will reply here shortly.', 'moksa-for-line' )
 				),
 			);
 		}
@@ -131,7 +131,7 @@ class AiResponder {
 		 * @param string $text         Visitor message.
 		 * @param string $line_user_id LINE user id.
 		 */
-		$answer = (string) apply_filters( 'moksa_line_ai_answer', $answer, $text, $line_user_id );
+		$answer = (string) apply_filters( 'mofoline_ai_answer', $answer, $text, $line_user_id );
 
 		if ( '' === trim( $answer ) ) {
 			return null;

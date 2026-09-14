@@ -14,7 +14,7 @@
 	'use strict';
 
 	function strings() {
-		return (window.moksaLine && window.moksaLine.strings) || {};
+		return (window.mofoline && window.mofoline.strings) || {};
 	}
 
 	function t(key, fallback) {
@@ -135,7 +135,7 @@
 	 * @param {string} [kind]  'bad' (default) or 'ok'.
 	 */
 	window.moksaNotify = function (message, kind) {
-		var $host = $('.moksa-line-wrap').first();
+		var $host = $('.mofoline-wrap').first();
 
 		if (!$host.length) {
 			$host = $('body');

@@ -6,15 +6,15 @@
  * scenario bot, the keyword rules and the AI provider can each take a turn in
  * a defined order, and a site can insert its own step without editing this file.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Webhook;
+namespace Mofoline\Webhook;
 
-use Moksa\Line\Data\Users;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Data\Users;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -33,7 +33,7 @@ class Dispatcher {
 		 *
 		 * @param array $event Decoded event.
 		 */
-		do_action( 'moksa_line_event', $event );
+		do_action( 'mofoline_event', $event );
 
 		switch ( $type ) {
 			case 'follow':
@@ -64,7 +64,7 @@ class Dispatcher {
 				 *
 				 * @param array $event Decoded event.
 				 */
-				do_action( 'moksa_line_event_' . $type, $event );
+				do_action( 'mofoline_event_' . $type, $event );
 				break;
 
 			default:
@@ -87,7 +87,7 @@ class Dispatcher {
 		Users::set_friend_state( $line_user_id, true );
 		self::refresh_profile( $line_user_id );
 
-		do_action( 'moksa_line_event_follow', $event, $line_user_id );
+		do_action( 'mofoline_event_follow', $event, $line_user_id );
 
 		$greeting = trim( (string) Options::get( 'greeting_message' ) );
 
@@ -103,7 +103,7 @@ class Dispatcher {
 		 * @param array  $messages     Message objects.
 		 * @param string $line_user_id LINE user id.
 		 */
-		$messages = apply_filters( 'moksa_line_greeting_messages', $messages, $line_user_id );
+		$messages = apply_filters( 'mofoline_greeting_messages', $messages, $line_user_id );
 
 		$result = MessagingClient::reply( (string) $event['replyToken'], $messages );
 
@@ -124,7 +124,7 @@ class Dispatcher {
 
 		Users::set_friend_state( $line_user_id, false );
 
-		do_action( 'moksa_line_event_unfollow', $event, $line_user_id );
+		do_action( 'mofoline_event_unfollow', $event, $line_user_id );
 	}
 
 	/**
@@ -145,7 +145,7 @@ class Dispatcher {
 		 * @param array  $event        Decoded event.
 		 * @param string $line_user_id LINE user id.
 		 */
-		do_action( 'moksa_line_inbound_message', $event, $line_user_id );
+		do_action( 'mofoline_inbound_message', $event, $line_user_id );
 
 		if ( '' === $line_user_id ) {
 			return;
@@ -163,7 +163,7 @@ class Dispatcher {
 		 * @param string $source_type user, group or room.
 		 * @param array  $event       Decoded event.
 		 */
-		if ( ! apply_filters( 'moksa_line_should_auto_reply', 'user' === $source_type, $source_type, $event ) ) {
+		if ( ! apply_filters( 'mofoline_should_auto_reply', 'user' === $source_type, $source_type, $event ) ) {
 			return;
 		}
 
@@ -177,7 +177,7 @@ class Dispatcher {
 		 * @param array      $event        Decoded event.
 		 * @param string     $line_user_id LINE user id.
 		 */
-		$messages = apply_filters( 'moksa_line_compose_reply', null, $text, $event, $line_user_id );
+		$messages = apply_filters( 'mofoline_compose_reply', null, $text, $event, $line_user_id );
 
 		if ( empty( $messages ) || empty( $event['replyToken'] ) ) {
 			return;
@@ -196,7 +196,7 @@ class Dispatcher {
 		 * @param string $line_user_id LINE user id.
 		 * @param array  $event        Originating event.
 		 */
-		do_action( 'moksa_line_replied', $messages, $line_user_id, $event );
+		do_action( 'mofoline_replied', $messages, $line_user_id, $event );
 	}
 
 	/**
@@ -215,7 +215,7 @@ class Dispatcher {
 		 * @param array  $event        Decoded event.
 		 * @param string $line_user_id LINE user id.
 		 */
-		do_action( 'moksa_line_postback', $data, $event, $line_user_id );
+		do_action( 'mofoline_postback', $data, $event, $line_user_id );
 
 		/**
 		 * Compose a reply to a postback.
@@ -225,7 +225,7 @@ class Dispatcher {
 		 * @param array      $event        Decoded event.
 		 * @param string     $line_user_id LINE user id.
 		 */
-		$messages = apply_filters( 'moksa_line_compose_postback_reply', null, $data, $event, $line_user_id );
+		$messages = apply_filters( 'mofoline_compose_postback_reply', null, $data, $event, $line_user_id );
 
 		if ( empty( $messages ) || empty( $event['replyToken'] ) ) {
 			return;
@@ -234,7 +234,7 @@ class Dispatcher {
 		$result = MessagingClient::reply( (string) $event['replyToken'], $messages );
 
 		if ( ! Logger::capture( $result, 'Could not reply to a postback', 'bot' ) ) {
-			do_action( 'moksa_line_replied', $messages, $line_user_id, $event );
+			do_action( 'mofoline_replied', $messages, $line_user_id, $event );
 		}
 	}
 
@@ -263,8 +263,8 @@ class Dispatcher {
 			// (no names anywhere) does not point at it. Throttled to once an
 			// hour, because when the token is wrong this fails on every single
 			// inbound message and would otherwise bury the log.
-			if ( false === get_transient( 'moksa_line_profile_warned' ) ) {
-				set_transient( 'moksa_line_profile_warned', 1, HOUR_IN_SECONDS );
+			if ( false === get_transient( 'mofoline_profile_warned' ) ) {
+				set_transient( 'mofoline_profile_warned', 1, HOUR_IN_SECONDS );
 
 				Logger::warning(
 					'Could not fetch a LINE profile, so contacts are recorded without display names. Check the Messaging API channel access token.',

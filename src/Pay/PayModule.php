@@ -8,25 +8,25 @@
  * comes back at all -- in which case the reconciliation sweep finishes the
  * job from LINE Pay's own record.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Pay;
+namespace Mofoline\Pay;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Support\Options;
+use Mofoline\Support\Db;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Support\Logger;
+use Mofoline\Support\Options;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use Moksa\Line\Admin\Ajax;
+use Mofoline\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
 class PayModule {
 
-	const NAMESPACE_V1 = 'moksa-line/v1';
+	const NAMESPACE_V1 = 'mofoline/v1';
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
@@ -40,12 +40,12 @@ class PayModule {
 		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'thankyou_text' ), 10, 2 );
 		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'order_details_note' ) );
 
-		add_action( 'wp_ajax_moksa_line_pay_link', array( $this, 'ajax_create_link' ) );
+		add_action( 'wp_ajax_mofoline_pay_link', array( $this, 'ajax_create_link' ) );
 
-		add_action( 'moksa_line_reconcile_payments', array( $this, 'reconcile' ) );
+		add_action( 'mofoline_reconcile_payments', array( $this, 'reconcile' ) );
 
-		if ( ! wp_next_scheduled( 'moksa_line_reconcile_payments' ) ) {
-			wp_schedule_event( time() + ( 5 * MINUTE_IN_SECONDS ), 'hourly', 'moksa_line_reconcile_payments' );
+		if ( ! wp_next_scheduled( 'mofoline_reconcile_payments' ) ) {
+			wp_schedule_event( time() + ( 5 * MINUTE_IN_SECONDS ), 'hourly', 'mofoline_reconcile_payments' );
 		}
 	}
 
@@ -93,8 +93,8 @@ class PayModule {
 		$screen = function_exists( 'wc_get_page_screen_id' ) ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
 
 		add_meta_box(
-			'moksa-line-pay',
-			__( 'LINE Pay', 'moksa-line' ),
+			'mofoline-pay',
+			__( 'LINE Pay', 'moksa-for-line' ),
 			array( $this, 'render_order_meta_box' ),
 			$screen,
 			'side',
@@ -112,8 +112,8 @@ class PayModule {
 			return;
 		}
 
-		if ( 'moksa_line_pay' !== $order->get_payment_method() ) {
-			echo '<p class="description">' . esc_html__( 'This order was not paid with LINE Pay.', 'moksa-line' ) . '</p>';
+		if ( 'mofoline_pay' !== $order->get_payment_method() ) {
+			echo '<p class="description">' . esc_html__( 'This order was not paid with LINE Pay.', 'moksa-for-line' ) . '</p>';
 
 			return;
 		}
@@ -121,22 +121,22 @@ class PayModule {
 		$payment = Payments::by_wc_order( $order->get_id() );
 
 		if ( ! $payment ) {
-			echo '<p class="description">' . esc_html__( 'No LINE Pay record exists for this order. The payment may never have been started.', 'moksa-line' ) . '</p>';
+			echo '<p class="description">' . esc_html__( 'No LINE Pay record exists for this order. The payment may never have been started.', 'moksa-for-line' ) . '</p>';
 
 			return;
 		}
 
 		$statuses = array(
-			'created'            => __( 'Created', 'moksa-line' ),
-			'pending'            => __( 'Waiting for the customer', 'moksa-line' ),
-			'authorized'         => __( 'Authorised, not yet captured', 'moksa-line' ),
-			'captured'           => __( 'Paid', 'moksa-line' ),
-			'partially_refunded' => __( 'Partly refunded', 'moksa-line' ),
-			'refunded'           => __( 'Refunded', 'moksa-line' ),
-			'void'               => __( 'Voided', 'moksa-line' ),
-			'cancelled'          => __( 'Cancelled by the customer', 'moksa-line' ),
-			'expired'            => __( 'Expired unpaid', 'moksa-line' ),
-			'failed'             => __( 'Failed', 'moksa-line' ),
+			'created'            => __( 'Created', 'moksa-for-line' ),
+			'pending'            => __( 'Waiting for the customer', 'moksa-for-line' ),
+			'authorized'         => __( 'Authorised, not yet captured', 'moksa-for-line' ),
+			'captured'           => __( 'Paid', 'moksa-for-line' ),
+			'partially_refunded' => __( 'Partly refunded', 'moksa-for-line' ),
+			'refunded'           => __( 'Refunded', 'moksa-for-line' ),
+			'void'               => __( 'Voided', 'moksa-for-line' ),
+			'cancelled'          => __( 'Cancelled by the customer', 'moksa-for-line' ),
+			'expired'            => __( 'Expired unpaid', 'moksa-for-line' ),
+			'failed'             => __( 'Failed', 'moksa-for-line' ),
 		);
 
 		$status   = (string) $payment->status;
@@ -149,45 +149,45 @@ class PayModule {
 			<p class="moksa-pay-box__status moksa-pay-box__status--<?php echo esc_attr( $paid ? 'paid' : 'open' ); ?>">
 				<strong><?php echo esc_html( $label ); ?></strong>
 				<?php if ( Options::get( 'pay_sandbox' ) ) : ?>
-					<span class="moksa-pay-box__sandbox"><?php esc_html_e( 'Sandbox', 'moksa-line' ); ?></span>
+					<span class="moksa-pay-box__sandbox"><?php esc_html_e( 'Sandbox', 'moksa-for-line' ); ?></span>
 				<?php endif; ?>
 			</p>
 
 			<dl class="moksa-pay-box__facts">
-				<dt><?php esc_html_e( 'Amount', 'moksa-line' ); ?></dt>
+				<dt><?php esc_html_e( 'Amount', 'moksa-for-line' ); ?></dt>
 				<dd><?php echo esc_html( self::money( (float) $payment->amount, $currency ) ); ?></dd>
 
 				<?php if ( $refunded > 0 ) : ?>
-					<dt><?php esc_html_e( 'Refunded', 'moksa-line' ); ?></dt>
+					<dt><?php esc_html_e( 'Refunded', 'moksa-for-line' ); ?></dt>
 					<dd><?php echo esc_html( self::money( $refunded, $currency ) ); ?></dd>
 				<?php endif; ?>
 
-				<dt><?php esc_html_e( 'Transaction', 'moksa-line' ); ?></dt>
+				<dt><?php esc_html_e( 'Transaction', 'moksa-for-line' ); ?></dt>
 				<dd>
 					<?php if ( '' !== (string) $payment->transaction_id ) : ?>
 						<code><?php echo esc_html( (string) $payment->transaction_id ); ?></code>
 					<?php else : ?>
-						<span class="description"><?php esc_html_e( 'None yet', 'moksa-line' ); ?></span>
+						<span class="description"><?php esc_html_e( 'None yet', 'moksa-for-line' ); ?></span>
 					<?php endif; ?>
 				</dd>
 
-				<dt><?php esc_html_e( 'Reference', 'moksa-line' ); ?></dt>
+				<dt><?php esc_html_e( 'Reference', 'moksa-for-line' ); ?></dt>
 				<dd><code><?php echo esc_html( (string) $payment->order_ref ); ?></code></dd>
 			</dl>
 
 			<?php if ( 'pending' === $status ) : ?>
 				<p class="description">
-					<?php esc_html_e( 'The customer was sent to LINE Pay and has not come back. Unfinished payments are checked hourly and expire on their own.', 'moksa-line' ); ?>
+					<?php esc_html_e( 'The customer was sent to LINE Pay and has not come back. Unfinished payments are checked hourly and expire on their own.', 'moksa-for-line' ); ?>
 				</p>
 			<?php elseif ( 'authorized' === $status ) : ?>
 				<p class="description">
-					<?php esc_html_e( 'The money is held, not taken. Capture it from the order actions, or it is released when the order is cancelled.', 'moksa-line' ); ?>
+					<?php esc_html_e( 'The money is held, not taken. Capture it from the order actions, or it is released when the order is cancelled.', 'moksa-for-line' ); ?>
 				</p>
 			<?php endif; ?>
 
 			<p>
 				<a href="<?php echo esc_url( Options::get( 'pay_sandbox' ) ? 'https://sandbox-web-pay.line.me/web/' : 'https://pay.line.me/portal/' ); ?>" target="_blank" rel="noopener">
-					<?php esc_html_e( 'Open the LINE Pay merchant centre', 'moksa-line' ); ?> &rarr;
+					<?php esc_html_e( 'Open the LINE Pay merchant centre', 'moksa-for-line' ); ?> &rarr;
 				</a>
 			</p>
 		</div>
@@ -230,7 +230,7 @@ class PayModule {
 	 * @return string
 	 */
 	public function thankyou_text( $text, $order ) {
-		if ( ! $order instanceof \WC_Order || 'moksa_line_pay' !== $order->get_payment_method() ) {
+		if ( ! $order instanceof \WC_Order || 'mofoline_pay' !== $order->get_payment_method() ) {
 			return $text;
 		}
 
@@ -245,14 +245,14 @@ class PayModule {
 	 * @param \WC_Order $order The order.
 	 */
 	public function order_details_note( $order ): void {
-		if ( ! $order instanceof \WC_Order || 'moksa_line_pay' !== $order->get_payment_method() ) {
+		if ( ! $order instanceof \WC_Order || 'mofoline_pay' !== $order->get_payment_method() ) {
 			return;
 		}
 
 		$note = self::unfinished_note( $order );
 
 		if ( '' !== $note ) {
-			echo '<p class="moksa-line-notice">' . esc_html( $note ) . '</p>';
+			echo '<p class="mofoline-notice">' . esc_html( $note ) . '</p>';
 		}
 	}
 
@@ -264,9 +264,9 @@ class PayModule {
 	private static function unfinished_note( \WC_Order $order ): string {
 		switch ( $order->get_status() ) {
 			case 'pending':
-				return __( 'Your order is in, but the LINE Pay payment did not go through. You can pay for it again from your account.', 'moksa-line' );
+				return __( 'Your order is in, but the LINE Pay payment did not go through. You can pay for it again from your account.', 'moksa-for-line' );
 			case 'on-hold':
-				return __( 'Your order is in and we are waiting for LINE Pay to confirm the payment. This usually takes a moment.', 'moksa-line' );
+				return __( 'Your order is in and we are waiting for LINE Pay to confirm the payment. This usually takes a moment.', 'moksa-for-line' );
 			default:
 				return '';
 		}
@@ -319,7 +319,7 @@ class PayModule {
 		$payment = Payments::by_order_ref( $order_ref );
 
 		if ( ! $payment ) {
-			return $this->redirect( home_url(), __( 'That payment could not be found.', 'moksa-line' ) );
+			return $this->redirect( home_url(), __( 'That payment could not be found.', 'moksa-for-line' ) );
 		}
 
 		$result = self::complete( (int) $payment->id, $transaction_id );
@@ -349,12 +349,12 @@ class PayModule {
 				$order = wc_get_order( (int) $payment->wc_order_id );
 
 				if ( $order ) {
-					$order->add_order_note( __( 'The customer cancelled the LINE Pay payment.', 'moksa-line' ) );
+					$order->add_order_note( __( 'The customer cancelled the LINE Pay payment.', 'moksa-for-line' ) );
 				}
 			}
 		}
 
-		return $this->redirect( self::failure_url( $payment ), __( 'The payment was cancelled.', 'moksa-line' ) );
+		return $this->redirect( self::failure_url( $payment ), __( 'The payment was cancelled.', 'moksa-for-line' ) );
 	}
 
 	// --- Completion ---------------------------------------------------------------
@@ -375,7 +375,7 @@ class PayModule {
 		$payment = Db::get_row( Db::prepare( "SELECT * FROM %i WHERE id = %d", $table, $payment_id ) );
 
 		if ( ! $payment ) {
-			return new WP_Error( 'moksa_line_pay_missing', __( 'That payment could not be found.', 'moksa-line' ) );
+			return new WP_Error( 'mofoline_pay_missing', __( 'That payment could not be found.', 'moksa-for-line' ) );
 		}
 
 		if ( in_array( $payment->status, array( 'captured', 'authorized' ), true ) ) {
@@ -388,8 +388,8 @@ class PayModule {
 
 		if ( '' === $transaction_id ) {
 			return new WP_Error(
-				'moksa_line_pay_no_transaction',
-				__( 'LINE Pay did not identify this transaction.', 'moksa-line' )
+				'mofoline_pay_no_transaction',
+				__( 'LINE Pay did not identify this transaction.', 'moksa-for-line' )
 			);
 		}
 
@@ -407,8 +407,8 @@ class PayModule {
 			);
 
 			return new WP_Error(
-				'moksa_line_pay_transaction_mismatch',
-				__( 'This return does not belong to that payment.', 'moksa-line' )
+				'mofoline_pay_transaction_mismatch',
+				__( 'This return does not belong to that payment.', 'moksa-for-line' )
 			);
 		}
 
@@ -421,8 +421,8 @@ class PayModule {
 			}
 
 			return new WP_Error(
-				'moksa_line_pay_in_progress',
-				__( 'This payment is already being confirmed. Please wait a moment and refresh.', 'moksa-line' )
+				'mofoline_pay_in_progress',
+				__( 'This payment is already being confirmed. Please wait a moment and refresh.', 'moksa-for-line' )
 			);
 		}
 
@@ -435,7 +435,7 @@ class PayModule {
 		if ( is_wp_error( $result ) ) {
 			// 1165 means LINE Pay already captured it; that is a success from
 			// the shop's point of view, not a failure to retry.
-			if ( 'moksa_line_pay_1165' === $result->get_error_code() ) {
+			if ( 'mofoline_pay_1165' === $result->get_error_code() ) {
 				Payments::update( $payment_id, array( 'status' => 'captured', 'transaction_id' => $transaction_id ) );
 				self::settle( $payment_id );
 
@@ -483,7 +483,7 @@ class PayModule {
 				$order->add_order_note(
 					sprintf(
 						/* translators: %s: LINE Pay transaction id. */
-						__( 'LINE Pay confirmed. Transaction %s.', 'moksa-line' ),
+						__( 'LINE Pay confirmed. Transaction %s.', 'moksa-for-line' ),
 						(string) $payment->transaction_id
 					)
 				);
@@ -495,7 +495,7 @@ class PayModule {
 			$receipt = MessagingClient::text(
 				sprintf(
 					/* translators: 1: amount, 2: currency, 3: order reference. */
-					__( 'Payment received: %1$s %2$s (order %3$s). Thank you!', 'moksa-line' ),
+					__( 'Payment received: %1$s %2$s (order %3$s). Thank you!', 'moksa-for-line' ),
 					number_format_i18n( (float) $payment->amount, in_array( $payment->currency, array( 'TWD', 'JPY', 'KRW' ), true ) ? 0 : 2 ),
 					(string) $payment->currency,
 					(string) $payment->order_ref
@@ -516,7 +516,7 @@ class PayModule {
 		 *
 		 * @param object $payment Payment row.
 		 */
-		do_action( 'moksa_line_payment_completed', $payment );
+		do_action( 'mofoline_payment_completed', $payment );
 	}
 
 	/**
@@ -546,7 +546,7 @@ class PayModule {
 			if ( is_wp_error( $details ) ) {
 				// 1150 means LINE Pay has no such transaction: the customer
 				// never paid, so the reservation can be retired.
-				if ( 'moksa_line_pay_1150' === $details->get_error_code() ) {
+				if ( 'mofoline_pay_1150' === $details->get_error_code() ) {
 					Payments::update( (int) $payment->id, array( 'status' => 'expired' ) );
 				}
 
@@ -625,7 +625,7 @@ class PayModule {
 		$amount_i = LinePayClient::format_amount( $amount, $currency );
 
 		if ( $amount_i <= 0 ) {
-			return new WP_Error( 'moksa_line_pay_bad_amount', __( 'Enter an amount greater than zero.', 'moksa-line' ) );
+			return new WP_Error( 'mofoline_pay_bad_amount', __( 'Enter an amount greater than zero.', 'moksa-for-line' ) );
 		}
 
 		$order_ref  = Payments::new_reference( 'LINK' );
@@ -640,7 +640,7 @@ class PayModule {
 		);
 
 		if ( ! $payment_id ) {
-			return new WP_Error( 'moksa_line_pay_store_failed', __( 'The payment could not be recorded.', 'moksa-line' ) );
+			return new WP_Error( 'mofoline_pay_store_failed', __( 'The payment could not be recorded.', 'moksa-for-line' ) );
 		}
 
 		$title = '' !== trim( $title ) ? $title : get_bloginfo( 'name' );
@@ -690,7 +690,7 @@ class PayModule {
 		);
 
 		if ( '' === $url ) {
-			return new WP_Error( 'moksa_line_pay_no_url', __( 'LINE Pay did not return a payment URL.', 'moksa-line' ) );
+			return new WP_Error( 'mofoline_pay_no_url', __( 'LINE Pay did not return a payment URL.', 'moksa-for-line' ) );
 		}
 
 		return array( 'url' => $url, 'order_ref' => $order_ref );
@@ -701,10 +701,10 @@ class PayModule {
 	 * customer as a Flex message.
 	 */
 	public function ajax_create_link(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+		check_ajax_referer( 'mofoline_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_woocommerce' ) && ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot create payment links.', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot create payment links.', 'moksa-for-line' ) ), 403 );
 		}
 
 		$amount  = Ajax::number( 'amount' );
@@ -724,7 +724,7 @@ class PayModule {
 						'url'     => $link['url'],
 						'message' => sprintf(
 							/* translators: %s: error detail. */
-							__( 'The link was created, but LINE would not deliver it: %s', 'moksa-line' ),
+							__( 'The link was created, but LINE would not deliver it: %s', 'moksa-for-line' ),
 							$sent->get_error_message()
 						),
 					)
@@ -735,7 +735,7 @@ class PayModule {
 		wp_send_json_success(
 			array(
 				'url'     => $link['url'],
-				'message' => __( 'Payment link created.', 'moksa-line' ),
+				'message' => __( 'Payment link created.', 'moksa-for-line' ),
 			)
 		);
 	}
@@ -759,7 +759,7 @@ class PayModule {
 		return MessagingClient::flex(
 			sprintf(
 				/* translators: 1: item title, 2: formatted amount. */
-				__( 'Payment request: %1$s %2$s', 'moksa-line' ),
+				__( 'Payment request: %1$s %2$s', 'moksa-for-line' ),
 				$title,
 				$display
 			),
@@ -772,7 +772,7 @@ class PayModule {
 					'contents' => array(
 						array(
 							'type'   => 'text',
-							'text'   => __( 'Payment request', 'moksa-line' ),
+							'text'   => __( 'Payment request', 'moksa-for-line' ),
 							'size'   => 'sm',
 							'color'  => '#888888',
 						),
@@ -801,7 +801,7 @@ class PayModule {
 							'color'  => '#06C755',
 							'action' => array(
 								'type'  => 'uri',
-								'label' => __( 'Pay with LINE Pay', 'moksa-line' ),
+								'label' => __( 'Pay with LINE Pay', 'moksa-for-line' ),
 								'uri'   => $url,
 							),
 						),
@@ -851,7 +851,7 @@ class PayModule {
 		 * @param string      $url     Destination.
 		 * @param object|null $payment Payment row.
 		 */
-		return apply_filters( 'moksa_line_pay_success_url', home_url(), $payment );
+		return apply_filters( 'mofoline_pay_success_url', home_url(), $payment );
 	}
 
 	/**
@@ -874,7 +874,7 @@ class PayModule {
 		 * @param string      $url     Destination.
 		 * @param object|null $payment Payment row.
 		 */
-		return apply_filters( 'moksa_line_pay_failure_url', home_url(), $payment );
+		return apply_filters( 'mofoline_pay_failure_url', home_url(), $payment );
 	}
 
 	/**

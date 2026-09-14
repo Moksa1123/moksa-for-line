@@ -10,7 +10,7 @@
 (function ($) {
 	'use strict';
 
-	var settings = window.moksaLineAccount || {};
+	var settings = window.mofolineAccount || {};
 
 	function t(key, fallback) {
 		var value = (settings.strings || {})[key];
@@ -39,7 +39,7 @@
 	}
 
 	$(function () {
-		$(document).on('click', '[data-moksa-line-unlink]', function (event) {
+		$(document).on('click', '[data-mofoline-unlink]', function (event) {
 			event.preventDefault();
 
 			var $button = $(this);
@@ -60,9 +60,9 @@
 				$button.prop('disabled', true);
 
 				$.post(settings.ajaxUrl, {
-					action: 'moksa_line_unlink',
+					action: 'mofoline_unlink',
 					nonce: $button.data('nonce'),
-					user_id: $button.data('moksa-line-unlink')
+					user_id: $button.data('mofoline-unlink')
 				}).then(function (response) {
 					if (response && response.success) {
 						window.location.reload();
@@ -81,7 +81,7 @@
 		// Replacing the card is the way out of a shared screenshot: the old
 		// code stops working the moment a new one is issued, so it is worth
 		// asking first.
-		$(document).on('click', '[data-moksa-line-reissue]', function (event) {
+		$(document).on('click', '[data-mofoline-reissue]', function (event) {
 			event.preventDefault();
 
 			var $button = $(this);
@@ -98,7 +98,7 @@
 				$button.prop('disabled', true);
 
 				$.post(settings.ajaxUrl, {
-					action: 'moksa_line_member_reissue',
+					action: 'mofoline_member_reissue',
 					nonce: $button.data('nonce')
 				}).then(function (response) {
 					if (response && response.success) {

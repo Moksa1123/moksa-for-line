@@ -7,30 +7,30 @@
  * status, which means a status that flips back and forth, or a plugin that
  * fires the hook twice, cannot spam the customer.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Woo;
+namespace Mofoline\Woo;
 
-use Moksa\Line\Data\Users;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Login\LoginModule;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Frontend\ShortcodeModule;
-use Moksa\Line\Support\Options;
+use Mofoline\Data\Users;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Login\LoginModule;
+use Mofoline\Support\Logger;
+use Mofoline\Frontend\ShortcodeModule;
+use Mofoline\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
 class WooModule {
 
 	const ENDPOINT = 'line-account';
-	const META_KEY = '_moksa_line_user_id';
+	const META_KEY = '_mofoline_user_id';
 
 	/** Which statuses this order has already been notified about. */
-	const META_SENT = '_moksa_line_notified';
+	const META_SENT = '_mofoline_notified';
 
 	/** How many times we have waited for a tracking number on this order. */
-	const META_ATTEMPTS = '_moksa_line_notify_attempts';
+	const META_ATTEMPTS = '_mofoline_notify_attempts';
 
 	/**
 	 * @var NotifyTemplates
@@ -49,7 +49,7 @@ class WooModule {
 		$this->templates->register();
 
 		add_action( 'woocommerce_order_status_changed', array( $this, 'on_status_changed' ), 10, 4 );
-		add_action( 'moksa_line_order_notify', array( $this, 'dispatch' ), 10, 2 );
+		add_action( 'mofoline_order_notify', array( $this, 'dispatch' ), 10, 2 );
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'store_line_id_on_order' ), 10, 2 );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'show_line_id_in_admin' ) );
 
@@ -243,7 +243,7 @@ class WooModule {
 					'%1$d LINE notification sent for status: %2$s',
 					'%1$d LINE notifications sent for status: %2$s',
 					$delivered,
-					'moksa-line'
+					'moksa-for-line'
 				),
 				$delivered,
 				wc_get_order_status_name( $status )
@@ -285,7 +285,7 @@ class WooModule {
 		 * @param string    $status       Status slug.
 		 * @param string    $line_user_id Recipient.
 		 */
-		return (array) apply_filters( 'moksa_line_order_messages', $messages, $order, $status, $line_user_id );
+		return (array) apply_filters( 'mofoline_order_messages', $messages, $order, $status, $line_user_id );
 	}
 
 	/**
@@ -335,11 +335,11 @@ class WooModule {
 		$args = array( $order_id, $status );
 
 		// Never stack two jobs for the same order and status.
-		if ( wp_next_scheduled( 'moksa_line_order_notify', $args ) ) {
+		if ( wp_next_scheduled( 'mofoline_order_notify', $args ) ) {
 			return;
 		}
 
-		wp_schedule_single_event( time() + max( 5, $delay ), 'moksa_line_order_notify', $args );
+		wp_schedule_single_event( time() + max( 5, $delay ), 'mofoline_order_notify', $args );
 	}
 
 	/**
@@ -444,7 +444,7 @@ class WooModule {
 				'type'   => 'text',
 				'text'   => sprintf(
 					/* translators: %s: order number. */
-					__( 'Order %s', 'moksa-line' ),
+					__( 'Order %s', 'moksa-for-line' ),
 					(string) $order->get_order_number()
 				),
 				'weight' => 'bold',
@@ -469,7 +469,7 @@ class WooModule {
 			'layout'   => 'horizontal',
 			'margin'   => 'md',
 			'contents' => array(
-				array( 'type' => 'text', 'text' => __( 'Total', 'moksa-line' ), 'size' => 'sm', 'color' => '#888888' ),
+				array( 'type' => 'text', 'text' => __( 'Total', 'moksa-for-line' ), 'size' => 'sm', 'color' => '#888888' ),
 				array(
 					'type'   => 'text',
 					'text'   => OrderContext::clean_money( (string) $order->get_formatted_order_total() ),
@@ -508,7 +508,7 @@ class WooModule {
 						'height' => 'sm',
 						'action' => array(
 							'type'  => 'uri',
-							'label' => __( 'View order', 'moksa-line' ),
+							'label' => __( 'View order', 'moksa-for-line' ),
 							'uri'   => $view_url,
 						),
 					),
@@ -525,7 +525,7 @@ class WooModule {
 		return MessagingClient::flex(
 			sprintf(
 				/* translators: 1: order number, 2: status label. */
-				__( 'Order %1$s: %2$s', 'moksa-line' ),
+				__( 'Order %1$s: %2$s', 'moksa-for-line' ),
 				(string) $order->get_order_number(),
 				$status_label
 			),
@@ -605,7 +605,7 @@ class WooModule {
 
 		printf(
 			'<p><strong>%s:</strong><br />%s<br /><code>%s</code></p>',
-			esc_html__( 'LINE account', 'moksa-line' ),
+			esc_html__( 'LINE account', 'moksa-for-line' ),
 			esc_html( $record ? (string) $record->display_name : '' ),
 			esc_html( $line_user_id )
 		);
@@ -635,12 +635,12 @@ class WooModule {
 	 * Flushing is expensive, so it happens once and then the flag says so.
 	 */
 	private static function flush_endpoint_once(): void {
-		if ( self::ENDPOINT === get_option( 'moksa_line_account_endpoint' ) ) {
+		if ( self::ENDPOINT === get_option( 'mofoline_account_endpoint' ) ) {
 			return;
 		}
 
 		flush_rewrite_rules( false );
-		update_option( 'moksa_line_account_endpoint', self::ENDPOINT, false );
+		update_option( 'mofoline_account_endpoint', self::ENDPOINT, false );
 	}
 
 	/**
@@ -666,7 +666,7 @@ class WooModule {
 
 		unset( $items['customer-logout'] );
 
-		$items[ self::ENDPOINT ] = __( 'LINE', 'moksa-line' );
+		$items[ self::ENDPOINT ] = __( 'LINE', 'moksa-for-line' );
 
 		if ( null !== $logout ) {
 			$items['customer-logout'] = $logout;
@@ -687,8 +687,8 @@ class WooModule {
 	private static function enqueue_account_assets(): void {
 		// The strings and the ajax URL ride along from where the script is
 		// registered; enqueuing is all this has to do.
-		wp_enqueue_style( 'moksa-line-confirm' );
-		wp_enqueue_script( 'moksa-line-account' );
+		wp_enqueue_style( 'mofoline-confirm' );
+		wp_enqueue_script( 'mofoline-account' );
 	}
 
 	/**
@@ -698,7 +698,7 @@ class WooModule {
 		$record = Users::by_wp_id( get_current_user_id() );
 		$linked = $record && '' !== (string) $record->line_user_id;
 
-		wp_enqueue_style( 'moksa-line-front' );
+		wp_enqueue_style( 'mofoline-front' );
 		self::enqueue_account_assets();
 
 		$basic_id  = ltrim( trim( (string) Options::get( 'bot_basic_id' ) ), '@' );
@@ -707,9 +707,9 @@ class WooModule {
 		<div class="moksa-account">
 			<div class="moksa-account__head">
 				<span class="moksa-account__mark" aria-hidden="true">LINE</span>
-				<span class="moksa-account__title"><?php esc_html_e( 'LINE account', 'moksa-line' ); ?></span>
+				<span class="moksa-account__title"><?php esc_html_e( 'LINE account', 'moksa-for-line' ); ?></span>
 				<span class="moksa-account__state moksa-account__state--<?php echo $linked ? 'on' : 'off'; ?>">
-					<?php echo esc_html( $linked ? __( 'Connected', 'moksa-line' ) : __( 'Not connected', 'moksa-line' ) ); ?>
+					<?php echo esc_html( $linked ? __( 'Connected', 'moksa-for-line' ) : __( 'Not connected', 'moksa-for-line' ) ); ?>
 				</span>
 			</div>
 
@@ -732,18 +732,18 @@ class WooModule {
 						$shown_name = trim( (string) $record->display_name );
 						?>
 						<strong class="moksa-account__name">
-							<?php echo esc_html( '' !== $shown_name ? $shown_name : __( 'Your LINE account', 'moksa-line' ) ); ?>
+							<?php echo esc_html( '' !== $shown_name ? $shown_name : __( 'Your LINE account', 'moksa-for-line' ) ); ?>
 						</strong>
 						<?php if ( '' !== (string) $record->created_at ) : ?>
 							<span class="moksa-account__since">
 								<?php
 								printf(
 									/* translators: %s: the date the account was linked. */
-									esc_html__( 'Linked since %s', 'moksa-line' ),
+									esc_html__( 'Linked since %s', 'moksa-for-line' ),
 									esc_html(
 										mysql2date(
 											/* translators: date format for "Linked since", see https://www.php.net/manual/datetime.format.php -- translate it to whatever reads naturally in your language, not literally. */
-											_x( 'F j, Y', 'linked-since date', 'moksa-line' ),
+											_x( 'F j, Y', 'linked-since date', 'moksa-for-line' ),
 											get_date_from_gmt( (string) $record->created_at )
 										)
 									)
@@ -756,7 +756,7 @@ class WooModule {
 
 				<ul class="moksa-account__facts">
 					<li class="moksa-account__fact moksa-account__fact--yes">
-						<?php esc_html_e( 'Order updates come to you on LINE', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Order updates come to you on LINE', 'moksa-for-line' ); ?>
 					</li>
 
 					<?php
@@ -772,53 +772,53 @@ class WooModule {
 							// seen: someone who added the account before this
 							// site had a webhook is recorded as not a friend,
 							// and telling them otherwise is worse than silence.
-							esc_html_e( 'They cannot reach you until you add the official account as a friend', 'moksa-line' );
+							esc_html_e( 'They cannot reach you until you add the official account as a friend', 'moksa-for-line' );
 							?>
 							<?php if ( '' !== $friend_url ) : ?>
-								<a class="moksa-line-button moksa-line-button--small" href="<?php echo esc_url( $friend_url ); ?>"
-									target="_blank" rel="noopener nofollow"><?php esc_html_e( 'Add as a friend', 'moksa-line' ); ?></a>
+								<a class="mofoline-button mofoline-button--small" href="<?php echo esc_url( $friend_url ); ?>"
+									target="_blank" rel="noopener nofollow"><?php esc_html_e( 'Add as a friend', 'moksa-for-line' ); ?></a>
 							<?php endif; ?>
 						</li>
 					<?php endif; ?>
 
 					<li class="moksa-account__fact moksa-account__fact--yes">
-						<?php esc_html_e( 'You can sign in with LINE instead of a password', 'moksa-line' ); ?>
+						<?php esc_html_e( 'You can sign in with LINE instead of a password', 'moksa-for-line' ); ?>
 					</li>
 				</ul>
 
 				<div class="moksa-account__actions">
 					<button type="button" class="moksa-account__unlink"
-						data-moksa-line-unlink="<?php echo esc_attr( (string) get_current_user_id() ); ?>"
-						data-nonce="<?php echo esc_attr( wp_create_nonce( 'moksa_line_link' ) ); ?>">
-						<?php esc_html_e( 'Unlink', 'moksa-line' ); ?>
+						data-mofoline-unlink="<?php echo esc_attr( (string) get_current_user_id() ); ?>"
+						data-nonce="<?php echo esc_attr( wp_create_nonce( 'mofoline_link' ) ); ?>">
+						<?php esc_html_e( 'Unlink', 'moksa-for-line' ); ?>
 					</button>
 				</div>
 			<?php else : ?>
-				<p class="moksa-account__lead"><?php esc_html_e( 'Link your account to:', 'moksa-line' ); ?></p>
+				<p class="moksa-account__lead"><?php esc_html_e( 'Link your account to:', 'moksa-for-line' ); ?></p>
 
 				<ul class="moksa-account__facts">
 					<li class="moksa-account__fact moksa-account__fact--yes">
-						<?php esc_html_e( 'Hear about your order in LINE, from checkout to delivery', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Hear about your order in LINE, from checkout to delivery', 'moksa-for-line' ); ?>
 					</li>
 					<li class="moksa-account__fact moksa-account__fact--yes">
-						<?php esc_html_e( 'Sign in with one tap next time', 'moksa-line' ); ?>
+						<?php esc_html_e( 'Sign in with one tap next time', 'moksa-for-line' ); ?>
 					</li>
 				</ul>
 
 				<div class="moksa-account__actions">
-					<a class="moksa-line-button" href="<?php
+					<a class="mofoline-button" href="<?php
 						echo esc_url(
 							add_query_arg(
 								array(
-									'action'      => 'moksa_line_start',
+									'action'      => 'mofoline_start',
 									'link'        => 1,
-									'_wpnonce'    => wp_create_nonce( 'moksa_line_link' ),
+									'_wpnonce'    => wp_create_nonce( 'mofoline_link' ),
 									'redirect_to' => rawurlencode( wc_get_account_endpoint_url( self::ENDPOINT ) ),
 								),
 								admin_url( 'admin-ajax.php' )
 							)
 						);
-					?>"><?php esc_html_e( 'Link my account', 'moksa-line' ); ?></a>
+					?>"><?php esc_html_e( 'Link my account', 'moksa-for-line' ); ?></a>
 				</div>
 			<?php endif; ?>
 
@@ -830,7 +830,7 @@ class WooModule {
 			// Not conditional on being linked, either -- the code identifies
 			// the customer at the counter, which is just as useful for someone
 			// who signs in with a password.
-			\Moksa\Line\Member\MemberModule::render_customer_card( get_current_user_id() );
+			\Mofoline\Member\MemberModule::render_customer_card( get_current_user_id() );
 			?>
 		</div>
 		<?php
@@ -846,31 +846,31 @@ class WooModule {
 			return;
 		}
 
-		wp_enqueue_style( 'moksa-line-front' );
+		wp_enqueue_style( 'mofoline-front' );
 
 		$position = 'below' !== Options::get( 'button_position' ) ? 'above' : 'below';
 		$label    = trim( (string) Options::get( 'button_text' ) );
 		$divider  = Options::get( 'button_divider' )
 			? sprintf(
-				'<p class="moksa-line-divider" aria-hidden="true"><span>%s</span></p>',
-				esc_html_x( 'or', 'between the LINE button and the login form', 'moksa-line' )
+				'<p class="mofoline-divider" aria-hidden="true"><span>%s</span></p>',
+				esc_html_x( 'or', 'between the LINE button and the login form', 'moksa-for-line' )
 			)
 			: '';
 
 		$button = sprintf(
-			'<p class="moksa-line-woo-login"><a class="moksa-line-button%1$s" href="%2$s" style="%3$s" rel="nofollow">%4$s</a></p>',
+			'<p class="mofoline-woo-login"><a class="mofoline-button%1$s" href="%2$s" style="%3$s" rel="nofollow">%4$s</a></p>',
 			esc_attr( ShortcodeModule::align_class() ),
 			esc_url(
 				add_query_arg(
 					array(
-						'action'      => 'moksa_line_start',
+						'action'      => 'mofoline_start',
 						'redirect_to' => rawurlencode( wc_get_page_permalink( 'myaccount' ) ),
 					),
 					admin_url( 'admin-ajax.php' )
 				)
 			),
 			esc_attr( ShortcodeModule::style_declarations() ),
-			esc_html( '' !== $label ? $label : __( 'Continue with LINE', 'moksa-line' ) )
+			esc_html( '' !== $label ? $label : __( 'Continue with LINE', 'moksa-for-line' ) )
 		);
 
 		// The rule goes between the two things it separates, whichever way
@@ -887,22 +887,22 @@ class WooModule {
 			return;
 		}
 
-		wp_enqueue_style( 'moksa-line-front' );
+		wp_enqueue_style( 'mofoline-front' );
 
 		printf(
-			'<div class="woocommerce-info moksa-line-checkout-prompt"><span>%s</span> <a class="moksa-line-button moksa-line-button--small" href="%s" style="%s">%s</a></div>',
-			esc_html__( 'Already shopped with us?', 'moksa-line' ),
+			'<div class="woocommerce-info mofoline-checkout-prompt"><span>%s</span> <a class="mofoline-button mofoline-button--small" href="%s" style="%s">%s</a></div>',
+			esc_html__( 'Already shopped with us?', 'moksa-for-line' ),
 			esc_url(
 				add_query_arg(
 					array(
-						'action'      => 'moksa_line_start',
+						'action'      => 'mofoline_start',
 						'redirect_to' => rawurlencode( wc_get_checkout_url() ),
 					),
 					admin_url( 'admin-ajax.php' )
 				)
 			),
 			esc_attr( ShortcodeModule::style_declarations() ),
-			esc_html__( 'Sign in with LINE', 'moksa-line' )
+			esc_html__( 'Sign in with LINE', 'moksa-for-line' )
 		);
 	}
 

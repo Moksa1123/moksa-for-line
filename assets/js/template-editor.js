@@ -26,7 +26,7 @@
 	var MAX_COLUMNS = 10;
 
 	function strings() {
-		return (window.moksaLine && window.moksaLine.strings) || {};
+		return (window.mofoline && window.mofoline.strings) || {};
 	}
 
 	function t(key, fallback) {
@@ -509,9 +509,9 @@
 		clearTimeout(this.warnTimer);
 
 		this.warnTimer = setTimeout(function () {
-			$.post(moksaLine.ajaxUrl, {
-				action: 'moksa_line_template_warnings',
-				nonce: moksaLine.nonce,
+			$.post(mofoline.ajaxUrl, {
+				action: 'mofoline_template_warnings',
+				nonce: mofoline.nonce,
 				definition: JSON.stringify(self.model)
 			}).done(function (response) {
 				var problems = (response && response.data && response.data.problems) || [];

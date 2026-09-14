@@ -17,19 +17,19 @@
  * server delivered it, before WordPress added slashes to the superglobals, so
  * there is nothing to unslash and no way to forget to.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Admin;
+namespace Mofoline\Admin;
 
-use Moksa\Line\Support\Logger;
+use Mofoline\Support\Logger;
 
 defined( 'ABSPATH' ) || exit;
 
 final class Ajax {
 
 	/** The nonce action every admin screen signs its requests with. */
-	const NONCE = 'moksa_line_admin';
+	const NONCE = 'mofoline_admin';
 
 	/**
 	 * Stop unless this is a signed request from somebody allowed to make it.

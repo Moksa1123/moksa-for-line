@@ -10,19 +10,19 @@
  * The alphabet is Crockford's base32 -- no I, L, O or U -- because a code that
  * gets read aloud across a counter has to survive being heard as well as seen.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Member;
+namespace Mofoline\Member;
 
-use Moksa\Line\Support\Db;
+use Mofoline\Support\Db;
 
 defined( 'ABSPATH' ) || exit;
 
 class MemberCard {
 
 	/** Where the code lives. Underscored, so it stays out of custom-field UIs. */
-	const META = '_moksa_line_member_code';
+	const META = '_mofoline_member_code';
 
 	/** Characters a code is built from. */
 	const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';

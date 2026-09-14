@@ -5,12 +5,12 @@
  * Every send path normalises its messages first, so a caller can pass a plain
  * string, one message array, or a list, and always get a valid request body.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Api;
+namespace Mofoline\Api;
 
-use Moksa\Line\Flex\Validator;
+use Mofoline\Flex\Validator;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -161,7 +161,7 @@ class MessagingClient {
 			 * @param string $to       LINE user id.
 			 * @param array  $options  Options the caller passed.
 			 */
-			do_action( 'moksa_line_pushed', $messages, $to, $options );
+			do_action( 'mofoline_pushed', $messages, $to, $options );
 		}
 
 		return $result;
@@ -356,7 +356,7 @@ class MessagingClient {
 	 * @return int|null Reachable people, or null when LINE cannot say.
 	 */
 	public static function reachable(): ?int {
-		$cached = get_transient( 'moksa_line_reachable' );
+		$cached = get_transient( 'mofoline_reachable' );
 
 		if ( false !== $cached ) {
 			return '' === $cached ? null : (int) $cached;
@@ -369,7 +369,7 @@ class MessagingClient {
 			$reach = isset( $response['targetedReaches'] ) ? (int) $response['targetedReaches'] : null;
 		}
 
-		set_transient( 'moksa_line_reachable', null === $reach ? '' : (string) $reach, HOUR_IN_SECONDS );
+		set_transient( 'mofoline_reachable', null === $reach ? '' : (string) $reach, HOUR_IN_SECONDS );
 
 		return $reach;
 	}
@@ -414,8 +414,8 @@ class MessagingClient {
 
 		if ( ! is_array( $messages ) || empty( $messages ) ) {
 			return new WP_Error(
-				'moksa_line_empty_message',
-				__( 'There is nothing to send.', 'moksa-line' )
+				'mofoline_empty_message',
+				__( 'There is nothing to send.', 'moksa-for-line' )
 			);
 		}
 
@@ -423,10 +423,10 @@ class MessagingClient {
 
 		if ( count( $messages ) > self::MAX_MESSAGES ) {
 			return new WP_Error(
-				'moksa_line_too_many_messages',
+				'mofoline_too_many_messages',
 				sprintf(
 					/* translators: %d: maximum number of messages. */
-					__( 'LINE accepts at most %d messages per send.', 'moksa-line' ),
+					__( 'LINE accepts at most %d messages per send.', 'moksa-for-line' ),
 					self::MAX_MESSAGES
 				)
 			);
@@ -435,10 +435,10 @@ class MessagingClient {
 		foreach ( $messages as $index => $message ) {
 			if ( ! is_array( $message ) || empty( $message['type'] ) ) {
 				return new WP_Error(
-					'moksa_line_invalid_message',
+					'mofoline_invalid_message',
 					sprintf(
 						/* translators: %d: zero-based message index. */
-						__( 'Message %d is missing its type.', 'moksa-line' ),
+						__( 'Message %d is missing its type.', 'moksa-for-line' ),
 						$index
 					)
 				);
@@ -451,7 +451,7 @@ class MessagingClient {
 
 				if ( ! empty( $problems ) ) {
 					return new WP_Error(
-						'moksa_line_invalid_flex',
+						'mofoline_invalid_flex',
 						implode( ' ', array_slice( $problems, 0, 3 ) )
 					);
 				}
@@ -510,7 +510,7 @@ class MessagingClient {
 		// Version 5: SHA-1 over a namespace and a name. The namespace is this
 		// plugin's own, so keys cannot collide with another system's.
 		$namespace = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
-		$hash      = sha1( hex2bin( str_replace( '-', '', $namespace ) ) . 'moksa-line:' . $seed );
+		$hash      = sha1( hex2bin( str_replace( '-', '', $namespace ) ) . 'moksa-for-line:' . $seed );
 
 		return sprintf(
 			'%08s-%04s-%04x-%04x-%12s',

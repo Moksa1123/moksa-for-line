@@ -6,17 +6,17 @@
  * this replaces, so templates a shop has already written keep working: they
  * live in wp_posts, which this plugin never rewrites.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Woo;
+namespace Mofoline\Woo;
 
-use Moksa\Line\Support\Db;
-use Moksa\Line\Api\MessagingClient;
-use Moksa\Line\Support\Options;
-use Moksa\Line\Flex\Validator;
-use Moksa\Line\Support\Logger;
-use Moksa\Line\Admin\Ajax;
+use Mofoline\Support\Db;
+use Mofoline\Api\MessagingClient;
+use Mofoline\Support\Options;
+use Mofoline\Flex\Validator;
+use Mofoline\Support\Logger;
+use Mofoline\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -36,8 +36,8 @@ class NotifyTemplates {
 		add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'columns' ) );
 		add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'column' ), 10, 2 );
 
-		add_action( 'wp_ajax_moksa_line_notify_test', array( $this, 'ajax_test' ) );
-		add_action( 'wp_ajax_moksa_line_notify_preview', array( $this, 'ajax_preview' ) );
+		add_action( 'wp_ajax_mofoline_notify_test', array( $this, 'ajax_test' ) );
+		add_action( 'wp_ajax_mofoline_notify_preview', array( $this, 'ajax_preview' ) );
 	}
 
 	public function register_post_type(): void {
@@ -45,12 +45,12 @@ class NotifyTemplates {
 			self::POST_TYPE,
 			array(
 				'labels'          => array(
-					'name'          => __( 'Order notifications', 'moksa-line' ),
-					'singular_name' => __( 'Order notification', 'moksa-line' ),
-					'add_new_item'  => __( 'Add order notification', 'moksa-line' ),
-					'edit_item'     => __( 'Edit order notification', 'moksa-line' ),
-					'search_items'  => __( 'Search notifications', 'moksa-line' ),
-					'not_found'     => __( 'No notification templates yet.', 'moksa-line' ),
+					'name'          => __( 'Order notifications', 'moksa-for-line' ),
+					'singular_name' => __( 'Order notification', 'moksa-for-line' ),
+					'add_new_item'  => __( 'Add order notification', 'moksa-for-line' ),
+					'edit_item'     => __( 'Edit order notification', 'moksa-for-line' ),
+					'search_items'  => __( 'Search notifications', 'moksa-for-line' ),
+					'not_found'     => __( 'No notification templates yet.', 'moksa-for-line' ),
 				),
 				'public'          => false,
 				'show_ui'         => true,
@@ -75,7 +75,7 @@ class NotifyTemplates {
 	public function add_meta_boxes(): void {
 		add_meta_box(
 			'moksa-notify-trigger',
-			__( 'When to send', 'moksa-line' ),
+			__( 'When to send', 'moksa-for-line' ),
 			array( $this, 'render_trigger' ),
 			self::POST_TYPE,
 			'normal',
@@ -84,7 +84,7 @@ class NotifyTemplates {
 
 		add_meta_box(
 			'moksa-notify-content',
-			__( 'Message', 'moksa-line' ),
+			__( 'Message', 'moksa-for-line' ),
 			array( $this, 'render_content' ),
 			self::POST_TYPE,
 			'normal',
@@ -93,7 +93,7 @@ class NotifyTemplates {
 
 		add_meta_box(
 			'moksa-notify-preview',
-			__( 'Preview', 'moksa-line' ),
+			__( 'Preview', 'moksa-for-line' ),
 			array( $this, 'render_preview' ),
 			self::POST_TYPE,
 			'normal',
@@ -105,7 +105,7 @@ class NotifyTemplates {
 		// took three lines inside a box that then had to scroll.
 		add_meta_box(
 			'moksa-notify-params',
-			__( 'Available values', 'moksa-line' ),
+			__( 'Available values', 'moksa-for-line' ),
 			array( $this, 'render_params' ),
 			self::POST_TYPE,
 			'normal',
@@ -119,14 +119,14 @@ class NotifyTemplates {
 	 * @param \WP_Post $post Template being edited.
 	 */
 	public function render_trigger( $post ): void {
-		wp_nonce_field( 'moksa_line_notify_save', 'moksa_line_notify_nonce' );
+		wp_nonce_field( 'mofoline_notify_save', 'mofoline_notify_nonce' );
 
 		$statuses = (array) get_post_meta( $post->ID, self::META_STATUSES, true );
 		$rules    = (array) get_post_meta( $post->ID, self::META_RULES, true );
 		?>
-		<p><strong><?php esc_html_e( 'Order statuses', 'moksa-line' ); ?></strong></p>
+		<p><strong><?php esc_html_e( 'Order statuses', 'moksa-for-line' ); ?></strong></p>
 		<p class="description">
-			<?php esc_html_e( 'The customer is messaged when the order enters any of these statuses. Each notification is billed as a push message.', 'moksa-line' ); ?>
+			<?php esc_html_e( 'The customer is messaged when the order enters any of these statuses. Each notification is billed as a push message.', 'moksa-for-line' ); ?>
 		</p>
 
 		<?php foreach ( self::order_statuses() as $slug => $label ) : ?>
@@ -139,9 +139,9 @@ class NotifyTemplates {
 
 		<hr />
 
-		<p><strong><?php esc_html_e( 'Only when', 'moksa-line' ); ?></strong></p>
+		<p><strong><?php esc_html_e( 'Only when', 'moksa-for-line' ); ?></strong></p>
 		<p class="description">
-			<?php esc_html_e( 'Every condition must hold. Leave empty to send for every order that reaches those statuses.', 'moksa-line' ); ?>
+			<?php esc_html_e( 'Every condition must hold. Leave empty to send for every order that reaches those statuses.', 'moksa-for-line' ); ?>
 		</p>
 
 		<table class="widefat moksa-rules" data-moksa-rules>
@@ -155,7 +155,7 @@ class NotifyTemplates {
 				?>
 			</tbody>
 		</table>
-		<p><button type="button" class="button" data-moksa-add-rule><?php esc_html_e( 'Add condition', 'moksa-line' ); ?></button></p>
+		<p><button type="button" class="button" data-moksa-add-rule><?php esc_html_e( 'Add condition', 'moksa-for-line' ); ?></button></p>
 		<?php
 	}
 
@@ -174,7 +174,7 @@ class NotifyTemplates {
 		<tr>
 			<td>
 				<select name="moksa_notify_rules[<?php echo esc_attr( (string) $index ); ?>][type]">
-					<option value=""><?php esc_html_e( '-- choose --', 'moksa-line' ); ?></option>
+					<option value=""><?php esc_html_e( '-- choose --', 'moksa-for-line' ); ?></option>
 					<?php foreach ( TriggerRules::types() as $slug => $label ) : ?>
 						<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $type, $slug ); ?>>
 							<?php echo esc_html( $label ); ?>
@@ -202,9 +202,9 @@ class NotifyTemplates {
 			<td>
 				<input type="text" name="moksa_notify_rules[<?php echo esc_attr( (string) $index ); ?>][value]"
 					value="<?php echo esc_attr( $value ); ?>" class="regular-text"
-					placeholder="<?php esc_attr_e( 'e.g. cod, flat_rate, 1000', 'moksa-line' ); ?>" />
+					placeholder="<?php esc_attr_e( 'e.g. cod, flat_rate, 1000', 'moksa-for-line' ); ?>" />
 			</td>
-			<td><button type="button" class="button-link delete" data-moksa-remove-rule><?php esc_html_e( 'Remove', 'moksa-line' ); ?></button></td>
+			<td><button type="button" class="button-link delete" data-moksa-remove-rule><?php esc_html_e( 'Remove', 'moksa-for-line' ); ?></button></td>
 		</tr>
 		<?php
 	}
@@ -222,18 +222,18 @@ class NotifyTemplates {
 		}
 		?>
 		<p class="description">
-			<?php esc_html_e( 'A Flex Message bubble or carousel, as JSON. Values in braces are replaced with the order\'s details before sending.', 'moksa-line' ); ?>
+			<?php esc_html_e( 'A Flex Message bubble or carousel, as JSON. Values in braces are replaced with the order\'s details before sending.', 'moksa-for-line' ); ?>
 		</p>
 		<textarea name="moksa_notify_content" rows="20" class="widefat code" spellcheck="false"
 			data-moksa-notify-json><?php echo esc_textarea( $content ); ?></textarea>
 
 		<p>
-			<label for="moksa-notify-test-to"><?php esc_html_e( 'Send a test to', 'moksa-line' ); ?></label>
+			<label for="moksa-notify-test-to"><?php esc_html_e( 'Send a test to', 'moksa-for-line' ); ?></label>
 			<input type="text" id="moksa-notify-test-to" class="regular-text" placeholder="U1234..." data-moksa-notify-test-to />
 			<button type="button" class="button" data-moksa-notify-test="<?php echo esc_attr( (string) $post->ID ); ?>">
-				<?php esc_html_e( 'Send test', 'moksa-line' ); ?>
+				<?php esc_html_e( 'Send test', 'moksa-for-line' ); ?>
 			</button>
-			<span class="description"><?php esc_html_e( 'Uses the most recent order to fill in the values. Save first.', 'moksa-line' ); ?></span>
+			<span class="description"><?php esc_html_e( 'Uses the most recent order to fill in the values. Save first.', 'moksa-for-line' ); ?></span>
 		</p>
 
 		<div class="moksa-feedback" data-moksa-feedback></div>
@@ -252,14 +252,14 @@ class NotifyTemplates {
 		?>
 		<div class="moksa-notify-preview" data-moksa-notify-preview>
 			<p class="description">
-				<?php esc_html_e( 'Drawn from your most recent order, so the values are real ones.', 'moksa-line' ); ?>
+				<?php esc_html_e( 'Drawn from your most recent order, so the values are real ones.', 'moksa-for-line' ); ?>
 			</p>
 
 			<?php // data-line-preview marks a deliberate imitation of another product's UI. ?>
 			<div class="moksa-phone-chat" data-line-preview>
 				<div class="moksa-phone-chat__bar">
 					<span class="moksa-phone-chat__dot"></span>
-					<?php echo esc_html( '' !== $basic_id ? '@' . $basic_id : __( 'Your official account', 'moksa-line' ) ); ?>
+					<?php echo esc_html( '' !== $basic_id ? '@' . $basic_id : __( 'Your official account', 'moksa-for-line' ) ); ?>
 				</div>
 				<div class="moksa-phone-chat__body">
 					<span class="moksa-phone-chat__avatar" aria-hidden="true"></span>
@@ -268,7 +268,7 @@ class NotifyTemplates {
 			</div>
 
 			<p>
-				<button type="button" class="button" data-moksa-notify-refresh><?php esc_html_e( 'Refresh the preview', 'moksa-line' ); ?></button>
+				<button type="button" class="button" data-moksa-notify-refresh><?php esc_html_e( 'Refresh the preview', 'moksa-for-line' ); ?></button>
 				<span class="description" data-moksa-notify-preview-note></span>
 			</p>
 		</div>
@@ -281,15 +281,15 @@ class NotifyTemplates {
 	public function render_params(): void {
 		?>
 		<p class="description">
-			<?php esc_html_e( 'Click a name to copy it. The last column is what it resolves to for your most recent order, so a blank one is a value your shop does not fill in.', 'moksa-line' ); ?>
+			<?php esc_html_e( 'Click a name to copy it. The last column is what it resolves to for your most recent order, so a blank one is a value your shop does not fill in.', 'moksa-for-line' ); ?>
 		</p>
 
 		<table class="widefat striped moksa-params" data-moksa-params>
 			<thead>
 				<tr>
-					<th scope="col" class="moksa-params__col-key"><?php esc_html_e( 'Name', 'moksa-line' ); ?></th>
-					<th scope="col"><?php esc_html_e( 'What it is', 'moksa-line' ); ?></th>
-					<th scope="col" class="moksa-params__col-value"><?php esc_html_e( 'On your latest order', 'moksa-line' ); ?></th>
+					<th scope="col" class="moksa-params__col-key"><?php esc_html_e( 'Name', 'moksa-for-line' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'What it is', 'moksa-for-line' ); ?></th>
+					<th scope="col" class="moksa-params__col-value"><?php esc_html_e( 'On your latest order', 'moksa-for-line' ); ?></th>
 				</tr>
 			</thead>
 			<?php foreach ( OrderContext::documented_groups() as $group => $placeholders ) : ?>
@@ -303,7 +303,7 @@ class NotifyTemplates {
 								<?php // A button, not a <code>: the old one could not be reached by keyboard. ?>
 								<button type="button" class="moksa-copyable moksa-param__key"
 									data-moksa-copy="<?php echo esc_attr( $placeholder ); ?>"
-									title="<?php esc_attr_e( 'Copy', 'moksa-line' ); ?>">
+									title="<?php esc_attr_e( 'Copy', 'moksa-for-line' ); ?>">
 									<code><?php echo esc_html( $placeholder ); ?></code>
 									<span class="moksa-param__copy" aria-hidden="true">⧉</span>
 								</button>
@@ -329,9 +329,9 @@ class NotifyTemplates {
 			return;
 		}
 
-		$nonce = Ajax::text( 'moksa_line_notify_nonce' );
+		$nonce = Ajax::text( 'mofoline_notify_nonce' );
 
-		if ( ! wp_verify_nonce( $nonce, 'moksa_line_notify_save' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'mofoline_notify_save' ) ) {
 			return;
 		}
 
@@ -362,10 +362,10 @@ class NotifyTemplates {
 			update_post_meta( $post_id, self::META_CONTENT, $content );
 
 			set_transient(
-				'moksa_line_notify_json_error_' . $post_id,
+				'mofoline_notify_json_error_' . $post_id,
 				sprintf(
 					/* translators: %s: JSON parser message. */
-					__( 'The message is not valid JSON, so this notification will not send: %s', 'moksa-line' ),
+					__( 'The message is not valid JSON, so this notification will not send: %s', 'moksa-for-line' ),
 					json_last_error_msg()
 				),
 				60
@@ -386,9 +386,9 @@ class NotifyTemplates {
 			$out[ $key ] = $label;
 
 			if ( 'title' === $key ) {
-				$out['moksa_statuses'] = __( 'Statuses', 'moksa-line' );
-				$out['moksa_rules']    = __( 'Conditions', 'moksa-line' );
-				$out['moksa_sent']     = __( 'Sent (30 days)', 'moksa-line' );
+				$out['moksa_statuses'] = __( 'Statuses', 'moksa-for-line' );
+				$out['moksa_rules']    = __( 'Conditions', 'moksa-for-line' );
+				$out['moksa_sent']     = __( 'Sent (30 days)', 'moksa-for-line' );
 			}
 		}
 
@@ -411,7 +411,7 @@ class NotifyTemplates {
 
 			echo $names
 				? esc_html( implode( ', ', $names ) )
-				: '<span class="moksa-pill moksa-pill--warn">' . esc_html__( 'never fires', 'moksa-line' ) . '</span>';
+				: '<span class="moksa-pill moksa-pill--warn">' . esc_html__( 'never fires', 'moksa-for-line' ) . '</span>';
 
 			return;
 		}
@@ -423,10 +423,10 @@ class NotifyTemplates {
 				$rules
 					? sprintf(
 						/* translators: %d: number of conditions. */
-						_n( '%d condition', '%d conditions', count( $rules ), 'moksa-line' ),
+						_n( '%d condition', '%d conditions', count( $rules ), 'moksa-for-line' ),
 						count( $rules )
 					)
-					: __( 'Any order', 'moksa-line' )
+					: __( 'Any order', 'moksa-for-line' )
 			);
 
 			return;
@@ -531,7 +531,7 @@ class NotifyTemplates {
 			$message = MessagingClient::flex(
 				sprintf(
 					/* translators: 1: order number, 2: status label. */
-					__( 'Order %1$s: %2$s', 'moksa-line' ),
+					__( 'Order %1$s: %2$s', 'moksa-for-line' ),
 					(string) $order->get_order_number(),
 					wc_get_order_status_name( $status )
 				),
@@ -568,20 +568,20 @@ class NotifyTemplates {
 	 * was to push it to a phone, so every rewording cost a message.
 	 */
 	public function ajax_preview(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+		check_ajax_referer( 'mofoline_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot preview notifications.', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot preview notifications.', 'moksa-for-line' ) ), 403 );
 		}
 
 		if ( ! function_exists( 'wc_get_orders' ) ) {
-			wp_send_json_error( array( 'message' => __( 'WooCommerce is not active.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'WooCommerce is not active.', 'moksa-for-line' ) ) );
 		}
 
 		$orders = wc_get_orders( array( 'limit' => 1, 'orderby' => 'date', 'order' => 'DESC' ) );
 
 		if ( empty( $orders ) ) {
-			wp_send_json_error( array( 'message' => __( 'There are no orders yet to build a preview from.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'There are no orders yet to build a preview from.', 'moksa-for-line' ) ) );
 		}
 
 		$order       = $orders[0];
@@ -606,10 +606,10 @@ class NotifyTemplates {
 				'values'       => $values,
 				'order_number' => (string) $order->get_order_number(),
 				'note'         => null === $message
-					? __( 'This template does not produce a valid message yet.', 'moksa-line' )
+					? __( 'This template does not produce a valid message yet.', 'moksa-for-line' )
 					: sprintf(
 						/* translators: %s: order number the preview was built from. */
-						__( 'Using order %s.', 'moksa-line' ),
+						__( 'Using order %s.', 'moksa-for-line' ),
 						(string) $order->get_order_number()
 					),
 			)
@@ -620,27 +620,27 @@ class NotifyTemplates {
 	 * Send a template to one LINE user, filled in from the most recent order.
 	 */
 	public function ajax_test(): void {
-		check_ajax_referer( 'moksa_line_admin', 'nonce' );
+		check_ajax_referer( 'mofoline_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_woocommerce' ) && ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You cannot send test notifications.', 'moksa-line' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You cannot send test notifications.', 'moksa-for-line' ) ), 403 );
 		}
 
 		$template_id  = Ajax::int( 'template_id' );
 		$line_user_id = Ajax::text( 'line_user_id' );
 
 		if ( '' === $line_user_id ) {
-			wp_send_json_error( array( 'message' => __( 'Enter a LINE user id to send the test to.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Enter a LINE user id to send the test to.', 'moksa-for-line' ) ) );
 		}
 
 		if ( ! function_exists( 'wc_get_orders' ) ) {
-			wp_send_json_error( array( 'message' => __( 'WooCommerce is not active.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'WooCommerce is not active.', 'moksa-for-line' ) ) );
 		}
 
 		$orders = wc_get_orders( array( 'limit' => 1, 'orderby' => 'date', 'order' => 'DESC' ) );
 
 		if ( empty( $orders ) ) {
-			wp_send_json_error( array( 'message' => __( 'There are no orders yet to build a preview from.', 'moksa-line' ) ) );
+			wp_send_json_error( array( 'message' => __( 'There are no orders yet to build a preview from.', 'moksa-for-line' ) ) );
 		}
 
 		$order   = $orders[0];
@@ -648,7 +648,7 @@ class NotifyTemplates {
 
 		if ( null === $message ) {
 			wp_send_json_error(
-				array( 'message' => __( 'This template did not produce a valid message. Check the JSON and the placeholders.', 'moksa-line' ) )
+				array( 'message' => __( 'This template did not produce a valid message. Check the JSON and the placeholders.', 'moksa-for-line' ) )
 			);
 		}
 
@@ -660,7 +660,7 @@ class NotifyTemplates {
 			array(
 				'message' => sprintf(
 					/* translators: %s: order number used for the preview. */
-					__( 'Sent, using order %s for the values.', 'moksa-line' ),
+					__( 'Sent, using order %s for the values.', 'moksa-for-line' ),
 					(string) $order->get_order_number()
 				),
 			)

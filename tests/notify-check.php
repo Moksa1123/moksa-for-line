@@ -7,15 +7,15 @@
  *
  *   wp eval-file tests/notify-check.php
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-use Moksa\Line\Data\Users;
-use Moksa\Line\Support\Options;
-use Moksa\Line\Woo\NotifyHistory;
-use Moksa\Line\Woo\NotifyTemplates;
-use Moksa\Line\Woo\OrderContext;
-use Moksa\Line\Woo\TriggerRules;
+use Mofoline\Data\Users;
+use Mofoline\Support\Options;
+use Mofoline\Woo\NotifyHistory;
+use Mofoline\Woo\NotifyTemplates;
+use Mofoline\Woo\OrderContext;
+use Mofoline\Woo\TriggerRules;
 
 global $wpdb;
 
@@ -40,20 +40,20 @@ function check( $condition, $label, $detail = '' ) {
  * wrong terminal it silently destroys a shop's delivery record and rewrites
  * when their customers get notified. So it asks first.
  */
-if ( 'production' === wp_get_environment_type() && ! defined( 'MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
+if ( 'production' === wp_get_environment_type() && ! defined( 'MOFOLINE_ALLOW_DESTRUCTIVE_TESTS' ) ) {
 	echo "REFUSED: this site reports WP_ENVIRONMENT_TYPE=production.
 ";
 	echo "It truncates the notification history and log and overwrites notification settings.
 ";
 	echo "If this really is a throwaway site, set WP_ENVIRONMENT_TYPE, or define
 ";
-	echo "MOKSA_LINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.
+	echo "MOFOLINE_ALLOW_DESTRUCTIVE_TESTS in wp-config.php, and run it again.
 ";
 	return;
 }
 
 $wpdb->query( 'TRUNCATE ' . NotifyHistory::table() );
-$wpdb->query( 'TRUNCATE ' . \Moksa\Line\Support\Logger::table() );
+$wpdb->query( 'TRUNCATE ' . \Mofoline\Support\Logger::table() );
 
 Options::set( 'woo_notify', true );
 Options::set( 'woo_notify_statuses', array( 'completed' ) );
@@ -87,7 +87,7 @@ function make_order( $total_each = 500, $qty = 2 ) {
 	$order->set_billing_first_name( 'Notify' );
 	$order->set_billing_last_name( 'Buyer' );
 	$order->set_billing_email( 'buyer@example.com' );
-	$order->update_meta_data( '_moksa_line_user_id', 'Ubuyer9001' );
+	$order->update_meta_data( '_mofoline_user_id', 'Ubuyer9001' );
 	$order->calculate_totals();
 	$order->save();
 
@@ -207,7 +207,7 @@ check( in_array( $legacy_id, NotifyTemplates::for_status( 'refunded', $order ), 
 
 $message = NotifyTemplates::render( $template_id, $order, 'completed' );
 check( is_array( $message ) && 'flex' === $message['type'], 'template renders to a flex message' );
-check( is_array( $message ) && array() === \Moksa\Line\Flex\Validator::check_message( $message ), 'rendered message passes validation' );
+check( is_array( $message ) && array() === \Mofoline\Flex\Validator::check_message( $message ), 'rendered message passes validation' );
 
 echo "\n== Dispatch, history and the duplicate guard ==\n";
 
@@ -238,11 +238,11 @@ Options::flush_cache();
 $untracked = make_order();
 $untracked->save();
 
-wp_clear_scheduled_hook( 'moksa_line_order_notify' );
+wp_clear_scheduled_hook( 'mofoline_order_notify' );
 
 $untracked->update_status( 'processing', 'test' );
 
-$scheduled = wp_next_scheduled( 'moksa_line_order_notify', array( $untracked->get_id(), 'processing' ) );
+$scheduled = wp_next_scheduled( 'mofoline_order_notify', array( $untracked->get_id(), 'processing' ) );
 check( false !== $scheduled, 'a processing order with no tracking number is deferred rather than sent' );
 check( 0 === NotifyHistory::paginate( array( 'order_id' => $untracked->get_id() ) )['total'], 'nothing was sent while waiting' );
 
@@ -250,7 +250,7 @@ check( 0 === NotifyHistory::paginate( array( 'order_id' => $untracked->get_id() 
 $untracked->update_meta_data( '_shipping_tracking_number', 'TRACK999' );
 $untracked->save();
 
-$module = new \Moksa\Line\Woo\WooModule();
+$module = new \Mofoline\Woo\WooModule();
 $module->dispatch( $untracked->get_id(), 'processing' );
 
 check( 1 === NotifyHistory::paginate( array( 'order_id' => $untracked->get_id() ) )['total'], 'sent once the tracking number exists' );
@@ -259,16 +259,16 @@ echo "\n== Retry budget ==\n";
 
 $stubborn = make_order();
 $stubborn->save();
-wp_clear_scheduled_hook( 'moksa_line_order_notify' );
+wp_clear_scheduled_hook( 'mofoline_order_notify' );
 
 $module->dispatch( $stubborn->get_id(), 'processing' );
-check( 1 === (int) wc_get_order( $stubborn->get_id() )->get_meta( '_moksa_line_notify_attempts' ), 'first wait recorded' );
+check( 1 === (int) wc_get_order( $stubborn->get_id() )->get_meta( '_mofoline_notify_attempts' ), 'first wait recorded' );
 
-wp_clear_scheduled_hook( 'moksa_line_order_notify' );
+wp_clear_scheduled_hook( 'mofoline_order_notify' );
 $module->dispatch( $stubborn->get_id(), 'processing' );
-check( 2 === (int) wc_get_order( $stubborn->get_id() )->get_meta( '_moksa_line_notify_attempts' ), 'second wait recorded' );
+check( 2 === (int) wc_get_order( $stubborn->get_id() )->get_meta( '_mofoline_notify_attempts' ), 'second wait recorded' );
 
-wp_clear_scheduled_hook( 'moksa_line_order_notify' );
+wp_clear_scheduled_hook( 'mofoline_order_notify' );
 $module->dispatch( $stubborn->get_id(), 'processing' );
 
 check(

@@ -6,10 +6,10 @@
  * rich menus looked like "nothing happened". Everything that talks to LINE
  * now records why it failed, and the admin can read it without SSH.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Support;
+namespace Mofoline\Support;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -51,7 +51,7 @@ class Logger {
 	);
 
 	public static function table(): string {
-		return Db::prefix() . 'moksa_line_logs';
+		return Db::prefix() . 'mofoline_logs';
 	}
 
 	public static function debug( string $message, array $context = array(), string $channel = 'general' ): void {

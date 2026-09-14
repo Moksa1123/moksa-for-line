@@ -7,12 +7,12 @@
  * a provider by hand. That is how the settings screen ended up reporting on
  * AI Engine while the bot was configured to use something else.
  *
- * @package Moksa\Line
+ * @package Mofoline
  */
 
-namespace Moksa\Line\Bot\Ai;
+namespace Mofoline\Bot\Ai;
 
-use Moksa\Line\Support\Options;
+use Mofoline\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,9 +29,9 @@ class Providers {
 	 */
 	public static function choices(): array {
 		return array(
-			'core'      => __( 'WordPress AI (built into WordPress 7.0 and later)', 'moksa-line' ),
-			'ai_engine' => __( 'AI Engine (Meow Apps)', 'moksa-line' ),
-			'none'      => __( 'None', 'moksa-line' ),
+			'core'      => __( 'WordPress AI (built into WordPress 7.0 and later)', 'moksa-for-line' ),
+			'ai_engine' => __( 'AI Engine (Meow Apps)', 'moksa-for-line' ),
+			'none'      => __( 'None', 'moksa-for-line' ),
 		);
 	}
 
