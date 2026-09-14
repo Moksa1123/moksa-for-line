@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin Name: Moksa for LINE
- * Plugin URI: https://moksaweb.com/
  * Description: LINE Login, Messaging API bot, Flex Message builder, tabbed rich menus, customer-service inbox, AI replies and LINE Pay for WordPress and WooCommerce.
  * Version: 1.0.0
  * Author: Moksa
