@@ -12,6 +12,7 @@
 
 namespace Moksa\Line\Data;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
@@ -29,10 +30,9 @@ class Users {
 	 * @return object|null
 	 */
 	public static function by_line_id( string $line_user_id ) {
-		global $wpdb;
 		$table = self::table();
 
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE line_user_id = %s", $table, $line_user_id ) );
+		return Db::get_row( Db::prepare( "SELECT * FROM %i WHERE line_user_id = %s", $table, $line_user_id ) );
 	}
 
 	/**
@@ -46,10 +46,9 @@ class Users {
 			return null;
 		}
 
-		global $wpdb;
 		$table = self::table();
 
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE wp_user_id = %d", $table, $wp_user_id ) );
+		return Db::get_row( Db::prepare( "SELECT * FROM %i WHERE wp_user_id = %d", $table, $wp_user_id ) );
 	}
 
 	/**
@@ -60,8 +59,6 @@ class Users {
 	 * @return int Row id, or 0 on failure.
 	 */
 	public static function upsert( string $line_user_id, array $fields = array() ): int {
-		global $wpdb;
-
 		$now      = current_time( 'mysql', true );
 		$existing = self::by_line_id( $line_user_id );
 
@@ -93,7 +90,7 @@ class Users {
 
 		if ( $existing ) {
 			if ( ! empty( $data ) ) {
-				$wpdb->update( self::table(), $data, array( 'id' => (int) $existing->id ), $format, array( '%d' ) );
+				Db::update( self::table(), $data, array( 'id' => (int) $existing->id ), $format, array( '%d' ) );
 			}
 
 			return (int) $existing->id;
@@ -104,9 +101,9 @@ class Users {
 		$data['created_at']   = $now;
 		$format[]             = '%s';
 
-		$inserted = $wpdb->insert( self::table(), $data, $format );
+		$inserted = Db::insert( self::table(), $data, $format );
 
-		return $inserted ? (int) $wpdb->insert_id : 0;
+		return $inserted ? (int) Db::insert_id() : 0;
 	}
 
 	/**
@@ -127,9 +124,7 @@ class Users {
 	 * @param int $wp_user_id WordPress user id.
 	 */
 	public static function unlink( int $wp_user_id ): void {
-		global $wpdb;
-
-		$wpdb->update(
+		Db::update(
 			self::table(),
 			array( 'wp_user_id' => 0, 'updated_at' => current_time( 'mysql', true ) ),
 			array( 'wp_user_id' => $wp_user_id ),
@@ -165,10 +160,9 @@ class Users {
 	 * @return string[]
 	 */
 	public static function friend_ids( int $limit = 5000 ): array {
-		global $wpdb;
 		$table = self::table();
 
-		$ids = $wpdb->get_col( $wpdb->prepare( "SELECT line_user_id FROM %i WHERE is_friend = 1 LIMIT %d", $table, $limit ) );
+		$ids = Db::get_col( Db::prepare( "SELECT line_user_id FROM %i WHERE is_friend = 1 LIMIT %d", $table, $limit ) );
 
 		return array_map( 'strval', (array) $ids );
 	}
@@ -180,7 +174,6 @@ class Users {
 	 * @return array{rows:array,total:int}
 	 */
 	public static function paginate( array $args = array() ): array {
-		global $wpdb;
 		$table = self::table();
 
 		$per_page = max( 1, min( 200, (int) ( $args['per_page'] ?? 20 ) ) );
@@ -190,12 +183,12 @@ class Users {
 		// Every filter is always in the statement and switched off by its own
 		// value, so the statement is one literal with a fixed set of
 		// placeholders rather than something assembled at run time.
-		$search  = '' !== trim( (string) ( $args['search'] ?? '' ) ) ? '%' . $wpdb->esc_like( (string) $args['search'] ) . '%' : '';
+		$search  = '' !== trim( (string) ( $args['search'] ?? '' ) ) ? '%' . Db::esc_like( (string) $args['search'] ) . '%' : '';
 		$linked  = isset( $args['linked'] ) ? ( $args['linked'] ? 1 : 0 ) : -1;
 		$friends = empty( $args['friends_only'] ) ? 0 : 1;
 
-		$total = (int) $wpdb->get_var(
-			$wpdb->prepare(
+		$total = (int) Db::get_var(
+			Db::prepare(
 				"SELECT COUNT(*) FROM %i
 				 WHERE ( %s = '' OR display_name LIKE %s OR line_user_id LIKE %s OR email LIKE %s )
 				   AND ( %d = -1 OR ( wp_user_id > 0 ) = %d )
@@ -211,8 +204,8 @@ class Users {
 			)
 		);
 
-		$rows = $wpdb->get_results(
-			$wpdb->prepare(
+		$rows = Db::get_results(
+			Db::prepare(
 				"SELECT * FROM %i
 				 WHERE ( %s = '' OR display_name LIKE %s OR line_user_id LIKE %s OR email LIKE %s )
 				   AND ( %d = -1 OR ( wp_user_id > 0 ) = %d )
@@ -244,10 +237,9 @@ class Users {
 	 * @return array{total:int,linked:int,friends:int}
 	 */
 	public static function stats(): array {
-		global $wpdb;
 		$table = self::table();
 
-		$row = $wpdb->get_row( $wpdb->prepare( "SELECT COUNT(*) AS total,
+		$row = Db::get_row( Db::prepare( "SELECT COUNT(*) AS total,
 				SUM(CASE WHEN wp_user_id > 0 THEN 1 ELSE 0 END) AS linked,
 				SUM(CASE WHEN is_friend = 1 THEN 1 ELSE 0 END) AS friends
 			 FROM %i", $table ) );

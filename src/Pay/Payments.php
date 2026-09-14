@@ -12,6 +12,7 @@
 
 namespace Moksa\Line\Pay;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
@@ -30,11 +31,9 @@ class Payments {
 	 * @return int Row id.
 	 */
 	public static function create( array $fields ): int {
-		global $wpdb;
-
 		$now = current_time( 'mysql', true );
 
-		$wpdb->insert(
+		Db::insert(
 			self::table(),
 			array(
 				'order_ref'    => (string) ( $fields['order_ref'] ?? '' ),
@@ -50,7 +49,7 @@ class Payments {
 			array( '%s', '%d', '%s', '%f', '%s', '%s', '%s', '%s', '%s' )
 		);
 
-		return (int) $wpdb->insert_id;
+		return (int) Db::insert_id();
 	}
 
 	/**
@@ -60,8 +59,6 @@ class Payments {
 	 * @param array $fields Columns to change.
 	 */
 	public static function update( int $id, array $fields ): void {
-		global $wpdb;
-
 		$writable = array(
 			'transaction_id' => '%s',
 			'status'         => '%s',
@@ -91,7 +88,7 @@ class Payments {
 		$data['updated_at'] = current_time( 'mysql', true );
 		$format[]           = '%s';
 
-		$wpdb->update( self::table(), $data, array( 'id' => $id ), $format, array( '%d' ) );
+		Db::update( self::table(), $data, array( 'id' => $id ), $format, array( '%d' ) );
 	}
 
 	/**
@@ -101,10 +98,9 @@ class Payments {
 	 * @return object|null
 	 */
 	public static function by_order_ref( string $order_ref ) {
-		global $wpdb;
 		$table = self::table();
 
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE order_ref = %s", $table, $order_ref ) );
+		return Db::get_row( Db::prepare( "SELECT * FROM %i WHERE order_ref = %s", $table, $order_ref ) );
 	}
 
 	/**
@@ -114,10 +110,9 @@ class Payments {
 	 * @return object|null
 	 */
 	public static function by_wc_order( int $order_id ) {
-		global $wpdb;
 		$table = self::table();
 
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE wc_order_id = %d ORDER BY id DESC", $table, $order_id ) );
+		return Db::get_row( Db::prepare( "SELECT * FROM %i WHERE wc_order_id = %d ORDER BY id DESC", $table, $order_id ) );
 	}
 
 	/**
@@ -131,11 +126,10 @@ class Payments {
 	 * @return bool True when this caller owns the confirmation.
 	 */
 	public static function claim_for_confirm( int $id ): bool {
-		global $wpdb;
 		$table = self::table();
 
-		$claimed = $wpdb->query(
-			$wpdb->prepare(
+		$claimed = Db::query(
+			Db::prepare(
 				"UPDATE %i SET status = 'confirming', updated_at = %s
 				 WHERE id = %d AND status IN ('created','pending')",
 				$table,
@@ -178,10 +172,9 @@ class Payments {
 	 * @return array
 	 */
 	public static function recent( int $limit = 50 ): array {
-		global $wpdb;
 		$table = self::table();
 
-		return (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i ORDER BY id DESC LIMIT %d", $table, $limit ) );
+		return (array) Db::get_results( Db::prepare( "SELECT * FROM %i ORDER BY id DESC LIMIT %d", $table, $limit ) );
 	}
 
 	/**
@@ -191,12 +184,11 @@ class Payments {
 	 * @return array
 	 */
 	public static function stale( int $older_than_minutes = 15 ): array {
-		global $wpdb;
 		$table  = self::table();
 		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $older_than_minutes * MINUTE_IN_SECONDS ) );
 
-		return (array) $wpdb->get_results(
-			$wpdb->prepare(
+		return (array) Db::get_results(
+			Db::prepare(
 				"SELECT * FROM %i
 				 WHERE status IN ('created','pending','confirming')
 				   AND updated_at < %s

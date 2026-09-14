@@ -12,6 +12,7 @@
 
 namespace Moksa\Line\Bot;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Data\Repository;
 use Moksa\Line\Data\Users;
 use Moksa\Line\Api\MessagingClient;
@@ -62,11 +63,10 @@ class Flow extends Repository {
 	 * @return object|null
 	 */
 	public static function session( string $line_user_id ) {
-		global $wpdb;
 		$table = self::sessions_table();
 
-		$row = $wpdb->get_row(
-			$wpdb->prepare(
+		$row = Db::get_row(
+			Db::prepare(
 				"SELECT * FROM %i WHERE line_user_id = %s AND expires_at > %s",
 				$table,
 				$line_user_id,
@@ -92,13 +92,11 @@ class Flow extends Repository {
 			return null;
 		}
 
-		global $wpdb;
-
 		$now     = current_time( 'mysql', true );
 		$expires = gmdate( 'Y-m-d H:i:s', time() + self::SESSION_TTL );
 
-		$wpdb->query(
-			$wpdb->prepare(
+		Db::query(
+			Db::prepare(
 				'INSERT INTO %i
 					(line_user_id, flow_id, step_index, answers, expires_at, created_at, updated_at)
 				 VALUES (%s, %d, 0, %s, %s, %s, %s)
@@ -194,9 +192,7 @@ class Flow extends Repository {
 		$record  = Users::by_line_id( $line_user_id );
 		$display = $record ? (string) $record->display_name : '';
 
-		global $wpdb;
-
-		$wpdb->insert(
+		Db::insert(
 			self::submissions_table(),
 			array(
 				'flow_id'      => (int) $flow->id,
@@ -208,7 +204,7 @@ class Flow extends Repository {
 			array( '%d', '%s', '%s', '%s', '%s' )
 		);
 
-		$submission_id = (int) $wpdb->insert_id;
+		$submission_id = (int) Db::insert_id();
 
 		self::notify( $flow, $display, $line_user_id, $answers );
 
@@ -305,9 +301,7 @@ class Flow extends Repository {
 	 * @param array  $answers      Answers so far.
 	 */
 	private static function save_session( string $line_user_id, int $step_index, array $answers ): void {
-		global $wpdb;
-
-		$wpdb->update(
+		Db::update(
 			self::sessions_table(),
 			array(
 				'step_index' => $step_index,
@@ -327,9 +321,7 @@ class Flow extends Repository {
 	 * @param string $line_user_id LINE user id.
 	 */
 	public static function end( string $line_user_id ): void {
-		global $wpdb;
-
-		$wpdb->delete( self::sessions_table(), array( 'line_user_id' => $line_user_id ), array( '%s' ) );
+		Db::delete( self::sessions_table(), array( 'line_user_id' => $line_user_id ), array( '%s' ) );
 	}
 
 	// --- Steps ------------------------------------------------------------------
@@ -545,10 +537,9 @@ class Flow extends Repository {
 			return null;
 		}
 
-		global $wpdb;
 		$table = self::table();
 
-		$flows = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE is_active = 1", $table ) );
+		$flows = (array) Db::get_results( Db::prepare( "SELECT * FROM %i WHERE is_active = 1", $table ) );
 
 		foreach ( $flows as $flow ) {
 			$trigger = trim( (string) $flow->trigger_value );
@@ -577,11 +568,10 @@ class Flow extends Repository {
 	 * @return array
 	 */
 	public static function submissions( int $flow_id, int $limit = 100 ): array {
-		global $wpdb;
 		$table = self::submissions_table();
 
-		return (array) $wpdb->get_results(
-			$wpdb->prepare( "SELECT * FROM %i WHERE flow_id = %d ORDER BY id DESC LIMIT %d", $table, $flow_id, $limit )
+		return (array) Db::get_results(
+			Db::prepare( "SELECT * FROM %i WHERE flow_id = %d ORDER BY id DESC LIMIT %d", $table, $flow_id, $limit )
 		);
 	}
 }

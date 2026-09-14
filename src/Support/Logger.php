@@ -51,8 +51,7 @@ class Logger {
 	);
 
 	public static function table(): string {
-		global $wpdb;
-		return $wpdb->prefix . 'moksa_line_logs';
+		return Db::prefix() . 'moksa_line_logs';
 	}
 
 	public static function debug( string $message, array $context = array(), string $channel = 'general' ): void {
@@ -119,9 +118,7 @@ class Logger {
 			return;
 		}
 
-		global $wpdb;
-
-		$wpdb->insert(
+		Db::insert(
 			self::table(),
 			array(
 				'level'      => $level,
@@ -169,18 +166,14 @@ class Logger {
 	 * @return string[]
 	 */
 	public static function channels(): array {
-		global $wpdb;
-
-		return array_map( 'strval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT DISTINCT channel FROM %i ORDER BY channel ASC', self::table() ) ) );
+		return array_map( 'strval', (array) Db::get_col( Db::prepare( 'SELECT DISTINCT channel FROM %i ORDER BY channel ASC', self::table() ) ) );
 	}
 
 	/**
 	 * How many rows the table holds in all.
 	 */
 	public static function count(): int {
-		global $wpdb;
-
-		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', self::table() ) );
+		return (int) Db::get_var( Db::prepare( 'SELECT COUNT(*) FROM %i', self::table() ) );
 	}
 
 	/**
@@ -195,7 +188,6 @@ class Logger {
 	 * @return array{rows: object[], total: int, pages: int, page: int}
 	 */
 	public static function paginate( array $args = array() ): array {
-		global $wpdb;
 		$table = self::table();
 
 		$per_page = max( 1, min( 500, (int) ( $args['per_page'] ?? 100 ) ) );
@@ -209,8 +201,8 @@ class Logger {
 		$every  = 'all' === $level ? 1 : 0;
 		$levels = 'problems' === $level ? array( self::WARNING, self::ERROR ) : array( $level, $level );
 
-		$total = (int) $wpdb->get_var(
-			$wpdb->prepare(
+		$total = (int) Db::get_var(
+			Db::prepare(
 				"SELECT COUNT(*) FROM %i
 				 WHERE ( %d = 1 OR level IN ( %s, %s ) )
 				   AND ( %s = '' OR channel = %s )",
@@ -227,8 +219,8 @@ class Logger {
 		$page   = min( max( 1, (int) ( $args['page'] ?? 1 ) ), $pages );
 		$offset = ( $page - 1 ) * $per_page;
 
-		$rows = (array) $wpdb->get_results(
-			$wpdb->prepare(
+		$rows = (array) Db::get_results(
+			Db::prepare(
 				"SELECT * FROM %i
 				 WHERE ( %d = 1 OR level IN ( %s, %s ) )
 				   AND ( %s = '' OR channel = %s )
@@ -261,11 +253,10 @@ class Logger {
 	public static function purge(): int {
 		$days = max( 1, (int) Options::get( 'log_retention_days' ) );
 
-		global $wpdb;
 		$table = self::table();
 
-		return (int) $wpdb->query(
-			$wpdb->prepare(
+		return (int) Db::query(
+			Db::prepare(
 				"DELETE FROM %i WHERE created_at < %s",
 				$table,
 				gmdate( 'Y-m-d H:i:s', time() - ( $days * DAY_IN_SECONDS ) )

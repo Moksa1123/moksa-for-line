@@ -7,6 +7,7 @@
 
 namespace Moksa\Line\Admin;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Bot\Ai\Providers;
 use Moksa\Line\Inbox\Conversations;
@@ -768,10 +769,9 @@ class AdminModule {
 			wp_send_json_error( array( 'message' => __( 'You cannot clear the log.', 'moksa-line' ) ), 403 );
 		}
 
-		global $wpdb;
 		$table = \Moksa\Line\Support\Logger::table();
 
-		$removed = (int) $wpdb->query( $wpdb->prepare( "DELETE FROM %i", $table ) );
+		$removed = (int) Db::query( Db::prepare( "DELETE FROM %i", $table ) );
 
 		wp_send_json_success(
 			array(

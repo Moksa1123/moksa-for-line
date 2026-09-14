@@ -7,6 +7,7 @@
 
 namespace Moksa\Line\Inbox;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
@@ -26,8 +27,6 @@ class Messages {
 	 * @return int Row id.
 	 */
 	public static function record( array $fields ): int {
-		global $wpdb;
-
 		$data = array(
 			'conversation_id'   => (int) ( $fields['conversation_id'] ?? 0 ),
 			'line_user_id'      => (string) ( $fields['line_user_id'] ?? '' ),
@@ -43,13 +42,13 @@ class Messages {
 			'created_at'        => current_time( 'mysql', true ),
 		);
 
-		$wpdb->insert(
+		Db::insert(
 			self::table(),
 			$data,
 			array( '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s' )
 		);
 
-		return (int) $wpdb->insert_id;
+		return (int) Db::insert_id();
 	}
 
 	/**
@@ -60,11 +59,10 @@ class Messages {
 	 * @return array
 	 */
 	public static function thread( int $conversation_id, int $limit = 100 ): array {
-		global $wpdb;
 		$table = self::table();
 
-		$rows = (array) $wpdb->get_results(
-			$wpdb->prepare(
+		$rows = (array) Db::get_results(
+			Db::prepare(
 				"SELECT * FROM %i WHERE conversation_id = %d ORDER BY id DESC LIMIT %d",
 				$table,
 				$conversation_id,
@@ -82,9 +80,7 @@ class Messages {
 	 * after this?" rather than "anything at all?".
 	 */
 	public static function latest_id(): int {
-		global $wpdb;
-
-		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(id) FROM %i', self::table() ) );
+		return (int) Db::get_var( Db::prepare( 'SELECT MAX(id) FROM %i', self::table() ) );
 	}
 
 	/**
@@ -96,11 +92,9 @@ class Messages {
 	 * @param int $conversation_id Limit to one conversation, or 0 for all.
 	 */
 	public static function inbound_since( int $since, int $conversation_id = 0 ): int {
-		global $wpdb;
-
 		if ( $conversation_id > 0 ) {
-			return (int) $wpdb->get_var(
-				$wpdb->prepare(
+			return (int) Db::get_var(
+				Db::prepare(
 					"SELECT COUNT(*) FROM %i WHERE id > %d AND direction = 'in' AND conversation_id = %d",
 					self::table(),
 					$since,
@@ -109,8 +103,8 @@ class Messages {
 			);
 		}
 
-		return (int) $wpdb->get_var(
-			$wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE id > %d AND direction = 'in'", self::table(), $since )
+		return (int) Db::get_var(
+			Db::prepare( "SELECT COUNT(*) FROM %i WHERE id > %d AND direction = 'in'", self::table(), $since )
 		);
 	}
 

@@ -275,17 +275,7 @@ class LoginModule {
 		update_user_meta( $user_id, 'moksa_line_user_id', $line_user_id );
 
 		if ( get_current_user_id() !== $user_id ) {
-			wp_set_current_user( $user_id );
-			self::start_session( $user_id );
-
-			$user = get_userdata( $user_id );
-
-			if ( $user instanceof WP_User ) {
-				// Core's own hook, fired deliberately: wp_set_auth_cookie() does
-				// not fire it, and everything that watches for a login -- session
-				// handling, security plugins, analytics -- is listening here.
-				do_action( 'wp_login', $user->user_login, $user );
-			}
+			$this->start_session( $user_id );
 		}
 
 		/**
@@ -662,39 +652,58 @@ class LoginModule {
 	// --- Helpers ---------------------------------------------------------------
 
 	/**
-	 * Sign the user in for as long as the shop has asked for.
+	 * Sign the user in, the way WordPress signs anyone in.
 	 *
-	 * The filter is added and removed around this one call rather than left on
-	 * a hook. auth_cookie_expiration is global: a filter registered at load
-	 * time would quietly change how long a password login lasts too, which is
-	 * not what a setting about LINE logins should do.
+	 * LINE has already authenticated this person. That is said to WordPress
+	 * through the authenticate filter, and wp_signon() then does everything a
+	 * login does: writes the cookie, sets the current user, and fires
+	 * wp_login for whatever is listening -- session handling, security
+	 * plugins, analytics.
 	 *
 	 * @param int $user_id Who is signing in.
 	 */
-	private static function start_session( int $user_id ): void {
+	private function start_session( int $user_id ): void {
+		$user = get_userdata( $user_id );
+
+		if ( ! $user instanceof WP_User ) {
+			return;
+		}
+
 		$seconds = self::session_length();
 
-		// 'browser' means no remembering: WordPress writes a session cookie,
-		// which the browser drops when it closes.
-		if ( 0 === $seconds ) {
-			wp_set_auth_cookie( $user_id, false );
+		$vouch = static function () use ( $user ) {
+			return $user;
+		};
 
-			return;
-		}
-
-		if ( 0 > $seconds ) {
-			wp_set_auth_cookie( $user_id, true );
-
-			return;
-		}
-
+		// A positive length is a chosen number of days; -1 leaves the length
+		// to WordPress; 0 ('browser') means no remembering, so the browser
+		// drops the cookie when it closes.
 		$extend = static function () use ( $seconds ) {
 			return $seconds;
 		};
 
-		add_filter( 'auth_cookie_expiration', $extend, 99 );
-		wp_set_auth_cookie( $user_id, true );
+		add_filter( 'authenticate', $vouch, 1 );
+
+		if ( $seconds > 0 ) {
+			add_filter( 'auth_cookie_expiration', $extend, 99 );
+		}
+
+		$signed = wp_signon(
+			array(
+				'user_login'    => $user->user_login,
+				'user_password' => '',
+				'remember'      => 0 !== $seconds,
+			),
+			is_ssl()
+		);
+
+		remove_filter( 'authenticate', $vouch, 1 );
 		remove_filter( 'auth_cookie_expiration', $extend, 99 );
+
+		if ( is_wp_error( $signed ) ) {
+			Logger::capture( $signed, 'WordPress refused the sign-in after LINE had authenticated', 'login' );
+			$this->fail( __( 'The sign-in could not be completed. Please try again.', 'moksa-line' ) );
+		}
 	}
 
 	/**

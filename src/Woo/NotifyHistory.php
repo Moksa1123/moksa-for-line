@@ -12,6 +12,7 @@
 
 namespace Moksa\Line\Woo;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
@@ -33,9 +34,7 @@ class NotifyHistory {
 	 * @return int Row id, or 0 on failure.
 	 */
 	public static function begin( array $fields ): int {
-		global $wpdb;
-
-		$wpdb->insert(
+		Db::insert(
 			self::table(),
 			array(
 				'wp_user_id'   => (int) ( $fields['wp_user_id'] ?? 0 ),
@@ -52,7 +51,7 @@ class NotifyHistory {
 			array( '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s', '%s' )
 		);
 
-		return (int) $wpdb->insert_id;
+		return (int) Db::insert_id();
 	}
 
 	/**
@@ -67,9 +66,7 @@ class NotifyHistory {
 			return;
 		}
 
-		global $wpdb;
-
-		$wpdb->update(
+		Db::update(
 			self::table(),
 			array(
 				'status'     => $success ? 'sent' : 'failed',
@@ -89,7 +86,6 @@ class NotifyHistory {
 	 * @return array{rows:array,total:int}
 	 */
 	public static function paginate( array $args = array() ): array {
-		global $wpdb;
 		$table = self::table();
 
 		$per_page = max( 1, min( 200, (int) ( $args['per_page'] ?? 30 ) ) );
@@ -102,8 +98,8 @@ class NotifyHistory {
 		$order_id = (int) ( $args['order_id'] ?? 0 );
 		$status   = (string) ( $args['status'] ?? '' );
 
-		$total = (int) $wpdb->get_var(
-			$wpdb->prepare(
+		$total = (int) Db::get_var(
+			Db::prepare(
 				"SELECT COUNT(*) FROM %i
 				 WHERE ( %d = 0 OR order_id = %d )
 				   AND ( %s = '' OR status = %s )",
@@ -115,8 +111,8 @@ class NotifyHistory {
 			)
 		);
 
-		$rows = (array) $wpdb->get_results(
-			$wpdb->prepare(
+		$rows = (array) Db::get_results(
+			Db::prepare(
 				"SELECT * FROM %i
 				 WHERE ( %d = 0 OR order_id = %d )
 				   AND ( %s = '' OR status = %s )
@@ -145,12 +141,11 @@ class NotifyHistory {
 	 * @return array{sent:int,failed:int}
 	 */
 	public static function tally( int $days = 30 ): array {
-		global $wpdb;
 		$table  = self::table();
 		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( max( 1, $days ) * DAY_IN_SECONDS ) );
 
-		$row = $wpdb->get_row(
-			$wpdb->prepare(
+		$row = Db::get_row(
+			Db::prepare(
 				"SELECT
 					SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) AS sent,
 					SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) AS failed
@@ -177,11 +172,10 @@ class NotifyHistory {
 			return 0;
 		}
 
-		global $wpdb;
 		$table = self::table();
 
-		return (int) $wpdb->query(
-			$wpdb->prepare(
+		return (int) Db::query(
+			Db::prepare(
 				"DELETE FROM %i WHERE created_at < %s",
 				$table,
 				gmdate( 'Y-m-d H:i:s', time() - ( $days * DAY_IN_SECONDS ) )

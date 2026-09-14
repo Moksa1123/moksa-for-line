@@ -12,6 +12,7 @@
 
 namespace Moksa\Line;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Migrator;
 use Moksa\Line\Support\Options;
@@ -144,12 +145,10 @@ final class Plugin {
 	 * inbox history past the retention window.
 	 */
 	public function run_maintenance(): void {
-		global $wpdb;
-
 		Logger::purge();
 
 		$sessions = Migrator::table( 'flow_sessions' );
-		$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE expires_at < %s", $sessions, current_time( 'mysql', true ) ) );
+		Db::query( Db::prepare( "DELETE FROM %i WHERE expires_at < %s", $sessions, current_time( 'mysql', true ) ) );
 
 		if ( class_exists( Woo\NotifyHistory::class ) ) {
 			Woo\NotifyHistory::purge( (int) Options::get( 'woo_history_days' ) );
@@ -162,8 +161,8 @@ final class Plugin {
 			$messages = Migrator::table( 'messages' );
 			$events   = Migrator::table( 'events' );
 
-			$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE created_at < %s", $messages, $cutoff ) );
-			$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE received_at < %s AND status = 'done'", $events, $cutoff ) );
+			Db::query( Db::prepare( "DELETE FROM %i WHERE created_at < %s", $messages, $cutoff ) );
+			Db::query( Db::prepare( "DELETE FROM %i WHERE received_at < %s AND status = 'done'", $events, $cutoff ) );
 		}
 	}
 

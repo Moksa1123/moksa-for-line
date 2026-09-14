@@ -13,6 +13,7 @@
 
 namespace Moksa\Line\Bot;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Data\Flex;
 use Moksa\Line\Data\QuickReplies;
 use Moksa\Line\Api\MessagingClient;
@@ -88,10 +89,9 @@ class AutoReply {
 			return $cached;
 		}
 
-		global $wpdb;
 		$table = self::table();
 
-		$rules = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE is_active = 1 ORDER BY priority ASC, id ASC", $table ) );
+		$rules = (array) Db::get_results( Db::prepare( "SELECT * FROM %i WHERE is_active = 1 ORDER BY priority ASC, id ASC", $table ) );
 
 		wp_cache_set( 'moksa_line_active_rules', $rules, 'moksa_line', 300 );
 
@@ -372,10 +372,9 @@ class AutoReply {
 	 * @param int $rule_id Rule id.
 	 */
 	public static function record_hit( int $rule_id ): void {
-		global $wpdb;
 		$table = self::table();
 
-		$wpdb->query( $wpdb->prepare( "UPDATE %i SET hit_count = hit_count + 1 WHERE id = %d", $table, $rule_id ) );
+		Db::query( Db::prepare( "UPDATE %i SET hit_count = hit_count + 1 WHERE id = %d", $table, $rule_id ) );
 	}
 
 	/**
@@ -385,8 +384,6 @@ class AutoReply {
 	 * @return int Rule id, or 0 on failure.
 	 */
 	public static function save( array $fields ): int {
-		global $wpdb;
-
 		$now = current_time( 'mysql', true );
 		$id  = isset( $fields['id'] ) ? (int) $fields['id'] : 0;
 
@@ -411,7 +408,7 @@ class AutoReply {
 		// inbound webhook repopulates the cache from the pre-edit rows, and the
 		// bot then answers with the old rule for the next five minutes.
 		if ( $id > 0 ) {
-			$wpdb->update( self::table(), $data, array( 'id' => $id ), $format, array( '%d' ) );
+			Db::update( self::table(), $data, array( 'id' => $id ), $format, array( '%d' ) );
 
 			self::flush_cache();
 
@@ -421,11 +418,11 @@ class AutoReply {
 		$data['created_at'] = $now;
 		$format[]           = '%s';
 
-		$wpdb->insert( self::table(), $data, $format );
+		Db::insert( self::table(), $data, $format );
 
 		self::flush_cache();
 
-		return (int) $wpdb->insert_id;
+		return (int) Db::insert_id();
 	}
 
 	/**
@@ -434,9 +431,7 @@ class AutoReply {
 	 * @param int $id Rule id.
 	 */
 	public static function delete( int $id ): bool {
-		global $wpdb;
-
-		$deleted = (bool) $wpdb->delete( self::table(), array( 'id' => $id ), array( '%d' ) );
+		$deleted = (bool) Db::delete( self::table(), array( 'id' => $id ), array( '%d' ) );
 
 		self::flush_cache();
 
@@ -449,10 +444,9 @@ class AutoReply {
 	 * @return array
 	 */
 	public static function all(): array {
-		global $wpdb;
 		$table = self::table();
 
-		return (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i ORDER BY priority ASC, id DESC", $table ) );
+		return (array) Db::get_results( Db::prepare( "SELECT * FROM %i ORDER BY priority ASC, id DESC", $table ) );
 	}
 
 	/**
@@ -462,10 +456,9 @@ class AutoReply {
 	 * @return object|null
 	 */
 	public static function find( int $id ) {
-		global $wpdb;
 		$table = self::table();
 
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $id ) );
+		return Db::get_row( Db::prepare( "SELECT * FROM %i WHERE id = %d", $table, $id ) );
 	}
 
 	/**

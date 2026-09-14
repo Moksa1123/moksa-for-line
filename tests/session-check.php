@@ -64,12 +64,21 @@ add_action(
 function session_measure( $user_id ) {
 	$GLOBALS['session_seen'] = null;
 
+	$GLOBALS['session_login_fired'] = false;
+
 	$method = new ReflectionMethod( LoginModule::class, 'start_session' );
 	$method->setAccessible( true );
-	$method->invoke( null, $user_id );
+	$method->invoke( Moksa\Line\Plugin::instance()->module( 'login' ), $user_id );
 
 	return $GLOBALS['session_seen'];
 }
+
+add_action(
+	'wp_login',
+	static function () {
+		$GLOBALS['session_login_fired'] = true;
+	}
+);
 
 $admin = get_users( array( 'role' => 'administrator', 'number' => 1, 'fields' => 'ID' ) );
 
@@ -94,6 +103,8 @@ foreach ( $cases as $setting => $expected ) {
 	Options::set( 'login_duration', $setting );
 
 	$seen = session_measure( $user_id );
+
+	session_check( true === $GLOBALS['session_login_fired'], 'wp_login fired for ' . $setting );
 
 	if ( null === $seen ) {
 		session_check( false, $expected['label'], 'no auth cookie was built' );

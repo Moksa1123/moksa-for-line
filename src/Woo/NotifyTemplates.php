@@ -11,6 +11,7 @@
 
 namespace Moksa\Line\Woo;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Support\Options;
 use Moksa\Line\Flex\Validator;
@@ -432,11 +433,10 @@ class NotifyTemplates {
 		}
 
 		if ( 'moksa_sent' === $column ) {
-			global $wpdb;
 			$table = NotifyHistory::table();
 
-			$count = (int) $wpdb->get_var(
-				$wpdb->prepare(
+			$count = (int) Db::get_var(
+				Db::prepare(
 					"SELECT COUNT(*) FROM %i WHERE template_id = %d AND status = 'sent' AND created_at >= %s",
 					$table,
 					$post_id,

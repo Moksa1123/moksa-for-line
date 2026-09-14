@@ -12,6 +12,7 @@
 
 namespace Moksa\Line\Liff;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Data\Users;
 use Moksa\Line\Admin\AdminModule;
 use Moksa\Line\Admin\Ajax;
@@ -60,17 +61,15 @@ class LiffModule {
 			return (int) $cached;
 		}
 
-		global $wpdb;
-
 		// Written out rather than assembled: the two shortcodes are a fixed
 		// pair, and a query with no string building in it is one the
 		// directory's scan can read as well as we can.
-		$id = (int) $wpdb->get_var(
-			$wpdb->prepare(
+		$id = (int) Db::get_var(
+			Db::prepare(
 				"SELECT ID FROM %i WHERE post_type = 'page' AND post_status = 'publish' AND ( post_content LIKE %s OR post_content LIKE %s ) ORDER BY ID ASC LIMIT 1",
-				$wpdb->posts,
-				'%' . $wpdb->esc_like( '[' . self::SHORTCODES[0] ) . '%',
-				'%' . $wpdb->esc_like( '[' . self::SHORTCODES[1] ) . '%'
+				Db::core_table( 'posts' ),
+				'%' . Db::esc_like( '[' . self::SHORTCODES[0] ) . '%',
+				'%' . Db::esc_like( '[' . self::SHORTCODES[1] ) . '%'
 			)
 		);
 

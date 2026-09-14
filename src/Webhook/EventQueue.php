@@ -12,6 +12,7 @@
 
 namespace Moksa\Line\Webhook;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Migrator;
 
@@ -33,8 +34,6 @@ class EventQueue {
 	 * @return int Row id, or 0 when this event was already stored.
 	 */
 	public static function store( array $event ): int {
-		global $wpdb;
-
 		// Events without an id (older payloads, and the console's verify ping)
 		// get a deterministic one so replays still collapse.
 		$event_id = isset( $event['webhookEventId'] )
@@ -52,8 +51,8 @@ class EventQueue {
 			}
 		}
 
-		$inserted = $wpdb->query(
-			$wpdb->prepare(
+		$inserted = Db::query(
+			Db::prepare(
 				'INSERT IGNORE INTO %i
 					(webhook_event_id, event_type, source_type, source_id, reply_token, payload, status, received_at)
 				 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
@@ -69,7 +68,7 @@ class EventQueue {
 			)
 		);
 
-		return $inserted ? (int) $wpdb->insert_id : 0;
+		return $inserted ? (int) Db::insert_id() : 0;
 	}
 
 	/**
@@ -83,11 +82,10 @@ class EventQueue {
 	 * @return int Events processed.
 	 */
 	public static function drain( int $limit = 25 ): int {
-		global $wpdb;
 		$table = self::table();
 
-		$rows = $wpdb->get_results(
-			$wpdb->prepare(
+		$rows = Db::get_results(
+			Db::prepare(
 				"SELECT * FROM %i WHERE status = 'pending' AND attempts < %d ORDER BY id ASC LIMIT %d",
 				$table,
 				self::MAX_ATTEMPTS,
@@ -100,8 +98,8 @@ class EventQueue {
 		foreach ( (array) $rows as $row ) {
 			// Claim the row first: two overlapping drains (a webhook burst plus
 			// the cron fallback) must not both handle the same event.
-			$claimed = $wpdb->query(
-				$wpdb->prepare(
+			$claimed = Db::query(
+				Db::prepare(
 					"UPDATE %i SET status = 'running', attempts = attempts + 1 WHERE id = %d AND status = 'pending'",
 					$table,
 					(int) $row->id
@@ -152,9 +150,7 @@ class EventQueue {
 	 * @param string $error  Failure detail.
 	 */
 	private static function finish( int $id, string $status, string $error = '' ): void {
-		global $wpdb;
-
-		$wpdb->update(
+		Db::update(
 			self::table(),
 			array(
 				'status'       => $status,
@@ -175,16 +171,15 @@ class EventQueue {
 	 * @return array
 	 */
 	public static function recent( int $limit = 50, string $status = '' ): array {
-		global $wpdb;
 		$table = self::table();
 
 		if ( '' !== $status ) {
-			return (array) $wpdb->get_results(
-				$wpdb->prepare( "SELECT * FROM %i WHERE status = %s ORDER BY id DESC LIMIT %d", $table, $status, $limit )
+			return (array) Db::get_results(
+				Db::prepare( "SELECT * FROM %i WHERE status = %s ORDER BY id DESC LIMIT %d", $table, $status, $limit )
 			);
 		}
 
-		return (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i ORDER BY id DESC LIMIT %d", $table, $limit ) );
+		return (array) Db::get_results( Db::prepare( "SELECT * FROM %i ORDER BY id DESC LIMIT %d", $table, $limit ) );
 	}
 
 	/**
@@ -242,9 +237,8 @@ class EventQueue {
 	 * Whether any event has ever arrived, used by the setup checklist.
 	 */
 	public static function has_any(): bool {
-		global $wpdb;
 		$table = self::table();
 
-		return (bool) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i LIMIT 1", $table ) );
+		return (bool) Db::get_var( Db::prepare( "SELECT id FROM %i LIMIT 1", $table ) );
 	}
 }

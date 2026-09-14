@@ -15,6 +15,7 @@
 
 namespace Moksa\Line\RichMenu;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Data\Repository;
 use Moksa\Line\Api\RichMenuClient;
 use Moksa\Line\Support\Files;
@@ -159,10 +160,9 @@ class RichMenuModule extends Repository {
 		if ( (bool) $row->is_default || $was_default ) {
 			if ( $was_default ) {
 				// Only one menu can hold the flag, or the screen would show two.
-				global $wpdb;
 				$table = self::table();
 
-				$wpdb->query( $wpdb->prepare( "UPDATE %i SET is_default = 0 WHERE id <> %d", $table, $id ) );
+				Db::query( Db::prepare( "UPDATE %i SET is_default = 0 WHERE id <> %d", $table, $id ) );
 			}
 
 			$default = RichMenuClient::set_default( $new_id );
@@ -213,11 +213,10 @@ class RichMenuModule extends Repository {
 	 * @return array
 	 */
 	public static function in_group( string $group ): array {
-		global $wpdb;
 		$table = self::table();
 
-		return (array) $wpdb->get_results(
-			$wpdb->prepare( "SELECT * FROM %i WHERE tab_group = %s ORDER BY tab_order ASC, id ASC", $table, $group )
+		return (array) Db::get_results(
+			Db::prepare( "SELECT * FROM %i WHERE tab_group = %s ORDER BY tab_order ASC, id ASC", $table, $group )
 		);
 	}
 
@@ -227,10 +226,9 @@ class RichMenuModule extends Repository {
 	 * @return string[]
 	 */
 	public static function groups(): array {
-		global $wpdb;
 		$table = self::table();
 
-		$groups = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT tab_group FROM %i WHERE tab_group <> '' ORDER BY tab_group ASC", $table ) );
+		$groups = Db::get_col( Db::prepare( "SELECT DISTINCT tab_group FROM %i WHERE tab_group <> '' ORDER BY tab_group ASC", $table ) );
 
 		return array_map( 'strval', (array) $groups );
 	}
@@ -488,10 +486,9 @@ class RichMenuModule extends Repository {
 
 		// Only one menu can be the channel default.
 		if ( Ajax::flag( 'is_default' ) ) {
-			global $wpdb;
 			$table = self::table();
 
-			$wpdb->query( $wpdb->prepare( "UPDATE %i SET is_default = 0 WHERE id <> %d", $table, $id ) );
+			Db::query( Db::prepare( "UPDATE %i SET is_default = 0 WHERE id <> %d", $table, $id ) );
 		}
 
 		$warnings = array();
@@ -609,10 +606,9 @@ class RichMenuModule extends Repository {
 
 		Ajax::bail( $result );
 
-		global $wpdb;
 		$table = self::table();
 
-		$wpdb->query( $wpdb->prepare( "UPDATE %i SET is_default = 0", $table ) );
+		Db::query( Db::prepare( "UPDATE %i SET is_default = 0", $table ) );
 
 		self::save( array( 'id' => $id, 'is_default' => 1 ) );
 

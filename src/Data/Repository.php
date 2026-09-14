@@ -11,6 +11,7 @@
 
 namespace Moksa\Line\Data;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Support\Migrator;
 
 defined( 'ABSPATH' ) || exit;
@@ -55,10 +56,9 @@ abstract class Repository {
 			return null;
 		}
 
-		global $wpdb;
 		$table = static::table();
 
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $id ) );
+		return Db::get_row( Db::prepare( "SELECT * FROM %i WHERE id = %d", $table, $id ) );
 	}
 
 	/**
@@ -67,7 +67,6 @@ abstract class Repository {
 	 * @return array
 	 */
 	public static function all(): array {
-		global $wpdb;
 		$table = static::table();
 		$order = static::order();
 
@@ -79,10 +78,10 @@ abstract class Repository {
 		// Two complete statements, chosen between -- not one statement with the
 		// direction pasted in.
 		if ( 'ASC' === strtoupper( $direction ) ) {
-			return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY %i ASC', $table, $column ) );
+			return (array) Db::get_results( Db::prepare( 'SELECT * FROM %i ORDER BY %i ASC', $table, $column ) );
 		}
 
-		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY %i DESC', $table, $column ) );
+		return (array) Db::get_results( Db::prepare( 'SELECT * FROM %i ORDER BY %i DESC', $table, $column ) );
 	}
 
 	/**
@@ -92,8 +91,6 @@ abstract class Repository {
 	 * @return int Row id, or 0 on failure.
 	 */
 	public static function save( array $fields ): int {
-		global $wpdb;
-
 		$now  = current_time( 'mysql', true );
 		$id   = isset( $fields['id'] ) ? (int) $fields['id'] : 0;
 		$data = array();
@@ -114,7 +111,7 @@ abstract class Repository {
 		$fmt[]              = '%s';
 
 		if ( $id > 0 ) {
-			$wpdb->update( static::table(), $data, array( 'id' => $id ), $fmt, array( '%d' ) );
+			Db::update( static::table(), $data, array( 'id' => $id ), $fmt, array( '%d' ) );
 
 			return $id;
 		}
@@ -122,9 +119,9 @@ abstract class Repository {
 		$data['created_at'] = $now;
 		$fmt[]              = '%s';
 
-		$inserted = $wpdb->insert( static::table(), $data, $fmt );
+		$inserted = Db::insert( static::table(), $data, $fmt );
 
-		return $inserted ? (int) $wpdb->insert_id : 0;
+		return $inserted ? (int) Db::insert_id() : 0;
 	}
 
 	/**
@@ -133,18 +130,15 @@ abstract class Repository {
 	 * @param int $id Row id.
 	 */
 	public static function delete( int $id ): bool {
-		global $wpdb;
-
-		return (bool) $wpdb->delete( static::table(), array( 'id' => $id ), array( '%d' ) );
+		return (bool) Db::delete( static::table(), array( 'id' => $id ), array( '%d' ) );
 	}
 
 	/**
 	 * Row count.
 	 */
 	public static function count(): int {
-		global $wpdb;
 		$table = static::table();
 
-		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i", $table ) );
+		return (int) Db::get_var( Db::prepare( "SELECT COUNT(*) FROM %i", $table ) );
 	}
 }

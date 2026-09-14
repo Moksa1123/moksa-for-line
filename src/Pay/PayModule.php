@@ -13,6 +13,7 @@
 
 namespace Moksa\Line\Pay;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Api\MessagingClient;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Options;
@@ -369,11 +370,9 @@ class PayModule {
 	 * @return true|WP_Error
 	 */
 	public static function complete( int $payment_id, string $transaction_id = '' ) {
-		global $wpdb;
-
 		$table = Payments::table();
 
-		$payment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $payment_id ) );
+		$payment = Db::get_row( Db::prepare( "SELECT * FROM %i WHERE id = %d", $table, $payment_id ) );
 
 		if ( ! $payment ) {
 			return new WP_Error( 'moksa_line_pay_missing', __( 'That payment could not be found.', 'moksa-line' ) );
@@ -415,7 +414,7 @@ class PayModule {
 
 		if ( ! Payments::claim_for_confirm( $payment_id ) ) {
 			// Someone else is confirming, or already has.
-			$fresh = $wpdb->get_row( $wpdb->prepare( "SELECT status FROM %i WHERE id = %d", $table, $payment_id ) );
+			$fresh = Db::get_row( Db::prepare( "SELECT status FROM %i WHERE id = %d", $table, $payment_id ) );
 
 			if ( $fresh && in_array( $fresh->status, array( 'captured', 'authorized' ), true ) ) {
 				return true;
@@ -527,10 +526,9 @@ class PayModule {
 	 * @return object|null
 	 */
 	private static function row( int $payment_id ) {
-		global $wpdb;
 		$table = Payments::table();
 
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $payment_id ) );
+		return Db::get_row( Db::prepare( "SELECT * FROM %i WHERE id = %d", $table, $payment_id ) );
 	}
 
 	// --- Reconciliation --------------------------------------------------------------

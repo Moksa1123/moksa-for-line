@@ -12,6 +12,7 @@
 
 namespace Moksa\Line\Inbox;
 
+use Moksa\Line\Support\Db;
 use Moksa\Line\Data\Users;
 use Moksa\Line\Support\Migrator;
 
@@ -33,10 +34,9 @@ class Conversations {
 	 * @return object|null
 	 */
 	public static function find( string $line_user_id ) {
-		global $wpdb;
 		$table = self::table();
 
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE line_user_id = %s", $table, $line_user_id ) );
+		return Db::get_row( Db::prepare( "SELECT * FROM %i WHERE line_user_id = %s", $table, $line_user_id ) );
 	}
 
 	/**
@@ -46,10 +46,9 @@ class Conversations {
 	 * @return object|null
 	 */
 	public static function find_by_id( int $id ) {
-		global $wpdb;
 		$table = self::table();
 
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $id ) );
+		return Db::get_row( Db::prepare( "SELECT * FROM %i WHERE id = %d", $table, $id ) );
 	}
 
 	/**
@@ -68,10 +67,8 @@ class Conversations {
 		$record = Users::by_line_id( $line_user_id );
 		$now    = current_time( 'mysql', true );
 
-		global $wpdb;
-
-		$wpdb->query(
-			$wpdb->prepare(
+		Db::query(
+			Db::prepare(
 				'INSERT IGNORE INTO %i
 					(line_user_id, display_name, picture_url, status, created_at, updated_at)
 				 VALUES (%s, %s, %s, %s, %s, %s)',
@@ -85,8 +82,8 @@ class Conversations {
 			)
 		);
 
-		if ( $wpdb->insert_id ) {
-			return (int) $wpdb->insert_id;
+		if ( Db::insert_id() ) {
+			return (int) Db::insert_id();
 		}
 
 		$existing = self::find( $line_user_id );
@@ -108,7 +105,6 @@ class Conversations {
 			return;
 		}
 
-		global $wpdb;
 		$table = self::table();
 		$now   = current_time( 'mysql', true );
 
@@ -116,8 +112,8 @@ class Conversations {
 		$preview = mb_substr( trim( preg_replace( '/\s+/u', ' ', $preview ) ), 0, 120 );
 
 		if ( $inbound ) {
-			$wpdb->query(
-				$wpdb->prepare(
+			Db::query(
+				Db::prepare(
 					"UPDATE %i
 					 SET last_message_preview = %s,
 						 last_message_at = %s,
@@ -141,8 +137,8 @@ class Conversations {
 			return;
 		}
 
-		$wpdb->query(
-			$wpdb->prepare(
+		Db::query(
+			Db::prepare(
 				"UPDATE %i
 				 SET last_message_preview = %s, last_message_at = %s, updated_at = %s
 				 WHERE id = %d",
@@ -173,9 +169,7 @@ class Conversations {
 			return;
 		}
 
-		global $wpdb;
-
-		$wpdb->update(
+		Db::update(
 			self::table(),
 			array(
 				'status'      => $status,
@@ -214,9 +208,7 @@ class Conversations {
 	 * @param int $id Conversation id.
 	 */
 	public static function mark_read( int $id ): void {
-		global $wpdb;
-
-		$wpdb->update(
+		Db::update(
 			self::table(),
 			array( 'unread_count' => 0 ),
 			array( 'id' => $id ),
@@ -232,7 +224,6 @@ class Conversations {
 	 * @return array{rows:array,total:int}
 	 */
 	public static function paginate( array $args = array() ): array {
-		global $wpdb;
 		$table = self::table();
 
 		$per_page = max( 1, min( 100, (int) ( $args['per_page'] ?? 25 ) ) );
@@ -244,10 +235,10 @@ class Conversations {
 		// placeholders rather than something assembled at run time.
 		$status = ! empty( $args['status'] ) && in_array( $args['status'], self::STATUSES, true ) ? (string) $args['status'] : '';
 		$unread = empty( $args['unread'] ) ? 0 : 1;
-		$search = '' !== trim( (string) ( $args['search'] ?? '' ) ) ? '%' . $wpdb->esc_like( (string) $args['search'] ) . '%' : '';
+		$search = '' !== trim( (string) ( $args['search'] ?? '' ) ) ? '%' . Db::esc_like( (string) $args['search'] ) . '%' : '';
 
-		$total = (int) $wpdb->get_var(
-			$wpdb->prepare(
+		$total = (int) Db::get_var(
+			Db::prepare(
 				"SELECT COUNT(*) FROM %i
 				 WHERE ( %s = '' OR status = %s )
 				   AND ( %d = 0 OR unread_count > 0 )
@@ -263,8 +254,8 @@ class Conversations {
 			)
 		);
 
-		$rows = (array) $wpdb->get_results(
-			$wpdb->prepare(
+		$rows = (array) Db::get_results(
+			Db::prepare(
 				"SELECT * FROM %i
 				 WHERE ( %s = '' OR status = %s )
 				   AND ( %d = 0 OR unread_count > 0 )
@@ -297,19 +288,17 @@ class Conversations {
 	 * replies do nothing" into an answer.
 	 */
 	public static function human_handled_total(): int {
-		global $wpdb;
 		$table = self::table();
 
-		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE status = 'human'", $table ) );
+		return (int) Db::get_var( Db::prepare( "SELECT COUNT(*) FROM %i WHERE status = 'human'", $table ) );
 	}
 
 	/**
 	 * Number of conversations waiting on a human.
 	 */
 	public static function unread_total(): int {
-		global $wpdb;
 		$table = self::table();
 
-		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE unread_count > 0 AND status <> 'closed'", $table ) );
+		return (int) Db::get_var( Db::prepare( "SELECT COUNT(*) FROM %i WHERE unread_count > 0 AND status <> 'closed'", $table ) );
 	}
 }

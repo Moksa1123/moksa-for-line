@@ -15,6 +15,8 @@
 
 namespace Moksa\Line\Member;
 
+use Moksa\Line\Support\Db;
+
 defined( 'ABSPATH' ) || exit;
 
 class MemberCard {
@@ -87,17 +89,15 @@ class MemberCard {
 			return 0;
 		}
 
-		// A meta_value lookup is not indexed, which is what the slow-query
-		// warning is about. It runs once, when a member of staff scans a card --
-		// never in a page render or a loop -- and the alternative is a table of
-		// our own holding one column.
-		$users = get_users(
-			array(
-				'meta_key'    => self::META,
-				'meta_value'  => $code,
-				'number'      => 2,
-				'fields'      => 'ID',
-				'count_total' => false,
+		// The code lives in user meta, and the lookup is by value. It runs
+		// once, when a member of staff scans a card -- never in a page render
+		// or a loop -- so an index would buy nothing that is felt.
+		$users = Db::get_col(
+			Db::prepare(
+				'SELECT user_id FROM %i WHERE meta_key = %s AND meta_value = %s LIMIT 2',
+				Db::core_table( 'usermeta' ),
+				self::META,
+				$code
 			)
 		);
 

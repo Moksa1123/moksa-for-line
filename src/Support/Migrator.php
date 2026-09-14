@@ -76,11 +76,9 @@ class Migrator {
 			return false;
 		}
 
-		global $wpdb;
+		$prefix = Db::prefix() . 'moksa_line_';
 
-		$prefix = $wpdb->prefix . 'moksa_line_';
-
-		$found = (array) $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $prefix ) . '%' ) );
+		$found = (array) Db::get_col( Db::prepare( 'SHOW TABLES LIKE %s', Db::esc_like( $prefix ) . '%' ) );
 
 		$expected = array();
 
@@ -116,8 +114,7 @@ class Migrator {
 	 * Fully qualified table name for a logical table key.
 	 */
 	public static function table( string $key ): string {
-		global $wpdb;
-		return $wpdb->prefix . 'moksa_line_' . $key;
+		return Db::prefix() . 'moksa_line_' . $key;
 	}
 
 	/**
@@ -127,8 +124,7 @@ class Migrator {
 	 * @return string[]
 	 */
 	public static function schemas(): array {
-		global $wpdb;
-		$collate = $wpdb->get_charset_collate();
+		$collate = Db::charset_collate();
 
 		$t = function ( $key ) {
 			return self::table( $key );
@@ -424,8 +420,6 @@ class Migrator {
 			return;
 		}
 
-		global $wpdb;
-
 		// 1. Settings kept their moksa_line_ prefix, so most carry over as-is.
 		//    Secrets, however, were stored in the clear and must be encrypted.
 		foreach ( array( 'channel_secret', 'messaging_secret', 'messaging_token', 'pay_channel_secret' ) as $key ) {
@@ -482,11 +476,11 @@ class Migrator {
 		$auto = self::table( 'auto_replies' );
 
 		if ( self::column_exists( $auto, 'reply_content' ) ) {
-			$wpdb->query( $wpdb->prepare( "UPDATE %i SET reply_data = reply_content WHERE (reply_data IS NULL OR reply_data = '') AND reply_content <> ''", $auto ) );
+			Db::query( Db::prepare( "UPDATE %i SET reply_data = reply_content WHERE (reply_data IS NULL OR reply_data = '') AND reply_content <> ''", $auto ) );
 		}
 
 		if ( self::column_exists( $auto, 'status' ) ) {
-			$wpdb->query( $wpdb->prepare( "UPDATE %i SET is_active = status", $auto ) );
+			Db::query( Db::prepare( "UPDATE %i SET is_active = status", $auto ) );
 		}
 
 		// 4. The old quick-reply table stored a single keyword/reply pair.
@@ -494,7 +488,7 @@ class Migrator {
 		$quick = self::table( 'quick_replies' );
 
 		if ( self::column_exists( $quick, 'reply_message' ) && self::column_exists( $quick, 'keyword' ) ) {
-			$rows = $wpdb->get_results( $wpdb->prepare( "SELECT id, keyword, reply_message FROM %i WHERE (items IS NULL OR items = '')", $quick ) );
+			$rows = Db::get_results( Db::prepare( "SELECT id, keyword, reply_message FROM %i WHERE (items IS NULL OR items = '')", $quick ) );
 
 			foreach ( (array) $rows as $row ) {
 				$items = array(
@@ -508,7 +502,7 @@ class Migrator {
 					),
 				);
 
-				$wpdb->update(
+				Db::update(
 					$quick,
 					array(
 						'name'  => (string) $row->keyword,
@@ -527,8 +521,8 @@ class Migrator {
 
 		foreach ( array( 'users', 'auto_replies', 'quick_replies', 'imagemaps', 'richmenus' ) as $key ) {
 			$table = self::table( $key );
-			$wpdb->query( $wpdb->prepare( "UPDATE %i SET updated_at = %s WHERE updated_at = '0000-00-00 00:00:00'", $table, $now ) );
-			$wpdb->query( $wpdb->prepare( "UPDATE %i SET created_at = %s WHERE created_at = '0000-00-00 00:00:00'", $table, $now ) );
+			Db::query( Db::prepare( "UPDATE %i SET updated_at = %s WHERE updated_at = '0000-00-00 00:00:00'", $table, $now ) );
+			Db::query( Db::prepare( "UPDATE %i SET created_at = %s WHERE created_at = '0000-00-00 00:00:00'", $table, $now ) );
 		}
 
 		// 6. Seed the inbox from any LINE users we already know about, so the
@@ -536,8 +530,8 @@ class Migrator {
 		$users         = self::table( 'users' );
 		$conversations = self::table( 'conversations' );
 
-		$wpdb->query(
-			$wpdb->prepare(
+		Db::query(
+			Db::prepare(
 				"INSERT IGNORE INTO %i
 					(line_user_id, display_name, picture_url, status, created_at, updated_at)
 				 SELECT line_user_id, display_name, picture_url, 'bot', %s, %s FROM %i",
@@ -552,9 +546,9 @@ class Migrator {
 		//    different prefix, created outside its installer. Copy it across so
 		//    the record of what customers were told is not lost, and so
 		//    uninstall can actually clean it up.
-		$legacy_history = $wpdb->prefix . 'moksa_notify_history';
+		$legacy_history = Db::prefix() . 'moksa_notify_history';
 
-		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $legacy_history ) );
+		$exists = Db::get_var( Db::prepare( 'SHOW TABLES LIKE %s', $legacy_history ) );
 
 		if ( $exists ) {
 			$history = self::table( 'notify_history' );
@@ -563,8 +557,8 @@ class Migrator {
 			// sends, because the code checked for a 'status' key the LINE API
 			// does not return. That cannot be reconstructed after the fact, so
 			// they are imported as 'unknown' rather than as lies.
-			$wpdb->query(
-				$wpdb->prepare(
+			Db::query(
+				Db::prepare(
 				"INSERT INTO %i
 					(wp_user_id, recipient, order_id, template_id, order_status, channel, content, status, error, created_at)
 				 SELECT
@@ -584,7 +578,7 @@ class Migrator {
 				)
 			);
 
-			$imported = (int) $wpdb->rows_affected;
+			$imported = (int) Db::rows_affected();
 
 			if ( $imported > 0 ) {
 				Logger::info(
@@ -602,9 +596,7 @@ class Migrator {
 	 * Whether a column exists, used to make v1 migrations idempotent.
 	 */
 	private static function column_exists( string $table, string $column ): bool {
-		global $wpdb;
-
-		$found = $wpdb->get_var( $wpdb->prepare( "SHOW COLUMNS FROM %i LIKE %s", $table, $column ) );
+		$found = Db::get_var( Db::prepare( "SHOW COLUMNS FROM %i LIKE %s", $table, $column ) );
 
 		return ! empty( $found );
 	}
@@ -613,11 +605,9 @@ class Migrator {
 	 * Drop every plugin table. Only ever called from uninstall.php.
 	 */
 	public static function drop_all(): void {
-		global $wpdb;
-
 		foreach ( self::table_keys() as $key ) {
 			$table = self::table( $key );
-			$wpdb->query( $wpdb->prepare( "DROP TABLE IF EXISTS %i", $table ) );
+			Db::query( Db::prepare( "DROP TABLE IF EXISTS %i", $table ) );
 		}
 	}
 }
