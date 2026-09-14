@@ -395,6 +395,25 @@ class PayModule {
 			);
 		}
 
+		// The transaction was named when the payment was reserved; the one in
+		// the return URL has to be that one. LINE's confirm only checks the
+		// amount, so without this a transaction reserved for one order could
+		// be presented against another of the same total. Nothing is gained by
+		// doing that -- the money is still paid once -- but the binding is ours
+		// to enforce, not LINE's to happen to catch.
+		if ( '' !== (string) $payment->transaction_id && $transaction_id !== (string) $payment->transaction_id ) {
+			Logger::warning(
+				'A LINE Pay return named a different transaction from the one reserved',
+				array( 'payment' => $payment_id, 'reserved' => (string) $payment->transaction_id, 'presented' => $transaction_id ),
+				'pay'
+			);
+
+			return new WP_Error(
+				'moksa_line_pay_transaction_mismatch',
+				__( 'This return does not belong to that payment.', 'moksa-line' )
+			);
+		}
+
 		if ( ! Payments::claim_for_confirm( $payment_id ) ) {
 			// Someone else is confirming, or already has.
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.

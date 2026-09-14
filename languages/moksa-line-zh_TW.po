@@ -3432,3 +3432,9 @@ msgstr "%d 則新訊息"
 
 msgid "Desktop notifications"
 msgstr "桌面通知"
+
+msgid "This link was started from a different account. Please start again from your own account page."
+msgstr "這個連結是從另一個帳號開始的。請回到自己的帳戶頁重新操作。"
+
+msgid "This return does not belong to that payment."
+msgstr "這個回傳不屬於這筆付款。"

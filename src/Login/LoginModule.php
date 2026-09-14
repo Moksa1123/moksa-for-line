@@ -196,6 +196,24 @@ class LoginModule {
 			$this->fail( __( 'LINE did not return an authorization code.', 'moksa-line' ) );
 		}
 
+		// A link has to finish in the session that started it. The target was
+		// fixed when the flow began, so a stranger opening this callback could
+		// never attach their LINE to somebody else's account -- but the sign-in
+		// at the end would still switch their browser to the account that
+		// started the link. Handing an attacker's session to whoever they can
+		// get to click a URL is the classic login CSRF, and refusing here is
+		// what closes it.
+		if ( (int) ( $stored['link_to'] ?? 0 ) > 0 && get_current_user_id() !== (int) $stored['link_to'] ) {
+			Logger::warning(
+				'A LINE account link was opened from a different session than started it',
+				array( 'started_by' => (int) $stored['link_to'], 'opened_by' => get_current_user_id() ),
+				'login'
+			);
+
+			$this->fail( __( 'This link was started from a different account. Please start again from your own account page.', 'moksa-line' ) );
+		}
+
+
 		$tokens = $this->exchange_code( $code, (string) ( $stored['code_verifier'] ?? '' ) );
 
 		if ( is_wp_error( $tokens ) ) {

@@ -54,10 +54,19 @@ if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
 
 // --- the gateway, and the block checkout's view of it ------------------------
 
-$enabled_before = (bool) Options::get( 'pay_enabled' );
-$gateways       = WC()->payment_gateways()->payment_gateways();
+$module_on = (bool) Options::get( 'pay_enabled' );
+$gateways  = WC()->payment_gateways()->payment_gateways();
 
-pay_check( isset( $gateways['moksa_line_pay'] ), 'the gateway is registered with WooCommerce' );
+// The gateway and the order-screen box only exist while the module is
+// switched on in settings. With it off there is nothing to be wrong about,
+// so those two are reported as skipped rather than failed -- a test that
+// fails because of a setting teaches nobody anything.
+if ( $module_on ) {
+	pay_check( isset( $gateways['moksa_line_pay'] ), 'the gateway is registered with WooCommerce' );
+} else {
+	echo "  skip  LINE Pay is switched off in settings; the gateway and order-screen checks need it on
+";
+}
 
 if ( class_exists( '\Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
 	pay_check( class_exists( BlocksSupport::class ), 'a block payment method type exists' );
@@ -135,7 +144,9 @@ foreach ( array( 'side', 'normal', 'advanced' ) as $context ) {
 	}
 }
 
-pay_check( $found, 'a LINE Pay box is on the order screen (' . $screen . ')' );
+if ( $module_on ) {
+	pay_check( $found, 'a LINE Pay box is on the order screen (' . $screen . ')' );
+}
 
 // Render it for an order that was not paid with LINE Pay: it has to say so,
 // not crash on a missing payment row.

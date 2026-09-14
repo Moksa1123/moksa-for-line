@@ -227,10 +227,14 @@ class OrderContext {
 		$escaped  = array();
 
 		foreach ( $map as $placeholder => $value ) {
-			// json_encode a string yields it quoted; trim the quotes to get an
-			// escaped fragment safe to splice into the JSON.
+			// json_encode a string yields it quoted; take the first and last
+			// character off to get an escaped fragment safe to splice into the
+			// JSON. Not trim(): that strips every trailing quote, so a name
+			// ending in a literal " -- encoded as "...\"" -- lost both and left
+			// a bare backslash that swallowed the template's own closing quote.
+			// Invalid JSON, and the notification was silently never sent.
 			$encoded = wp_json_encode( $value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
-			$escaped[ $placeholder ] = false === $encoded ? '' : trim( (string) $encoded, '"' );
+			$escaped[ $placeholder ] = false === $encoded ? '' : substr( (string) $encoded, 1, -1 );
 		}
 
 		$rendered = strtr( $template_json, $escaped );
