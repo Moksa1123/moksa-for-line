@@ -113,6 +113,11 @@ foreach ( array( 'channel_id', 'channel_secret', 'messaging_secret', 'messaging_
 	Mofoline\Support\Options::delete( $reset );
 }
 
+// A 1.4.0 site never had the new-name keys under the old prefix either.
+foreach ( array( 'webhook_forward_url', 'woo_notify_delay', 'woo_tracking_delay', 'woo_tracking_retries' ) as $reset ) {
+	delete_option( Mofoline\Support\Migrator::LEGACY_PREFIX . $reset );
+}
+
 update_option( 'moksa_line_order_delay', '30' );
 update_option( 'moksa_line_order_processing_delay', '90' );
 update_option( 'moksa_line_order_processing_max_retries', '5' );
