@@ -61,19 +61,16 @@ class LiffModule {
 
 		global $wpdb;
 
-		$like = array();
-		$args = array();
-
-		foreach ( self::SHORTCODES as $tag ) {
-			$like[] = 'post_content LIKE %s';
-			$args[] = '%' . $wpdb->esc_like( '[' . $tag ) . '%';
-		}
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- the OR list is built from literals above; cached in a transient.
+		// Written out rather than assembled: the two shortcodes are a fixed
+		// pair, and a query with no string building in it is one the
+		// directory's scan can read as well as we can.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- cached in a transient below.
 		$id = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'publish' AND (" . implode( ' OR ', $like ) . ') ORDER BY ID ASC LIMIT 1',
-				$args
+				"SELECT ID FROM %i WHERE post_type = 'page' AND post_status = 'publish' AND ( post_content LIKE %s OR post_content LIKE %s ) ORDER BY ID ASC LIMIT 1",
+				$wpdb->posts,
+				'%' . $wpdb->esc_like( '[' . self::SHORTCODES[0] ) . '%',
+				'%' . $wpdb->esc_like( '[' . self::SHORTCODES[1] ) . '%'
 			)
 		);
 
