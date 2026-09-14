@@ -25,3 +25,6 @@ dist/
 # Browser automation output
 .playwright-mcp/
 *.png
+
+# Release builds
+*.zip
