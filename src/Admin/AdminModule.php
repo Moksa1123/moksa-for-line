@@ -562,7 +562,18 @@ class AdminModule {
 
 		$tab       = Ajax::key( 'tab', 'general' );
 		$schema    = Options::schema();
-		$submitted = Ajax::fields_textarea( 'moksa_line' );
+		$submitted = Ajax::fields_typed(
+			'moksa_line',
+			static function ( string $field ) use ( $schema ): string {
+				$type = (string) ( $schema[ $field ]['type'] ?? 'string' );
+
+				if ( 'url' === $type ) {
+					return 'url';
+				}
+
+				return 'text' === $type ? 'textarea' : 'text';
+			}
+		);
 
 		foreach ( $submitted as $key => $value ) {
 			if ( ! isset( $schema[ $key ] ) || 'db_version' === $key ) {

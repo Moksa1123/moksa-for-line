@@ -216,15 +216,46 @@ final class Ajax {
 	}
 
 	/**
-	 * A whole form whose leaves may hold multi-line text.
+	 * A whole form, each field sanitised for what its own key says it is.
 	 *
-	 * @param string $key Field name.
-	 * @return array
+	 * For the settings screen, where the schema knows a field is a URL or a
+	 * paragraph and the generic text cleaner would damage both -- it drops
+	 * percent-encoded characters from a URL and the line breaks from a
+	 * message.
+	 *
+	 * @param string   $key  Field name.
+	 * @param callable $kind Given a field's key, returns 'text', 'textarea' or 'url'.
+	 * @return array<string,string> Field key => clean value; nested values are dropped.
 	 */
-	public static function fields_textarea( string $key ): array {
+	public static function fields_typed( string $key, callable $kind ): array {
 		$form = filter_input( INPUT_POST, $key, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-		return is_array( $form ) ? map_deep( $form, 'sanitize_textarea_field' ) : array();
+		if ( ! is_array( $form ) ) {
+			return array();
+		}
+
+		$clean = array();
+
+		foreach ( $form as $field => $value ) {
+			if ( ! is_string( $value ) ) {
+				continue;
+			}
+
+			$field = sanitize_key( (string) $field );
+
+			switch ( $kind( $field ) ) {
+				case 'url':
+					$clean[ $field ] = esc_url_raw( $value );
+					break;
+				case 'textarea':
+					$clean[ $field ] = sanitize_textarea_field( $value );
+					break;
+				default:
+					$clean[ $field ] = sanitize_text_field( $value );
+			}
+		}
+
+		return $clean;
 	}
 
 	/**
@@ -286,17 +317,6 @@ final class Ajax {
 		$value = wp_check_invalid_utf8( $value );
 
 		return preg_replace( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $value );
-	}
-
-	/**
-	 * A block of HTML from the request, reduced to what a post may contain.
-	 *
-	 * @param string $key Field name.
-	 */
-	public static function html( string $key ): string {
-		$value = self::scalar( INPUT_POST, $key );
-
-		return null === $value ? '' : wp_kses_post( $value );
 	}
 
 	// --- The query string ------------------------------------------------------------
@@ -368,7 +388,9 @@ final class Ajax {
 	 * @param string $key Parameter name.
 	 */
 	public static function query_has( string $key ): bool {
-		return null !== filter_input( INPUT_GET, $key, FILTER_DEFAULT, FILTER_NULL_ON_FAILURE );
+		// Absent is null; anything present -- a string, or false for an
+		// array that the default filter would not take -- is not.
+		return null !== filter_input( INPUT_GET, $key );
 	}
 
 	/**

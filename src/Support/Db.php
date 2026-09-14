@@ -160,10 +160,24 @@ final class Db {
 	/**
 	 * The name of one of WordPress's own tables.
 	 *
-	 * @param string $name posts, options, usermeta and so on.
+	 * Only the tables this plugin touches are named here, so nothing else on
+	 * the connection object can be reached by name.
+	 *
+	 * @param string $name posts, options or usermeta.
 	 */
 	public static function core_table( string $name ): string {
-		return (string) self::connection()->{$name};
+		$db = self::connection();
+
+		switch ( $name ) {
+			case 'posts':
+				return (string) $db->posts;
+			case 'options':
+				return (string) $db->options;
+			case 'usermeta':
+				return (string) $db->usermeta;
+		}
+
+		return '';
 	}
 
 	/** The connection WordPress opened. */
