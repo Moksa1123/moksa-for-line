@@ -85,8 +85,11 @@ Used to send and receive messages, issue channel access tokens, read the profile
 **LINE Login** — `access.line.me` and `api.line.me`
 Used to sign visitors in and to verify the resulting ID token. Sent: your channel id and secret, and the authorization code returned by LINE. Received: the visitor's LINE user id, display name, profile picture URL, and email address when your channel is approved for it. Called when a visitor uses a LINE login button.
 
-**LIFF SDK** — `static.line-scdn.net`
-A JavaScript file loaded in the visitor's browser on pages using the LIFF shortcodes. It must be served from LINE's own CDN; a bundled copy is not supported. Loaded only on pages containing `[moksa_liff_profile]` or `[moksa_line_chat]`.
+**LIFF SDK** — `static.line-scdn.net`, and `api.line.me` for verification
+A JavaScript file loaded in the visitor's browser on pages using the LIFF shortcodes. It must be served from LINE's own CDN; a bundled copy is not supported. Loaded only on pages containing `[moksa_liff_profile]` or `[moksa_line_chat]`. When the visitor opens such a page inside LINE, the ID token LIFF issues is sent from your site to `api.line.me` to be verified before the visitor's LINE user id, display name and picture are used.
+
+**Images served by LINE** — `profile.line-scdn.net`, `stickershop.line-scdn.net`
+Profile pictures and sticker images are not copied to your site; they are loaded by the browser directly from LINE's CDN wherever they are shown — the inbox and user list in wp-admin, and the visitor's own picture on the My Account page and the LIFF profile. A browser loading them discloses its IP address and user agent to LINE, as with any image hosted elsewhere. Sent by the plugin: nothing; the URLs come from LINE's own profile data.
 
 **LINE Pay** — `api-pay.line.me`, or `sandbox-api-pay.line.me` in sandbox mode
 Only contacted when LINE Pay is enabled. Sent: your LINE Pay channel id, a signature derived from your channel secret, the order reference, the amount and currency, and the names and quantities of the items being purchased. Called when a payment is reserved, confirmed, refunded, voided or queried.
