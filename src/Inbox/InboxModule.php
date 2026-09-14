@@ -274,7 +274,7 @@ class InboxModule {
 		}
 
 		$conversation_id = Ajax::int( 'conversation_id' );
-		$text            = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+		$text            = Ajax::textarea( 'message' );
 		$package_id      = Ajax::text( 'sticker_package' );
 		$sticker_id      = Ajax::text( 'sticker_id' );
 		$is_sticker      = '' !== $package_id && '' !== $sticker_id;

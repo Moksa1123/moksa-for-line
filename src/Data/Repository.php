@@ -58,8 +58,7 @@ abstract class Repository {
 		global $wpdb;
 		$table = static::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $id ) );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $id ) );
 	}
 
 	/**
@@ -72,8 +71,18 @@ abstract class Repository {
 		$table = static::table();
 		$order = static::order();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table and a fixed order clause.
-		return (array) $wpdb->get_results( "SELECT * FROM {$table} ORDER BY {$order}" );
+		// order() is "column DIRECTION" from a subclass constant. The column
+		// goes through prepare() as an identifier; the direction can only be
+		// one of two words, so it is chosen, not interpolated.
+		list( $column, $direction ) = array_pad( explode( ' ', trim( $order ), 2 ), 2, 'DESC' );
+
+		// Two complete statements, chosen between -- not one statement with the
+		// direction pasted in.
+		if ( 'ASC' === strtoupper( $direction ) ) {
+			return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY %i ASC', $table, $column ) );
+		}
+
+		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY %i DESC', $table, $column ) );
 	}
 
 	/**
@@ -105,7 +114,6 @@ abstract class Repository {
 		$fmt[]              = '%s';
 
 		if ( $id > 0 ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 			$wpdb->update( static::table(), $data, array( 'id' => $id ), $fmt, array( '%d' ) );
 
 			return $id;
@@ -114,7 +122,6 @@ abstract class Repository {
 		$data['created_at'] = $now;
 		$fmt[]              = '%s';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$inserted = $wpdb->insert( static::table(), $data, $fmt );
 
 		return $inserted ? (int) $wpdb->insert_id : 0;
@@ -128,7 +135,6 @@ abstract class Repository {
 	public static function delete( int $id ): bool {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		return (bool) $wpdb->delete( static::table(), array( 'id' => $id ), array( '%d' ) );
 	}
 
@@ -139,7 +145,6 @@ abstract class Repository {
 		global $wpdb;
 		$table = static::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" );
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i", $table ) );
 	}
 }

@@ -858,7 +858,7 @@ class WooModule {
 			: '';
 
 		$button = sprintf(
-			'<p class="moksa-line-woo-login"><a class="moksa-line-button%1$s" href="%2$s"%3$s rel="nofollow">%4$s</a></p>',
+			'<p class="moksa-line-woo-login"><a class="moksa-line-button%1$s" href="%2$s" style="%3$s" rel="nofollow">%4$s</a></p>',
 			esc_attr( ShortcodeModule::align_class() ),
 			esc_url(
 				add_query_arg(
@@ -869,7 +869,7 @@ class WooModule {
 					admin_url( 'admin-ajax.php' )
 				)
 			),
-			ShortcodeModule::style_attribute(),
+			esc_attr( ShortcodeModule::style_declarations() ),
 			esc_html( '' !== $label ? $label : __( 'Continue with LINE', 'moksa-line' ) )
 		);
 
@@ -890,7 +890,7 @@ class WooModule {
 		wp_enqueue_style( 'moksa-line-front' );
 
 		printf(
-			'<div class="woocommerce-info moksa-line-checkout-prompt"><span>%s</span> <a class="moksa-line-button moksa-line-button--small" href="%s"%s>%s</a></div>',
+			'<div class="woocommerce-info moksa-line-checkout-prompt"><span>%s</span> <a class="moksa-line-button moksa-line-button--small" href="%s" style="%s">%s</a></div>',
 			esc_html__( 'Already shopped with us?', 'moksa-line' ),
 			esc_url(
 				add_query_arg(
@@ -901,7 +901,7 @@ class WooModule {
 					admin_url( 'admin-ajax.php' )
 				)
 			),
-			ShortcodeModule::style_attribute(), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- returns an escaped attribute, or nothing.
+			esc_attr( ShortcodeModule::style_declarations() ),
 			esc_html__( 'Sign in with LINE', 'moksa-line' )
 		);
 	}

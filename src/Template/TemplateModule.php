@@ -35,9 +35,7 @@ class TemplateModule {
 	public function ajax_warnings(): void {
 		$this->guard();
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON, decoded below.
-		$raw     = isset( $_POST['definition'] ) ? wp_unslash( $_POST['definition'] ) : '';
-		$decoded = json_decode( (string) $raw, true );
+		$decoded = Ajax::json_verbatim( 'definition' );
 
 		wp_send_json_success(
 			array( 'problems' => is_array( $decoded ) ? TemplateMessages::check( $decoded ) : array() )
@@ -109,7 +107,7 @@ class TemplateModule {
 		$this->guard();
 
 		$decoded  = $this->decoded_definition();
-		$alt_text = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : 'Preview';
+		$alt_text = Ajax::text( 'alt_text', 'Preview' );
 		$problems = TemplateMessages::check( $decoded );
 
 		if ( $problems ) {
@@ -209,9 +207,7 @@ class TemplateModule {
 	 * @return array
 	 */
 	private function decoded_definition(): array {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON, decoded and then checked field by field.
-		$raw     = isset( $_POST['definition'] ) ? wp_unslash( $_POST['definition'] ) : '';
-		$decoded = json_decode( (string) $raw, true );
+		$decoded = Ajax::json_verbatim( 'definition' );
 
 		if ( ! is_array( $decoded ) ) {
 			wp_send_json_error( array( 'message' => __( 'That is not valid JSON.', 'moksa-line' ) ) );

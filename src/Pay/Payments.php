@@ -34,7 +34,6 @@ class Payments {
 
 		$now = current_time( 'mysql', true );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->insert(
 			self::table(),
 			array(
@@ -92,7 +91,6 @@ class Payments {
 		$data['updated_at'] = current_time( 'mysql', true );
 		$format[]           = '%s';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->update( self::table(), $data, array( 'id' => $id ), $format, array( '%d' ) );
 	}
 
@@ -106,8 +104,7 @@ class Payments {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE order_ref = %s", $order_ref ) );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE order_ref = %s", $table, $order_ref ) );
 	}
 
 	/**
@@ -120,8 +117,7 @@ class Payments {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE wc_order_id = %d ORDER BY id DESC", $order_id ) );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE wc_order_id = %d ORDER BY id DESC", $table, $order_id ) );
 	}
 
 	/**
@@ -138,11 +134,11 @@ class Payments {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		$claimed = $wpdb->query(
 			$wpdb->prepare(
-				"UPDATE {$table} SET status = 'confirming', updated_at = %s
+				"UPDATE %i SET status = 'confirming', updated_at = %s
 				 WHERE id = %d AND status IN ('created','pending')",
+				$table,
 				current_time( 'mysql', true ),
 				$id
 			)
@@ -185,8 +181,7 @@ class Payments {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} ORDER BY id DESC LIMIT %d", $limit ) );
+		return (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i ORDER BY id DESC LIMIT %d", $table, $limit ) );
 	}
 
 	/**
@@ -200,13 +195,13 @@ class Payments {
 		$table  = self::table();
 		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $older_than_minutes * MINUTE_IN_SECONDS ) );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		return (array) $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$table}
+				"SELECT * FROM %i
 				 WHERE status IN ('created','pending','confirming')
 				   AND updated_at < %s
 				 ORDER BY id ASC LIMIT 50",
+				$table,
 				$cutoff
 			)
 		);

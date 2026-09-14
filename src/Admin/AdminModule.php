@@ -559,11 +559,9 @@ class AdminModule {
 
 		check_admin_referer( 'moksa_line_settings' );
 
-		$tab      = isset( $_POST['tab'] ) ? sanitize_key( wp_unslash( $_POST['tab'] ) ) : 'general';
-		$schema   = Options::schema();
-		$submitted = isset( $_POST['moksa_line'] ) && is_array( $_POST['moksa_line'] )
-			? wp_unslash( $_POST['moksa_line'] )
-			: array();
+		$tab       = Ajax::key( 'tab', 'general' );
+		$schema    = Options::schema();
+		$submitted = Ajax::fields_textarea( 'moksa_line' );
 
 		foreach ( $submitted as $key => $value ) {
 			if ( ! isset( $schema[ $key ] ) || 'db_version' === $key ) {
@@ -581,11 +579,7 @@ class AdminModule {
 
 		// Unchecked checkboxes are absent from the POST, so every boolean on
 		// the submitted tab is explicitly set to false when missing.
-		$booleans = isset( $_POST['moksa_line_booleans'] ) ? (array) wp_unslash( $_POST['moksa_line_booleans'] ) : array();
-
-		foreach ( $booleans as $key ) {
-			$key = sanitize_key( $key );
-
+		foreach ( Ajax::keys( 'moksa_line_booleans' ) as $key ) {
 			if ( isset( $schema[ $key ] ) && 'bool' === $schema[ $key ]['type'] && ! isset( $submitted[ $key ] ) ) {
 				Options::set( $key, false );
 			}
@@ -595,11 +589,7 @@ class AdminModule {
 		// they are handled outside the schema loop. An empty submission on the
 		// WooCommerce tab means "notify on nothing", which is a real choice.
 		if ( 'woo' === $tab ) {
-			$statuses = isset( $_POST['moksa_line_woo_statuses'] )
-				? array_map( 'sanitize_key', (array) wp_unslash( $_POST['moksa_line_woo_statuses'] ) )
-				: array();
-
-			Options::set( 'woo_notify_statuses', array_values( $statuses ) );
+			Options::set( 'woo_notify_statuses', Ajax::keys( 'moksa_line_woo_statuses' ) );
 		}
 
 		// A LINE channel id is a ten digit number. Anything else is a mistake --
@@ -781,8 +771,7 @@ class AdminModule {
 		global $wpdb;
 		$table = \Moksa\Line\Support\Logger::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$removed = (int) $wpdb->query( "DELETE FROM {$table}" );
+		$removed = (int) $wpdb->query( $wpdb->prepare( "DELETE FROM %i", $table ) );
 
 		wp_send_json_success(
 			array(
@@ -846,8 +835,8 @@ class AdminModule {
 			wp_send_json_error( array( 'message' => __( 'You cannot send broadcasts.', 'moksa-line' ) ), 403 );
 		}
 
-		$mode     = isset( $_POST['mode'] ) ? sanitize_key( wp_unslash( $_POST['mode'] ) ) : 'test';
-		$body     = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+		$mode     = Ajax::key( 'mode', 'test' );
+		$body     = Ajax::textarea( 'message' );
 		$flex_id  = Ajax::int( 'flex_id' );
 		$target   = Ajax::text( 'line_user_id' );
 

@@ -91,8 +91,7 @@ class AutoReply {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$rules = (array) $wpdb->get_results( "SELECT * FROM {$table} WHERE is_active = 1 ORDER BY priority ASC, id ASC" );
+		$rules = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE is_active = 1 ORDER BY priority ASC, id ASC", $table ) );
 
 		wp_cache_set( 'moksa_line_active_rules', $rules, 'moksa_line', 300 );
 
@@ -164,13 +163,9 @@ class AutoReply {
 					return 0;
 				}
 
-				// Administrator-supplied patterns are delimited here rather
-				// than trusted verbatim, so a stray delimiter cannot smuggle
-				// in the /e-style modifiers.
-				$pattern = '/' . str_replace( '/', '\\/', $keyword ) . '/iu';
-				$result  = @preg_match( $pattern, $text ); // phpcs:ignore WordPress.PHP.NoSilencedErrors -- invalid patterns are reported below.
+				$result = self::matches_pattern( $keyword, $text );
 
-				if ( false === $result ) {
+				if ( null === $result ) {
 					Logger::warning(
 						'A keyword rule has an invalid regular expression',
 						array( 'rule_id' => (int) $rule->id, 'pattern' => $keyword ),
@@ -380,8 +375,7 @@ class AutoReply {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET hit_count = hit_count + 1 WHERE id = %d", $rule_id ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE %i SET hit_count = hit_count + 1 WHERE id = %d", $table, $rule_id ) );
 	}
 
 	/**
@@ -417,7 +411,6 @@ class AutoReply {
 		// inbound webhook repopulates the cache from the pre-edit rows, and the
 		// bot then answers with the old rule for the next five minutes.
 		if ( $id > 0 ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 			$wpdb->update( self::table(), $data, array( 'id' => $id ), $format, array( '%d' ) );
 
 			self::flush_cache();
@@ -428,7 +421,6 @@ class AutoReply {
 		$data['created_at'] = $now;
 		$format[]           = '%s';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->insert( self::table(), $data, $format );
 
 		self::flush_cache();
@@ -444,7 +436,6 @@ class AutoReply {
 	public static function delete( int $id ): bool {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$deleted = (bool) $wpdb->delete( self::table(), array( 'id' => $id ), array( '%d' ) );
 
 		self::flush_cache();
@@ -461,8 +452,7 @@ class AutoReply {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return (array) $wpdb->get_results( "SELECT * FROM {$table} ORDER BY priority ASC, id DESC" );
+		return (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i ORDER BY priority ASC, id DESC", $table ) );
 	}
 
 	/**
@@ -475,7 +465,32 @@ class AutoReply {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $id ) );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $id ) );
+	}
+
+	/**
+	 * Whether a text matches an administrator-supplied pattern.
+	 *
+	 * The pattern is delimited here rather than trusted verbatim, so a stray
+	 * delimiter cannot smuggle in modifiers. A pattern PCRE cannot compile
+	 * gives null, so a caller can tell "no match" from "no pattern".
+	 *
+	 * @param string $keyword The pattern, without delimiters.
+	 * @param string $text    What to match it against.
+	 * @return bool|null Null when the pattern is not valid.
+	 */
+	public static function matches_pattern( string $keyword, string $text ): ?bool {
+		$pattern = '/' . str_replace( '/', '\\/', $keyword ) . '/iu';
+
+		// PCRE reports a pattern it cannot compile with a warning and a false
+		// return. The return is the answer; the warning is not, so it is
+		// silenced here and nowhere else.
+		$result = @preg_match( $pattern, $text );
+
+		if ( false === $result ) {
+			return null;
+		}
+
+		return 1 === $result;
 	}
 }

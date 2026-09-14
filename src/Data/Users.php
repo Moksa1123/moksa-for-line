@@ -32,8 +32,7 @@ class Users {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE line_user_id = %s", $line_user_id ) );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE line_user_id = %s", $table, $line_user_id ) );
 	}
 
 	/**
@@ -50,8 +49,7 @@ class Users {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE wp_user_id = %d", $wp_user_id ) );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE wp_user_id = %d", $table, $wp_user_id ) );
 	}
 
 	/**
@@ -95,7 +93,6 @@ class Users {
 
 		if ( $existing ) {
 			if ( ! empty( $data ) ) {
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 				$wpdb->update( self::table(), $data, array( 'id' => (int) $existing->id ), $format, array( '%d' ) );
 			}
 
@@ -107,7 +104,6 @@ class Users {
 		$data['created_at']   = $now;
 		$format[]             = '%s';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$inserted = $wpdb->insert( self::table(), $data, $format );
 
 		return $inserted ? (int) $wpdb->insert_id : 0;
@@ -133,7 +129,6 @@ class Users {
 	public static function unlink( int $wp_user_id ): void {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->update(
 			self::table(),
 			array( 'wp_user_id' => 0, 'updated_at' => current_time( 'mysql', true ) ),
@@ -173,8 +168,7 @@ class Users {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$ids = $wpdb->get_col( $wpdb->prepare( "SELECT line_user_id FROM {$table} WHERE is_friend = 1 LIMIT %d", $limit ) );
+		$ids = $wpdb->get_col( $wpdb->prepare( "SELECT line_user_id FROM %i WHERE is_friend = 1 LIMIT %d", $table, $limit ) );
 
 		return array_map( 'strval', (array) $ids );
 	}
@@ -193,48 +187,48 @@ class Users {
 		$page     = max( 1, (int) ( $args['page'] ?? 1 ) );
 		$offset   = ( $page - 1 ) * $per_page;
 
-		$where  = array( '1=1' );
-		$params = array();
+		// Every filter is always in the statement and switched off by its own
+		// value, so the statement is one literal with a fixed set of
+		// placeholders rather than something assembled at run time.
+		$search  = '' !== trim( (string) ( $args['search'] ?? '' ) ) ? '%' . $wpdb->esc_like( (string) $args['search'] ) . '%' : '';
+		$linked  = isset( $args['linked'] ) ? ( $args['linked'] ? 1 : 0 ) : -1;
+		$friends = empty( $args['friends_only'] ) ? 0 : 1;
 
-		if ( ! empty( $args['search'] ) ) {
-			$where[]  = '(display_name LIKE %s OR line_user_id LIKE %s OR email LIKE %s)';
-			$like     = '%' . $wpdb->esc_like( (string) $args['search'] ) . '%';
-			$params[] = $like;
-			$params[] = $like;
-			$params[] = $like;
-		}
-
-		if ( isset( $args['linked'] ) ) {
-			$where[] = $args['linked'] ? 'wp_user_id > 0' : 'wp_user_id = 0';
-		}
-
-		if ( ! empty( $args['friends_only'] ) ) {
-			$where[] = 'is_friend = 1';
-		}
-
-		$clause = implode( ' AND ', $where );
-
-		// The WHERE clause is assembled from the literal fragments above; every
-		// value in it is a placeholder, and the table name is one too.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned table, paged admin list.
 		$total = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM %i WHERE {$clause}",
-				array_merge( array( $table ), $params )
+				"SELECT COUNT(*) FROM %i
+				 WHERE ( %s = '' OR display_name LIKE %s OR line_user_id LIKE %s OR email LIKE %s )
+				   AND ( %d = -1 OR ( wp_user_id > 0 ) = %d )
+				   AND ( %d = 0 OR is_friend = 1 )",
+				$table,
+				$search,
+				$search,
+				$search,
+				$search,
+				$linked,
+				$linked,
+				$friends
 			)
 		);
 
-		$query_params   = array_merge( array( $table ), $params );
-		$query_params[] = $per_page;
-		$query_params[] = $offset;
-
-		// The WHERE clause is assembled from the literal fragments above; every
-		// value in it is a placeholder, and the table name is one too.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned table, paged admin list.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM %i WHERE {$clause} ORDER BY updated_at DESC LIMIT %d OFFSET %d",
-				$query_params
+				"SELECT * FROM %i
+				 WHERE ( %s = '' OR display_name LIKE %s OR line_user_id LIKE %s OR email LIKE %s )
+				   AND ( %d = -1 OR ( wp_user_id > 0 ) = %d )
+				   AND ( %d = 0 OR is_friend = 1 )
+				 ORDER BY updated_at DESC
+				 LIMIT %d OFFSET %d",
+				$table,
+				$search,
+				$search,
+				$search,
+				$search,
+				$linked,
+				$linked,
+				$friends,
+				$per_page,
+				$offset
 			)
 		);
 
@@ -253,13 +247,10 @@ class Users {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$row = $wpdb->get_row(
-			"SELECT COUNT(*) AS total,
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT COUNT(*) AS total,
 				SUM(CASE WHEN wp_user_id > 0 THEN 1 ELSE 0 END) AS linked,
 				SUM(CASE WHEN is_friend = 1 THEN 1 ELSE 0 END) AS friends
-			 FROM {$table}"
-		);
+			 FROM %i", $table ) );
 
 		return array(
 			'total'   => $row ? (int) $row->total : 0,

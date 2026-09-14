@@ -17,6 +17,7 @@ namespace Moksa\Line\RichMenu;
 
 use Moksa\Line\Data\Repository;
 use Moksa\Line\Api\RichMenuClient;
+use Moksa\Line\Support\Files;
 use Moksa\Line\Support\Logger;
 use WP_Error;
 use Moksa\Line\Admin\Ajax;
@@ -161,8 +162,7 @@ class RichMenuModule extends Repository {
 				global $wpdb;
 				$table = self::table();
 
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-				$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET is_default = 0 WHERE id <> %d", $id ) );
+				$wpdb->query( $wpdb->prepare( "UPDATE %i SET is_default = 0 WHERE id <> %d", $table, $id ) );
 			}
 
 			$default = RichMenuClient::set_default( $new_id );
@@ -216,9 +216,8 @@ class RichMenuModule extends Repository {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		return (array) $wpdb->get_results(
-			$wpdb->prepare( "SELECT * FROM {$table} WHERE tab_group = %s ORDER BY tab_order ASC, id ASC", $group )
+			$wpdb->prepare( "SELECT * FROM %i WHERE tab_group = %s ORDER BY tab_order ASC, id ASC", $table, $group )
 		);
 	}
 
@@ -231,8 +230,7 @@ class RichMenuModule extends Repository {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$groups = $wpdb->get_col( "SELECT DISTINCT tab_group FROM {$table} WHERE tab_group <> '' ORDER BY tab_group ASC" );
+		$groups = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT tab_group FROM %i WHERE tab_group <> '' ORDER BY tab_group ASC", $table ) );
 
 		return array_map( 'strval', (array) $groups );
 	}
@@ -389,7 +387,7 @@ class RichMenuModule extends Repository {
 			$mime = 'image/jpeg';
 		}
 
-		$bytes = file_get_contents( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions -- reading a local file, not a remote request.
+		$bytes = Files::read( $path );
 
 		if ( false === $bytes ) {
 			return new WP_Error(
@@ -451,14 +449,13 @@ class RichMenuModule extends Repository {
 	public function ajax_save(): void {
 		$this->guard();
 
-		$areas_raw = isset( $_POST['areas'] ) ? wp_unslash( $_POST['areas'] ) : '[]';
-		$areas     = json_decode( (string) $areas_raw, true );
+		$areas = '' === Ajax::text( 'areas' ) ? array() : Ajax::json_verbatim( 'areas' );
 
 		if ( ! is_array( $areas ) ) {
 			wp_send_json_error( array( 'message' => __( 'The tappable areas could not be read.', 'moksa-line' ) ) );
 		}
 
-		$size  = isset( $_POST['size'] ) && 'half' === $_POST['size'] ? 'half' : 'full';
+		$size  = Ajax::is( 'size', 'half' ) ? 'half' : 'full';
 		$group = Ajax::text( 'tab_group' );
 		$name  = Ajax::text( 'name' );
 
@@ -475,15 +472,13 @@ class RichMenuModule extends Repository {
 				'name'                => $name,
 				'chat_bar_text'       => Ajax::text( 'chat_bar_text' ),
 				'size'                => $size,
-				'selected'            => empty( $_POST['selected'] ) ? 0 : 1,
+				'selected'            => Ajax::flag( 'selected' ) ? 1 : 0,
 				'areas'               => wp_json_encode( self::normalize_areas( $areas, $size ) ),
 				'image_attachment_id' => Ajax::int( 'image_attachment_id' ),
 				'tab_group'           => $group,
 				'tab_order'           => Ajax::int( 'tab_order' ),
-				'is_default'          => empty( $_POST['is_default'] ) ? 0 : 1,
-				'alias_id'            => isset( $_POST['alias_id'] )
-					? RichMenuClient::sanitize_alias_id( sanitize_text_field( wp_unslash( $_POST['alias_id'] ) ) )
-					: '',
+				'is_default'          => Ajax::flag( 'is_default' ) ? 1 : 0,
+				'alias_id'            => RichMenuClient::sanitize_alias_id( Ajax::text( 'alias_id' ) ),
 			)
 		);
 
@@ -492,18 +487,17 @@ class RichMenuModule extends Repository {
 		}
 
 		// Only one menu can be the channel default.
-		if ( ! empty( $_POST['is_default'] ) ) {
+		if ( Ajax::flag( 'is_default' ) ) {
 			global $wpdb;
 			$table = self::table();
 
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-			$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET is_default = 0 WHERE id <> %d", $id ) );
+			$wpdb->query( $wpdb->prepare( "UPDATE %i SET is_default = 0 WHERE id <> %d", $table, $id ) );
 		}
 
 		$warnings = array();
 
-		if ( ! empty( $_POST['image_attachment_id'] ) ) {
-			$warnings = self::check_image( (int) $_POST['image_attachment_id'], $size );
+		if ( Ajax::int( 'image_attachment_id' ) > 0 ) {
+			$warnings = self::check_image( Ajax::int( 'image_attachment_id' ), $size );
 		}
 
 		wp_send_json_success(
@@ -618,8 +612,7 @@ class RichMenuModule extends Repository {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$wpdb->query( "UPDATE {$table} SET is_default = 0" );
+		$wpdb->query( $wpdb->prepare( "UPDATE %i SET is_default = 0", $table ) );
 
 		self::save( array( 'id' => $id, 'is_default' => 1 ) );
 

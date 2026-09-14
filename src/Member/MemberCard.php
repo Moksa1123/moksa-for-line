@@ -93,9 +93,7 @@ class MemberCard {
 		// our own holding one column.
 		$users = get_users(
 			array(
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- see above.
 				'meta_key'    => self::META,
-				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- see above.
 				'meta_value'  => $code,
 				'number'      => 2,
 				'fields'      => 'ID',

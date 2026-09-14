@@ -21,6 +21,7 @@
 
 namespace Moksa\Line\Login;
 
+use Moksa\Line\Admin\Ajax;
 use Moksa\Line\Data\Users;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Options;
@@ -134,10 +135,10 @@ class LoginModule {
 	 * still produce a valid login.
 	 */
 	public function handle_start(): void {
-		$redirect = isset( $_GET['redirect_to'] ) ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) : '';
-		$link     = ! empty( $_GET['link'] ) && is_user_logged_in();
+		$redirect = Ajax::query_url( 'redirect_to' );
+		$link     = Ajax::query_flag( 'link' ) && is_user_logged_in();
 
-		if ( $link && ! wp_verify_nonce( isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '', 'moksa_line_link' ) ) {
+		if ( $link && ! wp_verify_nonce( Ajax::query_text( '_wpnonce' ), 'moksa_line_link' ) ) {
 			wp_die( esc_html__( 'This link expired. Please go back and try again.', 'moksa-line' ), 403 );
 		}
 
@@ -147,13 +148,25 @@ class LoginModule {
 			wp_die( esc_html__( 'LINE Login is not configured on this site yet.', 'moksa-line' ) );
 		}
 
-		// Not wp_safe_redirect: the destination is access.line.me, and the safe
-		// variant only allows hosts on this site's allowlist -- it would send
-		// everybody to wp-admin instead of to LINE. The URL is built by
-		// authorize_url() from the configured channel, not from the request.
-		// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- deliberate off-site redirect to the LINE authorisation page.
-		wp_redirect( $url );
+		// The destination is access.line.me, which is not on this site's
+		// redirect allowlist; it is added for this one redirect only. The URL
+		// is built by authorize_url() from the configured channel, not from
+		// the request.
+		add_filter( 'allowed_redirect_hosts', array( __CLASS__, 'allow_line_host' ) );
+		wp_safe_redirect( $url );
 		exit;
+	}
+
+	/**
+	 * Let wp_safe_redirect() send a visitor to LINE's authorisation page.
+	 *
+	 * @param string[] $hosts Hosts WordPress already allows.
+	 * @return string[]
+	 */
+	public static function allow_line_host( array $hosts ): array {
+		$hosts[] = 'access.line.me';
+
+		return $hosts;
 	}
 
 	// --- Callback ---------------------------------------------------------------
@@ -162,7 +175,7 @@ class LoginModule {
 	 * Handle LINE's redirect back to the site.
 	 */
 	public function handle_callback(): void {
-		$state = isset( $_GET['state'] ) ? sanitize_text_field( wp_unslash( $_GET['state'] ) ) : '';
+		$state = Ajax::query_text( 'state' );
 
 		if ( '' === $state ) {
 			$this->fail( __( 'This login request is missing its state. Please start again.', 'moksa-line' ) );
@@ -179,10 +192,8 @@ class LoginModule {
 		}
 
 		// LINE reports user-side cancellation as an error parameter.
-		if ( isset( $_GET['error'] ) ) {
-			$description = isset( $_GET['error_description'] )
-				? sanitize_text_field( wp_unslash( $_GET['error_description'] ) )
-				: sanitize_text_field( wp_unslash( $_GET['error'] ) );
+		if ( Ajax::query_has( 'error' ) ) {
+			$description = Ajax::query_text( 'error_description', Ajax::query_text( 'error' ) );
 
 			Logger::info( 'LINE login was not completed', array( 'detail' => $description ), 'login' );
 
@@ -190,7 +201,7 @@ class LoginModule {
 			exit;
 		}
 
-		$code = isset( $_GET['code'] ) ? sanitize_text_field( wp_unslash( $_GET['code'] ) ) : '';
+		$code = Ajax::query_text( 'code' );
 
 		if ( '' === $code ) {
 			$this->fail( __( 'LINE did not return an authorization code.', 'moksa-line' ) );
@@ -273,7 +284,6 @@ class LoginModule {
 				// Core's own hook, fired deliberately: wp_set_auth_cookie() does
 				// not fire it, and everything that watches for a login -- session
 				// handling, security plugins, analytics -- is listening here.
-				// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- firing a core hook, not defining one.
 				do_action( 'wp_login', $user->user_login, $user );
 			}
 		}
@@ -598,7 +608,7 @@ class LoginModule {
 			wp_send_json_error( array( 'message' => __( 'You are not signed in.', 'moksa-line' ) ), 403 );
 		}
 
-		$target = isset( $_POST['user_id'] ) ? (int) $_POST['user_id'] : $user_id;
+		$target = Ajax::int( 'user_id', $user_id );
 
 		if ( $target !== $user_id && ! current_user_can( 'edit_users' ) ) {
 			wp_send_json_error( array( 'message' => __( 'You cannot unlink another user.', 'moksa-line' ) ), 403 );

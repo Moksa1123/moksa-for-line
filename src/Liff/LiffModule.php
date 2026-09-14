@@ -14,6 +14,7 @@ namespace Moksa\Line\Liff;
 
 use Moksa\Line\Data\Users;
 use Moksa\Line\Admin\AdminModule;
+use Moksa\Line\Admin\Ajax;
 use Moksa\Line\Inbox\Conversations;
 use Moksa\Line\Inbox\Messages;
 use Moksa\Line\Support\Logger;
@@ -64,7 +65,6 @@ class LiffModule {
 		// Written out rather than assembled: the two shortcodes are a fixed
 		// pair, and a query with no string building in it is one the
 		// directory's scan can read as well as we can.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- cached in a transient below.
 		$id = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT ID FROM %i WHERE post_type = 'page' AND post_status = 'publish' AND ( post_content LIKE %s OR post_content LIKE %s ) ORDER BY ID ASC LIMIT 1",
@@ -92,7 +92,7 @@ class LiffModule {
 	 * Create the endpoint page, from the settings screen.
 	 */
 	public function ajax_create_page(): void {
-		\Moksa\Line\Admin\Ajax::guard( __( 'You cannot create pages.', 'moksa-line' ), 'publish_pages' );
+		Ajax::guard( __( 'You cannot create pages.', 'moksa-line' ), 'publish_pages' );
 
 		$existing = self::endpoint_page_id();
 
@@ -111,7 +111,7 @@ class LiffModule {
 			true
 		);
 
-		\Moksa\Line\Admin\Ajax::bail( $id, 'Could not create the LIFF page', 'liff' );
+		Ajax::bail( $id, 'Could not create the LIFF page', 'liff' );
 
 		delete_transient( 'moksa_line_liff_page' );
 

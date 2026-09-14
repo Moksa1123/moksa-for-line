@@ -36,8 +36,7 @@ class Conversations {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE line_user_id = %s", $line_user_id ) );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE line_user_id = %s", $table, $line_user_id ) );
 	}
 
 	/**
@@ -50,8 +49,7 @@ class Conversations {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $id ) );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $id ) );
 	}
 
 	/**
@@ -72,7 +70,6 @@ class Conversations {
 
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->query(
 			$wpdb->prepare(
 				'INSERT IGNORE INTO %i
@@ -119,10 +116,9 @@ class Conversations {
 		$preview = mb_substr( trim( preg_replace( '/\s+/u', ' ', $preview ) ), 0, 120 );
 
 		if ( $inbound ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 			$wpdb->query(
 				$wpdb->prepare(
-					"UPDATE {$table}
+					"UPDATE %i
 					 SET last_message_preview = %s,
 						 last_message_at = %s,
 						 last_inbound_at = %s,
@@ -131,6 +127,7 @@ class Conversations {
 						 picture_url = %s,
 						 updated_at = %s
 					 WHERE id = %d",
+					$table,
 					$preview,
 					$now,
 					$now,
@@ -144,12 +141,12 @@ class Conversations {
 			return;
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		$wpdb->query(
 			$wpdb->prepare(
-				"UPDATE {$table}
+				"UPDATE %i
 				 SET last_message_preview = %s, last_message_at = %s, updated_at = %s
 				 WHERE id = %d",
+				$table,
 				$preview,
 				$now,
 				$now,
@@ -178,7 +175,6 @@ class Conversations {
 
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->update(
 			self::table(),
 			array(
@@ -220,7 +216,6 @@ class Conversations {
 	public static function mark_read( int $id ): void {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->update(
 			self::table(),
 			array( 'unread_count' => 0 ),
@@ -244,51 +239,48 @@ class Conversations {
 		$page     = max( 1, (int) ( $args['page'] ?? 1 ) );
 		$offset   = ( $page - 1 ) * $per_page;
 
-		$where  = array( '1=1' );
-		$params = array();
+		// Every filter is always in the statement and switched off by its own
+		// value, so the statement is one literal with a fixed set of
+		// placeholders rather than something assembled at run time.
+		$status = ! empty( $args['status'] ) && in_array( $args['status'], self::STATUSES, true ) ? (string) $args['status'] : '';
+		$unread = empty( $args['unread'] ) ? 0 : 1;
+		$search = '' !== trim( (string) ( $args['search'] ?? '' ) ) ? '%' . $wpdb->esc_like( (string) $args['search'] ) . '%' : '';
 
-		if ( ! empty( $args['status'] ) && in_array( $args['status'], self::STATUSES, true ) ) {
-			$where[]  = 'status = %s';
-			$params[] = $args['status'];
-		}
-
-		if ( ! empty( $args['unread'] ) ) {
-			$where[] = 'unread_count > 0';
-		}
-
-		if ( ! empty( $args['search'] ) ) {
-			$like     = '%' . $wpdb->esc_like( (string) $args['search'] ) . '%';
-			$where[]  = '(display_name LIKE %s OR line_user_id LIKE %s OR last_message_preview LIKE %s)';
-			$params[] = $like;
-			$params[] = $like;
-			$params[] = $like;
-		}
-
-		$clause = implode( ' AND ', $where );
-
-		// The WHERE clause is assembled from the literal fragments above; every
-		// value in it is a placeholder, and the table name is one too.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned table, paged admin list.
 		$total = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM %i WHERE {$clause}",
-				array_merge( array( $table ), $params )
+				"SELECT COUNT(*) FROM %i
+				 WHERE ( %s = '' OR status = %s )
+				   AND ( %d = 0 OR unread_count > 0 )
+				   AND ( %s = '' OR display_name LIKE %s OR line_user_id LIKE %s OR last_message_preview LIKE %s )",
+				$table,
+				$status,
+				$status,
+				$unread,
+				$search,
+				$search,
+				$search,
+				$search
 			)
 		);
 
-		$query_params   = array_merge( array( $table ), $params );
-		$query_params[] = $per_page;
-		$query_params[] = $offset;
-
-		// The WHERE clause is assembled from the literal fragments above; every
-		// value in it is a placeholder, and the table name is one too.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned table, paged admin list.
 		$rows = (array) $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM %i WHERE {$clause}
-				 ORDER BY (last_message_at IS NULL), last_message_at DESC
+				"SELECT * FROM %i
+				 WHERE ( %s = '' OR status = %s )
+				   AND ( %d = 0 OR unread_count > 0 )
+				   AND ( %s = '' OR display_name LIKE %s OR line_user_id LIKE %s OR last_message_preview LIKE %s )
+				 ORDER BY ( last_message_at IS NULL ), last_message_at DESC
 				 LIMIT %d OFFSET %d",
-				$query_params
+				$table,
+				$status,
+				$status,
+				$unread,
+				$search,
+				$search,
+				$search,
+				$search,
+				$per_page,
+				$offset
 			)
 		);
 
@@ -308,8 +300,7 @@ class Conversations {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE status = 'human'" );
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE status = 'human'", $table ) );
 	}
 
 	/**
@@ -319,7 +310,6 @@ class Conversations {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table} WHERE unread_count > 0 AND status <> 'closed'" );
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE unread_count > 0 AND status <> 'closed'", $table ) );
 	}
 }

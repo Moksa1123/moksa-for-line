@@ -149,8 +149,7 @@ final class Plugin {
 		Logger::purge();
 
 		$sessions = Migrator::table( 'flow_sessions' );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$wpdb->query( $wpdb->prepare( "DELETE FROM {$sessions} WHERE expires_at < %s", current_time( 'mysql', true ) ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE expires_at < %s", $sessions, current_time( 'mysql', true ) ) );
 
 		if ( class_exists( Woo\NotifyHistory::class ) ) {
 			Woo\NotifyHistory::purge( (int) Options::get( 'woo_history_days' ) );
@@ -163,10 +162,8 @@ final class Plugin {
 			$messages = Migrator::table( 'messages' );
 			$events   = Migrator::table( 'events' );
 
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-			$wpdb->query( $wpdb->prepare( "DELETE FROM {$messages} WHERE created_at < %s", $cutoff ) );
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-			$wpdb->query( $wpdb->prepare( "DELETE FROM {$events} WHERE received_at < %s AND status = 'done'", $cutoff ) );
+			$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE created_at < %s", $messages, $cutoff ) );
+			$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE received_at < %s AND status = 'done'", $events, $cutoff ) );
 		}
 	}
 

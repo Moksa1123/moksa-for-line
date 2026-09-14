@@ -23,11 +23,8 @@ Moksa\Line\Support\Migrator::drop_all();
 
 global $wpdb;
 
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- one-off uninstall cleanup.
 $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'moksa_line_%'" );
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- one-off uninstall cleanup.
 $wpdb->query( "DELETE FROM {$wpdb->usermeta} WHERE meta_key IN ('moksa_line_user_id', 'moksa_line_avatar')" );
-// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- transients left behind by login attempts.
 $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_mlline_%' OR option_name LIKE '_transient_timeout_mlline_%'" );
 
 wp_clear_scheduled_hook( 'moksa_line_daily_maintenance' );

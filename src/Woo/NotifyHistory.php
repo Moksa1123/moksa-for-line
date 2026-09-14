@@ -35,7 +35,6 @@ class NotifyHistory {
 	public static function begin( array $fields ): int {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->insert(
 			self::table(),
 			array(
@@ -70,7 +69,6 @@ class NotifyHistory {
 
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->update(
 			self::table(),
 			array(
@@ -98,42 +96,39 @@ class NotifyHistory {
 		$page     = max( 1, (int) ( $args['page'] ?? 1 ) );
 		$offset   = ( $page - 1 ) * $per_page;
 
-		$where  = array( '1=1' );
-		$params = array();
+		// Every filter is always in the statement and switched off by its own
+		// value, so the statement is one literal with a fixed set of
+		// placeholders rather than something assembled at run time.
+		$order_id = (int) ( $args['order_id'] ?? 0 );
+		$status   = (string) ( $args['status'] ?? '' );
 
-		if ( ! empty( $args['order_id'] ) ) {
-			$where[]  = 'order_id = %d';
-			$params[] = (int) $args['order_id'];
-		}
-
-		if ( ! empty( $args['status'] ) ) {
-			$where[]  = 'status = %s';
-			$params[] = (string) $args['status'];
-		}
-
-		$clause = implode( ' AND ', $where );
-
-		// The WHERE clause is assembled from the literal fragments above; every
-		// value in it is a placeholder, and the table name is one too.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned table, paged admin list.
 		$total = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM %i WHERE {$clause}",
-				array_merge( array( $table ), $params )
+				"SELECT COUNT(*) FROM %i
+				 WHERE ( %d = 0 OR order_id = %d )
+				   AND ( %s = '' OR status = %s )",
+				$table,
+				$order_id,
+				$order_id,
+				$status,
+				$status
 			)
 		);
 
-		$query_params   = array_merge( array( $table ), $params );
-		$query_params[] = $per_page;
-		$query_params[] = $offset;
-
-		// The WHERE clause is assembled from the literal fragments above; every
-		// value in it is a placeholder, and the table name is one too.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- plugin-owned table, paged admin list.
 		$rows = (array) $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM %i WHERE {$clause} ORDER BY id DESC LIMIT %d OFFSET %d",
-				$query_params
+				"SELECT * FROM %i
+				 WHERE ( %d = 0 OR order_id = %d )
+				   AND ( %s = '' OR status = %s )
+				 ORDER BY id DESC
+				 LIMIT %d OFFSET %d",
+				$table,
+				$order_id,
+				$order_id,
+				$status,
+				$status,
+				$per_page,
+				$offset
 			)
 		);
 
@@ -154,13 +149,13 @@ class NotifyHistory {
 		$table  = self::table();
 		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( max( 1, $days ) * DAY_IN_SECONDS ) );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT
 					SUM(CASE WHEN status = 'sent' THEN 1 ELSE 0 END) AS sent,
 					SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END) AS failed
-				 FROM {$table} WHERE created_at >= %s",
+				 FROM %i WHERE created_at >= %s",
+				$table,
 				$cutoff
 			)
 		);
@@ -185,10 +180,10 @@ class NotifyHistory {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		return (int) $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$table} WHERE created_at < %s",
+				"DELETE FROM %i WHERE created_at < %s",
+				$table,
 				gmdate( 'Y-m-d H:i:s', time() - ( $days * DAY_IN_SECONDS ) )
 			)
 		);

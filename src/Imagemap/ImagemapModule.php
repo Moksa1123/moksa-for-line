@@ -196,8 +196,7 @@ class ImagemapModule {
 		$name    = Ajax::text( 'name' );
 		$alt     = Ajax::text( 'alt_text' );
 		$image   = Ajax::int( 'image_attachment_id' );
-		$raw     = isset( $_POST['areas'] ) ? wp_unslash( $_POST['areas'] ) : '[]'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON, decoded below.
-		$decoded = json_decode( (string) $raw, true );
+		$decoded = '' === Ajax::text( 'areas' ) ? array() : Ajax::json_verbatim( 'areas' );
 
 		if ( ! is_array( $decoded ) ) {
 			wp_send_json_error( array( 'message' => __( 'The tappable areas could not be read.', 'moksa-line' ) ) );

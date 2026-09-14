@@ -18,6 +18,7 @@
 namespace Moksa\Line\Member;
 
 use Moksa\Line\Admin\AdminModule;
+use Moksa\Line\Admin\Ajax;
 use Moksa\Line\Data\Users;
 use Moksa\Line\Support\Logger;
 use Moksa\Line\Support\Options;
@@ -137,9 +138,7 @@ class MemberModule {
 			// A staff member typing a code into a form on their own screen;
 			// there is nothing to forge, and normalise() reduces it to the
 			// code alphabet before it reaches a query.
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$raw   = isset( $_GET['code'] ) && is_string( $_GET['code'] ) ? wp_unslash( $_GET['code'] ) : '';
-			$typed = MemberCard::normalise( (string) $raw );
+			$typed = MemberCard::normalise( Ajax::query_text( 'code' ) );
 
 			if ( '' !== $typed ) {
 				$found = MemberCard::user_for_code( $typed );
@@ -552,7 +551,7 @@ class MemberModule {
 			?>
 			<button type="button" class="moksa-account__qr" data-moksa-qr-zoom
 				aria-label="<?php esc_attr_e( 'Show the code larger', 'moksa-line' ); ?>">
-				<?php echo $svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built here, no input in it. ?>
+				<?php echo wp_kses( $svg, QrCode::allowed_html() ); ?>
 				<span class="moksa-account__qr-hint"><?php esc_html_e( 'Tap to enlarge', 'moksa-line' ); ?></span>
 			</button>
 

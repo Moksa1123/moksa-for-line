@@ -133,7 +133,7 @@ class ImagemapImages {
 				return $saved;
 			}
 
-			$bytes = (int) @filesize( $saved['path'] );
+			$bytes = is_readable( $saved['path'] ) ? (int) filesize( $saved['path'] ) : 0;
 
 			if ( $bytes > self::MAX_BYTES ) {
 				return new WP_Error(
@@ -220,17 +220,28 @@ class ImagemapImages {
 			exit;
 		}
 
+		// The tile goes out through WordPress's image editor, which writes it
+		// straight to the response. The file was cut to this exact width, so
+		// the editor has nothing to resize; it decodes and re-encodes, which
+		// is a few milliseconds and happens once per LINE fetch -- LINE keeps
+		// its own copy of an imagemap image once it has one.
+		$editor = wp_get_image_editor( $file );
+
+		if ( is_wp_error( $editor ) ) {
+			status_header( 500 );
+			exit;
+		}
+
 		nocache_headers();
 		header_remove( 'Cache-Control' );
 		header_remove( 'Expires' );
 
-		header( 'Content-Type: image/jpeg' );
-		header( 'Content-Length: ' . (int) filesize( $file ) );
 		header( 'Cache-Control: public, max-age=86400' );
 		header( 'ETag: ' . $etag );
 		header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', $modified ) . ' GMT' );
 
-		readfile( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- streaming a file is the point.
+		$editor->set_quality( 90 );
+		$editor->stream( 'image/jpeg' );
 		exit;
 	}
 }

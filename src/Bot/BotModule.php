@@ -60,15 +60,18 @@ class BotModule {
 	public function ajax_save_rule(): void {
 		$this->guard();
 
-		$reply_type = isset( $_POST['reply_type'] ) ? sanitize_key( wp_unslash( $_POST['reply_type'] ) ) : 'text';
-		$reply_data = isset( $_POST['reply_data'] ) ? wp_unslash( $_POST['reply_data'] ) : '';
+		$reply_type = Ajax::key( 'reply_type', 'text' );
 
-		// Raw and Flex payloads are JSON and must survive intact, so they are
-		// validated rather than sanitised into uselessness.
-		if ( in_array( $reply_type, array( 'raw', 'flex' ), true ) && '' !== trim( (string) $reply_data ) && ! ctype_digit( trim( (string) $reply_data ) ) ) {
-			$decoded = json_decode( (string) $reply_data, true );
+		if ( in_array( $reply_type, array( 'raw', 'flex' ), true ) ) {
+			// Raw and Flex payloads are JSON and must survive intact, so they are
+			// validated rather than sanitised into uselessness. A bare number is
+			// the id of a saved message instead.
+			$decoded    = Ajax::json_verbatim( 'reply_data' );
+			$reply_data = Ajax::text( 'reply_data' );
 
-			if ( ! is_array( $decoded ) ) {
+			if ( null !== $decoded ) {
+				$reply_data = wp_json_encode( $decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+			} elseif ( '' !== $reply_data && ! ctype_digit( $reply_data ) ) {
 				wp_send_json_error(
 					array(
 						'message' => sprintf(
@@ -79,23 +82,21 @@ class BotModule {
 					)
 				);
 			}
-
-			$reply_data = wp_json_encode( $decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
 		} elseif ( 'text' === $reply_type ) {
-			$reply_data = sanitize_textarea_field( (string) $reply_data );
+			$reply_data = Ajax::textarea( 'reply_data' );
 		} else {
-			$reply_data = sanitize_text_field( (string) $reply_data );
+			$reply_data = Ajax::text( 'reply_data' );
 		}
 
 		$keyword    = Ajax::text( 'keyword' );
-		$match_type = isset( $_POST['match_type'] ) ? sanitize_key( wp_unslash( $_POST['match_type'] ) ) : 'exact';
+		$match_type = Ajax::key( 'match_type', 'exact' );
 
 		if ( 'any' !== $match_type && '' === trim( $keyword ) ) {
 			wp_send_json_error( array( 'message' => __( 'Give the rule something to match on.', 'moksa-line' ) ) );
 		}
 
 		// A broken pattern would otherwise silently match nothing forever.
-		if ( 'regex' === $match_type && false === @preg_match( '/' . str_replace( '/', '\\/', $keyword ) . '/iu', '' ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors -- the point is to detect the failure.
+		if ( 'regex' === $match_type && null === AutoReply::matches_pattern( $keyword, '' ) ) {
 			wp_send_json_error( array( 'message' => __( 'That pattern is not valid.', 'moksa-line' ) ) );
 		}
 
@@ -108,7 +109,7 @@ class BotModule {
 				'reply_type' => $reply_type,
 				'reply_data' => $reply_data,
 				'priority'   => Ajax::int( 'priority', 10 ),
-				'is_active'  => ! empty( $_POST['is_active'] ),
+				'is_active'  => Ajax::flag( 'is_active' ),
 			)
 		);
 
@@ -136,8 +137,7 @@ class BotModule {
 	public function ajax_save_flow(): void {
 		$this->guard();
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- a Flex/flow document, parsed as JSON and then checked field by field; sanitising it as text would corrupt valid URLs and colours.
-		$definition = json_decode( (string) wp_unslash( $_POST['definition'] ?? '' ), true );
+		$definition = Ajax::json_verbatim( 'definition' );
 
 		if ( ! is_array( $definition ) ) {
 			wp_send_json_error( array( 'message' => __( 'The flow definition is not valid JSON.', 'moksa-line' ) ) );
@@ -161,7 +161,7 @@ class BotModule {
 			}
 		}
 
-		$email = isset( $_POST['notify_email'] ) ? sanitize_email( wp_unslash( $_POST['notify_email'] ) ) : '';
+		$email = Ajax::email( 'notify_email' );
 
 		if ( '' !== $email && ! is_email( $email ) ) {
 			wp_send_json_error( array( 'message' => __( 'That notification address is not valid.', 'moksa-line' ) ) );
@@ -171,11 +171,11 @@ class BotModule {
 			array(
 				'id'            => Ajax::int( 'id' ),
 				'name'          => Ajax::text( 'name' ),
-				'trigger_type'  => isset( $_POST['trigger_type'] ) && 'contains' === $_POST['trigger_type'] ? 'contains' : 'keyword',
+				'trigger_type'  => Ajax::is( 'trigger_type', 'contains' ) ? 'contains' : 'keyword',
 				'trigger_value' => Ajax::text( 'trigger_value' ),
 				'definition'    => wp_json_encode( $definition, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ),
 				'notify_email'  => $email,
-				'is_active'     => ! empty( $_POST['is_active'] ) ? 1 : 0,
+				'is_active'     => Ajax::flag( 'is_active' ) ? 1 : 0,
 			)
 		);
 
@@ -205,7 +205,7 @@ class BotModule {
 	public function ajax_save_quick_reply(): void {
 		$this->guard();
 
-		$items = json_decode( (string) wp_unslash( $_POST['items'] ?? '' ), true );
+		$items = Ajax::json_verbatim( 'items' );
 
 		if ( ! is_array( $items ) || empty( $items ) ) {
 			wp_send_json_error( array( 'message' => __( 'Add at least one quick reply button.', 'moksa-line' ) ) );

@@ -373,8 +373,7 @@ class PayModule {
 
 		$table = Payments::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$payment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $payment_id ) );
+		$payment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $payment_id ) );
 
 		if ( ! $payment ) {
 			return new WP_Error( 'moksa_line_pay_missing', __( 'That payment could not be found.', 'moksa-line' ) );
@@ -416,8 +415,7 @@ class PayModule {
 
 		if ( ! Payments::claim_for_confirm( $payment_id ) ) {
 			// Someone else is confirming, or already has.
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-			$fresh = $wpdb->get_row( $wpdb->prepare( "SELECT status FROM {$table} WHERE id = %d", $payment_id ) );
+			$fresh = $wpdb->get_row( $wpdb->prepare( "SELECT status FROM %i WHERE id = %d", $table, $payment_id ) );
 
 			if ( $fresh && in_array( $fresh->status, array( 'captured', 'authorized' ), true ) ) {
 				return true;
@@ -532,8 +530,7 @@ class PayModule {
 		global $wpdb;
 		$table = Payments::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $payment_id ) );
+		return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM %i WHERE id = %d", $table, $payment_id ) );
 	}
 
 	// --- Reconciliation --------------------------------------------------------------
@@ -712,7 +709,7 @@ class PayModule {
 			wp_send_json_error( array( 'message' => __( 'You cannot create payment links.', 'moksa-line' ) ), 403 );
 		}
 
-		$amount  = isset( $_POST['amount'] ) ? (float) $_POST['amount'] : 0;
+		$amount  = Ajax::number( 'amount' );
 		$title   = Ajax::text( 'title' );
 		$send_to = Ajax::text( 'line_user_id' );
 

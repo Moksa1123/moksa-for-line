@@ -141,11 +141,11 @@ class ShortcodeModule {
 		$label      = '' !== $configured ? $configured : $atts['label'];
 
 		return sprintf(
-			'<a class="moksa-line-button moksa-line-button--%1$s %2$s" href="%3$s" rel="nofollow"%4$s>%5$s%6$s</a>',
+			'<a class="moksa-line-button moksa-line-button--%1$s %2$s" href="%3$s" rel="nofollow" style="%4$s">%5$s%6$s</a>',
 			esc_attr( $atts['size'] ),
 			esc_attr( $atts['class'] ),
 			esc_url( $url ),
-			self::style_attribute(),
+			esc_attr( self::style_declarations() ),
 			$this->logo(),
 			esc_html( $label )
 		);
@@ -160,8 +160,10 @@ class ShortcodeModule {
 	 *
 	 * An option left at its default contributes nothing and the stylesheet
 	 * decides, which is also how a theme keeps the upper hand.
+	 *
+	 * @return string The value for a style attribute; empty when nothing is set.
 	 */
-	public static function style_attribute(): string {
+	public static function style_declarations(): string {
 		$declarations = array();
 
 		$background = trim( (string) Options::get( 'button_bg_color' ) );
@@ -175,11 +177,7 @@ class ShortcodeModule {
 			$declarations[] = '--moksa-line-button-fg:' . $foreground;
 		}
 
-		if ( empty( $declarations ) ) {
-			return '';
-		}
-
-		return ' style="' . esc_attr( implode( ';', $declarations ) ) . '"';
+		return implode( ';', $declarations );
 	}
 
 	/**

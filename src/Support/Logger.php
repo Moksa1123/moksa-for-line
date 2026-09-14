@@ -121,7 +121,6 @@ class Logger {
 
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- dedicated plugin table.
 		$wpdb->insert(
 			self::table(),
 			array(
@@ -165,6 +164,96 @@ class Logger {
 	}
 
 	/**
+	 * Every channel that has ever logged a row, for the filter on the Logs screen.
+	 *
+	 * @return string[]
+	 */
+	public static function channels(): array {
+		global $wpdb;
+
+		return array_map( 'strval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT DISTINCT channel FROM %i ORDER BY channel ASC', self::table() ) ) );
+	}
+
+	/**
+	 * How many rows the table holds in all.
+	 */
+	public static function count(): int {
+		global $wpdb;
+
+		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', self::table() ) );
+	}
+
+	/**
+	 * One page of the log, newest first.
+	 *
+	 * @param array $args {
+	 *     @type string $level    One level, "problems" for warnings and errors, or "all".
+	 *     @type string $channel  Limit to one channel; empty for every channel.
+	 *     @type int    $page     Page number, from 1.
+	 *     @type int    $per_page Rows per page.
+	 * }
+	 * @return array{rows: object[], total: int, pages: int, page: int}
+	 */
+	public static function paginate( array $args = array() ): array {
+		global $wpdb;
+		$table = self::table();
+
+		$per_page = max( 1, min( 500, (int) ( $args['per_page'] ?? 100 ) ) );
+		$level    = (string) ( $args['level'] ?? 'problems' );
+		$channel  = (string) ( $args['channel'] ?? '' );
+
+		// Every filter is always in the statement and switched off by its own
+		// value, so the statement is one literal with a fixed set of
+		// placeholders rather than something assembled at run time. "problems"
+		// is the two levels that matter; one level is that level twice.
+		$every  = 'all' === $level ? 1 : 0;
+		$levels = 'problems' === $level ? array( self::WARNING, self::ERROR ) : array( $level, $level );
+
+		$total = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM %i
+				 WHERE ( %d = 1 OR level IN ( %s, %s ) )
+				   AND ( %s = '' OR channel = %s )",
+				$table,
+				$every,
+				$levels[0],
+				$levels[1],
+				$channel,
+				$channel
+			)
+		);
+
+		$pages  = max( 1, (int) ceil( $total / $per_page ) );
+		$page   = min( max( 1, (int) ( $args['page'] ?? 1 ) ), $pages );
+		$offset = ( $page - 1 ) * $per_page;
+
+		$rows = (array) $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM %i
+				 WHERE ( %d = 1 OR level IN ( %s, %s ) )
+				   AND ( %s = '' OR channel = %s )
+				 ORDER BY id DESC
+				 LIMIT %d OFFSET %d",
+				$table,
+				$every,
+				$levels[0],
+				$levels[1],
+				$channel,
+				$channel,
+				$per_page,
+				$offset
+			)
+		);
+
+		return array(
+			'rows'  => $rows,
+			'total' => $total,
+			'pages' => $pages,
+			'page'  => $page,
+		);
+	}
+
+	/**
 	 * Delete rows older than the retention window. Called from the daily cron.
 	 *
 	 * @return int Rows removed.
@@ -175,10 +264,10 @@ class Logger {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is internal.
 		return (int) $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$table} WHERE created_at < %s",
+				"DELETE FROM %i WHERE created_at < %s",
+				$table,
 				gmdate( 'Y-m-d H:i:s', time() - ( $days * DAY_IN_SECONDS ) )
 			)
 		);

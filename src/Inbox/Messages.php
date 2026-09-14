@@ -43,7 +43,6 @@ class Messages {
 			'created_at'        => current_time( 'mysql', true ),
 		);
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->insert(
 			self::table(),
 			$data,
@@ -64,10 +63,10 @@ class Messages {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		$rows = (array) $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$table} WHERE conversation_id = %d ORDER BY id DESC LIMIT %d",
+				"SELECT * FROM %i WHERE conversation_id = %d ORDER BY id DESC LIMIT %d",
+				$table,
 				$conversation_id,
 				$limit
 			)
@@ -85,7 +84,6 @@ class Messages {
 	public static function latest_id(): int {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table, one indexed max.
 		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(id) FROM %i', self::table() ) );
 	}
 
@@ -101,7 +99,6 @@ class Messages {
 		global $wpdb;
 
 		if ( $conversation_id > 0 ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table, polled on purpose.
 			return (int) $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT COUNT(*) FROM %i WHERE id > %d AND direction = 'in' AND conversation_id = %d",
@@ -112,7 +109,6 @@ class Messages {
 			);
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table, polled on purpose.
 		return (int) $wpdb->get_var(
 			$wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE id > %d AND direction = 'in'", self::table(), $since )
 		);

@@ -52,7 +52,6 @@ class EventQueue {
 			}
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$inserted = $wpdb->query(
 			$wpdb->prepare(
 				'INSERT IGNORE INTO %i
@@ -87,10 +86,10 @@ class EventQueue {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$table} WHERE status = 'pending' AND attempts < %d ORDER BY id ASC LIMIT %d",
+				"SELECT * FROM %i WHERE status = 'pending' AND attempts < %d ORDER BY id ASC LIMIT %d",
+				$table,
 				self::MAX_ATTEMPTS,
 				$limit
 			)
@@ -101,10 +100,10 @@ class EventQueue {
 		foreach ( (array) $rows as $row ) {
 			// Claim the row first: two overlapping drains (a webhook burst plus
 			// the cron fallback) must not both handle the same event.
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 			$claimed = $wpdb->query(
 				$wpdb->prepare(
-					"UPDATE {$table} SET status = 'running', attempts = attempts + 1 WHERE id = %d AND status = 'pending'",
+					"UPDATE %i SET status = 'running', attempts = attempts + 1 WHERE id = %d AND status = 'pending'",
+					$table,
 					(int) $row->id
 				)
 			);
@@ -155,7 +154,6 @@ class EventQueue {
 	private static function finish( int $id, string $status, string $error = '' ): void {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->update(
 			self::table(),
 			array(
@@ -181,14 +179,12 @@ class EventQueue {
 		$table = self::table();
 
 		if ( '' !== $status ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 			return (array) $wpdb->get_results(
-				$wpdb->prepare( "SELECT * FROM {$table} WHERE status = %s ORDER BY id DESC LIMIT %d", $status, $limit )
+				$wpdb->prepare( "SELECT * FROM %i WHERE status = %s ORDER BY id DESC LIMIT %d", $table, $status, $limit )
 			);
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} ORDER BY id DESC LIMIT %d", $limit ) );
+		return (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i ORDER BY id DESC LIMIT %d", $table, $limit ) );
 	}
 
 	/**
@@ -249,7 +245,6 @@ class EventQueue {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		return (bool) $wpdb->get_var( "SELECT id FROM {$table} LIMIT 1" );
+		return (bool) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i LIMIT 1", $table ) );
 	}
 }

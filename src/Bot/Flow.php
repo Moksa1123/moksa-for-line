@@ -65,10 +65,10 @@ class Flow extends Repository {
 		global $wpdb;
 		$table = self::sessions_table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$table} WHERE line_user_id = %s AND expires_at > %s",
+				"SELECT * FROM %i WHERE line_user_id = %s AND expires_at > %s",
+				$table,
 				$line_user_id,
 				current_time( 'mysql', true )
 			)
@@ -97,7 +97,6 @@ class Flow extends Repository {
 		$now     = current_time( 'mysql', true );
 		$expires = gmdate( 'Y-m-d H:i:s', time() + self::SESSION_TTL );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->query(
 			$wpdb->prepare(
 				'INSERT INTO %i
@@ -197,7 +196,6 @@ class Flow extends Repository {
 
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->insert(
 			self::submissions_table(),
 			array(
@@ -309,7 +307,6 @@ class Flow extends Repository {
 	private static function save_session( string $line_user_id, int $step_index, array $answers ): void {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->update(
 			self::sessions_table(),
 			array(
@@ -332,7 +329,6 @@ class Flow extends Repository {
 	public static function end( string $line_user_id ): void {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 		$wpdb->delete( self::sessions_table(), array( 'line_user_id' => $line_user_id ), array( '%s' ) );
 	}
 
@@ -552,8 +548,7 @@ class Flow extends Repository {
 		global $wpdb;
 		$table = self::table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
-		$flows = (array) $wpdb->get_results( "SELECT * FROM {$table} WHERE is_active = 1" );
+		$flows = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE is_active = 1", $table ) );
 
 		foreach ( $flows as $flow ) {
 			$trigger = trim( (string) $flow->trigger_value );
@@ -585,9 +580,8 @@ class Flow extends Repository {
 		global $wpdb;
 		$table = self::submissions_table();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 		return (array) $wpdb->get_results(
-			$wpdb->prepare( "SELECT * FROM {$table} WHERE flow_id = %d ORDER BY id DESC LIMIT %d", $flow_id, $limit )
+			$wpdb->prepare( "SELECT * FROM %i WHERE flow_id = %d ORDER BY id DESC LIMIT %d", $table, $flow_id, $limit )
 		);
 	}
 }

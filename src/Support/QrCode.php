@@ -109,6 +109,32 @@ class QrCode {
 	}
 
 	/**
+	 * The elements and attributes svg() emits, in the shape wp_kses() takes.
+	 *
+	 * @return array
+	 */
+	public static function allowed_html(): array {
+		return array(
+			'svg'  => array(
+				'xmlns'   => true,
+				'viewbox' => true,
+				'width'   => true,
+				'height'  => true,
+				'role'    => true,
+			),
+			'rect' => array(
+				'width'  => true,
+				'height' => true,
+				'fill'   => true,
+			),
+			'path' => array(
+				'd'    => true,
+				'fill' => true,
+			),
+		);
+	}
+
+	/**
 	 * The code as an SVG, ready to drop into a page.
 	 *
 	 * @param string $text   Data to encode.

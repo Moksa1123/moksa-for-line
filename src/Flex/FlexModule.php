@@ -48,7 +48,7 @@ class FlexModule {
 	public function ajax_product_cards(): void {
 		$this->guard();
 
-		$ids = isset( $_POST['ids'] ) ? array_map( 'intval', (array) wp_unslash( $_POST['ids'] ) ) : array();
+		$ids = Ajax::ints( 'ids' );
 
 		if ( empty( $ids ) ) {
 			wp_send_json_error( array( 'message' => __( 'Choose at least one product.', 'moksa-line' ) ) );
@@ -77,9 +77,7 @@ class FlexModule {
 	public function ajax_save(): void {
 		$this->guard();
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- a Flex/flow document, parsed as JSON and then checked field by field; sanitising it as text would corrupt valid URLs and colours.
-		$contents_raw = isset( $_POST['contents'] ) ? wp_unslash( $_POST['contents'] ) : '';
-		$decoded      = json_decode( (string) $contents_raw, true );
+		$decoded = Ajax::json_verbatim( 'contents' );
 
 		if ( ! is_array( $decoded ) ) {
 			wp_send_json_error(
@@ -151,7 +149,7 @@ class FlexModule {
 	public function ajax_validate(): void {
 		$this->guard();
 
-		$decoded = json_decode( (string) wp_unslash( $_POST['contents'] ?? '' ), true );
+		$decoded = Ajax::json_verbatim( 'contents' );
 
 		if ( ! is_array( $decoded ) ) {
 			wp_send_json_error(
@@ -162,7 +160,7 @@ class FlexModule {
 			);
 		}
 
-		$alt_text = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : 'Preview';
+		$alt_text = Ajax::text( 'alt_text', 'Preview' );
 		$message  = MessagingClient::flex( $alt_text, $decoded );
 		$problems = Validator::check_message( $message );
 
@@ -217,13 +215,13 @@ class FlexModule {
 			wp_send_json_error( array( 'message' => __( 'Enter the LINE user id to send the test to.', 'moksa-line' ) ) );
 		}
 
-		$decoded = json_decode( (string) wp_unslash( $_POST['contents'] ?? '' ), true );
+		$decoded = Ajax::json_verbatim( 'contents' );
 
 		if ( ! is_array( $decoded ) ) {
 			wp_send_json_error( array( 'message' => __( 'That is not valid JSON.', 'moksa-line' ) ) );
 		}
 
-		$alt_text = isset( $_POST['alt_text'] ) ? sanitize_text_field( wp_unslash( $_POST['alt_text'] ) ) : 'Preview';
+		$alt_text = Ajax::text( 'alt_text', 'Preview' );
 
 		$result = MessagingClient::push( $line_user_id, array( MessagingClient::flex( $alt_text, $decoded ) ) );
 

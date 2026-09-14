@@ -338,22 +338,16 @@ class NotifyTemplates {
 			return;
 		}
 
-		$statuses = isset( $_POST['moksa_notify_statuses'] )
-			? array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['moksa_notify_statuses'] ) )
-			: array();
-
 		$allowed  = array_keys( self::order_statuses() );
-		$statuses = array_values( array_intersect( $statuses, $allowed ) );
+		$statuses = array_values( array_intersect( Ajax::texts( 'moksa_notify_statuses' ), $allowed ) );
 
 		update_post_meta( $post_id, self::META_STATUSES, $statuses );
 
-		$rules = isset( $_POST['moksa_notify_rules'] ) ? (array) wp_unslash( $_POST['moksa_notify_rules'] ) : array();
-		update_post_meta( $post_id, self::META_RULES, TriggerRules::sanitize( $rules ) );
+		update_post_meta( $post_id, self::META_RULES, TriggerRules::sanitize( Ajax::fields( 'moksa_notify_rules' ) ) );
 
 		// The content is Flex JSON and must survive intact, so it is validated
 		// rather than sanitised into something that no longer parses.
-		$content = isset( $_POST['moksa_notify_content'] ) ? (string) wp_unslash( $_POST['moksa_notify_content'] ) : '';
-		$decoded = json_decode( $content, true );
+		$decoded = Ajax::json_verbatim( 'moksa_notify_content' );
 
 		if ( is_array( $decoded ) ) {
 			update_post_meta(
@@ -441,10 +435,10 @@ class NotifyTemplates {
 			global $wpdb;
 			$table = NotifyHistory::table();
 
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table.
 			$count = (int) $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$table} WHERE template_id = %d AND status = 'sent' AND created_at >= %s",
+					"SELECT COUNT(*) FROM %i WHERE template_id = %d AND status = 'sent' AND created_at >= %s",
+					$table,
 					$post_id,
 					gmdate( 'Y-m-d H:i:s', time() - ( 30 * DAY_IN_SECONDS ) )
 				)

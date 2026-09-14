@@ -80,7 +80,6 @@ class Migrator {
 
 		$prefix = $wpdb->prefix . 'moksa_line_';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- listing our own tables.
 		$found = (array) $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $prefix ) . '%' ) );
 
 		$expected = array();
@@ -483,13 +482,11 @@ class Migrator {
 		$auto = self::table( 'auto_replies' );
 
 		if ( self::column_exists( $auto, 'reply_content' ) ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table name.
-			$wpdb->query( "UPDATE {$auto} SET reply_data = reply_content WHERE (reply_data IS NULL OR reply_data = '') AND reply_content <> ''" );
+			$wpdb->query( $wpdb->prepare( "UPDATE %i SET reply_data = reply_content WHERE (reply_data IS NULL OR reply_data = '') AND reply_content <> ''", $auto ) );
 		}
 
 		if ( self::column_exists( $auto, 'status' ) ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table name.
-			$wpdb->query( "UPDATE {$auto} SET is_active = status" );
+			$wpdb->query( $wpdb->prepare( "UPDATE %i SET is_active = status", $auto ) );
 		}
 
 		// 4. The old quick-reply table stored a single keyword/reply pair.
@@ -497,8 +494,7 @@ class Migrator {
 		$quick = self::table( 'quick_replies' );
 
 		if ( self::column_exists( $quick, 'reply_message' ) && self::column_exists( $quick, 'keyword' ) ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table name.
-			$rows = $wpdb->get_results( "SELECT id, keyword, reply_message FROM {$quick} WHERE (items IS NULL OR items = '')" );
+			$rows = $wpdb->get_results( $wpdb->prepare( "SELECT id, keyword, reply_message FROM %i WHERE (items IS NULL OR items = '')", $quick ) );
 
 			foreach ( (array) $rows as $row ) {
 				$items = array(
@@ -512,7 +508,6 @@ class Migrator {
 					),
 				);
 
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- internal table.
 				$wpdb->update(
 					$quick,
 					array(
@@ -532,10 +527,8 @@ class Migrator {
 
 		foreach ( array( 'users', 'auto_replies', 'quick_replies', 'imagemaps', 'richmenus' ) as $key ) {
 			$table = self::table( $key );
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table name.
-			$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET updated_at = %s WHERE updated_at = '0000-00-00 00:00:00'", $now ) );
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table name.
-			$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET created_at = %s WHERE created_at = '0000-00-00 00:00:00'", $now ) );
+			$wpdb->query( $wpdb->prepare( "UPDATE %i SET updated_at = %s WHERE updated_at = '0000-00-00 00:00:00'", $table, $now ) );
+			$wpdb->query( $wpdb->prepare( "UPDATE %i SET created_at = %s WHERE created_at = '0000-00-00 00:00:00'", $table, $now ) );
 		}
 
 		// 6. Seed the inbox from any LINE users we already know about, so the
@@ -543,14 +536,15 @@ class Migrator {
 		$users         = self::table( 'users' );
 		$conversations = self::table( 'conversations' );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table names.
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT IGNORE INTO {$conversations}
+				"INSERT IGNORE INTO %i
 					(line_user_id, display_name, picture_url, status, created_at, updated_at)
-				 SELECT line_user_id, display_name, picture_url, 'bot', %s, %s FROM {$users}",
+				 SELECT line_user_id, display_name, picture_url, 'bot', %s, %s FROM %i",
+				$conversations,
 				$now,
-				$now
+				$now,
+				$users
 			)
 		);
 
@@ -560,7 +554,6 @@ class Migrator {
 		//    uninstall can actually clean it up.
 		$legacy_history = $wpdb->prefix . 'moksa_notify_history';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- checking for a table by name.
 		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $legacy_history ) );
 
 		if ( $exists ) {
@@ -570,9 +563,9 @@ class Migrator {
 			// sends, because the code checked for a 'status' key the LINE API
 			// does not return. That cannot be reconstructed after the fact, so
 			// they are imported as 'unknown' rather than as lies.
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table names.
 			$wpdb->query(
-				"INSERT INTO {$history}
+				$wpdb->prepare(
+				"INSERT INTO %i
 					(wp_user_id, recipient, order_id, template_id, order_status, channel, content, status, error, created_at)
 				 SELECT
 					COALESCE(user_id, 0),
@@ -585,7 +578,10 @@ class Migrator {
 					'unknown',
 					error_message,
 					COALESCE(notify_time, UTC_TIMESTAMP())
-				 FROM {$legacy_history}"
+				 FROM %i",
+				$history,
+				$legacy_history
+				)
 			);
 
 			$imported = (int) $wpdb->rows_affected;
@@ -608,8 +604,7 @@ class Migrator {
 	private static function column_exists( string $table, string $column ): bool {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table name.
-		$found = $wpdb->get_var( $wpdb->prepare( "SHOW COLUMNS FROM {$table} LIKE %s", $column ) );
+		$found = $wpdb->get_var( $wpdb->prepare( "SHOW COLUMNS FROM %i LIKE %s", $table, $column ) );
 
 		return ! empty( $found );
 	}
@@ -622,8 +617,7 @@ class Migrator {
 
 		foreach ( self::table_keys() as $key ) {
 			$table = self::table( $key );
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- internal table name.
-			$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
+			$wpdb->query( $wpdb->prepare( "DROP TABLE IF EXISTS %i", $table ) );
 		}
 	}
 }
