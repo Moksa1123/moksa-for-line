@@ -604,6 +604,13 @@ class AdminModule {
 			Options::set( 'woo_notify_statuses', Ajax::keys( 'mofoline_woo_statuses' ) );
 		}
 
+		// The role for new accounts is chosen from a list of harmless roles;
+		// a value from outside that list -- an old setting, or a hand-made
+		// request -- falls back to the least a role can be.
+		if ( isset( $submitted['new_user_role'] ) && ! isset( \Mofoline\Login\LoginModule::registration_roles()[ (string) $submitted['new_user_role'] ] ) ) {
+			Options::set( 'new_user_role', 'subscriber' );
+		}
+
 		// A LINE channel id is a ten digit number. Anything else is a mistake --
 		// most often a browser autofilling an email address into the field
 		// because it sits next to a password input. Storing it would produce a

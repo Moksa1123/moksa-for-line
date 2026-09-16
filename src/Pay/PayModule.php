@@ -20,6 +20,7 @@ use Mofoline\Support\Options;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
+use Mofoline\Admin\AdminModule;
 use Mofoline\Admin\Ajax;
 
 defined( 'ABSPATH' ) || exit;
@@ -37,6 +38,7 @@ class PayModule {
 
 		// The order screen, and the customer's own view of an unfinished payment.
 		add_action( 'add_meta_boxes', array( $this, 'add_order_meta_box' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_order_screen' ) );
 		add_filter( 'woocommerce_thankyou_order_received_text', array( $this, 'thankyou_text' ), 10, 2 );
 		add_action( 'woocommerce_order_details_after_order_table', array( $this, 'order_details_note' ) );
 
@@ -99,6 +101,25 @@ class PayModule {
 			$screen,
 			'side',
 			'default'
+		);
+	}
+
+	/**
+	 * The box's stylesheet, on the order screen only.
+	 */
+	public function enqueue_order_screen(): void {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		$orders = function_exists( 'wc_get_page_screen_id' ) ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
+
+		if ( ! $screen || $screen->id !== $orders ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'mofoline-pay-box',
+			MOFOLINE_URL . 'assets/css/pay-box.css',
+			array(),
+			AdminModule::asset_version( 'assets/css/pay-box.css' )
 		);
 	}
 
@@ -191,14 +212,6 @@ class PayModule {
 				</a>
 			</p>
 		</div>
-		<style>
-			.moksa-pay-box__status { margin: 0 0 8px; font-size: 14px; }
-			.moksa-pay-box__status--paid strong { color: #00792a; }
-			.moksa-pay-box__sandbox { margin-left: 6px; padding: 1px 6px; border-radius: 3px; background: #f0f0f1; font-size: 11px; font-weight: 400; color: #50575e; }
-			.moksa-pay-box__facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; margin: 0 0 8px; font-size: 12px; }
-			.moksa-pay-box__facts dt { color: #646970; }
-			.moksa-pay-box__facts dd { margin: 0; overflow-wrap: anywhere; }
-		</style>
 		<?php
 	}
 

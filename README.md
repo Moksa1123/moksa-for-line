@@ -170,11 +170,11 @@ what the checkout directory is called.
 
 ### Translations
 
-`languages/moksa-for-line.pot` is the current template (580 strings). No
-translations ship with the plugin: the ones inherited from 1.3.2 covered four
-of those 580 strings, so keeping them would have produced a mostly-English
-interface with a few stray translated words in it. Traditional Chinese
-(`zh_TW`) is the obvious first locale to produce.
+The plugin ships no translation files. Once it is listed on wordpress.org,
+translations come from translate.wordpress.org and WordPress installs them
+by itself. `languages/moksa-for-line.pot` is the current template and
+`languages/moksa-for-line-zh_TW.po` the Traditional Chinese translation kept
+here as the source to import there; neither is part of the release package.
 
 ## Licence
 

@@ -1,0 +1,7 @@
+/* The LINE Pay box on the order screen. */
+.moksa-pay-box__status { margin: 0 0 8px; font-size: 14px; }
+.moksa-pay-box__status--paid strong { color: #00792a; }
+.moksa-pay-box__sandbox { margin-left: 6px; padding: 1px 6px; border-radius: 3px; background: #f0f0f1; font-size: 11px; font-weight: 400; color: #50575e; }
+.moksa-pay-box__facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; margin: 0 0 8px; font-size: 12px; }
+.moksa-pay-box__facts dt { color: #646970; }
+.moksa-pay-box__facts dd { margin: 0; overflow-wrap: anywhere; }

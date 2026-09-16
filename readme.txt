@@ -61,9 +61,9 @@ Online API v3. Its signature construction is publicly documented and widely used
 
 No, unless you define `MOFOLINE_REMOVE_DATA` as `true` in `wp-config.php`. Payment records and conversation history are the kind of thing a shop may need to keep.
 
-= Why can I not select administrator as the role for new accounts? =
+= Why are only subscriber and customer offered as the role for new accounts? =
 
-Because a self-service login flow that can mint administrators is a way to lose a site.
+Somebody arriving through LINE has proven only that they hold a LINE account. The account created for them can carry no more than the right to read the site, so the choice is limited to roles that can do nothing else -- subscriber, and WooCommerce's customer. Anything that can write, upload or manage has to be granted by an administrator afterwards. Account creation itself is a setting (**New visitors**) you can switch off, in which case only existing accounts can sign in with LINE.
 
 = I already use the Moksa LINE Login plugin. What happens to my data? =
 

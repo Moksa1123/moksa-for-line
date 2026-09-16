@@ -572,16 +572,48 @@ class LoginModule {
 	 * Role for newly registered users, falling back to the site default.
 	 */
 	private function new_user_role(): string {
-		$role  = (string) Options::get( 'new_user_role' );
-		$roles = wp_roles()->get_names();
+		$allowed = self::registration_roles();
+		$role    = (string) Options::get( 'new_user_role' );
 
-		if ( isset( $roles[ $role ] ) && 'administrator' !== $role ) {
+		if ( isset( $allowed[ $role ] ) ) {
 			return $role;
 		}
 
 		$default = (string) get_option( 'default_role', 'subscriber' );
 
-		return isset( $roles[ $default ] ) ? $default : 'subscriber';
+		return isset( $allowed[ $default ] ) ? $default : 'subscriber';
+	}
+
+	/**
+	 * The roles a self-service sign-up may be given.
+	 *
+	 * Somebody who arrives through LINE has proven only that they hold a LINE
+	 * account, so the account made for them may carry no more than the right
+	 * to read the site: a role qualifies only when every capability it grants
+	 * is one of "read" and "level_0". That admits subscriber and WooCommerce's
+	 * customer, and rules out anything that can write, upload or manage --
+	 * including administrator, and including editor and author, which the
+	 * settings screen used to offer.
+	 *
+	 * @return array<string,string> Role slug => display name.
+	 */
+	public static function registration_roles(): array {
+		$harmless = array( 'read', 'level_0' );
+		$allowed  = array();
+
+		foreach ( wp_roles()->roles as $slug => $role ) {
+			$granted = array_keys( array_filter( (array) ( $role['capabilities'] ?? array() ) ) );
+
+			if ( array() === array_diff( $granted, $harmless ) ) {
+				$allowed[ $slug ] = translate_user_role( (string) $role['name'] );
+			}
+		}
+
+		if ( ! isset( $allowed['subscriber'] ) && isset( wp_roles()->roles['subscriber'] ) ) {
+			$allowed['subscriber'] = translate_user_role( (string) wp_roles()->roles['subscriber']['name'] );
+		}
+
+		return $allowed;
 	}
 
 	// --- Unlink and cleanup ---------------------------------------------------

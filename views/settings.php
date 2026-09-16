@@ -194,14 +194,12 @@ defined( 'ABSPATH' ) || exit;
 					$field( 'channel_id', __( 'Channel ID', 'moksa-for-line' ), __( 'From the LINE Login channel, not the Messaging API one.', 'moksa-for-line' ) );
 					$field( 'channel_secret', __( 'Channel secret', 'moksa-for-line' ), __( 'Stored encrypted. Only the last four characters are ever shown again.', 'moksa-for-line' ), 'password' );
 					$checkbox( 'auto_register', __( 'New visitors', 'moksa-for-line' ), __( 'Create a WordPress account the first time someone logs in with LINE', 'moksa-for-line' ) );
-					// Administrator is deliberately absent: a self-service login
-					// flow must not be able to mint administrators.
-					// get_names() returns the raw English role names. Core keeps the
-					// translations behind translate_user_role(), so without it the
-					// only English words on this screen were the role choices.
-					$roles = array_map( 'translate_user_role', wp_roles()->get_names() );
-					unset( $roles['administrator'] );
-					$select( 'new_user_role', __( 'Role for new accounts', 'moksa-for-line' ), $roles );
+					// Only roles that can do nothing but read: a self-service
+					// sign-up must not be able to mint an editor, let alone an
+					// administrator. LoginModule enforces the same list on save
+					// and at sign-up, so the choice here is never more than a
+					// choice among the harmless ones.
+					$select( 'new_user_role', __( 'Role for new accounts', 'moksa-for-line' ), LoginModule::registration_roles(), __( 'Only roles that can do nothing beyond reading the site are offered.', 'moksa-for-line' ) );
 					$checkbox( 'sync_profile', __( 'Profile sync', 'moksa-for-line' ), __( 'Keep the WordPress display name in step with the LINE display name', 'moksa-for-line' ) );
 					$checkbox( 'request_email', __( 'Email address', 'moksa-for-line' ), __( 'Request the email scope (needs approval from LINE first)', 'moksa-for-line' ) );
 					$checkbox( 'link_by_email', __( 'Match by email', 'moksa-for-line' ), __( 'Link to an existing account when the email matches', 'moksa-for-line' ) );

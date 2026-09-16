@@ -48,30 +48,9 @@ final class Plugin {
 	 */
 	public function boot(): void {
 		add_action( 'plugins_loaded', array( $this, 'load_modules' ), 5 );
-		add_action( 'init', array( $this, 'load_textdomain' ), 0 );
 		add_action( 'init', array( Migrator::class, 'maybe_upgrade' ), 1 );
 
 		add_action( 'mofoline_daily_maintenance', array( $this, 'run_maintenance' ) );
-	}
-
-	/**
-	 * Load translations bundled with the plugin.
-	 *
-	 * On `init`, not `plugins_loaded`: WordPress 6.7 warns when a translation
-	 * is requested before init, and loading the domain early is what invites
-	 * that. Translations from wordpress.org load automatically regardless;
-	 * this call only covers the .mo files shipped in /languages.
-	 */
-	public function load_textdomain(): void {
-		// Deliberately empty of a load_plugin_textdomain() call. WordPress has
-		// loaded a plugin's translations by itself since 4.6, from both
-		// wp-content/languages/plugins and the plugin's own Domain Path, at the
-		// moment the first string is asked for. Calling it here did nothing
-		// except force that work to happen earlier than it was needed.
-		//
-		// The hook stays so the timing remains obvious to the next reader, and
-		// so anything that wants to add a language pack has somewhere to do it.
-		do_action( 'mofoline_load_textdomain' );
 	}
 
 	/**
