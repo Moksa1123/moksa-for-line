@@ -41,6 +41,19 @@ class LoginModule {
 	const STATE_TTL = 600;
 
 	/**
+	 * The cookie that ties a login attempt to the browser that started it.
+	 *
+	 * The state parameter proves the callback belongs to a login this site
+	 * began; it does not prove it belongs to *this browser*. Without that, an
+	 * attacker can start a login with their own LINE account, stop at LINE's
+	 * redirect, and hand the callback URL to a victim -- whose browser would
+	 * then be signed in as the attacker. The cookie is set when the login
+	 * starts and must come back with the callback; the transient holds only
+	 * its hash.
+	 */
+	const BROWSER_COOKIE = 'mofoline_login';
+
+	/**
 	 * Hook the module into WordPress.
 	 */
 	public function register(): void {
@@ -84,6 +97,7 @@ class LoginModule {
 		$state         = wp_generate_password( 40, false, false );
 		$nonce         = wp_generate_password( 40, false, false );
 		$code_verifier = self::random_verifier();
+		$browser       = wp_generate_password( 40, false, false );
 
 		if ( '' === $redirect_to ) {
 			$configured  = (string) Options::get( 'login_redirect' );
@@ -97,10 +111,13 @@ class LoginModule {
 				'code_verifier' => $code_verifier,
 				'redirect'      => $redirect_to,
 				'link_to'       => ! empty( $args['link'] ) ? get_current_user_id() : 0,
+				'browser'       => hash( 'sha256', $browser ),
 				'created'       => time(),
 			),
 			self::STATE_TTL
 		);
+
+		self::set_browser_cookie( $browser, time() + self::STATE_TTL );
 
 		$scope = array( 'openid', 'profile' );
 
@@ -158,6 +175,34 @@ class LoginModule {
 	}
 
 	/**
+	 * Write, or clear, the cookie that ties a login attempt to this browser.
+	 *
+	 * Lax rather than Strict: the callback is a top-level navigation back
+	 * from LINE, which Lax sends the cookie on and Strict would not.
+	 *
+	 * @param string $value   Token, or '' to clear.
+	 * @param int    $expires Unix time.
+	 */
+	private static function set_browser_cookie( string $value, int $expires ): void {
+		if ( headers_sent() ) {
+			return;
+		}
+
+		setcookie(
+			self::BROWSER_COOKIE,
+			$value,
+			array(
+				'expires'  => $expires,
+				'path'     => COOKIEPATH ? COOKIEPATH : '/',
+				'domain'   => COOKIE_DOMAIN ? COOKIE_DOMAIN : '',
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
+		);
+	}
+
+	/**
 	 * Let wp_safe_redirect() send a visitor to LINE's authorisation page.
 	 *
 	 * @param string[] $hosts Hosts WordPress already allows.
@@ -189,6 +234,19 @@ class LoginModule {
 
 		if ( ! is_array( $stored ) ) {
 			$this->fail( __( 'This login link has expired. Please try again.', 'moksa-for-line' ) );
+		}
+
+		// The browser that opens the callback must be the one that started
+		// the login. A callback URL carried to another browser -- the login
+		// CSRF -- fails here, before the code is worth anything.
+		$browser = (string) filter_input( INPUT_COOKIE, self::BROWSER_COOKIE );
+
+		self::set_browser_cookie( '', time() - DAY_IN_SECONDS );
+
+		if ( '' === $browser || ! hash_equals( (string) ( $stored['browser'] ?? '' ), hash( 'sha256', $browser ) ) ) {
+			Logger::warning( 'A LINE login callback arrived in a browser other than the one that started it', array(), 'login' );
+
+			$this->fail( __( 'This login was started in a different browser. Please start again from this one.', 'moksa-for-line' ) );
 		}
 
 		// LINE reports user-side cancellation as an error parameter.
