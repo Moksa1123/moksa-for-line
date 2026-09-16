@@ -15,6 +15,7 @@ namespace Mofoline\Webhook;
 use Mofoline\Api\Signature;
 use Mofoline\Support\Logger;
 use Mofoline\Support\Options;
+use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -58,16 +59,41 @@ class WebhookModule {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'handle' ),
-					// The HMAC over the raw body is the authentication. LINE does
+					// The HMAC over the raw body is the authentication: LINE
+					// signs every delivery with the channel secret. LINE does
 					// not publish sender IPs, so there is nothing else to check.
-					'permission_callback' => '__return_true',
+					'permission_callback' => array( $this, 'verify_delivery' ),
 				)
 			);
 		}
 	}
 
 	/**
-	 * Receive a webhook delivery.
+	 * Whether a delivery carries LINE's signature over its body.
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return true|WP_Error
+	 */
+	public function verify_delivery( WP_REST_Request $request ) {
+		$raw       = (string) $request->get_body();
+		$signature = (string) $request->get_header( 'x-line-signature' );
+
+		if ( Signature::verify( $raw, $signature ) ) {
+			return true;
+		}
+
+		Logger::warning(
+			'Rejected a webhook delivery with a bad signature',
+			array( 'length' => strlen( $raw ) ),
+			'webhook'
+		);
+
+		// 403 rather than 401: there is no credential to re-present.
+		return new WP_Error( 'mofoline_bad_signature', 'invalid signature', array( 'status' => 403 ) );
+	}
+
+	/**
+	 * Receive a webhook delivery that verify_delivery() has already accepted.
 	 *
 	 * @param WP_REST_Request $request Incoming request.
 	 * @return WP_REST_Response
@@ -75,19 +101,7 @@ class WebhookModule {
 	public function handle( WP_REST_Request $request ): WP_REST_Response {
 		$raw       = (string) $request->get_body();
 		$signature = (string) $request->get_header( 'x-line-signature' );
-
-		if ( ! Signature::verify( $raw, $signature ) ) {
-			Logger::warning(
-				'Rejected a webhook delivery with a bad signature',
-				array( 'length' => strlen( $raw ) ),
-				'webhook'
-			);
-
-			// 403 rather than 401: there is no credential to re-present.
-			return new WP_REST_Response( array( 'status' => 'invalid signature' ), 403 );
-		}
-
-		$payload = json_decode( $raw, true );
+		$payload   = json_decode( $raw, true );
 		$events  = is_array( $payload ) && ! empty( $payload['events'] ) ? $payload['events'] : array();
 
 		// The Console's "Verify" button sends an empty events array. Answering
@@ -162,7 +176,11 @@ class WebhookModule {
 			return;
 		}
 
-		wp_remote_post(
+		// The safe variant refuses private and loopback addresses. An n8n on
+		// the same machine is a real setup; a site that wants it can allow
+		// its host through WordPress's own http_request_host_is_external
+		// filter, which is the documented way and keeps the choice explicit.
+		wp_safe_remote_post(
 			$url,
 			array(
 				'timeout'  => 5,

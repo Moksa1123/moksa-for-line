@@ -526,13 +526,16 @@ class AdminModule {
 			return;
 		}
 
+		// Two screens only -- the dashboard and the plugin list, where somebody
+		// who has just activated the plugin will be -- never across the whole
+		// of wp-admin.
 		$screen = get_current_screen();
 
-		if ( $screen && false !== strpos( (string) $screen->id, self::SLUG ) ) {
+		if ( ! $screen || ! in_array( $screen->id, array( 'dashboard', 'plugins' ), true ) ) {
 			return;
 		}
 
-		// Only nag about the two things that make the plugin do nothing at all.
+		// Only about the two things that make the plugin do nothing at all.
 		$login     = '' !== (string) Options::get( 'channel_id' );
 		$messaging = \Mofoline\Api\TokenManager::is_configured();
 

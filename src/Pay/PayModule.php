@@ -294,11 +294,13 @@ class PayModule {
 			array(
 				'methods'             => array( 'GET', 'POST' ),
 				'callback'            => array( $this, 'handle_return' ),
-				// The order reference is unguessable and the payment is
-				// verified against LINE Pay, so no site session is required --
-				// which matters, because the customer may return inside the
-				// LINE in-app browser without cookies.
-				'permission_callback' => '__return_true',
+				// The order reference -- the order number plus eight random
+				// characters, issued when the payment was reserved -- is the
+				// credential, and the result is then verified against LINE
+				// Pay. No site session is required, which matters because the
+				// customer may return inside the LINE in-app browser without
+				// cookies.
+				'permission_callback' => array( $this, 'verify_order_ref' ),
 				'args'                => array(
 					'order_ref' => array( 'required' => true, 'type' => 'string' ),
 				),
@@ -311,12 +313,28 @@ class PayModule {
 			array(
 				'methods'             => array( 'GET', 'POST' ),
 				'callback'            => array( $this, 'handle_cancel' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => array( $this, 'verify_order_ref' ),
 				'args'                => array(
 					'order_ref' => array( 'required' => true, 'type' => 'string' ),
 				),
 			)
 		);
+	}
+
+	/**
+	 * Whether the request names a payment this site reserved.
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return true|WP_Error
+	 */
+	public function verify_order_ref( WP_REST_Request $request ) {
+		$order_ref = (string) $request->get_param( 'order_ref' );
+
+		if ( '' === $order_ref || ! Payments::by_order_ref( $order_ref ) ) {
+			return new WP_Error( 'mofoline_pay_unknown', __( 'That payment could not be found.', 'moksa-for-line' ), array( 'status' => 404 ) );
+		}
+
+		return true;
 	}
 
 	/**
@@ -355,7 +373,9 @@ class PayModule {
 	public function handle_cancel( WP_REST_Request $request ) {
 		$payment = Payments::by_order_ref( (string) $request->get_param( 'order_ref' ) );
 
-		if ( $payment ) {
+		// Only a payment that has not been taken can be cancelled from the
+		// browser; a paid or held one is settled through the order.
+		if ( $payment && in_array( (string) $payment->status, array( 'created', 'pending', 'confirming' ), true ) ) {
 			Payments::update( (int) $payment->id, array( 'status' => 'cancelled' ) );
 
 			if ( (int) $payment->wc_order_id && function_exists( 'wc_get_order' ) ) {

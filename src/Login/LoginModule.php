@@ -152,6 +152,13 @@ class LoginModule {
 	 * still produce a valid login.
 	 */
 	public function handle_start(): void {
+		// Every start writes a state; a browser that starts logins faster
+		// than a person could is asked to wait rather than allowed to fill
+		// the options table.
+		if ( ! self::within_start_rate_limit() ) {
+			wp_die( esc_html__( 'Too many login attempts. Please wait a minute and try again.', 'moksa-for-line' ), 429 );
+		}
+
 		$redirect = Ajax::query_url( 'redirect_to' );
 		$link     = Ajax::query_flag( 'link' ) && is_user_logged_in();
 
@@ -172,6 +179,31 @@ class LoginModule {
 		add_filter( 'allowed_redirect_hosts', array( __CLASS__, 'allow_line_host' ) );
 		wp_safe_redirect( $url );
 		exit;
+	}
+
+	/**
+	 * At most thirty login starts a minute from one address.
+	 *
+	 * The address is whatever PHP reports; behind a proxy that is the proxy,
+	 * which makes the limit coarser, never looser for a real visitor.
+	 */
+	private static function within_start_rate_limit(): bool {
+		$address = (string) filter_input( INPUT_SERVER, 'REMOTE_ADDR', FILTER_VALIDATE_IP );
+
+		if ( '' === $address ) {
+			return true;
+		}
+
+		$key   = 'mofoline_start_rate_' . substr( hash( 'sha256', $address ), 0, 24 );
+		$count = (int) get_transient( $key );
+
+		if ( $count >= 30 ) {
+			return false;
+		}
+
+		set_transient( $key, $count + 1, MINUTE_IN_SECONDS );
+
+		return true;
 	}
 
 	/**

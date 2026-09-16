@@ -124,7 +124,7 @@ class LiffModule {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'handle_session' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => array( $this, 'verify_visitor' ),
 				'args'                => array(
 					'id_token' => array( 'required' => true, 'type' => 'string' ),
 				),
@@ -137,13 +137,55 @@ class LiffModule {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'handle_message' ),
-				'permission_callback' => '__return_true',
+				'permission_callback' => array( $this, 'verify_visitor' ),
 				'args'                => array(
 					'id_token' => array( 'required' => true, 'type' => 'string' ),
 					'message'  => array( 'required' => true, 'type' => 'string' ),
 				),
 			)
 		);
+	}
+
+	/**
+	 * Claims of the ID token each request carried, once verified, keyed by
+	 * the token's hash so a handler can pick up what the permission check
+	 * established without verifying twice.
+	 *
+	 * @var array<string,array>
+	 */
+	private $verified = array();
+
+	/**
+	 * The visitor's LIFF ID token, verified with LINE, is the credential for
+	 * both endpoints: no token, or one LINE will not vouch for, and the
+	 * request goes no further.
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return true|WP_Error
+	 */
+	public function verify_visitor( WP_REST_Request $request ) {
+		$token  = (string) $request->get_param( 'id_token' );
+		$claims = self::verify_id_token( $token );
+
+		if ( is_wp_error( $claims ) ) {
+			return $claims;
+		}
+
+		$this->verified[ hash( 'sha256', $token ) ] = $claims;
+
+		return true;
+	}
+
+	/**
+	 * The claims verify_visitor() established for this request.
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return array|WP_Error
+	 */
+	private function claims_for( WP_REST_Request $request ) {
+		$key = hash( 'sha256', (string) $request->get_param( 'id_token' ) );
+
+		return $this->verified[ $key ] ?? self::verify_id_token( (string) $request->get_param( 'id_token' ) );
 	}
 
 	// --- Endpoints ---------------------------------------------------------------
@@ -156,7 +198,7 @@ class LiffModule {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function handle_session( WP_REST_Request $request ) {
-		$claims = self::verify_id_token( (string) $request->get_param( 'id_token' ) );
+		$claims = $this->claims_for( $request );
 
 		if ( is_wp_error( $claims ) ) {
 			return $claims;
@@ -203,7 +245,7 @@ class LiffModule {
 			);
 		}
 
-		$claims = self::verify_id_token( (string) $request->get_param( 'id_token' ) );
+		$claims = $this->claims_for( $request );
 
 		if ( is_wp_error( $claims ) ) {
 			return $claims;
