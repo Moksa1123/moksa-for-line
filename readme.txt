@@ -98,7 +98,7 @@ Terms of use: https://terms.line.me/LINE_Developers_Agreement — Privacy policy
 
 **Optional, off unless you configure it:**
 
-*Webhook forwarding* — if you set a forwarding URL in the settings, every webhook delivery from LINE is relayed to that URL unchanged, including the message content and the sender's LINE user id. The destination is entirely your choice; nothing is sent anywhere until you enter one.
+*Webhook forwarding* — if you set a forwarding URL in the settings, every webhook delivery from LINE is relayed to that URL unchanged, including the message content and the sender's LINE user id. The destination is entirely your choice; nothing is sent anywhere until you enter one. The relay uses WordPress's safe HTTP request, which refuses private and loopback addresses; a receiver on your own network (an n8n on the same machine, say) needs its host allowed through the core `http_request_host_is_external` filter.
 
 *AI replies* — if you enable AI replies, the visitor's message text and a pseudonymous conversation id are passed to the AI Engine plugin, which sends them onward to whichever AI provider you have configured in that plugin. This plugin does not contact any AI provider directly. Review AI Engine's own disclosures for where that data goes.
 

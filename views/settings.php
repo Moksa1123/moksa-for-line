@@ -202,7 +202,7 @@ defined( 'ABSPATH' ) || exit;
 					$select( 'new_user_role', __( 'Role for new accounts', 'moksa-for-line' ), LoginModule::registration_roles(), __( 'Only roles that can do nothing beyond reading the site are offered.', 'moksa-for-line' ) );
 					$checkbox( 'sync_profile', __( 'Profile sync', 'moksa-for-line' ), __( 'Keep the WordPress display name in step with the LINE display name', 'moksa-for-line' ) );
 					$checkbox( 'request_email', __( 'Email address', 'moksa-for-line' ), __( 'Request the email scope (needs approval from LINE first)', 'moksa-for-line' ) );
-					$checkbox( 'link_by_email', __( 'Match by email', 'moksa-for-line' ), __( 'Link to an existing account when the email matches. LINE only supplies an address it has verified; still, whoever controls that mailbox at LINE then signs in to that WordPress account, so leave this off unless your members expect it.', 'moksa-for-line' ) );
+					$checkbox( 'link_by_email', __( 'Match by email', 'moksa-for-line' ), __( 'Link to an existing account when the email matches', 'moksa-for-line' ) );
 					?>
 					<tr>
 						<th scope="row"></th>
