@@ -109,10 +109,11 @@ with LINE's published APIs; you supply your own channel credentials.
 == Screenshots ==
 
 1. The dashboard: what is connected, what is still missing, and how much of this month's push quota is gone.
-2. LINE Login settings. The callback URL to paste into the LINE Developers Console, and what happens to a visitor signing in for the first time.
-3. Keyword auto replies. Rules are ranked by how strongly they match, then by priority, so the most specific answer wins.
-4. The Flex message editor, with the bubble drawn as the customer will receive it and the chat-list line they see before opening it.
-5. Order notifications: which order statuses send a message, the conditions that must hold, and the message itself as Flex JSON.
+2. The inbox. Conversations arrive by webhook and are marked bot, human or closed; replies are sent from wp-admin and are billed as push messages.
+3. LINE Login settings. The callback URL to paste into the LINE Developers Console, and what happens to a visitor signing in for the first time.
+4. Keyword auto replies. Rules are ranked by how strongly they match, then by priority, so the most specific answer wins.
+5. The Flex message editor, with the bubble drawn as the customer will receive it and the chat-list line they see before opening it.
+6. Order notifications: which order statuses send a message, the conditions that must hold, and the message itself as Flex JSON.
 
 == Upgrade Notice ==
 
