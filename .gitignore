@@ -25,6 +25,7 @@ dist/
 # Browser automation output
 .playwright-mcp/
 *.png
+!.wordpress-org/*.png
 
 # Release builds
 *.zip
